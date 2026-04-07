@@ -1,0 +1,29 @@
+{
+  "generationParameters": {
+    "generationDate": "Thu Apr 02 2026 07:37:40 GMT+0000 (Coordinated Universal Time)",
+    "generatorPlatform": "SAP Business Application Studio",
+    "serviceType": "SAP System (ABAP On-Premise)",
+    "metadataFilename": "",
+    "serviceUrl": "https://my426517.s4hana.cloud.sap/sap/opu/odata4/sap/zui_extend_mat_v4/srvd/sap/zui_extend_mat/0001/",
+    "appName": "zextend_material",
+    "appTitle": "Extend Material",
+    "appDescription": "Extend Material",
+    "appNamespace": "",
+    "ui5Theme": "sap_horizon",
+    "ui5Version": "1.120.40",
+    "enableEslint": true,
+    "enableTypeScript": false,
+    "showMockDataInfo": true,
+    "generatorVersion": "1.22.0",
+    "template": "List Report Page V4",
+    "generatorName": "SAP Fiori Application Generator",
+    "entityRelatedConfig": [
+      {
+        "type": "Main Entity",
+        "value": "ExtendProduct"
+      }
+    ],
+    "launchText": "To launch the generated application, run the following from the generated application root folder:\n\n```\n    npm start\n```",
+    "valueHelpDownloaded": true
+  }
+}

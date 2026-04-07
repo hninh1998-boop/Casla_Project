@@ -1,0 +1,26 @@
+# yaml-language-server: $schema=https://sap.github.io/ui5-tooling/schema/ui5.yaml.json
+
+specVersion: "4.0"
+metadata:
+  name: zextendmaterial
+type: application
+builder:
+  resources:
+    excludes:
+      - /test/**
+      - /localService/**
+  customTasks:
+    - name: deploy-to-abap
+      afterTask: generateCachebusterInfo
+      configuration:
+        target:
+          destination: CASLA
+          url: https://my426517.s4hana.cloud.sap
+          authenticationType: reentranceTicket # SAML support for vscode
+        app:
+          name: ZEXTEND_MAT
+          description: Extend Material
+          package: ZPK_EXTEND_MAT_PLANT_SLOC
+          transport: AK3K904217
+        exclude:
+          - /test/
