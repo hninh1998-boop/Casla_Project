@@ -1,0 +1,102 @@
+[
+    {
+        "Id": "577bc230-c3ad-56ac-b0e0-a548a5d8ffdc",
+        "Repository": "Repository1",
+        "Folder": "Folder1"
+    },
+    {
+        "Id": "3f73f768-d9b0-5a95-aeae-68935cf67128",
+        "Repository": "Repository2",
+        "Folder": "Folder2"
+    },
+    {
+        "Id": "45453e5e-ecaf-5c4b-89fb-0182c8ef5e72",
+        "Repository": "Repository3",
+        "Folder": "Folder3"
+    },
+    {
+        "Id": "5f7bd659-ba7a-5bc2-94aa-7f6e21c671a8",
+        "Repository": "Repository4",
+        "Folder": "Folder4"
+    },
+    {
+        "Id": "6fd65d3f-c4f9-5c5a-8a56-3b023ce255f1",
+        "Repository": "Repository5",
+        "Folder": "Folder5"
+    },
+    {
+        "Id": "ed0f39b5-2e03-5487-90b7-1834fcc65c1a",
+        "Repository": "Repository6",
+        "Folder": "Folder6"
+    },
+    {
+        "Id": "b516b35a-d674-548d-b9bc-ae0f22da5227",
+        "Repository": "Repository7",
+        "Folder": "Folder7"
+    },
+    {
+        "Id": "43872a6f-07c5-576a-b56f-b6d547a55532",
+        "Repository": "Repository8",
+        "Folder": "Folder8"
+    },
+    {
+        "Id": "4b9957dd-33b1-58ac-8d86-10da69d3e96f",
+        "Repository": "Repository9",
+        "Folder": "Folder9"
+    },
+    {
+        "Id": "74f92239-963d-5440-888f-b25478e59993",
+        "Repository": "Repository10",
+        "Folder": "Folder10"
+    },
+    {
+        "Id": "9b49b96b-2517-5dd7-b122-1e73cdb874a8",
+        "Repository": "Repository11",
+        "Folder": "Folder11"
+    },
+    {
+        "Id": "4779d823-f0b9-53f8-ac83-c01e4f06cfa1",
+        "Repository": "Repository12",
+        "Folder": "Folder12"
+    },
+    {
+        "Id": "68271bd7-72fa-55c1-859b-1914dac4d196",
+        "Repository": "Repository13",
+        "Folder": "Folder13"
+    },
+    {
+        "Id": "212de661-af22-5fd8-835b-6ea4f8359b96",
+        "Repository": "Repository14",
+        "Folder": "Folder14"
+    },
+    {
+        "Id": "ccf5c744-4452-52b3-9cdf-f1760a623ab8",
+        "Repository": "Repository15",
+        "Folder": "Folder15"
+    },
+    {
+        "Id": "3779cf8f-29dc-560d-a187-10d97eb5b85a",
+        "Repository": "Repository16",
+        "Folder": "Folder16"
+    },
+    {
+        "Id": "8d6b2ab7-cd9b-52ce-980e-ea76494ce73e",
+        "Repository": "Repository17",
+        "Folder": "Folder17"
+    },
+    {
+        "Id": "b29a89ac-c912-523e-979a-dff5d1fca1a9",
+        "Repository": "Repository18",
+        "Folder": "Folder18"
+    },
+    {
+        "Id": "fc453686-56a1-52c1-86fe-76cce3af875e",
+        "Repository": "Repository19",
+        "Folder": "Folder19"
+    },
+    {
+        "Id": "39105168-56a2-544f-ac27-0ae00ae737d7",
+        "Repository": "Repository20",
+        "Folder": "Folder20"
+    }
+]
