@@ -1,0 +1,522 @@
+[
+    {
+        "BusinessPartner": "cpEOXBszBr",
+        "OrgCode": "NZRS",
+        "BusinessPartnerFullName": "BusinessPartnerFullName1",
+        "FLCU00_Customer": "1",
+        "FLCU01_CustomerFin": "1",
+        "FLVN00_Supplier": "1",
+        "FLVN01_SupplierFin": "1",
+        "__EntityControl": {
+            "Deletable": true,
+            "Updatable": false
+        },
+        "SAP__Messages": [
+            {
+                "code": "code18",
+                "message": "message18",
+                "target": "target18",
+                "additionalTargets": [
+                    "additionalTargets18"
+                ],
+                "transition": true,
+                "numericSeverity": 59,
+                "longtextUrl": "longtextUrl18"
+            }
+        ]
+    },
+    {
+        "BusinessPartner": "VAgzpLNWMz",
+        "OrgCode": "vjmk",
+        "BusinessPartnerFullName": "BusinessPartnerFullName2",
+        "FLCU00_Customer": "2",
+        "FLCU01_CustomerFin": "2",
+        "FLVN00_Supplier": "2",
+        "FLVN01_SupplierFin": "2",
+        "__EntityControl": {
+            "Deletable": true,
+            "Updatable": false
+        },
+        "SAP__Messages": [
+            {
+                "code": "code2",
+                "message": "message2",
+                "target": "target2",
+                "additionalTargets": [
+                    "additionalTargets2"
+                ],
+                "transition": true,
+                "numericSeverity": 92,
+                "longtextUrl": "longtextUrl2"
+            }
+        ]
+    },
+    {
+        "BusinessPartner": "XGWYSBMjdh",
+        "OrgCode": "PZTg",
+        "BusinessPartnerFullName": "BusinessPartnerFullName3",
+        "FLCU00_Customer": "3",
+        "FLCU01_CustomerFin": "3",
+        "FLVN00_Supplier": "3",
+        "FLVN01_SupplierFin": "3",
+        "__EntityControl": {
+            "Deletable": true,
+            "Updatable": true
+        },
+        "SAP__Messages": [
+            {
+                "code": "code5",
+                "message": "message5",
+                "target": "target5",
+                "additionalTargets": [
+                    "additionalTargets5"
+                ],
+                "transition": false,
+                "numericSeverity": 48,
+                "longtextUrl": "longtextUrl5"
+            }
+        ]
+    },
+    {
+        "BusinessPartner": "hQhKiLBnAf",
+        "OrgCode": "lPCz",
+        "BusinessPartnerFullName": "BusinessPartnerFullName4",
+        "FLCU00_Customer": "4",
+        "FLCU01_CustomerFin": "4",
+        "FLVN00_Supplier": "4",
+        "FLVN01_SupplierFin": "4",
+        "__EntityControl": {
+            "Deletable": false,
+            "Updatable": true
+        },
+        "SAP__Messages": [
+            {
+                "code": "code9",
+                "message": "message9",
+                "target": "target9",
+                "additionalTargets": [
+                    "additionalTargets9"
+                ],
+                "transition": false,
+                "numericSeverity": 123,
+                "longtextUrl": "longtextUrl9"
+            }
+        ]
+    },
+    {
+        "BusinessPartner": "isnNsioSoi",
+        "OrgCode": "ErZA",
+        "BusinessPartnerFullName": "BusinessPartnerFullName5",
+        "FLCU00_Customer": "5",
+        "FLCU01_CustomerFin": "5",
+        "FLVN00_Supplier": "5",
+        "FLVN01_SupplierFin": "5",
+        "__EntityControl": {
+            "Deletable": false,
+            "Updatable": true
+        },
+        "SAP__Messages": [
+            {
+                "code": "code18",
+                "message": "message18",
+                "target": "target18",
+                "additionalTargets": [
+                    "additionalTargets18"
+                ],
+                "transition": true,
+                "numericSeverity": 59,
+                "longtextUrl": "longtextUrl18"
+            }
+        ]
+    },
+    {
+        "BusinessPartner": "tgEooIJPPz",
+        "OrgCode": "xooO",
+        "BusinessPartnerFullName": "BusinessPartnerFullName6",
+        "FLCU00_Customer": "6",
+        "FLCU01_CustomerFin": "6",
+        "FLVN00_Supplier": "6",
+        "FLVN01_SupplierFin": "6",
+        "__EntityControl": {
+            "Deletable": false,
+            "Updatable": true
+        },
+        "SAP__Messages": [
+            {
+                "code": "code17",
+                "message": "message17",
+                "target": "target17",
+                "additionalTargets": [
+                    "additionalTargets17"
+                ],
+                "transition": true,
+                "numericSeverity": 140,
+                "longtextUrl": "longtextUrl17"
+            }
+        ]
+    },
+    {
+        "BusinessPartner": "jIdMWmuBiN",
+        "OrgCode": "qCUw",
+        "BusinessPartnerFullName": "BusinessPartnerFullName7",
+        "FLCU00_Customer": "7",
+        "FLCU01_CustomerFin": "7",
+        "FLVN00_Supplier": "7",
+        "FLVN01_SupplierFin": "7",
+        "__EntityControl": {
+            "Deletable": false,
+            "Updatable": true
+        },
+        "SAP__Messages": [
+            {
+                "code": "code1",
+                "message": "message1",
+                "target": "target1",
+                "additionalTargets": [
+                    "additionalTargets1"
+                ],
+                "transition": true,
+                "numericSeverity": 227,
+                "longtextUrl": "longtextUrl1"
+            }
+        ]
+    },
+    {
+        "BusinessPartner": "zhaIYDnvXq",
+        "OrgCode": "qbby",
+        "BusinessPartnerFullName": "BusinessPartnerFullName8",
+        "FLCU00_Customer": "8",
+        "FLCU01_CustomerFin": "8",
+        "FLVN00_Supplier": "8",
+        "FLVN01_SupplierFin": "8",
+        "__EntityControl": {
+            "Deletable": true,
+            "Updatable": false
+        },
+        "SAP__Messages": [
+            {
+                "code": "code7",
+                "message": "message7",
+                "target": "target7",
+                "additionalTargets": [
+                    "additionalTargets7"
+                ],
+                "transition": false,
+                "numericSeverity": 212,
+                "longtextUrl": "longtextUrl7"
+            }
+        ]
+    },
+    {
+        "BusinessPartner": "hWQyjJMHFN",
+        "OrgCode": "VviX",
+        "BusinessPartnerFullName": "BusinessPartnerFullName9",
+        "FLCU00_Customer": "9",
+        "FLCU01_CustomerFin": "9",
+        "FLVN00_Supplier": "9",
+        "FLVN01_SupplierFin": "9",
+        "__EntityControl": {
+            "Deletable": true,
+            "Updatable": false
+        },
+        "SAP__Messages": [
+            {
+                "code": "code7",
+                "message": "message7",
+                "target": "target7",
+                "additionalTargets": [
+                    "additionalTargets7"
+                ],
+                "transition": false,
+                "numericSeverity": 212,
+                "longtextUrl": "longtextUrl7"
+            }
+        ]
+    },
+    {
+        "BusinessPartner": "ZQOyMAsDJJ",
+        "OrgCode": "TiJi",
+        "BusinessPartnerFullName": "BusinessPartnerFullName10",
+        "FLCU00_Customer": "0",
+        "FLCU01_CustomerFin": "0",
+        "FLVN00_Supplier": "0",
+        "FLVN01_SupplierFin": "0",
+        "__EntityControl": {
+            "Deletable": false,
+            "Updatable": true
+        },
+        "SAP__Messages": [
+            {
+                "code": "code2",
+                "message": "message2",
+                "target": "target2",
+                "additionalTargets": [
+                    "additionalTargets2"
+                ],
+                "transition": true,
+                "numericSeverity": 92,
+                "longtextUrl": "longtextUrl2"
+            }
+        ]
+    },
+    {
+        "BusinessPartner": "GXmzCJeITS",
+        "OrgCode": "oaBm",
+        "BusinessPartnerFullName": "BusinessPartnerFullName11",
+        "FLCU00_Customer": "1",
+        "FLCU01_CustomerFin": "1",
+        "FLVN00_Supplier": "1",
+        "FLVN01_SupplierFin": "1",
+        "__EntityControl": {
+            "Deletable": true,
+            "Updatable": false
+        },
+        "SAP__Messages": [
+            {
+                "code": "code20",
+                "message": "message20",
+                "target": "target20",
+                "additionalTargets": [
+                    "additionalTargets20"
+                ],
+                "transition": false,
+                "numericSeverity": 160,
+                "longtextUrl": "longtextUrl20"
+            }
+        ]
+    },
+    {
+        "BusinessPartner": "OMpdDysXxU",
+        "OrgCode": "bKJz",
+        "BusinessPartnerFullName": "BusinessPartnerFullName12",
+        "FLCU00_Customer": "2",
+        "FLCU01_CustomerFin": "2",
+        "FLVN00_Supplier": "2",
+        "FLVN01_SupplierFin": "2",
+        "__EntityControl": {
+            "Deletable": true,
+            "Updatable": true
+        },
+        "SAP__Messages": [
+            {
+                "code": "code9",
+                "message": "message9",
+                "target": "target9",
+                "additionalTargets": [
+                    "additionalTargets9"
+                ],
+                "transition": false,
+                "numericSeverity": 123,
+                "longtextUrl": "longtextUrl9"
+            }
+        ]
+    },
+    {
+        "BusinessPartner": "AsnHZmyohM",
+        "OrgCode": "hWGe",
+        "BusinessPartnerFullName": "BusinessPartnerFullName13",
+        "FLCU00_Customer": "3",
+        "FLCU01_CustomerFin": "3",
+        "FLVN00_Supplier": "3",
+        "FLVN01_SupplierFin": "3",
+        "__EntityControl": {
+            "Deletable": true,
+            "Updatable": false
+        },
+        "SAP__Messages": [
+            {
+                "code": "code12",
+                "message": "message12",
+                "target": "target12",
+                "additionalTargets": [
+                    "additionalTargets12"
+                ],
+                "transition": false,
+                "numericSeverity": 149,
+                "longtextUrl": "longtextUrl12"
+            }
+        ]
+    },
+    {
+        "BusinessPartner": "tDOiEcNnub",
+        "OrgCode": "qjRO",
+        "BusinessPartnerFullName": "BusinessPartnerFullName14",
+        "FLCU00_Customer": "4",
+        "FLCU01_CustomerFin": "4",
+        "FLVN00_Supplier": "4",
+        "FLVN01_SupplierFin": "4",
+        "__EntityControl": {
+            "Deletable": false,
+            "Updatable": true
+        },
+        "SAP__Messages": [
+            {
+                "code": "code1",
+                "message": "message1",
+                "target": "target1",
+                "additionalTargets": [
+                    "additionalTargets1"
+                ],
+                "transition": true,
+                "numericSeverity": 227,
+                "longtextUrl": "longtextUrl1"
+            }
+        ]
+    },
+    {
+        "BusinessPartner": "fyNZiKlaJd",
+        "OrgCode": "jhel",
+        "BusinessPartnerFullName": "BusinessPartnerFullName15",
+        "FLCU00_Customer": "5",
+        "FLCU01_CustomerFin": "5",
+        "FLVN00_Supplier": "5",
+        "FLVN01_SupplierFin": "5",
+        "__EntityControl": {
+            "Deletable": true,
+            "Updatable": false
+        },
+        "SAP__Messages": [
+            {
+                "code": "code12",
+                "message": "message12",
+                "target": "target12",
+                "additionalTargets": [
+                    "additionalTargets12"
+                ],
+                "transition": false,
+                "numericSeverity": 149,
+                "longtextUrl": "longtextUrl12"
+            }
+        ]
+    },
+    {
+        "BusinessPartner": "AqkAFEGnnD",
+        "OrgCode": "rLeU",
+        "BusinessPartnerFullName": "BusinessPartnerFullName16",
+        "FLCU00_Customer": "6",
+        "FLCU01_CustomerFin": "6",
+        "FLVN00_Supplier": "6",
+        "FLVN01_SupplierFin": "6",
+        "__EntityControl": {
+            "Deletable": true,
+            "Updatable": true
+        },
+        "SAP__Messages": [
+            {
+                "code": "code3",
+                "message": "message3",
+                "target": "target3",
+                "additionalTargets": [
+                    "additionalTargets3"
+                ],
+                "transition": false,
+                "numericSeverity": 152,
+                "longtextUrl": "longtextUrl3"
+            }
+        ]
+    },
+    {
+        "BusinessPartner": "AtqFazPNBd",
+        "OrgCode": "GavS",
+        "BusinessPartnerFullName": "BusinessPartnerFullName17",
+        "FLCU00_Customer": "7",
+        "FLCU01_CustomerFin": "7",
+        "FLVN00_Supplier": "7",
+        "FLVN01_SupplierFin": "7",
+        "__EntityControl": {
+            "Deletable": true,
+            "Updatable": false
+        },
+        "SAP__Messages": [
+            {
+                "code": "code14",
+                "message": "message14",
+                "target": "target14",
+                "additionalTargets": [
+                    "additionalTargets14"
+                ],
+                "transition": true,
+                "numericSeverity": 74,
+                "longtextUrl": "longtextUrl14"
+            }
+        ]
+    },
+    {
+        "BusinessPartner": "XqtGhQofNG",
+        "OrgCode": "UAEu",
+        "BusinessPartnerFullName": "BusinessPartnerFullName18",
+        "FLCU00_Customer": "8",
+        "FLCU01_CustomerFin": "8",
+        "FLVN00_Supplier": "8",
+        "FLVN01_SupplierFin": "8",
+        "__EntityControl": {
+            "Deletable": false,
+            "Updatable": true
+        },
+        "SAP__Messages": [
+            {
+                "code": "code8",
+                "message": "message8",
+                "target": "target8",
+                "additionalTargets": [
+                    "additionalTargets8"
+                ],
+                "transition": false,
+                "numericSeverity": 54,
+                "longtextUrl": "longtextUrl8"
+            }
+        ]
+    },
+    {
+        "BusinessPartner": "dNzoXwfSyt",
+        "OrgCode": "oMcT",
+        "BusinessPartnerFullName": "BusinessPartnerFullName19",
+        "FLCU00_Customer": "9",
+        "FLCU01_CustomerFin": "9",
+        "FLVN00_Supplier": "9",
+        "FLVN01_SupplierFin": "9",
+        "__EntityControl": {
+            "Deletable": true,
+            "Updatable": false
+        },
+        "SAP__Messages": [
+            {
+                "code": "code13",
+                "message": "message13",
+                "target": "target13",
+                "additionalTargets": [
+                    "additionalTargets13"
+                ],
+                "transition": false,
+                "numericSeverity": 89,
+                "longtextUrl": "longtextUrl13"
+            }
+        ]
+    },
+    {
+        "BusinessPartner": "kSzkcblldF",
+        "OrgCode": "Ltnj",
+        "BusinessPartnerFullName": "BusinessPartnerFullName20",
+        "FLCU00_Customer": "0",
+        "FLCU01_CustomerFin": "0",
+        "FLVN00_Supplier": "0",
+        "FLVN01_SupplierFin": "0",
+        "__EntityControl": {
+            "Deletable": false,
+            "Updatable": true
+        },
+        "SAP__Messages": [
+            {
+                "code": "code4",
+                "message": "message4",
+                "target": "target4",
+                "additionalTargets": [
+                    "additionalTargets4"
+                ],
+                "transition": true,
+                "numericSeverity": 22,
+                "longtextUrl": "longtextUrl4"
+            }
+        ]
+    }
+]

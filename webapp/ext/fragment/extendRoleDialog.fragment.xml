@@ -1,0 +1,54 @@
+<core:FragmentDefinition
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+    xmlns:f="sap.ui.layout.form">
+
+    <Dialog id="extendRoleDialog"
+            title="Extend Role with Refer"
+            draggable="true">
+
+        <VBox width="100%">
+            <f:SimpleForm
+                editable="true"
+                layout="ResponsiveGridLayout"
+                maxContainerCols="2"
+                labelSpanL="6" labelSpanM="6"
+                columnsL="1"   columnsM="1">
+                <f:content>
+
+                    <Label text="With reference BP"/>
+                    <Input id="inputRefBP" placeholder="Reference Business Partner"/>
+
+                    <Label text="Reference Company Code"/>
+                    <Input id="inputRefCC" placeholder="Reference Company Code"/>
+
+                    <Label text="FLCU01 Customer"/>
+                    <CheckBox id="cbFLCU01" selected="true"/>
+
+                    <Label text="FLCU00 Customer (Fin)"/>
+                    <CheckBox id="cbFLCU00" selected="true"/>
+
+                    <Label text="FLVN01 Supplier"/>
+                    <CheckBox id="cbFLVN01" selected="false"/>
+
+                    <Label text="FLVN00 Supplier (Fin)"/>
+                    <CheckBox id="cbFLVN00" selected="false"/>
+
+                </f:content>
+            </f:SimpleForm>
+        </VBox>
+
+        <footer>
+            <Toolbar>
+                <content>
+                    <Button text="Extend role"
+                            type="Emphasized"
+                            press=".onExtendRole"/>
+                    <Button text="Cancel"
+                            press=".onCloseDialog"/>
+                </content>
+            </Toolbar>
+        </footer>
+
+    </Dialog>
+</core:FragmentDefinition>
