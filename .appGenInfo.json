@@ -1,0 +1,28 @@
+{
+  "generationParameters": {
+    "generationDate": "Sat Apr 11 2026 04:14:10 GMT+0000 (Coordinated Universal Time)",
+    "generatorPlatform": "SAP Business Application Studio",
+    "serviceType": "SAP System (ABAP On-Premise)",
+    "metadataFilename": "",
+    "serviceUrl": "https://my426517.s4hana.cloud.sap/sap/opu/odata/sap/ZUI_CUS_PROD_REPORT_V2",
+    "appName": "zcus_prod_sales_rp",
+    "appTitle": "Báo cáo Doanh số bán hàng theo khách hàng và mặt hàng",
+    "appDescription": "Báo cáo Doanh số bán hàng theo khách hàng và mặt hàng",
+    "appNamespace": "",
+    "ui5Theme": "sap_horizon",
+    "ui5Version": "1.142.7",
+    "enableEslint": true,
+    "enableTypeScript": false,
+    "showMockDataInfo": true,
+    "generatorVersion": "1.22.0",
+    "template": "List Report Page V2",
+    "generatorName": "SAP Fiori Application Generator",
+    "entityRelatedConfig": [
+      {
+        "type": "Main Entity",
+        "value": "ZI_CUS_PROD_sales_REPORT"
+      }
+    ],
+    "launchText": "To launch the generated application, run the following from the generated application root folder:\n\n```\n    npm start\n```"
+  }
+}
