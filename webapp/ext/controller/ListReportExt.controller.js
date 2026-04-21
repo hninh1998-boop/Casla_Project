@@ -107,7 +107,7 @@ sap.ui.define([
             ]);
 
             row.getCell(7).numFmt = "#,##0.000";
-            row.getCell(8).numFmt = "#,##0";
+            row.getCell(8).numFmt = "#,##0.00";
             row.getCell(9).numFmt = "#,##0";
             row.getCell(10).numFmt = "#,##0";
             row.eachCell(function (cell) { cell.border = BORDER; });
@@ -129,7 +129,7 @@ sap.ui.define([
             cell.border = BORDER;
         });
         totalRow.getCell(7).numFmt = "#,##0.000";
-        totalRow.getCell(8).numFmt = "#,##0";
+        totalRow.getCell(8).numFmt = "#,##0.00";
         totalRow.getCell(9).numFmt = "#,##0";
         totalRow.getCell(10).numFmt = "#,##0";
 
