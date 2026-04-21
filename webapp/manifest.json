@@ -34,6 +34,19 @@
           "odataVersion": "4.0"
         }
       }
+    },
+    "crossNavigation": {
+      "inbounds": {
+        "zfi_cc_chk-display": {
+          "semanticObject": "zfi_cc_chk",
+          "action": "display",
+          "title": "{{zfi_cc_chk-display.flpTitle}}",
+          "signature": {
+            "parameters": {},
+            "additionalParameters": "allowed"
+          }
+        }
+      }
     }
   },
   "sap.ui": {
@@ -124,7 +137,8 @@
                 "@com.sap.vocabularies.UI.v1.LineItem": {
                   "tableSettings": {
                     "type": "GridTable",
-                    "selectAll": true
+                    "selectAll": true,
+                    "enableExport": true
                   },
                   "actions": {
                     "idUploadExcel": {

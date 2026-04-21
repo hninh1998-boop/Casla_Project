@@ -1,0 +1,802 @@
+[
+    {
+        "Costcenter": "gKkfZRbloJ",
+        "CostctrHierGrp": "fSvOmqEViKCQ",
+        "ValidTo": "2002-04-02",
+        "ValidFrom": "2004-07-16",
+        "CostcenterType": "1",
+        "CompCode": "Com1",
+        "ProfitCtr": "ProfitCtr1",
+        "PersonInCharge": "PersonInCha1",
+        "Name": "Name1",
+        "LocalCreatedBy": "LocalCreate1",
+        "LastChangedBy": "LastChanged1",
+        "LastChangedAt": "1982-04-15T08:44:07",
+        "LocalLastChangedAt": "2004-04-07T17:30:04",
+        "HasDraftEntity": false,
+        "DraftEntityCreationDateTime": "2010-10-23T01:49:38",
+        "DraftEntityLastChangeDateTime": "2016-04-16T06:14:20",
+        "HasActiveEntity": true,
+        "IsActiveEntity": true,
+        "__EntityControl": {
+            "Deletable": false,
+            "Updatable": false
+        },
+        "__OperationControl": {
+            "Edit": true
+        },
+        "SAP__Messages": [
+            {
+                "code": "code4",
+                "message": "message4",
+                "target": "target4",
+                "additionalTargets": [
+                    "additionalTargets4"
+                ],
+                "transition": false,
+                "numericSeverity": 34,
+                "longtextUrl": "longtextUrl4"
+            }
+        ]
+    },
+    {
+        "Costcenter": "nMTrPEJqKj",
+        "CostctrHierGrp": "DliNVcBkgnbL",
+        "ValidTo": "2010-09-21",
+        "ValidFrom": "1972-05-18",
+        "CostcenterType": "2",
+        "CompCode": "Com2",
+        "ProfitCtr": "ProfitCtr2",
+        "PersonInCharge": "PersonInCha2",
+        "Name": "Name2",
+        "LocalCreatedBy": "LocalCreate2",
+        "LastChangedBy": "LastChanged2",
+        "LastChangedAt": "1976-03-01T16:05:40",
+        "LocalLastChangedAt": "2011-03-17T14:30:44",
+        "HasDraftEntity": false,
+        "DraftEntityCreationDateTime": "1993-05-27T05:57:46",
+        "DraftEntityLastChangeDateTime": "1988-07-25T02:17:04",
+        "HasActiveEntity": false,
+        "IsActiveEntity": true,
+        "__EntityControl": {
+            "Deletable": false,
+            "Updatable": true
+        },
+        "__OperationControl": {
+            "Edit": true
+        },
+        "SAP__Messages": [
+            {
+                "code": "code12",
+                "message": "message12",
+                "target": "target12",
+                "additionalTargets": [
+                    "additionalTargets12"
+                ],
+                "transition": false,
+                "numericSeverity": 99,
+                "longtextUrl": "longtextUrl12"
+            }
+        ]
+    },
+    {
+        "Costcenter": "zgqtApnGCQ",
+        "CostctrHierGrp": "anSiiJqGQimk",
+        "ValidTo": "2014-09-06",
+        "ValidFrom": "2009-03-28",
+        "CostcenterType": "3",
+        "CompCode": "Com3",
+        "ProfitCtr": "ProfitCtr3",
+        "PersonInCharge": "PersonInCha3",
+        "Name": "Name3",
+        "LocalCreatedBy": "LocalCreate3",
+        "LastChangedBy": "LastChanged3",
+        "LastChangedAt": "1970-09-17T04:06:29",
+        "LocalLastChangedAt": "1977-06-03T09:29:09",
+        "HasDraftEntity": false,
+        "DraftEntityCreationDateTime": "2007-12-22T02:32:16",
+        "DraftEntityLastChangeDateTime": "1978-09-27T20:46:04",
+        "HasActiveEntity": false,
+        "IsActiveEntity": false,
+        "__EntityControl": {
+            "Deletable": false,
+            "Updatable": false
+        },
+        "__OperationControl": {
+            "Edit": true
+        },
+        "SAP__Messages": [
+            {
+                "code": "code5",
+                "message": "message5",
+                "target": "target5",
+                "additionalTargets": [
+                    "additionalTargets5"
+                ],
+                "transition": false,
+                "numericSeverity": 82,
+                "longtextUrl": "longtextUrl5"
+            }
+        ]
+    },
+    {
+        "Costcenter": "JsnZWXMxMR",
+        "CostctrHierGrp": "abRJICKPQHpJ",
+        "ValidTo": "1992-04-06",
+        "ValidFrom": "1989-07-06",
+        "CostcenterType": "4",
+        "CompCode": "Com4",
+        "ProfitCtr": "ProfitCtr4",
+        "PersonInCharge": "PersonInCha4",
+        "Name": "Name4",
+        "LocalCreatedBy": "LocalCreate4",
+        "LastChangedBy": "LastChanged4",
+        "LastChangedAt": "2013-06-26T06:53:40",
+        "LocalLastChangedAt": "2010-06-21T09:51:46",
+        "HasDraftEntity": false,
+        "DraftEntityCreationDateTime": "1990-10-20T17:24:46",
+        "DraftEntityLastChangeDateTime": "2009-12-28T17:32:29",
+        "HasActiveEntity": true,
+        "IsActiveEntity": true,
+        "__EntityControl": {
+            "Deletable": false,
+            "Updatable": false
+        },
+        "__OperationControl": {
+            "Edit": false
+        },
+        "SAP__Messages": [
+            {
+                "code": "code4",
+                "message": "message4",
+                "target": "target4",
+                "additionalTargets": [
+                    "additionalTargets4"
+                ],
+                "transition": false,
+                "numericSeverity": 34,
+                "longtextUrl": "longtextUrl4"
+            }
+        ]
+    },
+    {
+        "Costcenter": "fShvsUWDEW",
+        "CostctrHierGrp": "sWtDNgwxLfVA",
+        "ValidTo": "1998-12-20",
+        "ValidFrom": "2013-06-24",
+        "CostcenterType": "5",
+        "CompCode": "Com5",
+        "ProfitCtr": "ProfitCtr5",
+        "PersonInCharge": "PersonInCha5",
+        "Name": "Name5",
+        "LocalCreatedBy": "LocalCreate5",
+        "LastChangedBy": "LastChanged5",
+        "LastChangedAt": "1985-07-22T05:11:19",
+        "LocalLastChangedAt": "2011-09-12T18:40:03",
+        "HasDraftEntity": false,
+        "DraftEntityCreationDateTime": "1985-11-30T18:30:33",
+        "DraftEntityLastChangeDateTime": "2008-07-14T01:03:15",
+        "HasActiveEntity": true,
+        "IsActiveEntity": false,
+        "__EntityControl": {
+            "Deletable": false,
+            "Updatable": false
+        },
+        "__OperationControl": {
+            "Edit": false
+        },
+        "SAP__Messages": [
+            {
+                "code": "code2",
+                "message": "message2",
+                "target": "target2",
+                "additionalTargets": [
+                    "additionalTargets2"
+                ],
+                "transition": false,
+                "numericSeverity": 103,
+                "longtextUrl": "longtextUrl2"
+            }
+        ]
+    },
+    {
+        "Costcenter": "YPLhNfHuzz",
+        "CostctrHierGrp": "RFqHZXtGluha",
+        "ValidTo": "1992-11-01",
+        "ValidFrom": "2012-06-22",
+        "CostcenterType": "6",
+        "CompCode": "Com6",
+        "ProfitCtr": "ProfitCtr6",
+        "PersonInCharge": "PersonInCha6",
+        "Name": "Name6",
+        "LocalCreatedBy": "LocalCreate6",
+        "LastChangedBy": "LastChanged6",
+        "LastChangedAt": "1996-07-11T01:41:05",
+        "LocalLastChangedAt": "2004-12-19T01:04:47",
+        "HasDraftEntity": false,
+        "DraftEntityCreationDateTime": "1993-10-15T06:17:38",
+        "DraftEntityLastChangeDateTime": "2011-07-15T15:57:49",
+        "HasActiveEntity": false,
+        "IsActiveEntity": false,
+        "__EntityControl": {
+            "Deletable": false,
+            "Updatable": true
+        },
+        "__OperationControl": {
+            "Edit": true
+        },
+        "SAP__Messages": [
+            {
+                "code": "code6",
+                "message": "message6",
+                "target": "target6",
+                "additionalTargets": [
+                    "additionalTargets6"
+                ],
+                "transition": true,
+                "numericSeverity": 241,
+                "longtextUrl": "longtextUrl6"
+            }
+        ]
+    },
+    {
+        "Costcenter": "BwKLwEmeRV",
+        "CostctrHierGrp": "AbdNJxjOESyl",
+        "ValidTo": "1970-03-26",
+        "ValidFrom": "1993-09-01",
+        "CostcenterType": "7",
+        "CompCode": "Com7",
+        "ProfitCtr": "ProfitCtr7",
+        "PersonInCharge": "PersonInCha7",
+        "Name": "Name7",
+        "LocalCreatedBy": "LocalCreate7",
+        "LastChangedBy": "LastChanged7",
+        "LastChangedAt": "2003-04-04T12:53:20",
+        "LocalLastChangedAt": "1987-04-07T13:08:40",
+        "HasDraftEntity": true,
+        "DraftEntityCreationDateTime": "2005-01-31T17:08:52",
+        "DraftEntityLastChangeDateTime": "1980-08-28T03:17:19",
+        "HasActiveEntity": false,
+        "IsActiveEntity": true,
+        "__EntityControl": {
+            "Deletable": false,
+            "Updatable": true
+        },
+        "__OperationControl": {
+            "Edit": true
+        },
+        "SAP__Messages": [
+            {
+                "code": "code2",
+                "message": "message2",
+                "target": "target2",
+                "additionalTargets": [
+                    "additionalTargets2"
+                ],
+                "transition": false,
+                "numericSeverity": 103,
+                "longtextUrl": "longtextUrl2"
+            }
+        ]
+    },
+    {
+        "Costcenter": "xRLSvDRYcl",
+        "CostctrHierGrp": "oAxrLRWpLYFC",
+        "ValidTo": "2008-08-27",
+        "ValidFrom": "1989-11-22",
+        "CostcenterType": "8",
+        "CompCode": "Com8",
+        "ProfitCtr": "ProfitCtr8",
+        "PersonInCharge": "PersonInCha8",
+        "Name": "Name8",
+        "LocalCreatedBy": "LocalCreate8",
+        "LastChangedBy": "LastChanged8",
+        "LastChangedAt": "1984-12-04T01:35:11",
+        "LocalLastChangedAt": "1972-03-17T04:00:33",
+        "HasDraftEntity": true,
+        "DraftEntityCreationDateTime": "1975-11-23T13:14:15",
+        "DraftEntityLastChangeDateTime": "2015-01-03T08:31:58",
+        "HasActiveEntity": false,
+        "IsActiveEntity": true,
+        "__EntityControl": {
+            "Deletable": false,
+            "Updatable": true
+        },
+        "__OperationControl": {
+            "Edit": true
+        },
+        "SAP__Messages": [
+            {
+                "code": "code3",
+                "message": "message3",
+                "target": "target3",
+                "additionalTargets": [
+                    "additionalTargets3"
+                ],
+                "transition": true,
+                "numericSeverity": 237,
+                "longtextUrl": "longtextUrl3"
+            }
+        ]
+    },
+    {
+        "Costcenter": "KrGGIEArkc",
+        "CostctrHierGrp": "DBjVPRwcsFzj",
+        "ValidTo": "2008-06-18",
+        "ValidFrom": "1983-06-14",
+        "CostcenterType": "9",
+        "CompCode": "Com9",
+        "ProfitCtr": "ProfitCtr9",
+        "PersonInCharge": "PersonInCha9",
+        "Name": "Name9",
+        "LocalCreatedBy": "LocalCreate9",
+        "LastChangedBy": "LastChanged9",
+        "LastChangedAt": "2008-04-24T02:21:44",
+        "LocalLastChangedAt": "2005-03-13T00:07:29",
+        "HasDraftEntity": false,
+        "DraftEntityCreationDateTime": "1987-03-07T11:20:54",
+        "DraftEntityLastChangeDateTime": "1976-03-03T03:27:38",
+        "HasActiveEntity": false,
+        "IsActiveEntity": true,
+        "__EntityControl": {
+            "Deletable": true,
+            "Updatable": true
+        },
+        "__OperationControl": {
+            "Edit": true
+        },
+        "SAP__Messages": [
+            {
+                "code": "code18",
+                "message": "message18",
+                "target": "target18",
+                "additionalTargets": [
+                    "additionalTargets18"
+                ],
+                "transition": true,
+                "numericSeverity": 145,
+                "longtextUrl": "longtextUrl18"
+            }
+        ]
+    },
+    {
+        "Costcenter": "whETAUERRc",
+        "CostctrHierGrp": "RHMHbcrnlMeR",
+        "ValidTo": "1979-02-24",
+        "ValidFrom": "2004-07-07",
+        "CostcenterType": "0",
+        "CompCode": "Co10",
+        "ProfitCtr": "ProfitCt10",
+        "PersonInCharge": "PersonInCh10",
+        "Name": "Name10",
+        "LocalCreatedBy": "LocalCreat10",
+        "LastChangedBy": "LastChange10",
+        "LastChangedAt": "1989-01-02T18:09:32",
+        "LocalLastChangedAt": "2012-09-05T10:45:58",
+        "HasDraftEntity": true,
+        "DraftEntityCreationDateTime": "1984-03-24T00:47:56",
+        "DraftEntityLastChangeDateTime": "1986-06-13T13:03:18",
+        "HasActiveEntity": false,
+        "IsActiveEntity": true,
+        "__EntityControl": {
+            "Deletable": false,
+            "Updatable": false
+        },
+        "__OperationControl": {
+            "Edit": true
+        },
+        "SAP__Messages": [
+            {
+                "code": "code17",
+                "message": "message17",
+                "target": "target17",
+                "additionalTargets": [
+                    "additionalTargets17"
+                ],
+                "transition": true,
+                "numericSeverity": 91,
+                "longtextUrl": "longtextUrl17"
+            }
+        ]
+    },
+    {
+        "Costcenter": "OzWQwfPbvV",
+        "CostctrHierGrp": "ZYLWZYkWwGdR",
+        "ValidTo": "1985-03-05",
+        "ValidFrom": "1988-03-25",
+        "CostcenterType": "1",
+        "CompCode": "Co11",
+        "ProfitCtr": "ProfitCt11",
+        "PersonInCharge": "PersonInCh11",
+        "Name": "Name11",
+        "LocalCreatedBy": "LocalCreat11",
+        "LastChangedBy": "LastChange11",
+        "LastChangedAt": "2001-08-31T22:27:43",
+        "LocalLastChangedAt": "1986-12-31T06:48:46",
+        "HasDraftEntity": true,
+        "DraftEntityCreationDateTime": "2012-07-27T23:07:38",
+        "DraftEntityLastChangeDateTime": "1981-05-11T09:50:27",
+        "HasActiveEntity": true,
+        "IsActiveEntity": true,
+        "__EntityControl": {
+            "Deletable": false,
+            "Updatable": false
+        },
+        "__OperationControl": {
+            "Edit": true
+        },
+        "SAP__Messages": [
+            {
+                "code": "code1",
+                "message": "message1",
+                "target": "target1",
+                "additionalTargets": [
+                    "additionalTargets1"
+                ],
+                "transition": true,
+                "numericSeverity": 196,
+                "longtextUrl": "longtextUrl1"
+            }
+        ]
+    },
+    {
+        "Costcenter": "aFRveTnWUY",
+        "CostctrHierGrp": "THjgYAPHzYLa",
+        "ValidTo": "2003-07-14",
+        "ValidFrom": "2014-11-13",
+        "CostcenterType": "2",
+        "CompCode": "Co12",
+        "ProfitCtr": "ProfitCt12",
+        "PersonInCharge": "PersonInCh12",
+        "Name": "Name12",
+        "LocalCreatedBy": "LocalCreat12",
+        "LastChangedBy": "LastChange12",
+        "LastChangedAt": "1971-02-20T22:01:32",
+        "LocalLastChangedAt": "1990-11-10T08:48:28",
+        "HasDraftEntity": true,
+        "DraftEntityCreationDateTime": "2003-10-26T06:47:20",
+        "DraftEntityLastChangeDateTime": "1977-11-23T04:02:21",
+        "HasActiveEntity": true,
+        "IsActiveEntity": true,
+        "__EntityControl": {
+            "Deletable": true,
+            "Updatable": true
+        },
+        "__OperationControl": {
+            "Edit": true
+        },
+        "SAP__Messages": [
+            {
+                "code": "code15",
+                "message": "message15",
+                "target": "target15",
+                "additionalTargets": [
+                    "additionalTargets15"
+                ],
+                "transition": true,
+                "numericSeverity": 141,
+                "longtextUrl": "longtextUrl15"
+            }
+        ]
+    },
+    {
+        "Costcenter": "SlaDytOavi",
+        "CostctrHierGrp": "KztWYfGbKNKW",
+        "ValidTo": "1996-01-10",
+        "ValidFrom": "1990-04-22",
+        "CostcenterType": "3",
+        "CompCode": "Co13",
+        "ProfitCtr": "ProfitCt13",
+        "PersonInCharge": "PersonInCh13",
+        "Name": "Name13",
+        "LocalCreatedBy": "LocalCreat13",
+        "LastChangedBy": "LastChange13",
+        "LastChangedAt": "2007-09-01T14:37:05",
+        "LocalLastChangedAt": "2002-02-08T05:00:18",
+        "HasDraftEntity": true,
+        "DraftEntityCreationDateTime": "1989-06-21T13:24:46",
+        "DraftEntityLastChangeDateTime": "1984-08-01T08:01:55",
+        "HasActiveEntity": true,
+        "IsActiveEntity": true,
+        "__EntityControl": {
+            "Deletable": true,
+            "Updatable": true
+        },
+        "__OperationControl": {
+            "Edit": true
+        },
+        "SAP__Messages": [
+            {
+                "code": "code3",
+                "message": "message3",
+                "target": "target3",
+                "additionalTargets": [
+                    "additionalTargets3"
+                ],
+                "transition": true,
+                "numericSeverity": 237,
+                "longtextUrl": "longtextUrl3"
+            }
+        ]
+    },
+    {
+        "Costcenter": "MoOUYJRYXq",
+        "CostctrHierGrp": "nkvWgslFiXGk",
+        "ValidTo": "1997-02-18",
+        "ValidFrom": "2014-01-14",
+        "CostcenterType": "4",
+        "CompCode": "Co14",
+        "ProfitCtr": "ProfitCt14",
+        "PersonInCharge": "PersonInCh14",
+        "Name": "Name14",
+        "LocalCreatedBy": "LocalCreat14",
+        "LastChangedBy": "LastChange14",
+        "LastChangedAt": "2014-01-25T17:02:08",
+        "LocalLastChangedAt": "2005-07-18T01:55:15",
+        "HasDraftEntity": true,
+        "DraftEntityCreationDateTime": "2004-05-17T23:30:11",
+        "DraftEntityLastChangeDateTime": "1988-03-21T04:51:15",
+        "HasActiveEntity": true,
+        "IsActiveEntity": true,
+        "__EntityControl": {
+            "Deletable": false,
+            "Updatable": false
+        },
+        "__OperationControl": {
+            "Edit": true
+        },
+        "SAP__Messages": [
+            {
+                "code": "code7",
+                "message": "message7",
+                "target": "target7",
+                "additionalTargets": [
+                    "additionalTargets7"
+                ],
+                "transition": true,
+                "numericSeverity": 120,
+                "longtextUrl": "longtextUrl7"
+            }
+        ]
+    },
+    {
+        "Costcenter": "SffeOEnIGX",
+        "CostctrHierGrp": "SALVoYmfvhiX",
+        "ValidTo": "2006-06-08",
+        "ValidFrom": "1991-08-18",
+        "CostcenterType": "5",
+        "CompCode": "Co15",
+        "ProfitCtr": "ProfitCt15",
+        "PersonInCharge": "PersonInCh15",
+        "Name": "Name15",
+        "LocalCreatedBy": "LocalCreat15",
+        "LastChangedBy": "LastChange15",
+        "LastChangedAt": "2012-11-11T00:58:02",
+        "LocalLastChangedAt": "1979-06-04T06:19:20",
+        "HasDraftEntity": true,
+        "DraftEntityCreationDateTime": "1989-08-27T20:37:44",
+        "DraftEntityLastChangeDateTime": "2016-02-08T15:38:09",
+        "HasActiveEntity": true,
+        "IsActiveEntity": true,
+        "__EntityControl": {
+            "Deletable": true,
+            "Updatable": true
+        },
+        "__OperationControl": {
+            "Edit": false
+        },
+        "SAP__Messages": [
+            {
+                "code": "code1",
+                "message": "message1",
+                "target": "target1",
+                "additionalTargets": [
+                    "additionalTargets1"
+                ],
+                "transition": true,
+                "numericSeverity": 196,
+                "longtextUrl": "longtextUrl1"
+            }
+        ]
+    },
+    {
+        "Costcenter": "SxGAjlVGLL",
+        "CostctrHierGrp": "KtyyaMLtsZLt",
+        "ValidTo": "1988-05-23",
+        "ValidFrom": "1984-11-01",
+        "CostcenterType": "6",
+        "CompCode": "Co16",
+        "ProfitCtr": "ProfitCt16",
+        "PersonInCharge": "PersonInCh16",
+        "Name": "Name16",
+        "LocalCreatedBy": "LocalCreat16",
+        "LastChangedBy": "LastChange16",
+        "LastChangedAt": "2010-10-12T04:01:55",
+        "LocalLastChangedAt": "2001-12-29T00:51:22",
+        "HasDraftEntity": true,
+        "DraftEntityCreationDateTime": "2014-05-05T18:01:22",
+        "DraftEntityLastChangeDateTime": "1993-04-13T08:23:36",
+        "HasActiveEntity": true,
+        "IsActiveEntity": false,
+        "__EntityControl": {
+            "Deletable": true,
+            "Updatable": true
+        },
+        "__OperationControl": {
+            "Edit": true
+        },
+        "SAP__Messages": [
+            {
+                "code": "code6",
+                "message": "message6",
+                "target": "target6",
+                "additionalTargets": [
+                    "additionalTargets6"
+                ],
+                "transition": true,
+                "numericSeverity": 241,
+                "longtextUrl": "longtextUrl6"
+            }
+        ]
+    },
+    {
+        "Costcenter": "KnDFskQPXM",
+        "CostctrHierGrp": "UjtBtaYhFQsx",
+        "ValidTo": "1970-04-01",
+        "ValidFrom": "1994-03-16",
+        "CostcenterType": "7",
+        "CompCode": "Co17",
+        "ProfitCtr": "ProfitCt17",
+        "PersonInCharge": "PersonInCh17",
+        "Name": "Name17",
+        "LocalCreatedBy": "LocalCreat17",
+        "LastChangedBy": "LastChange17",
+        "LastChangedAt": "1978-12-26T06:54:54",
+        "LocalLastChangedAt": "1994-09-09T20:18:12",
+        "HasDraftEntity": true,
+        "DraftEntityCreationDateTime": "1985-08-22T10:57:39",
+        "DraftEntityLastChangeDateTime": "1975-08-19T15:30:00",
+        "HasActiveEntity": true,
+        "IsActiveEntity": true,
+        "__EntityControl": {
+            "Deletable": false,
+            "Updatable": false
+        },
+        "__OperationControl": {
+            "Edit": false
+        },
+        "SAP__Messages": [
+            {
+                "code": "code5",
+                "message": "message5",
+                "target": "target5",
+                "additionalTargets": [
+                    "additionalTargets5"
+                ],
+                "transition": false,
+                "numericSeverity": 82,
+                "longtextUrl": "longtextUrl5"
+            }
+        ]
+    },
+    {
+        "Costcenter": "GkWenHMkKX",
+        "CostctrHierGrp": "XHsuSZJZOAie",
+        "ValidTo": "1982-05-20",
+        "ValidFrom": "1983-09-18",
+        "CostcenterType": "8",
+        "CompCode": "Co18",
+        "ProfitCtr": "ProfitCt18",
+        "PersonInCharge": "PersonInCh18",
+        "Name": "Name18",
+        "LocalCreatedBy": "LocalCreat18",
+        "LastChangedBy": "LastChange18",
+        "LastChangedAt": "1997-06-30T06:57:49",
+        "LocalLastChangedAt": "1971-04-17T08:38:03",
+        "HasDraftEntity": false,
+        "DraftEntityCreationDateTime": "2008-07-07T01:03:48",
+        "DraftEntityLastChangeDateTime": "1974-12-19T09:14:47",
+        "HasActiveEntity": true,
+        "IsActiveEntity": true,
+        "__EntityControl": {
+            "Deletable": false,
+            "Updatable": true
+        },
+        "__OperationControl": {
+            "Edit": true
+        },
+        "SAP__Messages": [
+            {
+                "code": "code11",
+                "message": "message11",
+                "target": "target11",
+                "additionalTargets": [
+                    "additionalTargets11"
+                ],
+                "transition": false,
+                "numericSeverity": 33,
+                "longtextUrl": "longtextUrl11"
+            }
+        ]
+    },
+    {
+        "Costcenter": "fzaOKZSSnS",
+        "CostctrHierGrp": "IBtxqMRQpopb",
+        "ValidTo": "1983-06-12",
+        "ValidFrom": "1981-10-21",
+        "CostcenterType": "9",
+        "CompCode": "Co19",
+        "ProfitCtr": "ProfitCt19",
+        "PersonInCharge": "PersonInCh19",
+        "Name": "Name19",
+        "LocalCreatedBy": "LocalCreat19",
+        "LastChangedBy": "LastChange19",
+        "LastChangedAt": "1991-12-21T21:46:07",
+        "LocalLastChangedAt": "1975-09-04T09:38:26",
+        "HasDraftEntity": false,
+        "DraftEntityCreationDateTime": "1976-02-15T11:08:06",
+        "DraftEntityLastChangeDateTime": "2002-11-15T19:05:13",
+        "HasActiveEntity": true,
+        "IsActiveEntity": true,
+        "__EntityControl": {
+            "Deletable": true,
+            "Updatable": false
+        },
+        "__OperationControl": {
+            "Edit": true
+        },
+        "SAP__Messages": [
+            {
+                "code": "code6",
+                "message": "message6",
+                "target": "target6",
+                "additionalTargets": [
+                    "additionalTargets6"
+                ],
+                "transition": true,
+                "numericSeverity": 241,
+                "longtextUrl": "longtextUrl6"
+            }
+        ]
+    },
+    {
+        "Costcenter": "WVjecmnyMd",
+        "CostctrHierGrp": "lUuPZfiXEKQH",
+        "ValidTo": "2010-11-12",
+        "ValidFrom": "1974-01-05",
+        "CostcenterType": "0",
+        "CompCode": "Co20",
+        "ProfitCtr": "ProfitCt20",
+        "PersonInCharge": "PersonInCh20",
+        "Name": "Name20",
+        "LocalCreatedBy": "LocalCreat20",
+        "LastChangedBy": "LastChange20",
+        "LastChangedAt": "1974-02-08T06:25:55",
+        "LocalLastChangedAt": "1977-05-31T01:52:19",
+        "HasDraftEntity": false,
+        "DraftEntityCreationDateTime": "1987-04-10T05:29:00",
+        "DraftEntityLastChangeDateTime": "2013-07-03T02:57:09",
+        "HasActiveEntity": true,
+        "IsActiveEntity": false,
+        "__EntityControl": {
+            "Deletable": false,
+            "Updatable": false
+        },
+        "__OperationControl": {
+            "Edit": true
+        },
+        "SAP__Messages": [
+            {
+                "code": "code5",
+                "message": "message5",
+                "target": "target5",
+                "additionalTargets": [
+                    "additionalTargets5"
+                ],
+                "transition": false,
+                "numericSeverity": 82,
+                "longtextUrl": "longtextUrl5"
+            }
+        ]
+    }
+]
