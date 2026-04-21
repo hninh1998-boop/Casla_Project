@@ -1,0 +1,41 @@
+{
+    "fileName": "id_1776227748224_0_propertyChange",
+    "fileType": "change",
+    "changeType": "propertyChange",
+    "moduleName": "",
+    "reference": "zcpsalesrp",
+    "packageName": "",
+    "content": {
+        "property": "useExportToExcel",
+        "newValue": false
+    },
+    "selector": {
+        "id": "zcpsalesrp::sap.suite.ui.generic.template.ListReport.view.ListReport::ZCE_CP_SALES_REPORT--listReport",
+        "idIsLocal": false,
+        "type": "sap.ui.comp.smarttable.SmartTable"
+    },
+    "layer": "CUSTOMER_BASE",
+    "texts": {},
+    "namespace": "apps/zcpsalesrp/changes/",
+    "projectId": "",
+    "creation": 1776227748224,
+    "originalLanguage": "",
+    "support": {
+        "generator": "changeUtils: SAPFioriTools",
+        "service": "",
+        "user": "",
+        "sapui5Version": "1.142.10",
+        "sourceChangeFileName": "",
+        "compositeCommand": ""
+    },
+    "oDataInformation": {},
+    "dependentSelector": {},
+    "validAppVersions": {
+        "from": "0.0.1",
+        "to": "0.0.1",
+        "creation": "0.0.1"
+    },
+    "jsOnly": false,
+    "variantReference": "",
+    "appDescriptorChange": false
+}
