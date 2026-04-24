@@ -56,6 +56,7 @@
             <Annotation Term="SAP__core.SchemaVersion" String="1.0.0"/>
             <EntityType Name="ExtendBpRoleRefType">
                 <Key>
+<<<<<<< HEAD
                     <PropertyRef Name="BusinessPartner"/>
                     <PropertyRef Name="OrgCode"/>
                 </Key>
@@ -104,11 +105,36 @@
             <Annotations Target="SAP__self.ExtendBpRoleRefType/OrgCode">
                 <Annotation Term="SAP__common.Label" String="Org Code"/>
                 <Annotation Term="SAP__core.Computed"/>
+=======
+                    <PropertyRef Name="TargetBusinessPartner"/>
+                </Key>
+                <Property Name="TargetBusinessPartner" Type="Edm.String" Nullable="false" MaxLength="10"/>
+                <Property Name="RefBusinessPartner" Type="Edm.String" Nullable="false" MaxLength="10"/>
+                <Property Name="RefCompanyCode" Type="Edm.String" Nullable="false" MaxLength="4"/>
+                <Property Name="Status" Type="Edm.String" Nullable="false" MaxLength="255"/>
+                <Property Name="LocalCreatedBy" Type="Edm.String" Nullable="false" MaxLength="12"/>
+                <Property Name="LastChangedBy" Type="Edm.String" Nullable="false" MaxLength="12"/>
+                <Property Name="LastChangedAt" Type="Edm.DateTimeOffset" Precision="7"/>
+                <Property Name="LocalLastChangedAt" Type="Edm.DateTimeOffset" Precision="7"/>
+            </EntityType>
+            <EntityContainer Name="Container">
+                <EntitySet Name="ExtendBpRoleRef" EntityType="com.sap.gateway.srvd.zui_bp_ext_role_ref.v0001.ExtendBpRoleRefType"/>
+            </EntityContainer>
+            <Annotations Target="SAP__self.ExtendBpRoleRefType/TargetBusinessPartner">
+                <Annotation Term="SAP__common.Label" String="Business Partner"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ExtendBpRoleRefType/RefBusinessPartner">
+                <Annotation Term="SAP__common.Label" String="With Reference"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ExtendBpRoleRefType/RefCompanyCode">
+                <Annotation Term="SAP__common.Label" String="Company Code Ref"/>
+>>>>>>> bf875ca (Tool Extend BP with Reference)
                 <Annotation Term="SAP__common.IsUpperCase"/>
                 <Annotation Term="SAP__common.Heading" String="CoCd"/>
                 <Annotation Term="SAP__common.QuickInfo" String="Company Code"/>
                 <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=BUKRS"/>
             </Annotations>
+<<<<<<< HEAD
             <Annotations Target="SAP__self.ExtendBpRoleRefType/FLCU00_Customer">
                 <Annotation Term="SAP__common.Label" String="Customer"/>
             </Annotations>
@@ -145,6 +171,22 @@
                 <Annotation Term="SAP__common.IsUpperCase"/>
                 <Annotation Term="SAP__common.Label" String="Truth Value"/>
                 <Annotation Term="SAP__common.QuickInfo" String="Truth Value: True/False"/>
+=======
+            <Annotations Target="SAP__self.ExtendBpRoleRefType/Status">
+                <Annotation Term="SAP__common.Label" String="Status"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ExtendBpRoleRefType/LocalCreatedBy">
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="Created By"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Created By User"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=ABP_CREATION_USER"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ExtendBpRoleRefType/LastChangedBy">
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="Changed By"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Last Changed By User"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=ABP_LASTCHANGE_USER"/>
+>>>>>>> bf875ca (Tool Extend BP with Reference)
             </Annotations>
             <Annotations Target="SAP__self.ExtendBpRoleRefType">
                 <Annotation Term="SAP__common.Label" String="Cons.View - Extend BP Role with Ref"/>
@@ -163,12 +205,16 @@
                         <PropertyValue Property="TypeNamePlural" String="Business Partners"/>
                         <PropertyValue Property="Title">
                             <Record Type="SAP__UI.DataField">
+<<<<<<< HEAD
                                 <PropertyValue Property="Value" Path="BusinessPartner"/>
                             </Record>
                         </PropertyValue>
                         <PropertyValue Property="Description">
                             <Record Type="SAP__UI.DataField">
                                 <PropertyValue Property="Value" Path="BusinessPartnerFullName"/>
+=======
+                                <PropertyValue Property="Value" Path="TargetBusinessPartner"/>
+>>>>>>> bf875ca (Tool Extend BP with Reference)
                             </Record>
                         </PropertyValue>
                     </Record>
@@ -176,6 +222,7 @@
                 <Annotation Term="SAP__UI.Identification">
                     <Collection>
                         <Record Type="SAP__UI.DataField">
+<<<<<<< HEAD
                             <PropertyValue Property="Value" Path="BusinessPartner"/>
                         </Record>
                         <Record Type="SAP__UI.DataField">
@@ -192,12 +239,25 @@
                         </Record>
                         <Record Type="SAP__UI.DataField">
                             <PropertyValue Property="Value" Path="FLVN01_SupplierFin"/>
+=======
+                            <PropertyValue Property="Value" Path="TargetBusinessPartner"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Value" Path="RefBusinessPartner"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Value" Path="RefCompanyCode"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Value" Path="Status"/>
+>>>>>>> bf875ca (Tool Extend BP with Reference)
                         </Record>
                     </Collection>
                 </Annotation>
                 <Annotation Term="SAP__UI.LineItem">
                     <Collection>
                         <Record Type="SAP__UI.DataField">
+<<<<<<< HEAD
                             <PropertyValue Property="Value" Path="BusinessPartner"/>
                         </Record>
                         <Record Type="SAP__UI.DataField">
@@ -214,17 +274,50 @@
                         </Record>
                         <Record Type="SAP__UI.DataField">
                             <PropertyValue Property="Value" Path="FLVN01_SupplierFin"/>
+=======
+                            <PropertyValue Property="Value" Path="TargetBusinessPartner"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Value" Path="RefBusinessPartner"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Value" Path="RefCompanyCode"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Value" Path="Status"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Label" String="Created By"/>
+                            <PropertyValue Property="Value" Path="LocalCreatedBy"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Label" String="Changed By"/>
+                            <PropertyValue Property="Value" Path="LastChangedBy"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Label" String="Changed At"/>
+                            <PropertyValue Property="Value" Path="LastChangedAt"/>
+>>>>>>> bf875ca (Tool Extend BP with Reference)
                         </Record>
                     </Collection>
                 </Annotation>
                 <Annotation Term="SAP__UI.SelectionFields">
                     <Collection>
+<<<<<<< HEAD
                         <PropertyPath>BusinessPartner</PropertyPath>
                         <PropertyPath>OrgCode</PropertyPath>
                         <PropertyPath>FLCU00_Customer</PropertyPath>
                     </Collection>
                 </Annotation>
                 <Annotation Term="SAP__common.Messages" Path="SAP__Messages"/>
+=======
+                        <PropertyPath>TargetBusinessPartner</PropertyPath>
+                        <PropertyPath>RefBusinessPartner</PropertyPath>
+                        <PropertyPath>RefCompanyCode</PropertyPath>
+                        <PropertyPath>Status</PropertyPath>
+                    </Collection>
+                </Annotation>
+>>>>>>> bf875ca (Tool Extend BP with Reference)
             </Annotations>
             <Annotations Target="SAP__self.Container/ExtendBpRoleRef">
                 <Annotation Term="SAP__capabilities.SearchRestrictions">
@@ -232,6 +325,7 @@
                         <PropertyValue Property="Searchable" Bool="false"/>
                     </Record>
                 </Annotation>
+<<<<<<< HEAD
                 <Annotation Term="SAP__capabilities.FilterRestrictions">
                     <Record>
                         <PropertyValue Property="NonFilterableProperties">
@@ -248,12 +342,26 @@
                                 <PropertyPath>__EntityControl</PropertyPath>
                             </Collection>
                         </PropertyValue>
+=======
+                <Annotation Term="SAP__capabilities.InsertRestrictions">
+                    <Record>
+                        <PropertyValue Property="Insertable" Bool="false"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.DeleteRestrictions">
+                    <Record>
+                        <PropertyValue Property="Deletable" Bool="false"/>
+>>>>>>> bf875ca (Tool Extend BP with Reference)
                     </Record>
                 </Annotation>
                 <Annotation Term="SAP__capabilities.UpdateRestrictions">
                     <Record>
+<<<<<<< HEAD
                         <PropertyValue Property="DeltaUpdateSupported" Bool="true"/>
                         <PropertyValue Property="Updatable" Path="__EntityControl/Updatable"/>
+=======
+                        <PropertyValue Property="Updatable" Bool="false"/>
+>>>>>>> bf875ca (Tool Extend BP with Reference)
                         <PropertyValue Property="QueryOptions">
                             <Record>
                                 <PropertyValue Property="SelectSupported" Bool="true"/>
@@ -261,6 +369,7 @@
                         </PropertyValue>
                     </Record>
                 </Annotation>
+<<<<<<< HEAD
                 <Annotation Term="SAP__capabilities.DeepUpdateSupport">
                     <Record>
                         <PropertyValue Property="ContentIDSupported" Bool="true"/>
@@ -271,6 +380,8 @@
                         <PropertyValue Property="Deletable" Path="__EntityControl/Deletable"/>
                     </Record>
                 </Annotation>
+=======
+>>>>>>> bf875ca (Tool Extend BP with Reference)
             </Annotations>
             <Annotations Target="SAP__self.Container">
                 <Annotation Term="SAP__common.ApplyMultiUnitBehaviorForSortingAndFiltering" Bool="true"/>
@@ -328,6 +439,7 @@
                 <Annotation Term="SAP__capabilities.KeyAsSegmentSupported"/>
                 <Annotation Term="SAP__capabilities.AsynchronousRequestsSupported"/>
             </Annotations>
+<<<<<<< HEAD
             <Annotations Target="SAP__self.EntityControl/Deletable">
                 <Annotation Term="SAP__common.Label" String="Dyn. Method Control"/>
                 <Annotation Term="SAP__common.Heading" String="Dynamic Method Control"/>
@@ -337,6 +449,17 @@
                 <Annotation Term="SAP__common.Label" String="Dyn. Method Control"/>
                 <Annotation Term="SAP__common.Heading" String="Dynamic Method Control"/>
                 <Annotation Term="SAP__common.QuickInfo" String="Dynamic Method Property"/>
+=======
+            <Annotations Target="SAP__self.ExtendBpRoleRefType/LastChangedAt">
+                <Annotation Term="SAP__common.Label" String="Changed On"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Last Change Date Time"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=ABP_LASTCHANGE_TSTMPL"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ExtendBpRoleRefType/LocalLastChangedAt">
+                <Annotation Term="SAP__common.Label" String="Changed On"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Local Instance Last Change Date Time"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=ABP_LOCINST_LASTCHANGE_TSTMPL"/>
+>>>>>>> bf875ca (Tool Extend BP with Reference)
             </Annotations>
         </Schema>
     </edmx:DataServices>

@@ -19,7 +19,13 @@ builder:
           authenticationType: reentranceTicket # SAML support for vscode
         app:
           name: ZEXT_BPROLEREF
+<<<<<<< HEAD
           package: ZPK_EXTEND_BP_ROLE_REF
           transport: AK3K904402
+=======
+          description: Tool Extend BP Role with Reference
+          package: ZPK_EXTEND_BP_ROLE_REF
+          transport: AK3K904654
+>>>>>>> bf875ca (Tool Extend BP with Reference)
         exclude:
           - /test/

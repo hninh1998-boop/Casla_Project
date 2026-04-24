@@ -5,13 +5,19 @@
 
     <Dialog id="extendRoleDialog"
             title="Extend Role with Refer"
+<<<<<<< HEAD
             draggable="true">
+=======
+            draggable="true"
+            contentWidth="500px">
+>>>>>>> bf875ca (Tool Extend BP with Reference)
 
         <VBox width="100%">
             <f:SimpleForm
                 editable="true"
                 layout="ResponsiveGridLayout"
                 maxContainerCols="2"
+<<<<<<< HEAD
                 labelSpanL="6" labelSpanM="6"
                 columnsL="1"   columnsM="1">
                 <f:content>
@@ -33,6 +39,40 @@
 
                     <Label text="FLVN00 Supplier (Fin)"/>
                     <CheckBox id="cbFLVN00" selected="false"/>
+=======
+                labelSpanL="5" labelSpanM="5"
+                columnsL="1"   columnsM="1">
+                <f:content>
+
+                    <Label text="Target BP (multiple)" required="true"/>
+                    <Input  id="inputTargetBPs"
+                            placeholder="Target BP"/>
+
+                    <Label text="Reference BP" required="true"/>
+                    <Input id="inputRefBP"
+                           placeholder="Reference Business Partner"/>
+
+                    <Label text="Reference Company Code"/>
+                    <Input id="inputRefCC"
+                           placeholder="Reference Company Code"/>
+
+                    <Label text="Extend All Roles"/>
+                    <HBox alignItems="Center" wrap="Wrap">
+                        <CheckBox id="cbAll" text="Extend All"    selected="false"/>
+                    </HBox>
+
+                    <Label text="Customer Roles"/>
+                    <HBox alignItems="Center" wrap="Wrap">
+                        <CheckBox id="cbFLCU01" text="FLCU01 Customer"    selected="false"/>
+                        <CheckBox id="cbFLCU00" text="FLCU00 Customer (Fin)" selected="false"/>
+                    </HBox>
+
+                    <Label text="Supplier Roles"/>
+                    <HBox alignItems="Center" wrap="Wrap">
+                        <CheckBox id="cbFLVN01" text="FLVN01 Supplier"    selected="false"/>
+                        <CheckBox id="cbFLVN00" text="FLVN00 Supplier (Fin)" selected="false"/>
+                    </HBox>
+>>>>>>> bf875ca (Tool Extend BP with Reference)
 
                 </f:content>
             </f:SimpleForm>

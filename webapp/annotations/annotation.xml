@@ -13,6 +13,7 @@
     </edmx:Reference>
     <edmx:DataServices>
         <Schema xmlns="http://docs.oasis-open.org/odata/ns/edm" Namespace="local">
+<<<<<<< HEAD
             <Annotations Target="com.sap.gateway.srvd.zui_bp_ext_role_ref.v0001.Container/ExtendBpRoleRef">
                 <Annotation Term="UI.LineItem">
                     <Collection>
@@ -26,6 +27,8 @@
                     </Collection>
                 </Annotation>
             </Annotations>
+=======
+>>>>>>> bf875ca (Tool Extend BP with Reference)
         </Schema>
     </edmx:DataServices>
 </edmx:Edmx>

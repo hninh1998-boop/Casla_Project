@@ -1,12 +1,20 @@
 {
   "generationParameters": {
+<<<<<<< HEAD
     "generationDate": "Mon Apr 13 2026 06:48:57 GMT+0000 (Coordinated Universal Time)",
+=======
+    "generationDate": "Mon Apr 13 2026 08:37:48 GMT+0000 (Coordinated Universal Time)",
+>>>>>>> bf875ca (Tool Extend BP with Reference)
     "generatorPlatform": "SAP Business Application Studio",
     "serviceType": "SAP System (ABAP On-Premise)",
     "metadataFilename": "",
     "serviceUrl": "https://my426517.s4hana.cloud.sap/sap/opu/odata4/sap/zui_bp_ext_role_ref_v4/srvd/sap/zui_bp_ext_role_ref/0001/",
     "appName": "zextend_bp_role_ref",
+<<<<<<< HEAD
     "appTitle": "Extend BP Role with Reference",
+=======
+    "appTitle": "Tool Extend BP Role with Reference",
+>>>>>>> bf875ca (Tool Extend BP with Reference)
     "appDescription": "An SAP Fiori application.",
     "appNamespace": "",
     "ui5Theme": "sap_horizon",
