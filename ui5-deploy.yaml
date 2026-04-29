@@ -21,6 +21,6 @@ builder:
           name: ZSALES_RP
           description: Báo cáo Bán Hàng
           package: ZPK_SALES_REPORT
-          transport: AK3K904437
+          transport: AK3K904854
         exclude:
           - /test/
