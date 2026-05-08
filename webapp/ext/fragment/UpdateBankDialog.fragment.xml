@@ -1,0 +1,83 @@
+<core:FragmentDefinition
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+    xmlns:f="sap.ui.layout.form">
+
+    <Dialog id="updateBankDialog"
+            title="Update BP Bank Account"
+            draggable="true"
+            contentWidth="550px">
+
+        <VBox width="100%">
+            <f:SimpleForm
+                editable="true"
+                layout="ResponsiveGridLayout"
+                maxContainerCols="2"
+                labelSpanL="5" labelSpanM="5"
+                columnsL="1"   columnsM="1">
+                <f:content>
+
+                    <Label text="Mã BP"/>
+                    <Input id="udt_inputMaBP"
+                           value="{updateModel>/MaBP}"
+                           editable="false"/>
+
+                    <Label text="ID"/>
+                    <Input id="udt_inputID"
+                           value="{updateModel>/ID}"
+                           editable="false"/>
+
+                    <Label text="Bank Key" required="true"/>
+                    <Input id="udt_inputBankKey"
+                           value="{updateModel>/BankKey}"
+                           maxLength="15"
+                           change=".onBankKeyChange"/>
+
+                    <Label text="Bank Name"/>
+                    <Input id="udt_inputBankName"
+                           value="{updateModel>/BankName}"
+                           editable="false"/>
+
+                    <Label text="Bank Branch"/>
+                    <Input id="udt_inputBankBranch"
+                           value="{updateModel>/BankBranch}"
+                           editable="false"/>
+
+                    <Label text="Bank Account" required="true"/>
+                    <Input id="udt_inputBankAccount"
+                           value="{updateModel>/BankAccount}"
+                           maxLength="18"/>
+
+                    <Label text="Ext. ID"/>
+                    <Input id="udt_inputExtID"
+                           value="{updateModel>/ExtID}"
+                           maxLength="18"/>
+
+                    <Label text="Account Holder Name" required="true"/>
+                    <Input id="udt_inputAccountHolderName"
+                           value="{updateModel>/AccountHolderName}"
+                           maxLength="60"/>
+
+                    <Label text="Account Name"/>
+                    <Input id="udt_inputAccountName"
+                           value="{updateModel>/AccountName}"
+                           maxLength="40"/>
+
+                </f:content>
+            </f:SimpleForm>
+        </VBox>
+
+        <footer>
+            <Toolbar>
+                <content>
+                    <Button text="Save"
+                            type="Emphasized"
+                            press=".onUpdateBankConfirm"/>
+                    <Button text="Cancel"
+                            press=".onUpdateBankCancel"/>
+                </content>
+            </Toolbar>
+        </footer>
+
+    </Dialog>
+</core:FragmentDefinition>

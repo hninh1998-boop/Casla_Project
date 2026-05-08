@@ -1,0 +1,582 @@
+[
+    {
+        "MaBP": "OPDIjggbSa",
+        "ID": "qKLK",
+        "TenNCC": "TenNCC1",
+        "CR": "CR1",
+        "BankKey": "BankKey1",
+        "AccountName": "AccountName1",
+        "BankAccount": "BankAccount1",
+        "ExtID": "ExtID1",
+        "AccountHolderName": "AccountHolderName1",
+        "BankName": "BankName1",
+        "BankBranch": "BankBranch1",
+        "__OperationControl": {
+            "updateBpBank": true
+        },
+        "SAP__Messages": [
+            {
+                "code": "code5",
+                "message": "message5",
+                "target": "target5",
+                "additionalTargets": [
+                    "additionalTargets5"
+                ],
+                "transition": true,
+                "numericSeverity": 91,
+                "longtextUrl": "longtextUrl5"
+            }
+        ]
+    },
+    {
+        "MaBP": "FxITtatrJv",
+        "ID": "phZM",
+        "TenNCC": "TenNCC2",
+        "CR": "CR2",
+        "BankKey": "BankKey2",
+        "AccountName": "AccountName2",
+        "BankAccount": "BankAccount2",
+        "ExtID": "ExtID2",
+        "AccountHolderName": "AccountHolderName2",
+        "BankName": "BankName2",
+        "BankBranch": "BankBranch2",
+        "__OperationControl": {
+            "updateBpBank": true
+        },
+        "SAP__Messages": [
+            {
+                "code": "code4",
+                "message": "message4",
+                "target": "target4",
+                "additionalTargets": [
+                    "additionalTargets4"
+                ],
+                "transition": true,
+                "numericSeverity": 101,
+                "longtextUrl": "longtextUrl4"
+            }
+        ]
+    },
+    {
+        "MaBP": "ARqRiJjkeD",
+        "ID": "EXTU",
+        "TenNCC": "TenNCC3",
+        "CR": "CR3",
+        "BankKey": "BankKey3",
+        "AccountName": "AccountName3",
+        "BankAccount": "BankAccount3",
+        "ExtID": "ExtID3",
+        "AccountHolderName": "AccountHolderName3",
+        "BankName": "BankName3",
+        "BankBranch": "BankBranch3",
+        "__OperationControl": {
+            "updateBpBank": false
+        },
+        "SAP__Messages": [
+            {
+                "code": "code12",
+                "message": "message12",
+                "target": "target12",
+                "additionalTargets": [
+                    "additionalTargets12"
+                ],
+                "transition": false,
+                "numericSeverity": 25,
+                "longtextUrl": "longtextUrl12"
+            }
+        ]
+    },
+    {
+        "MaBP": "HKITMHWyhX",
+        "ID": "qNCN",
+        "TenNCC": "TenNCC4",
+        "CR": "CR4",
+        "BankKey": "BankKey4",
+        "AccountName": "AccountName4",
+        "BankAccount": "BankAccount4",
+        "ExtID": "ExtID4",
+        "AccountHolderName": "AccountHolderName4",
+        "BankName": "BankName4",
+        "BankBranch": "BankBranch4",
+        "__OperationControl": {
+            "updateBpBank": true
+        },
+        "SAP__Messages": [
+            {
+                "code": "code2",
+                "message": "message2",
+                "target": "target2",
+                "additionalTargets": [
+                    "additionalTargets2"
+                ],
+                "transition": false,
+                "numericSeverity": 245,
+                "longtextUrl": "longtextUrl2"
+            }
+        ]
+    },
+    {
+        "MaBP": "IYjibJfxMM",
+        "ID": "VONi",
+        "TenNCC": "TenNCC5",
+        "CR": "CR5",
+        "BankKey": "BankKey5",
+        "AccountName": "AccountName5",
+        "BankAccount": "BankAccount5",
+        "ExtID": "ExtID5",
+        "AccountHolderName": "AccountHolderName5",
+        "BankName": "BankName5",
+        "BankBranch": "BankBranch5",
+        "__OperationControl": {
+            "updateBpBank": true
+        },
+        "SAP__Messages": [
+            {
+                "code": "code17",
+                "message": "message17",
+                "target": "target17",
+                "additionalTargets": [
+                    "additionalTargets17"
+                ],
+                "transition": true,
+                "numericSeverity": 26,
+                "longtextUrl": "longtextUrl17"
+            }
+        ]
+    },
+    {
+        "MaBP": "LsmvVdvBNX",
+        "ID": "rNdQ",
+        "TenNCC": "TenNCC6",
+        "CR": "CR6",
+        "BankKey": "BankKey6",
+        "AccountName": "AccountName6",
+        "BankAccount": "BankAccount6",
+        "ExtID": "ExtID6",
+        "AccountHolderName": "AccountHolderName6",
+        "BankName": "BankName6",
+        "BankBranch": "BankBranch6",
+        "__OperationControl": {
+            "updateBpBank": false
+        },
+        "SAP__Messages": [
+            {
+                "code": "code16",
+                "message": "message16",
+                "target": "target16",
+                "additionalTargets": [
+                    "additionalTargets16"
+                ],
+                "transition": true,
+                "numericSeverity": 180,
+                "longtextUrl": "longtextUrl16"
+            }
+        ]
+    },
+    {
+        "MaBP": "RjUUKdXvRT",
+        "ID": "tyvh",
+        "TenNCC": "TenNCC7",
+        "CR": "CR7",
+        "BankKey": "BankKey7",
+        "AccountName": "AccountName7",
+        "BankAccount": "BankAccount7",
+        "ExtID": "ExtID7",
+        "AccountHolderName": "AccountHolderName7",
+        "BankName": "BankName7",
+        "BankBranch": "BankBranch7",
+        "__OperationControl": {
+            "updateBpBank": false
+        },
+        "SAP__Messages": [
+            {
+                "code": "code13",
+                "message": "message13",
+                "target": "target13",
+                "additionalTargets": [
+                    "additionalTargets13"
+                ],
+                "transition": false,
+                "numericSeverity": 136,
+                "longtextUrl": "longtextUrl13"
+            }
+        ]
+    },
+    {
+        "MaBP": "QZuTrLzVdl",
+        "ID": "DuOf",
+        "TenNCC": "TenNCC8",
+        "CR": "CR8",
+        "BankKey": "BankKey8",
+        "AccountName": "AccountName8",
+        "BankAccount": "BankAccount8",
+        "ExtID": "ExtID8",
+        "AccountHolderName": "AccountHolderName8",
+        "BankName": "BankName8",
+        "BankBranch": "BankBranch8",
+        "__OperationControl": {
+            "updateBpBank": true
+        },
+        "SAP__Messages": [
+            {
+                "code": "code4",
+                "message": "message4",
+                "target": "target4",
+                "additionalTargets": [
+                    "additionalTargets4"
+                ],
+                "transition": true,
+                "numericSeverity": 101,
+                "longtextUrl": "longtextUrl4"
+            }
+        ]
+    },
+    {
+        "MaBP": "eBBmtVkCWA",
+        "ID": "ufAp",
+        "TenNCC": "TenNCC9",
+        "CR": "CR9",
+        "BankKey": "BankKey9",
+        "AccountName": "AccountName9",
+        "BankAccount": "BankAccount9",
+        "ExtID": "ExtID9",
+        "AccountHolderName": "AccountHolderName9",
+        "BankName": "BankName9",
+        "BankBranch": "BankBranch9",
+        "__OperationControl": {
+            "updateBpBank": true
+        },
+        "SAP__Messages": [
+            {
+                "code": "code8",
+                "message": "message8",
+                "target": "target8",
+                "additionalTargets": [
+                    "additionalTargets8"
+                ],
+                "transition": false,
+                "numericSeverity": 238,
+                "longtextUrl": "longtextUrl8"
+            }
+        ]
+    },
+    {
+        "MaBP": "hQHCKYaUeD",
+        "ID": "RnCX",
+        "TenNCC": "TenNCC10",
+        "CR": "C10",
+        "BankKey": "BankKey10",
+        "AccountName": "AccountName10",
+        "BankAccount": "BankAccount10",
+        "ExtID": "ExtID10",
+        "AccountHolderName": "AccountHolderName10",
+        "BankName": "BankName10",
+        "BankBranch": "BankBranch10",
+        "__OperationControl": {
+            "updateBpBank": true
+        },
+        "SAP__Messages": [
+            {
+                "code": "code15",
+                "message": "message15",
+                "target": "target15",
+                "additionalTargets": [
+                    "additionalTargets15"
+                ],
+                "transition": true,
+                "numericSeverity": 73,
+                "longtextUrl": "longtextUrl15"
+            }
+        ]
+    },
+    {
+        "MaBP": "rwYMFrSvQb",
+        "ID": "XgjN",
+        "TenNCC": "TenNCC11",
+        "CR": "C11",
+        "BankKey": "BankKey11",
+        "AccountName": "AccountName11",
+        "BankAccount": "BankAccount11",
+        "ExtID": "ExtID11",
+        "AccountHolderName": "AccountHolderName11",
+        "BankName": "BankName11",
+        "BankBranch": "BankBranch11",
+        "__OperationControl": {
+            "updateBpBank": true
+        },
+        "SAP__Messages": [
+            {
+                "code": "code8",
+                "message": "message8",
+                "target": "target8",
+                "additionalTargets": [
+                    "additionalTargets8"
+                ],
+                "transition": false,
+                "numericSeverity": 238,
+                "longtextUrl": "longtextUrl8"
+            }
+        ]
+    },
+    {
+        "MaBP": "NMcPpoGqab",
+        "ID": "mYtz",
+        "TenNCC": "TenNCC12",
+        "CR": "C12",
+        "BankKey": "BankKey12",
+        "AccountName": "AccountName12",
+        "BankAccount": "BankAccount12",
+        "ExtID": "ExtID12",
+        "AccountHolderName": "AccountHolderName12",
+        "BankName": "BankName12",
+        "BankBranch": "BankBranch12",
+        "__OperationControl": {
+            "updateBpBank": false
+        },
+        "SAP__Messages": [
+            {
+                "code": "code13",
+                "message": "message13",
+                "target": "target13",
+                "additionalTargets": [
+                    "additionalTargets13"
+                ],
+                "transition": false,
+                "numericSeverity": 136,
+                "longtextUrl": "longtextUrl13"
+            }
+        ]
+    },
+    {
+        "MaBP": "isaqppemGE",
+        "ID": "YUor",
+        "TenNCC": "TenNCC13",
+        "CR": "C13",
+        "BankKey": "BankKey13",
+        "AccountName": "AccountName13",
+        "BankAccount": "BankAccount13",
+        "ExtID": "ExtID13",
+        "AccountHolderName": "AccountHolderName13",
+        "BankName": "BankName13",
+        "BankBranch": "BankBranch13",
+        "__OperationControl": {
+            "updateBpBank": false
+        },
+        "SAP__Messages": [
+            {
+                "code": "code3",
+                "message": "message3",
+                "target": "target3",
+                "additionalTargets": [
+                    "additionalTargets3"
+                ],
+                "transition": false,
+                "numericSeverity": 185,
+                "longtextUrl": "longtextUrl3"
+            }
+        ]
+    },
+    {
+        "MaBP": "pKaGMuDwPd",
+        "ID": "DaQn",
+        "TenNCC": "TenNCC14",
+        "CR": "C14",
+        "BankKey": "BankKey14",
+        "AccountName": "AccountName14",
+        "BankAccount": "BankAccount14",
+        "ExtID": "ExtID14",
+        "AccountHolderName": "AccountHolderName14",
+        "BankName": "BankName14",
+        "BankBranch": "BankBranch14",
+        "__OperationControl": {
+            "updateBpBank": false
+        },
+        "SAP__Messages": [
+            {
+                "code": "code12",
+                "message": "message12",
+                "target": "target12",
+                "additionalTargets": [
+                    "additionalTargets12"
+                ],
+                "transition": false,
+                "numericSeverity": 25,
+                "longtextUrl": "longtextUrl12"
+            }
+        ]
+    },
+    {
+        "MaBP": "oarXWexIjG",
+        "ID": "bKdj",
+        "TenNCC": "TenNCC15",
+        "CR": "C15",
+        "BankKey": "BankKey15",
+        "AccountName": "AccountName15",
+        "BankAccount": "BankAccount15",
+        "ExtID": "ExtID15",
+        "AccountHolderName": "AccountHolderName15",
+        "BankName": "BankName15",
+        "BankBranch": "BankBranch15",
+        "__OperationControl": {
+            "updateBpBank": true
+        },
+        "SAP__Messages": [
+            {
+                "code": "code3",
+                "message": "message3",
+                "target": "target3",
+                "additionalTargets": [
+                    "additionalTargets3"
+                ],
+                "transition": false,
+                "numericSeverity": 185,
+                "longtextUrl": "longtextUrl3"
+            }
+        ]
+    },
+    {
+        "MaBP": "UeUxcAYsyp",
+        "ID": "oBiu",
+        "TenNCC": "TenNCC16",
+        "CR": "C16",
+        "BankKey": "BankKey16",
+        "AccountName": "AccountName16",
+        "BankAccount": "BankAccount16",
+        "ExtID": "ExtID16",
+        "AccountHolderName": "AccountHolderName16",
+        "BankName": "BankName16",
+        "BankBranch": "BankBranch16",
+        "__OperationControl": {
+            "updateBpBank": true
+        },
+        "SAP__Messages": [
+            {
+                "code": "code13",
+                "message": "message13",
+                "target": "target13",
+                "additionalTargets": [
+                    "additionalTargets13"
+                ],
+                "transition": false,
+                "numericSeverity": 136,
+                "longtextUrl": "longtextUrl13"
+            }
+        ]
+    },
+    {
+        "MaBP": "rRrEtFyVfZ",
+        "ID": "kqhU",
+        "TenNCC": "TenNCC17",
+        "CR": "C17",
+        "BankKey": "BankKey17",
+        "AccountName": "AccountName17",
+        "BankAccount": "BankAccount17",
+        "ExtID": "ExtID17",
+        "AccountHolderName": "AccountHolderName17",
+        "BankName": "BankName17",
+        "BankBranch": "BankBranch17",
+        "__OperationControl": {
+            "updateBpBank": true
+        },
+        "SAP__Messages": [
+            {
+                "code": "code6",
+                "message": "message6",
+                "target": "target6",
+                "additionalTargets": [
+                    "additionalTargets6"
+                ],
+                "transition": false,
+                "numericSeverity": 93,
+                "longtextUrl": "longtextUrl6"
+            }
+        ]
+    },
+    {
+        "MaBP": "CqvcfohwsK",
+        "ID": "LUbA",
+        "TenNCC": "TenNCC18",
+        "CR": "C18",
+        "BankKey": "BankKey18",
+        "AccountName": "AccountName18",
+        "BankAccount": "BankAccount18",
+        "ExtID": "ExtID18",
+        "AccountHolderName": "AccountHolderName18",
+        "BankName": "BankName18",
+        "BankBranch": "BankBranch18",
+        "__OperationControl": {
+            "updateBpBank": true
+        },
+        "SAP__Messages": [
+            {
+                "code": "code10",
+                "message": "message10",
+                "target": "target10",
+                "additionalTargets": [
+                    "additionalTargets10"
+                ],
+                "transition": false,
+                "numericSeverity": 255,
+                "longtextUrl": "longtextUrl10"
+            }
+        ]
+    },
+    {
+        "MaBP": "snPHLDlglD",
+        "ID": "brXy",
+        "TenNCC": "TenNCC19",
+        "CR": "C19",
+        "BankKey": "BankKey19",
+        "AccountName": "AccountName19",
+        "BankAccount": "BankAccount19",
+        "ExtID": "ExtID19",
+        "AccountHolderName": "AccountHolderName19",
+        "BankName": "BankName19",
+        "BankBranch": "BankBranch19",
+        "__OperationControl": {
+            "updateBpBank": true
+        },
+        "SAP__Messages": [
+            {
+                "code": "code6",
+                "message": "message6",
+                "target": "target6",
+                "additionalTargets": [
+                    "additionalTargets6"
+                ],
+                "transition": false,
+                "numericSeverity": 93,
+                "longtextUrl": "longtextUrl6"
+            }
+        ]
+    },
+    {
+        "MaBP": "vrnOSpwjkw",
+        "ID": "lDnL",
+        "TenNCC": "TenNCC20",
+        "CR": "C20",
+        "BankKey": "BankKey20",
+        "AccountName": "AccountName20",
+        "BankAccount": "BankAccount20",
+        "ExtID": "ExtID20",
+        "AccountHolderName": "AccountHolderName20",
+        "BankName": "BankName20",
+        "BankBranch": "BankBranch20",
+        "__OperationControl": {
+            "updateBpBank": true
+        },
+        "SAP__Messages": [
+            {
+                "code": "code7",
+                "message": "message7",
+                "target": "target7",
+                "additionalTargets": [
+                    "additionalTargets7"
+                ],
+                "transition": true,
+                "numericSeverity": 251,
+                "longtextUrl": "longtextUrl7"
+            }
+        ]
+    }
+]

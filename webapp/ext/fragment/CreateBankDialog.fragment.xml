@@ -1,0 +1,78 @@
+<core:FragmentDefinition
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+    xmlns:f="sap.ui.layout.form">
+
+    <Dialog id="createBankDialog"
+            title="BP Bank Account"
+            draggable="true"
+            contentWidth="550px">
+
+        <VBox width="100%">
+            <f:SimpleForm
+                editable="true"
+                layout="ResponsiveGridLayout"
+                maxContainerCols="2"
+                labelSpanL="5" labelSpanM="5"
+                columnsL="1"   columnsM="1">
+                <f:content>
+
+                    <Label text="Mã BP" required="true"/>
+                    <Input id="crt_inputMaBP"
+                           value="{createModel>/MaBP}"
+                           maxLength="10"/>
+
+                    <Label text="Bank Key" required="true"/>
+                    <Input id="crt_inputBankKey"
+                           value="{createModel>/BankKey}"
+                           maxLength="15"
+                           change=".onBankKeyChange"/>
+
+                    <Label text="Bank Name"/>
+                    <Input id="crt_inputBankName"
+                           value="{createModel>/BankName}"
+                           editable="false"/>
+
+                    <Label text="Bank Branch"/>
+                    <Input id="crt_inputBankBranch"
+                           value="{createModel>/BankBranch}"
+                           editable="false"/>
+
+                    <Label text="Bank Account" required="true"/>
+                    <Input id="crt_inputBankAccount"
+                           value="{createModel>/BankAccount}"
+                           maxLength="18"/>
+
+                    <Label text="Ext. ID"/>
+                    <Input id="crt_inputExtID"
+                           value="{createModel>/ExtID}"
+                           maxLength="18"/>
+
+                    <Label text="Account Holder Name" required="true"/>
+                    <Input id="crt_inputAccountHolderName"
+                           value="{createModel>/AccountHolderName}"
+                           maxLength="60"/>
+
+                    <Label text="Account Name"/>
+                    <Input id="crt_inputAccountName"
+                           value="{createModel>/AccountName}"
+                           maxLength="40"/>
+
+                </f:content>
+            </f:SimpleForm>
+        </VBox>
+
+        <footer>
+            <Toolbar>
+                <content>
+                    <Button text="Create"
+                            type="Emphasized"
+                            press=".onCreateBankConfirm"/>
+                    <Button text="Cancel"
+                            press=".onCreateBankCancel"/>
+                </content>
+            </Toolbar>
+        </footer>
+
+    </Dialog>
+</core:FragmentDefinition>

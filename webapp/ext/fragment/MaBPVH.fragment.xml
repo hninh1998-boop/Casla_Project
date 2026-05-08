@@ -1,0 +1,19 @@
+<core:FragmentDefinition
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core">
+
+  <SelectDialog id="maBPVHDialog"
+                title="Chọn Mã BP"
+                noDataText="Nhập từ khóa để tìm kiếm (tối thiểu 2 ký tự)"
+                search=".onMaBPSearch"
+                confirm=".onMaBPSelected"
+                cancel=".onMaBPSelected"
+                items="{
+                  path: 'maBPModel>/items'
+                }">
+    <StandardListItem
+      title="{maBPModel>BusinessPartner}"
+      description="{maBPModel>BusinessPartnerName}"/>
+  </SelectDialog>
+
+</core:FragmentDefinition>

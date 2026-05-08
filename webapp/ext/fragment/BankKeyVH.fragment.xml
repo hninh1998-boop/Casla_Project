@@ -1,0 +1,22 @@
+<core:FragmentDefinition
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core">
+
+  <SelectDialog id="bankKeyVHDialog"
+                title="Chọn Bank Key"
+                search=".onBankKeySearch"
+                confirm=".onBankKeySelected"
+                cancel=".onBankKeySelected"
+                items="{
+                  path: '/I_BankVH',
+                  parameters: {
+                    $select: 'BankInternalID,BankName,LongBankBranch'
+                  }
+                }">
+    <StandardListItem
+      title="{BankInternalID}"
+      description="{BankName}"
+      info="{LongBankBranch}"/>
+  </SelectDialog>
+
+</core:FragmentDefinition>
