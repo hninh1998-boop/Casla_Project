@@ -1,0 +1,47 @@
+<core:FragmentDefinition
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core">
+
+    <Dialog
+        id="deleteDialog"
+        title="Delete BOM Items"
+        contentWidth="850px"
+        resizable="true"
+        draggable="true">
+
+        <content>
+            <VBox class="sapUiSmallMargin">
+
+                <MessageStrip
+                    id="deleteInfoStrip"
+                    text="0 BOM item will be deleted."
+                    type="Warning"
+                    showCloseButton="true"
+                    class="sapUiSmallMarginBottom"/>
+
+                <Title text="Select Mode of Processing" class="sapUiSmallMarginBottom"/>
+                <RadioButtonGroup id="deleteModeGroup" columns="2" class="sapUiSmallMarginBottom">
+                    <RadioButton id="deleteRbBackground" text="Run Job in Background"/>
+                    <RadioButton id="deleteRbRunNow" text="Run Now" selected="true"/>
+                </RadioButtonGroup>
+
+                <MessageStrip
+                    id="deleteValidationErrorStrip"
+                    text=""
+                    type="Error"
+                    showIcon="true"
+                    visible="false"
+                    class="sapUiSmallMarginTop"/>
+
+            </VBox>
+        </content>
+
+        <buttons>
+            <!-- <Button text="Simulate" type="Emphasized" press=".onSimulateDelete"/> -->
+            <Button text="Execute"  press=".onConfirmDelete"/>
+            <Button text="Close"    press=".onCancelDelete"/>
+        </buttons>
+
+    </Dialog>
+
+</core:FragmentDefinition>

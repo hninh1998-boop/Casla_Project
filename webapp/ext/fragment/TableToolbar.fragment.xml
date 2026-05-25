@@ -1,0 +1,9 @@
+<core:FragmentDefinition
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core">
+    <Menu>
+        <MenuItem text="Edit"   press=".onEditMassChange"/>
+        <MenuItem text="Delete" press=".onDeleteMassChange"/>
+        <!-- <MenuItem text="Add"    press=".onAddMassChange"/> -->
+    </Menu>
+</core:FragmentDefinition>
