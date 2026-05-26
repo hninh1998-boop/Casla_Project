@@ -1,0 +1,356 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="4.0" xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+    <edmx:Reference Uri="../../catalogservice;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_COMMON',Version='0001',SAP__Origin='')/$value">
+        <edmx:Include Namespace="com.sap.vocabularies.Common.v1" Alias="Common"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="../../catalogservice;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_UI',Version='0001',SAP__Origin='')/$value">
+        <edmx:Include Namespace="com.sap.vocabularies.UI.v1" Alias="UI"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="../../catalogservice;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_COMMUNICATION',Version='0001',SAP__Origin='')/$value">
+        <edmx:Include Namespace="com.sap.vocabularies.Communication.v1" Alias="Communication"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="../../catalogservice;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_PERSONALDATA',Version='0001',SAP__Origin='')/$value">
+        <edmx:Include Namespace="com.sap.vocabularies.PersonalData.v1" Alias="PersonalData"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="../../catalogservice;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_VALIDATION',Version='0001',SAP__Origin='')/$value">
+        <edmx:Include Namespace="Org.OData.Validation.V1" Alias="Validation"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="../../catalogservice;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_ANALYTICS',Version='0001',SAP__Origin='')/$value">
+        <edmx:Include Namespace="com.sap.vocabularies.Analytics.v1" Alias="Analytics"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="../../catalogservice;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_HTML5',Version='0001',SAP__Origin='')/$value">
+        <edmx:Include Namespace="com.sap.vocabularies.HTML5.v1" Alias="HTML5"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="../../catalogservice;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_ODM',Version='0001',SAP__Origin='')/$value">
+        <edmx:Include Namespace="com.sap.vocabularies.ODM.v1" Alias="SAP__ODM"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="../../../sap/zui_po_delcost_v2/$metadata">
+        <edmx:Include Namespace="cds_zui_po_delcost" Alias="SAP"/>
+    </edmx:Reference>
+    <edmx:DataServices>
+        <Schema Namespace="zui_po_delcost_v2_van.v1" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+            <Annotations Target="cds_zui_po_delcost.I_SupplierCompanyVHType/Supplier">
+                <Annotation Term="Common.Text" Path="BPSupplierName">
+                    <Annotation Term="UI.TextArrangement" EnumMember="UI.TextArrangementType/TextLast"/>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="cds_zui_po_delcost.I_SupplierCompanyVHType/CompanyCode">
+                <Annotation Term="Common.Text" Path="CompanyCodeName">
+                    <Annotation Term="UI.TextArrangement" EnumMember="UI.TextArrangementType/TextLast"/>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="cds_zui_po_delcost.PODeliCostType/ConditionTypeName">
+                <Annotation Term="UI.HiddenFilter"/>
+            </Annotations>
+            <Annotations Target="cds_zui_po_delcost.PODeliCostType/NameSupplier">
+                <Annotation Term="UI.HiddenFilter"/>
+            </Annotations>
+            <Annotations Target="cds_zui_po_delcost.PODeliCostType/MaterialName">
+                <Annotation Term="UI.HiddenFilter"/>
+            </Annotations>
+            <Annotations Target="cds_zui_po_delcost.PODeliCostType/POQuantity">
+                <Annotation Term="UI.HiddenFilter"/>
+            </Annotations>
+            <Annotations Target="cds_zui_po_delcost.PODeliCostType/DeliveredQuantity">
+                <Annotation Term="UI.HiddenFilter"/>
+            </Annotations>
+            <Annotations Target="cds_zui_po_delcost.PODeliCostType/InvoicedQuantity">
+                <Annotation Term="UI.HiddenFilter"/>
+            </Annotations>
+            <Annotations Target="cds_zui_po_delcost.PODeliCostType/QuantityToBeInvoiced">
+                <Annotation Term="UI.HiddenFilter"/>
+            </Annotations>
+            <Annotations Target="cds_zui_po_delcost.PODeliCostType/POEstimatedValue">
+                <Annotation Term="UI.HiddenFilter"/>
+            </Annotations>
+            <Annotations Target="cds_zui_po_delcost.PODeliCostType/DeliveriedValue">
+                <Annotation Term="UI.HiddenFilter"/>
+            </Annotations>
+            <Annotations Target="cds_zui_po_delcost.PODeliCostType/InvoicedValue">
+                <Annotation Term="UI.HiddenFilter"/>
+            </Annotations>
+            <Annotations Target="cds_zui_po_delcost.PODeliCostType/ValueToBeInvoiced">
+                <Annotation Term="UI.HiddenFilter"/>
+            </Annotations>
+            <Annotations Target="cds_zui_po_delcost.PODeliCostType/POExchangeRate">
+                <Annotation Term="UI.HiddenFilter"/>
+            </Annotations>
+            <Annotations Target="cds_zui_po_delcost.PODeliCostType/DeliveryCostCurrency">
+                <Annotation Term="UI.HiddenFilter"/>
+            </Annotations>
+            <Annotations Target="cds_zui_po_delcost.PODeliCostType/UnitOfMeasure">
+                <Annotation Term="UI.HiddenFilter"/>
+            </Annotations>
+            <Annotations Target="cds_zui_po_delcost.PODeliCostType/POSupplier">
+                <Annotation Term="UI.HiddenFilter"/>
+            </Annotations>
+            <Annotations Target="cds_zui_po_delcost.PODeliCostType/POSupplierName">
+                <Annotation Term="UI.HiddenFilter"/>
+            </Annotations>
+            <Annotations Target="cds_zui_po_delcost.PODeliCostType/POCurrency">
+                <Annotation Term="UI.HiddenFilter"/>
+            </Annotations>
+            <Annotations Target="cds_zui_po_delcost.PODeliCostType/TenCongTy">
+                <Annotation Term="UI.HiddenFilter"/>
+            </Annotations>
+            <Annotations Target="cds_zui_po_delcost.PODeliCostType/DiaChiCongTy">
+                <Annotation Term="UI.HiddenFilter"/>
+            </Annotations>
+            <Annotations Target="cds_zui_po_delcost.PODeliCostType">
+                <Annotation Term="UI.Facets">
+                    <Collection>
+                        <Record Type="UI.ReferenceFacet">
+                            <PropertyValue Property="Label" String="Monitor PO Delivery Cost"/>
+                            <PropertyValue Property="ID" String="idPODeliCost"/>
+                            <PropertyValue Property="Target" AnnotationPath="@UI.Identification"/>
+                        </Record>
+                    </Collection>
+                </Annotation>
+                <Annotation Term="UI.HeaderInfo">
+                    <Record>
+                        <PropertyValue Property="TypeName" String="Data"/>
+                        <PropertyValue Property="TypeNamePlural" String="Datas"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="UI.Identification">
+                    <Collection>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Label" String="PO"/>
+                            <PropertyValue Property="Value" Path="PO"/>
+                        </Record>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Label" String="PO Item"/>
+                            <PropertyValue Property="Value" Path="POItem"/>
+                        </Record>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Label" String="Condition Type"/>
+                            <PropertyValue Property="Value" Path="ConditionType"/>
+                        </Record>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Label" String="Condition Counter"/>
+                            <PropertyValue Property="Value" Path="PricingProcedureCounter"/>
+                        </Record>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Label" String="Condition Type Name"/>
+                            <PropertyValue Property="Value" Path="ConditionTypeName"/>
+                        </Record>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Label" String="Supplier Delivery Cost"/>
+                            <PropertyValue Property="Value" Path="SupplierDeliveryCost"/>
+                        </Record>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Label" String="Name Supplier"/>
+                            <PropertyValue Property="Value" Path="NameSupplier"/>
+                        </Record>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Label" String="Material"/>
+                            <PropertyValue Property="Value" Path="Material"/>
+                        </Record>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Label" String="Material Name"/>
+                            <PropertyValue Property="Value" Path="MaterialName"/>
+                        </Record>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Label" String="PO Quantity"/>
+                            <PropertyValue Property="Value" Path="POQuantity"/>
+                        </Record>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Label" String="Delivered Quantity"/>
+                            <PropertyValue Property="Value" Path="DeliveredQuantity"/>
+                        </Record>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Label" String="Invoiced Quantity"/>
+                            <PropertyValue Property="Value" Path="InvoicedQuantity"/>
+                        </Record>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Label" String="To Be Invoiced Quantity"/>
+                            <PropertyValue Property="Value" Path="QuantityToBeInvoiced"/>
+                        </Record>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Label" String="PO Estimated Value"/>
+                            <PropertyValue Property="Value" Path="POEstimatedValue"/>
+                        </Record>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Label" String="Delivered Value"/>
+                            <PropertyValue Property="Value" Path="DeliveriedValue"/>
+                        </Record>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Label" String="Invoiced Value"/>
+                            <PropertyValue Property="Value" Path="InvoicedValue"/>
+                        </Record>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Label" String="To Be Invoiced Value"/>
+                            <PropertyValue Property="Value" Path="ValueToBeInvoiced"/>
+                        </Record>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Label" String="Exchange Rate PO"/>
+                            <PropertyValue Property="Value" Path="POExchangeRate"/>
+                        </Record>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Label" String="Delivery Cost Currency"/>
+                            <PropertyValue Property="Value" Path="DeliveryCostCurrency"/>
+                        </Record>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Label" String="Fully Invoiced"/>
+                            <PropertyValue Property="Value" Path="FullyInvoicedText"/>
+                        </Record>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Label" String="Unit of Measure"/>
+                            <PropertyValue Property="Value" Path="UnitOfMeasure"/>
+                        </Record>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Label" String="PO Supplier"/>
+                            <PropertyValue Property="Value" Path="POSupplier"/>
+                        </Record>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Label" String="PO Supplier Name"/>
+                            <PropertyValue Property="Value" Path="POSupplierName"/>
+                        </Record>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Label" String="Plant"/>
+                            <PropertyValue Property="Value" Path="Plant"/>
+                        </Record>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Label" String="Company"/>
+                            <PropertyValue Property="Value" Path="Company"/>
+                        </Record>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Label" String="PO Currency"/>
+                            <PropertyValue Property="Value" Path="POCurrency"/>
+                        </Record>
+                    </Collection>
+                </Annotation>
+                <Annotation Term="UI.LineItem">
+                    <Collection>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Label" String="PO"/>
+                            <PropertyValue Property="Value" Path="PO"/>
+                        </Record>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Label" String="PO Item"/>
+                            <PropertyValue Property="Value" Path="POItem"/>
+                        </Record>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Label" String="Condition Type"/>
+                            <PropertyValue Property="Value" Path="ConditionType"/>
+                        </Record>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Label" String="Condition Counter"/>
+                            <PropertyValue Property="Value" Path="PricingProcedureCounter"/>
+                        </Record>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Label" String="Condition Type Name"/>
+                            <PropertyValue Property="Value" Path="ConditionTypeName"/>
+                        </Record>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Label" String="Supplier Delivery Cost"/>
+                            <PropertyValue Property="Value" Path="SupplierDeliveryCost"/>
+                        </Record>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Label" String="Name Supplier"/>
+                            <PropertyValue Property="Value" Path="NameSupplier"/>
+                        </Record>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Label" String="Material"/>
+                            <PropertyValue Property="Value" Path="Material"/>
+                        </Record>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Label" String="Material Name"/>
+                            <PropertyValue Property="Value" Path="MaterialName"/>
+                        </Record>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Label" String="PO Quantity"/>
+                            <PropertyValue Property="Value" Path="POQuantity"/>
+                        </Record>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Label" String="Delivered Quantity"/>
+                            <PropertyValue Property="Value" Path="DeliveredQuantity"/>
+                        </Record>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Label" String="Invoiced Quantity"/>
+                            <PropertyValue Property="Value" Path="InvoicedQuantity"/>
+                        </Record>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Label" String="To Be Invoiced Quantity"/>
+                            <PropertyValue Property="Value" Path="QuantityToBeInvoiced"/>
+                        </Record>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Label" String="PO Estimated Value"/>
+                            <PropertyValue Property="Value" Path="POEstimatedValue"/>
+                        </Record>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Label" String="Delivered Value"/>
+                            <PropertyValue Property="Value" Path="DeliveriedValue"/>
+                        </Record>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Label" String="Invoiced Value"/>
+                            <PropertyValue Property="Value" Path="InvoicedValue"/>
+                        </Record>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Label" String="To Be Invoiced Value"/>
+                            <PropertyValue Property="Value" Path="ValueToBeInvoiced"/>
+                        </Record>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Label" String="Exchange Rate PO"/>
+                            <PropertyValue Property="Value" Path="POExchangeRate"/>
+                        </Record>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Label" String="Delivery Cost Currency"/>
+                            <PropertyValue Property="Value" Path="DeliveryCostCurrency"/>
+                        </Record>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Label" String="Fully Invoiced"/>
+                            <PropertyValue Property="Value" Path="FullyInvoicedText"/>
+                        </Record>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Label" String="Unit of Measure"/>
+                            <PropertyValue Property="Value" Path="UnitOfMeasure"/>
+                        </Record>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Label" String="PO Supplier"/>
+                            <PropertyValue Property="Value" Path="POSupplier"/>
+                        </Record>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Label" String="PO Supplier Name"/>
+                            <PropertyValue Property="Value" Path="POSupplierName"/>
+                        </Record>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Label" String="Plant"/>
+                            <PropertyValue Property="Value" Path="Plant"/>
+                        </Record>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Label" String="Company"/>
+                            <PropertyValue Property="Value" Path="Company"/>
+                        </Record>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Label" String="PO Currency"/>
+                            <PropertyValue Property="Value" Path="POCurrency"/>
+                        </Record>
+                    </Collection>
+                </Annotation>
+                <Annotation Term="UI.SelectionFields">
+                    <Collection>
+                        <PropertyPath>Company</PropertyPath>
+                        <PropertyPath>PO</PropertyPath>
+                        <PropertyPath>POItem</PropertyPath>
+                        <PropertyPath>ConditionType</PropertyPath>
+                        <PropertyPath>SupplierDeliveryCost</PropertyPath>
+                        <PropertyPath>Plant</PropertyPath>
+                        <PropertyPath>Material</PropertyPath>
+                        <PropertyPath>FullyInvoiced</PropertyPath>
+                    </Collection>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="cds_zui_po_delcost.zi_fullyinvoiced_vhType/domain_name">
+                <Annotation Term="UI.Hidden"/>
+            </Annotations>
+            <Annotations Target="cds_zui_po_delcost.zi_fullyinvoiced_vhType/value_position">
+                <Annotation Term="UI.Hidden"/>
+            </Annotations>
+            <Annotations Target="cds_zui_po_delcost.zi_fullyinvoiced_vhType/language">
+                <Annotation Term="UI.Hidden"/>
+            </Annotations>
+            <Annotations Target="_Entities"/>
+        </Schema>
+    </edmx:DataServices>
+</edmx:Edmx>
