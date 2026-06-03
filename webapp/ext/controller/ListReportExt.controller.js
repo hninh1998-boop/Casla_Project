@@ -58,7 +58,8 @@ sap.ui.define([
                     new sap.ui.core.Item({ text: "Component Quantity", key: "ComponentQuantity" }),
                     new sap.ui.core.Item({ text: "Component Scrap (%)", key: "ComponentScrap" }),
                     new sap.ui.core.Item({ text: "Special Procurement", key: "SpecialProcurementType" }),
-                    new sap.ui.core.Item({ text: "Relevancy to Costing", key: "BOMItemIsCostingRelevant" })
+                    new sap.ui.core.Item({ text: "Relevancy to Costing", key: "BOMItemIsCostingRelevant" }),
+                    new sap.ui.core.Item({ text: "Component UoM", key: "ComponentUOM" })
                 ]
             });
             var oInput = new sap.m.Input({
@@ -300,14 +301,16 @@ sap.ui.define([
                 ComponentQuantity: "0",
                 ComponentScrap: "0",
                 SpecialProcurementType: "",
-                BOMItemIsCostingRelevant: ""
+                BOMItemIsCostingRelevant: "",
+                ComponentUOM: ""
             };
             var oParamSet = {
                 Component: false,
                 ComponentQuantity: false,
                 ComponentScrap: false,
                 SpecialProcurementType: false,
-                BOMItemIsCostingRelevant: false
+                BOMItemIsCostingRelevant: false,
+                ComponentUOM: false
             };
 
             aAttrs.forEach(function (oAttr) {
@@ -346,6 +349,14 @@ sap.ui.define([
                             oParamSet.BOMItemIsCostingRelevant = true;
                         }
                         break;
+                    case "ComponentUOM":
+                        if (oAttr.clear === true) {
+                            oParam.ComponentUOM = "";
+                        } else {
+                            oParam.ComponentUOM = oAttr.value || "";
+                            oParamSet.ComponentUOM = true;
+                        }
+                        break;
                 }
             });
 
@@ -355,7 +366,8 @@ sap.ui.define([
                 EditComponentQuantity: false,
                 EditComponentScrap: false,
                 EditSpecialProcurementType: false,
-                EditBOMItemIsCostingRelevant: false
+                EditBOMItemIsCostingRelevant: false,
+                EditComponentUOM: false
             };
 
             aAttrs.forEach(function (oAttr) {
@@ -374,6 +386,9 @@ sap.ui.define([
                         break;
                     case "BOMItemIsCostingRelevant":
                         oEditFlags.EditBOMItemIsCostingRelevant = true;
+                        break;
+                    case "ComponentUOM":
+                        oEditFlags.EditComponentUOM = true;
                         break;
                 }
             });
@@ -419,6 +434,7 @@ sap.ui.define([
                             ComponentScrap: oParam.ComponentScrap,
                             SpecialProcurementType: oParam.SpecialProcurementType,
                             BOMItemIsCostingRelevant: oParam.BOMItemIsCostingRelevant,
+                            ComponentUOM: oParam.ComponentUOM,
                             RunInBackground: sRunInBackground,
                             RunNow: sRunNow,
                             JobText: sJobText,
@@ -426,7 +442,8 @@ sap.ui.define([
                             EditComponentQuantity: oEditFlags.EditComponentQuantity,
                             EditComponentScrap: oEditFlags.EditComponentScrap,
                             EditSpecialProcurementType: oEditFlags.EditSpecialProcurementType,
-                            EditBOMItemIsCostingRelevant: oEditFlags.EditBOMItemIsCostingRelevant
+                            EditBOMItemIsCostingRelevant: oEditFlags.EditBOMItemIsCostingRelevant,
+                            EditComponentUOM: oEditFlags.EditComponentUOM
                         },
                         success: function (oResult) { resolve(oResult); },
                         error: function (oError) { reject(oError); }
