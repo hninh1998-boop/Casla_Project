@@ -1,0 +1,56 @@
+<mvc:View
+    xmlns="sap.m"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns:smartFilterBar="sap.ui.comp.smartfilterbar"
+    xmlns:smartTable="sap.ui.comp.smarttable"
+    xmlns:app="http://schemas.sap.com/sapui5/extension/sap.ui.core.CustomData/1"
+    controllerName="project1.controller.View1"
+    displayBlock="true"
+    height="100%">
+    <Page id="page" title="{i18n>title}" class="fullWidthPage">
+        <content>
+            <VBox fitContainer="true" width="100%" class="fullWidthContent">
+                <smartFilterBar:SmartFilterBar
+                    id="smartFilterBar"
+                    entitySet="yc_travel_tech_m"
+                    persistencyKey="TravelSmartFilter"
+                    basicSearchFieldName="TravelId"
+                    enableBasicSearch="true">
+                    <smartFilterBar:controlConfiguration>
+                        <smartFilterBar:ControlConfiguration key="TravelId"/>
+                        <smartFilterBar:ControlConfiguration key="AgencyId"/>
+                        <smartFilterBar:ControlConfiguration key="CustomerId"/>
+                        <smartFilterBar:ControlConfiguration key="OverallStatus"/>
+                    </smartFilterBar:controlConfiguration>
+                    <smartFilterBar:layoutData>
+                        <FlexItemData shrinkFactor="0"/>
+                    </smartFilterBar:layoutData>
+                </smartFilterBar:SmartFilterBar>
+
+                <smartTable:SmartTable
+                    id="travelSmartTable"
+                    entitySet="yc_travel_tech_m"
+                    smartFilterId="smartFilterBar"
+                    tableType="ResponsiveTable"
+                    enableExport="true"
+                    beforeExport=".onBeforeExport"
+                    useVariantManagement="true"
+                    useTablePersonalisation="true"
+                    header="{i18n>travelTableTitle}"
+                    showRowCount="true"
+                    persistencyKey="TravelSmartTable"
+                    enableAutoBinding="true"
+                    width="100%"
+                    class="fullWidthSmartTable"
+                    enableAutoColumnWidth="true"
+                    editTogglable="true"
+                    app:useSmartToggle="true"
+                    initiallyVisibleFields="TravelId,AgencyId,CustomerId,BeginDate,EndDate,BookingFee,TotalPrice,CurrencyCode,OverallStatus">
+                    <smartTable:layoutData>
+                        <FlexItemData growFactor="1" baseSize="0%"/>
+                    </smartTable:layoutData>
+                </smartTable:SmartTable>
+            </VBox>
+        </content>
+    </Page>
+</mvc:View>

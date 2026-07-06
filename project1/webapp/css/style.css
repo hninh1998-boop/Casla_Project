@@ -1,0 +1,15 @@
+/* Enter your custom styles here */
+
+#__container1,
+.fullWidthPage .sapMPageEnableScrolling,
+.fullWidthContent,
+.fullWidthSmartTable,
+.fullWidthSmartTable .sapUiCompSmartTable,
+.fullWidthSmartTable .sapMTable,
+.fullWidthSmartTable .sapMListTbl {
+    width: 100% !important;
+}
+
+.fullWidthPage .sapMPageEnableScrolling {
+    padding: 0 !important;
+}
