@@ -59,7 +59,8 @@ sap.ui.define([
                     new sap.ui.core.Item({ text: "Component Scrap (%)", key: "ComponentScrap" }),
                     new sap.ui.core.Item({ text: "Special Procurement", key: "SpecialProcurementType" }),
                     new sap.ui.core.Item({ text: "Relevancy to Costing", key: "BOMItemIsCostingRelevant" }),
-                    new sap.ui.core.Item({ text: "Component UoM", key: "ComponentUOM" })
+                    new sap.ui.core.Item({ text: "Component UoM", key: "ComponentUOM" }),
+                    new sap.ui.core.Item({ text: "Storage Location", key: "ProdOrderIssueLocation" }),
                 ]
             });
             var oInput = new sap.m.Input({
@@ -302,7 +303,8 @@ sap.ui.define([
                 ComponentScrap: "0",
                 SpecialProcurementType: "",
                 BOMItemIsCostingRelevant: "",
-                ComponentUOM: ""
+                ComponentUOM: "",
+                ProdOrderIssueLocation: ""
             };
             var oParamSet = {
                 Component: false,
@@ -310,7 +312,8 @@ sap.ui.define([
                 ComponentScrap: false,
                 SpecialProcurementType: false,
                 BOMItemIsCostingRelevant: false,
-                ComponentUOM: false
+                ComponentUOM: false,
+                ProdOrderIssueLocation: false
             };
 
             aAttrs.forEach(function (oAttr) {
@@ -357,6 +360,14 @@ sap.ui.define([
                             oParamSet.ComponentUOM = true;
                         }
                         break;
+                    case "ProdOrderIssueLocation":
+                        if (oAttr.clear === true) {
+                            oParam.ProdOrderIssueLocation = "";
+                        } else {
+                            oParam.ProdOrderIssueLocation = oAttr.value || "";
+                            oParamSet.ProdOrderIssueLocation = true;
+                        }
+                        break;
                 }
             });
 
@@ -367,7 +378,8 @@ sap.ui.define([
                 EditComponentScrap: false,
                 EditSpecialProcurementType: false,
                 EditBOMItemIsCostingRelevant: false,
-                EditComponentUOM: false
+                EditComponentUOM: false,
+                EditProdOrderIssueLocation: false
             };
 
             aAttrs.forEach(function (oAttr) {
@@ -389,6 +401,9 @@ sap.ui.define([
                         break;
                     case "ComponentUOM":
                         oEditFlags.EditComponentUOM = true;
+                        break;
+                    case "ProdOrderIssueLocation":
+                        oEditFlags.EditProdOrderIssueLocation = true;
                         break;
                 }
             });
@@ -429,21 +444,26 @@ sap.ui.define([
                             BOMItemInternalChangeCount: oData.BOMItemInternalChangeCount,
                             BillOfMaterial: oData.BillOfMaterial,
                             BillOfMaterialCategory: oData.BillOfMaterialCategory,
+                            
                             Component: oParam.Component,
                             ComponentQuantity: oParam.ComponentQuantity,
                             ComponentScrap: oParam.ComponentScrap,
                             SpecialProcurementType: oParam.SpecialProcurementType,
                             BOMItemIsCostingRelevant: oParam.BOMItemIsCostingRelevant,
                             ComponentUOM: oParam.ComponentUOM,
+                            ProdOrderIssueLocation: oParam.ProdOrderIssueLocation,
+
                             RunInBackground: sRunInBackground,
                             RunNow: sRunNow,
                             JobText: sJobText,
+
                             EditComponent: oEditFlags.EditComponent,
                             EditComponentQuantity: oEditFlags.EditComponentQuantity,
                             EditComponentScrap: oEditFlags.EditComponentScrap,
                             EditSpecialProcurementType: oEditFlags.EditSpecialProcurementType,
                             EditBOMItemIsCostingRelevant: oEditFlags.EditBOMItemIsCostingRelevant,
-                            EditComponentUOM: oEditFlags.EditComponentUOM
+                            EditComponentUOM: oEditFlags.EditComponentUOM,
+                            EditProdOrderIssueLocation: oEditFlags.EditProdOrderIssueLocation
                         },
                         success: function (oResult) { resolve(oResult); },
                         error: function (oError) { reject(oError); }
@@ -668,15 +688,6 @@ sap.ui.define([
         },
 
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////
-        // onAddItem: function () {
-        //     var oCrossAppNav = sap.ushell.Container.getService("CrossApplicationNavigation");
-        //     oCrossAppNav.toExternal({
-        //         target: {
-        //             semanticObject: "zupload_zbom_rp",
-        //             action: "display"
-        //         }
-        //     });
-        // },
         onAddItem: function () {
             var that = this;
             var oView = this.getView();
@@ -742,79 +753,6 @@ sap.ui.define([
         },
 
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////
-        // onAddMassChange: function () {
-        //     // console.log("onAddMassChange called");
-        //     // MessageToast.show("Add clicked");
-
-        //     var oView = this.getView();
-        //     var oModel = oView.getModel();
-        //     var aSmartTables = oView.findAggregatedObjects(true, function (o) {
-        //         return o.isA("sap.ui.comp.smarttable.SmartTable");
-        //     });
-        //     if (aSmartTables.length === 0) {
-        //         MessageToast.show("Không tìm thấy SmartTable");
-        //         return;
-        //     }
-
-        //     // Lấy inner GridTable qua _oTable (private nhưng stable)
-        //     var oSmartTable = aSmartTables[0];
-        //     var oTable = oSmartTable._oTable || oSmartTable.getTable();
-        //     console.log("Inner table:", oTable);
-
-        //     // Lấy selected rows từ binding
-        //     var oBinding = oTable.getBinding("rows");
-        //     var aContexts = oBinding.getCurrentContexts();
-        //     console.log("All contexts:", aContexts.length);
-
-        //     // Lọc những row đang được select bằng cách check DOM
-        //     var aSelected = [];
-        //     var oRows = oTable.getRows();
-        //     oRows.forEach(function (oRow) {
-        //         var oDomRef = oRow.getDomRef();
-        //         if (oDomRef && oDomRef.classList.contains("sapUiTableRowSel")) {
-        //             var oCtx = oRow.getBindingContext();
-        //             if (oCtx) {
-        //                 aSelected.push(oCtx.getObject());
-        //             }
-        //         }
-        //     });
-
-        //     // Loop qua tất cả selected rows
-        //     var aPromises = [];
-        //     aSelected.forEach(function (oData) {
-        //         var oPromise = new Promise(function (resolve, reject) {
-        //             oModel.callFunction("/MassChange", {
-        //                 method: "POST",
-        //                 urlParameters: {
-        //                     Material: oData.Material,
-        //                     Plant: oData.Plant,
-        //                     BillOfMaterialVariantUsage: oData.BillOfMaterialVariantUsage,
-        //                     BillOfMaterialVariant: oData.BillOfMaterialVariant,
-        //                     SalesOrder: oData.SalesOrder,
-        //                     SalesOrderItem: oData.SalesOrderItem,
-        //                     BillOfMaterialItemNumber: oData.BillOfMaterialItemNumber,
-        //                     BillOfMaterialItemNodeNumber: oData.BillOfMaterialItemNodeNumber,
-        //                     BOMItemInternalChangeCount: oData.BOMItemInternalChangeCount,
-        //                     BillOfMaterial: oData.BillOfMaterial,
-        //                     BillOfMaterialCategory: oData.BillOfMaterialCategory,
-        //                     EditSelected: "false",
-        //                     DeleteSelected: "false",
-        //                     AddSelected: "true"
-        //                 },
-        //                 success: function (oResult) { resolve(oResult); },
-        //                 error: function (oError) { reject(oError); }
-        //             });
-        //         });
-        //         aPromises.push(oPromise);
-        //     });
-
-        //     Promise.all(aPromises).then(function () {
-        //         MessageToast.show("MassChange success: " + aSelected.length + " dòng");
-        //     }).catch(function (oError) {
-        //         MessageBox.error("MassChange error: " + oError.responseText);
-        //     });
-        // },
-
         onBeforeRebindTableExtension: function () {
             var that = this;
             var oModel = this.getView().getModel();

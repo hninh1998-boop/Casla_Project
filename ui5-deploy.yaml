@@ -21,6 +21,7 @@ builder:
           name: ZBOMRP
           description: Báo cáo BOM chi tiết
           package: ZPK_ZBOM_RP
-          transport: AK3K905670
+          transport: AK3K906268
         exclude:
           - /test/
+          - /localService/
