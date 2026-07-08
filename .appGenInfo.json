@@ -1,0 +1,33 @@
+{
+  "generationParameters": {
+    "generationDate": "Thu Jun 25 2026 08:31:44 GMT+0000 (Coordinated Universal Time)",
+    "generatorPlatform": "SAP Business Application Studio",
+    "serviceType": "SAP System (ABAP On-Premise)",
+    "metadataFilename": "",
+    "serviceUrl": "https://my426517.s4hana.cloud.sap/sap/opu/odata4/sap/zui_crt_batch_ov4/srvd/sap/zui_crt_batch/0001/",
+    "appName": "zcrt_batch_ov4",
+    "appTitle": "Tool tạo batch",
+    "appDescription": "Tool tạo batch",
+    "appNamespace": "",
+    "ui5Theme": "sap_horizon",
+    "ui5Version": "1.142.12",
+    "enableEslint": true,
+    "enableTypeScript": false,
+    "showMockDataInfo": true,
+    "generatorVersion": "1.27.0",
+    "template": "List Report Page V4",
+    "generatorName": "SAP Fiori Application Generator",
+    "entityRelatedConfig": [
+      {
+        "type": "Main Entity",
+        "value": "ManageFile"
+      },
+      {
+        "type": "Navigation Entity",
+        "value": "_DataFile"
+      }
+    ],
+    "launchText": "To launch the generated application, run the following from the generated application root folder:\n\n```\n    npm start\n```",
+    "valueHelpDownloaded": true
+  }
+}
