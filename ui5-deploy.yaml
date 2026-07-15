@@ -21,7 +21,7 @@ builder:
           name: ZASSET_RP_OV2
           description: Báo cáo tổng hợp TSCĐ
           package: ZPK_ASSET_RP
-          transport: AK3K906274
+          transport: AK3K906421
         exclude:
           - /test/
           - /localService/
