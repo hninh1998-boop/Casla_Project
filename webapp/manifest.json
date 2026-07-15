@@ -34,6 +34,19 @@
           "odataVersion": "4.0"
         }
       }
+    },
+    "crossNavigation": {
+      "inbounds": {
+        "zmass_po_ov42-display": {
+          "semanticObject": "zmass_po_ov42",
+          "action": "display",
+          "title": "{{zmass_po_ov42-display.flpTitle}}",
+          "signature": {
+            "parameters": {},
+            "additionalParameters": "allowed"
+          }
+        }
+      }
     }
   },
   "sap.ui": {
@@ -129,11 +142,29 @@
                 "@com.sap.vocabularies.UI.v1.LineItem": {
                   "tableSettings": {
                     "type": "GridTable"
+                  },
+                  "actions": {
+                    "idUploadExcelSubComp": {
+                      "press": ".extension.zmasspoov42.ext.controller.ListReportExt.uploadExcelDialogSubComp",
+                      "visible": true,
+                      "enabled": true,
+                      "requiresSelection": false,
+                      "text": "Upload Excel"
+                    }
                   }
                 },
                 "/ManageFilePOItem/@com.sap.vocabularies.UI.v1.LineItem": {
                   "tableSettings": {
                     "type": "GridTable"
+                  },
+                  "actions": {
+                    "idUploadExcelItem": {
+                      "press": ".extension.zmasspoov42.ext.controller.ListReportExt.uploadExcelDialogItem",
+                      "visible": true,
+                      "enabled": true,
+                      "requiresSelection": false,
+                      "text": "Upload Excel"
+                    }
                   }
                 }
               },
@@ -165,6 +196,13 @@
                 "_DataFile": {
                   "detail": {
                     "route": "DataFilePOSubCompObjectPage"
+                  }
+                }
+              },
+              "controlConfiguration": {
+                "_DataFile/@com.sap.vocabularies.UI.v1.LineItem": {
+                  "tableSettings": {
+                    "type": "GridTable"
                   }
                 }
               }

@@ -1,13 +1,23 @@
 sap.ui.define([
 	"sap/ui/core/mvc/ControllerExtension",
-	"sap/m/MessageToast"
+	"sap/m/MessageToast",
+	"sap/ui/core/Messaging",
+	"sap/ui/core/message/Message",
+	"sap/ui/core/message/MessageType",
+	"sap/ui/core/Fragment"
 ], function (
 	ControllerExtension,
-	MessageToast
+	MessageToast,
+	Messaging,
+	Message,
+	MessageType,
+	Fragment
 ) {
 	"use strict";
 
 	return ControllerExtension.extend("zmasspoov42.ext.controller.ListReportExt", {
+
+		_NS: "com.sap.gateway.srvd.zui_m_mass_po.v0001.",
 
 		override: {
 			onInit: function () {
@@ -15,8 +25,6 @@ sap.ui.define([
 			},
 			editFlow: {
 				onAfterActionExecution: function (oEvent) {
-					// oEvent là string dạng: ".../ManageFilePOSubComp(...)/<namespace>.downloadTemplate(...)"
-					// hoặc ".../ManageFilePOItem(...)/<namespace>.downloadTemplate(...)"
 					if (!oEvent) { return; }
 
 					if (oEvent.indexOf("downloadTemplateSubComp") !== -1) {
@@ -27,6 +35,10 @@ sap.ui.define([
 				}
 			}
 		},
+
+		// ===== Shortcuts ==========================================================
+		_api() { return this.base.getExtensionAPI(); },
+		_model() { return this._api().getModel(); },
 
 		// ===== Shared helper: load ExcelJS 1 lần =================================
 		async _ensureExcelJS() {
@@ -68,14 +80,14 @@ sap.ui.define([
 					right: { style: "thin", color: { argb: "FFBFBFBF" } }
 				};
 			});
-			row.height = 65;
+			row.height = 90;
 		},
 
 		async _downloadExcel(columns, hintRowData, fileName) {
 			await this._ensureExcelJS();
 
 			const workbook = new ExcelJS.Workbook();
-			const sheet = workbook.addWorksheet("Template");
+			const sheet = workbook.addWorksheet("Sheet1");
 
 			sheet.columns = columns;
 			sheet.addRow(hintRowData);
@@ -116,7 +128,7 @@ sap.ui.define([
 				{ header: "PurchaseOrder", key: "PurchaseOrder", width: 16 },
 				{ header: "PurchaseOrderItem", key: "PurchaseOrderItem", width: 16 },
 				{ header: "ScheduleLine", key: "ScheduleLine", width: 14 },
-				{ header: "ReservationItem", key: "ReservationItem", width: 16 },
+				{ header: "BillOfMaterialItemNumber", key: "BillOfMaterialItemNumber", width: 16 },
 				{ header: "Material", key: "Material", width: 22 },
 				{ header: "QuantityInEntryUnit", key: "QuantityInEntryUnit", width: 18 },
 				{ header: "EntryUnit", key: "EntryUnit", width: 12 },
@@ -125,16 +137,16 @@ sap.ui.define([
 			];
 
 			const hintRow = {
-				Type: "I/D/M\nI: Insert\nM: Modify\nD: Delete",
-				PurchaseOrder: "Điền PO (34000..)",
-				PurchaseOrderItem: "Điền PO item (10,20,..)",
+				Type: "I = POST\nM=PATCH\nD= delete",
+				PurchaseOrder: "Điền PO ( 34000..)",
+				PurchaseOrderItem: "Điền PO item ( 10.20.,..)",
 				ScheduleLine: "Mặc định điền 1",
-				ReservationItem: "Điền stt item trong component",
+				BillOfMaterialItemNumber: "Điền stt item trong component ( 10,20,30..)\nĐiền trong Trường hợp chỉnh sửa item hoặc xóa item",
 				Material: "Điền material",
 				QuantityInEntryUnit: "Số lượng",
 				EntryUnit: "Đơn vị",
-				Plant: "Plant xuất hàng",
-				StorageLocation: "Kho xuất"
+				Plant: "Plant xuất hàng\n6711,6712…",
+				StorageLocation: "Kho xuất\n1000,2000…"
 			};
 
 			return this._downloadExcel(
@@ -161,31 +173,31 @@ sap.ui.define([
 				{ header: "PurchaseOrderQuantityUnit", key: "PurchaseOrderQuantityUnit", width: 22 },
 				{ header: "Plant", key: "Plant", width: 12 },
 				{ header: "StorageLocation", key: "StorageLocation", width: 18 },
-				{ header: "GlAccount", key: "GlAccount", width: 16 },
-				{ header: "OrderId", key: "OrderId", width: 14 },
-				{ header: "OrderInternalId", key: "OrderInternalId", width: 16 },
+				{ header: "G/L Account", key: "GlAccount", width: 16 },
+				{ header: "OrderID", key: "OrderId", width: 14 },
+				{ header: "OrderInternalID", key: "OrderInternalId", width: 16 },
 				{ header: "FunctionalArea", key: "FunctionalArea", width: 18 }
 			];
 
 			const hintRow = {
-				Type: "I/D/M\nI: Insert\nM: Modify\nD: Delete",
-				PurchaseOrder: "Điền PO (34000..)",
-				PurchaseOrderItem: "Điền PO item (10,20,..)",
-				AccountAssignmentCategory: "Điền Account Assignment Category",
-				PurchaseOrderItemCategory: "Điền Item Category",
-				PurchaseRequisition: "Điền PR nếu có",
-				PurchaseRequisitionItem: "Điền PR item nếu có",
-				Material: "Điền material",
-				PurchaseOrderItemText: "Mô tả ngắn",
-				MaterialGroup: "Nhóm vật tư",
-				OrderQuantity: "Số lượng đặt hàng",
+				Type: "I = POST\nM=PATCH\nD= delete",
+				PurchaseOrder: "Điền PO ( 34000..)",
+				PurchaseOrderItem: "Điền PO item ( 10.20.,..)",
+				AccountAssignmentCategory: "Điền AccountAssignmentCategory\nđối với gia công may điền F \nGia công của KHSX để trống\nđối với item refer từ PR không cần điền",
+				PurchaseOrderItemCategory: "Điền L nếu có component\ncòn lại để trống",
+				PurchaseRequisition: "số PR refer",
+				PurchaseRequisitionItem: "số PR item refer",
+				Material: "Mã hàng\nđối với item refer từ PR không cần điền",
+				PurchaseOrderItemText: "diễn giải item PO \nđối với item refer từ PR không cần điền",
+				MaterialGroup: "nhóm mã hàng điền trong TH không có material \nvới group của gia công điền 210018\nđối với item refer từ PR không cần điền",
+				OrderQuantity: "số lượng PO\nđối với item refer từ PR không cần điền",
 				PurchaseOrderQuantityUnit: "Đơn vị",
-				Plant: "Plant",
-				StorageLocation: "Kho",
-				GlAccount: "Tài khoản G/L",
-				OrderId: "Số Order (nếu account assignment liên quan)",
-				OrderInternalId: "Routing number nội bộ",
-				FunctionalArea: "Functional Area"
+				Plant: "Plant\nđối với item refer từ PR không cần điền",
+				StorageLocation: "điền kho\nđối với item refer từ PR không cần điền",
+				GlAccount: "đối với gia công may điền 1543002000\nđối với item refer từ PR không cần điền",
+				OrderId: "điền lệnh sản xuất\nđối với item refer từ PR không cần điền",
+				OrderInternalId: "điền công đoạn sản xuất, không có để trống\nđối với item refer từ PR không cần điền",
+				FunctionalArea: "với gia công chọn YB20\nđối với item refer từ PR không cần điền"
 			};
 
 			return this._downloadExcel(
@@ -193,6 +205,180 @@ sap.ui.define([
 				hintRow,
 				"Template_Mass Change PO Item.xlsx"
 			);
+		},
+
+		// ===== Upload: Tab 1 (SubComp) =============================================
+		uploadExcelDialogSubComp: async function () {
+			this._sActiveEntitySet = "ManageFilePOSubComp";
+			this._sActiveAction = "uploadExcelSubComp";
+			await this._openUploadDialog();
+		},
+
+		// ===== Upload: Tab 2 (Item) ================================================
+		uploadExcelDialogItem: async function () {
+			this._sActiveEntitySet = "ManageFilePOItem";
+			this._sActiveAction = "uploadExcelItem";
+			await this._openUploadDialog();
+		},
+
+		// ===== Shared upload dialog logic =========================================
+		async _openUploadDialog() {
+			if (!this._dlg) {
+				this._dlg = await this._api().loadFragment({
+					id: "idFileUploadDialog",
+					name: "zmasspoov42.ext.fragment.filedialog",
+					controller: this
+				});
+			}
+			this._dlg.open();
+		},
+
+		onFileChange: async function (oEvent) {
+			const f = (oEvent.getParameter("files") || [])[0];
+			if (!f) return;
+
+			this._file = {
+				type: f.type || "",
+				name: f.name || "",
+				ext: (f.name || "").split(".").pop() || ""
+			};
+
+			await this._secured(() =>
+				this._readAsDataUrl(f).then((url) => {
+					const m = String(url).match(/,(.*)$/);
+					this._file.content = m && m[1] ? m[1] : "";
+				})
+			);
+		},
+
+		onUploadPress: async function () {
+			if (!this._file?.content) {
+				MessageToast.show("Vui lòng chọn tệp.");
+				return;
+			}
+
+			await this._secured(async () => {
+				await this._invokeCollectionAction(this._sActiveEntitySet, this._sActiveAction, {
+					mimeType: this._file.type,
+					fileName: this._file.name,
+					fileContent: this._file.content,
+					fileExtension: this._file.ext
+				});
+
+				await this._refreshListReport();
+				MessageToast.show("Tải lên thành công.");
+				this._resetDialog();
+			});
+		},
+
+		onCancelUpload: function () {
+			this._resetDialog();
+		},
+
+		// ===== OData V4 — Bound to Collection Action ==============================
+		_invokeCollectionAction: async function (sEntitySet, sActionName, params) {
+			const path = `/${sEntitySet}/${this._NS}${sActionName}(...)`;
+			const op = this._model().bindContext(path);
+
+			if (params) {
+				Object.entries(params).forEach(([k, v]) => {
+					if (v !== undefined && v !== null && v !== "") {
+						op.setParameter(k, v);
+					}
+				});
+			}
+
+			try {
+				await op.invoke();
+			} catch (e) {
+				this._pushODataErrors(e);
+				this._openFEMessages();
+				throw e;
+			}
+
+			const ctx = op.getBoundContext?.();
+			return ctx?.getObject?.() || {};
+		},
+
+		_secured: function (fn) {
+			return this._api().getEditFlow().securedExecution(fn, { busy: { set: true } });
+		},
+
+		_refreshListReport: async function () {
+			const api = this._api();
+			if (typeof api.refresh === "function") {
+				await api.refresh();
+				return;
+			}
+			if (this._model()?.refresh) {
+				await this._model().refresh();
+			}
+		},
+
+		_resetDialog: function () {
+			try {
+				const fu = Fragment.byId("idFileUploadDialog", "idFileUpload");
+				fu?.clear?.();
+			} catch (e) { /* no-op */ }
+			this._file = null;
+			if (this._dlg) {
+				this._dlg.close?.();
+				this._dlg.destroy?.();
+				this._dlg = null;
+			}
+		},
+
+		_openFEMessages: function () {
+			const h = this._api().getEditFlow?.().getMessageHandler?.();
+			h?.showMessages?.();
+		},
+
+		_pushODataErrors: function (err) {
+			const root = err?.error || err?.cause?.error || {};
+			const bag = [];
+			const rootMsg = root?.message || err?.message;
+
+			if (typeof rootMsg === "string" && rootMsg.trim()) {
+				bag.push(new Message({
+					message: rootMsg,
+					type: MessageType.Error,
+					persistent: true,
+					code: root?.code
+				}));
+			}
+
+			if (Array.isArray(root?.details)) {
+				root.details.forEach((d) => {
+					if (d?.message) {
+						bag.push(new Message({
+							message: d.message,
+							type: MessageType.Error,
+							persistent: true,
+							code: d.code,
+							target: d.target || ""
+						}));
+					}
+				});
+			}
+
+			if (bag.length) {
+				if (Messaging?.addMessages) {
+					Messaging.addMessages(bag);
+				} else {
+					sap.ui.getCore().getMessageManager?.()?.addMessages?.(bag);
+				}
+			}
+		},
+
+		_readAsDataUrl: function (file) {
+			return new Promise((resolve, reject) => {
+				try {
+					const r = new FileReader();
+					r.onload = (e) => resolve(e?.target?.result || "");
+					r.onerror = reject;
+					r.readAsDataURL(file);
+				} catch (e) { reject(e); }
+			});
 		}
 
 	});
