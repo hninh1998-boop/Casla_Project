@@ -120,6 +120,16 @@
           "pattern": "ManageFilePOSubComp({key})/_DataFile({key2}):?query:",
           "name": "DataFilePOSubCompObjectPage",
           "target": "DataFilePOSubCompObjectPage"
+        },
+        {
+          "pattern": "ManageFilePOItem({key}):?query:",
+          "name": "ManageFilePOItemObjectPage",
+          "target": "ManageFilePOItemObjectPage"
+        },
+        {
+          "pattern": "ManageFilePOItem({key})/_DataFile({key2}):?query:",
+          "name": "DataFilePOItemObjectPage",
+          "target": "DataFilePOItemObjectPage"
         }
       ],
       "targets": {
@@ -135,6 +145,11 @@
                 "ManageFilePOSubComp": {
                   "detail": {
                     "route": "ManageFilePOSubCompObjectPage"
+                  }
+                },
+                "ManageFilePOItem": {
+                  "detail": {
+                    "route": "ManageFilePOItemObjectPage"
                   }
                 }
               },
@@ -217,6 +232,42 @@
             "settings": {
               "editableHeaderContent": false,
               "contextPath": "/ManageFilePOSubComp/_DataFile"
+            }
+          }
+        },
+        "ManageFilePOItemObjectPage": {
+          "type": "Component",
+          "id": "ManageFilePOItemObjectPage",
+          "name": "sap.fe.templates.ObjectPage",
+          "options": {
+            "settings": {
+              "editableHeaderContent": false,
+              "contextPath": "/ManageFilePOItem",
+              "navigation": {
+                "_DataFile": {
+                  "detail": {
+                    "route": "DataFilePOItemObjectPage"
+                  }
+                }
+              },
+              "controlConfiguration": {
+                "_DataFile/@com.sap.vocabularies.UI.v1.LineItem": {
+                  "tableSettings": {
+                    "type": "GridTable"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "DataFilePOItemObjectPage": {
+          "type": "Component",
+          "id": "DataFilePOItemObjectPage",
+          "name": "sap.fe.templates.ObjectPage",
+          "options": {
+            "settings": {
+              "editableHeaderContent": false,
+              "contextPath": "/ManageFilePOItem/_DataFile"
             }
           }
         }
