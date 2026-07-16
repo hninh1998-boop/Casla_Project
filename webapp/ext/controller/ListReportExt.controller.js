@@ -1,8 +1,9 @@
 sap.ui.define([
     "sap/m/MessageToast",
     "sap/m/MessageBox",
-    "sap/m/BusyDialog"
-], function (MessageToast, MessageBox, BusyDialog) {
+    "sap/m/BusyDialog",
+    "sap/ui/core/Fragment"
+], function (MessageToast, MessageBox, BusyDialog, Fragment) {
     'use strict';
 
     var BATCH_SIZE = 1000;
@@ -15,6 +16,8 @@ sap.ui.define([
         assetNumber: "MaTaiSan",
         assetName: "TenTaiSan",
         usageDate: "NgayDuaVaoSuDung",
+        location: "DiaDiemSuDung",
+        plant: "NhaMay",
 
         openBookValue: "NguyenGiaDauKy",
         increaseValue: "TangNguyenGia",
@@ -33,6 +36,7 @@ sap.ui.define([
     };
 
     var REPORT_TITLE = "BÁO CÁO TỔNG HỢP TÀI SẢN CỐ ĐỊNH";
+    var REPORT_TITLE_TSCD2 = "BÁO CÁO TÀI SẢN CỐ ĐỊNH THEO NHÓM HÌNH CÂY";
 
     // ────────────────────────────────────────────────────────
     // Tìm SmartTable + binding (giữ nguyên pattern cũ)
@@ -157,6 +161,40 @@ sap.ui.define([
             oGroup.sum.decreaseAccumDep += _num(item[FIELD.decreaseAccumDep]);
             oGroup.sum.closeAccumDep += _num(item[FIELD.closeAccumDep]);
             oGroup.sum.closeNetValue += _num(item[FIELD.closeNetValue]);
+        });
+
+        return aOrder.map(function (k) { return oGroups[k]; });
+    }
+
+    function _groupDataTSCD2(aData) {
+        var oGroups = {};
+        var aOrder = [];
+
+        aData.forEach(function (item) {
+            var sKey = item[FIELD.assetClass] || "";
+            if (!oGroups[sKey]) {
+                oGroups[sKey] = {
+                    code: sKey,
+                    text: item[FIELD.assetClassText] || "",
+                    items: [],
+                    sum: {
+                        openBookValue: 0,
+                        khTrongKy: 0,
+                        khLuyKe: 0,
+                        conLai: 0
+                    }
+                };
+                aOrder.push(sKey);
+            }
+            var oGroup = oGroups[sKey];
+            oGroup.items.push(item);
+
+            var fKhTrongKy = _num(item[FIELD.increaseAccumDep]) - _num(item[FIELD.decreaseAccumDep]);
+
+            oGroup.sum.openBookValue += _num(item[FIELD.openBookValue]);
+            oGroup.sum.khTrongKy += fKhTrongKy;
+            oGroup.sum.khLuyKe += _num(item[FIELD.closeAccumDep]);
+            oGroup.sum.conLai += _num(item[FIELD.closeNetValue]);
         });
 
         return aOrder.map(function (k) { return oGroups[k]; });
@@ -584,6 +622,188 @@ sap.ui.define([
         });
     }
 
+    function _buildExcelTSCD2(aData, sFromDate, sToDate, oCompanyInfo) {
+        return new Promise(function (resolve, reject) {
+            var workbook = new ExcelJS.Workbook();
+            var ws = workbook.addWorksheet("Sheet1");
+
+            var BORDER = {
+                top: { style: "thin" }, left: { style: "thin" },
+                bottom: { style: "thin" }, right: { style: "thin" }
+            };
+            var CENTER = { horizontal: "center", vertical: "middle", wrapText: true };
+            var HEADER_FILL = { type: "pattern", pattern: "solid", fgColor: { argb: "FFF2F2F2" } };
+
+            var oGroups = _groupDataTSCD2(aData);
+            var sAccountLine = _getAccountLine(oGroups); // dùng lại nguyên logic cũ
+
+            // Row 1-2: Company info — GIỮ NGUYÊN logic cũ
+            ws.mergeCells("A1:K1");
+            ws.getCell("A1").value = oCompanyInfo.name || "";
+            ws.getCell("A1").font = { bold: true, size: 12 };
+            ws.getCell("A1").alignment = { horizontal: "center" };
+
+            ws.mergeCells("A2:K2");
+            ws.getCell("A2").value = oCompanyInfo.address || "";
+            ws.getCell("A2").alignment = { horizontal: "center" };
+
+            // Row 4: Title
+            ws.mergeCells("A4:K4");
+            ws.getCell("A4").value = REPORT_TITLE_TSCD2;
+            ws.getCell("A4").font = { bold: true, size: 14, color: { argb: "FFFF0000" } };
+            ws.getCell("A4").alignment = { horizontal: "center" };
+
+            // Row 5: period — GIỮ NGUYÊN logic cũ
+            ws.mergeCells("A5:K5");
+            ws.getCell("A5").value = "Từ ngày " + sFromDate + " Đến ngày " + sToDate;
+            ws.getCell("A5").alignment = { horizontal: "center" };
+
+            // Row 6: Tài khoản — GIỮ NGUYÊN logic cũ
+            ws.mergeCells("A6:K6");
+            ws.getCell("A6").value = sAccountLine;
+            ws.getCell("A6").font = { bold: true };
+            ws.getCell("A6").alignment = { horizontal: "center" };
+
+            // Row 8: header (1 dòng duy nhất)
+            var rowHeader = 8;
+            var headerMap = {
+                A: "Mã TSCĐ",
+                B: "Số thẻ",
+                C: "Bộ phận",
+                D: "Tên TSCĐ",
+                E: "Nhà máy",
+                F: "Ngày SD",
+                G: "Nguyên giá",
+                H: "Tổng tiêu thức",
+                I: "KH trong kỳ",
+                J: "KH lũy kế",
+                K: "GT còn lại"
+            };
+            Object.keys(headerMap).forEach(function (col) {
+                var cell = ws.getCell(col + rowHeader);
+                cell.value = headerMap[col];
+                cell.font = { bold: true };
+                cell.alignment = CENTER;
+                cell.border = BORDER;
+                cell.fill = HEADER_FILL;
+            });
+
+            var iRow = rowHeader + 1;
+
+            var oGrandTotal = { openBookValue: 0, khTrongKy: 0, khLuyKe: 0, conLai: 0 };
+
+            oGroups.forEach(function (oGroup) {
+                var row = ws.getRow(iRow);
+                row.getCell(1).value = oGroup.code;               // Mã TSCĐ (group)
+                row.getCell(4).value = oGroup.text;                // Tên TSCĐ (group)
+                row.getCell(7).value = oGroup.sum.openBookValue;   // Nguyên giá
+                row.getCell(8).value = "";                          // Tổng tiêu thức - để trống ở group
+                row.getCell(9).value = oGroup.sum.khTrongKy;       // KH trong kỳ
+                row.getCell(10).value = oGroup.sum.khLuyKe;        // KH lũy kế
+                row.getCell(11).value = oGroup.sum.conLai;         // GT còn lại
+
+                for (var c = 1; c <= 11; c++) {
+                    row.getCell(c).font = { bold: true };
+                    row.getCell(c).border = BORDER;
+                }
+                iRow++;
+
+                oGroup.items.forEach(function (item) {
+                    var r = ws.getRow(iRow);
+                    r.getCell(1).value = "";                                    // Mã TSCĐ để trống ở dòng leaf
+                    r.getCell(2).value = item[FIELD.assetNumber];                // Số thẻ = MaTaiSan
+                    r.getCell(3).value = item[FIELD.location] || "";            // Bộ phận = DiaDiemSuDung
+                    r.getCell(4).value = "    " + (item[FIELD.assetName] || ""); // Tên TSCĐ (indented)
+                    r.getCell(5).value = item[FIELD.plant] || "";                // Nhà máy
+                    r.getCell(6).value = _formatDMY(item[FIELD.usageDate]);      // Ngày SD
+                    r.getCell(7).value = _num(item[FIELD.openBookValue]);        // Nguyên giá
+                    r.getCell(8).value = item[FIELD.totalCriteria]
+                        ? parseInt(item[FIELD.totalCriteria], 10) : "";           // Tổng tiêu thức
+                    r.getCell(9).value = _num(item[FIELD.increaseAccumDep])
+                        - _num(item[FIELD.decreaseAccumDep]);                    // KH trong kỳ
+                    r.getCell(10).value = _num(item[FIELD.closeAccumDep]);       // KH lũy kế
+                    r.getCell(11).value = _num(item[FIELD.closeNetValue]);       // GT còn lại
+
+                    for (var cc = 1; cc <= 11; cc++) {
+                        r.getCell(cc).border = BORDER;
+                    }
+                    r.getCell(6).alignment = { horizontal: "center" };
+                    r.getCell(8).alignment = { horizontal: "center" };
+                    iRow++;
+                });
+
+                oGrandTotal.openBookValue += oGroup.sum.openBookValue;
+                oGrandTotal.khTrongKy += oGroup.sum.khTrongKy;
+                oGrandTotal.khLuyKe += oGroup.sum.khLuyKe;
+                oGrandTotal.conLai += oGroup.sum.conLai;
+            });
+
+            // Dòng Cộng
+            var rowTotal = ws.getRow(iRow);
+            rowTotal.getCell(1).value = "Cộng";
+            rowTotal.getCell(1).font = { bold: true, color: { argb: "FFFF0000" } };
+            rowTotal.getCell(7).value = oGrandTotal.openBookValue;
+            rowTotal.getCell(9).value = oGrandTotal.khTrongKy;
+            rowTotal.getCell(10).value = oGrandTotal.khLuyKe;
+            rowTotal.getCell(11).value = oGrandTotal.conLai;
+            for (var ct = 1; ct <= 11; ct++) {
+                rowTotal.getCell(ct).font = { bold: true };
+                rowTotal.getCell(ct).border = BORDER;
+            }
+            var iRowAfterTotal = iRow;
+            iRow += 2;
+
+            // Signature block — GIỮ NGUYÊN logic cũ, chỉ đổi cột (B/F/K -> B/F/J vì bảng hẹp hơn)
+            var oToday = new Date();
+            ws.getCell("B" + iRow).value = "Ngày " + _pad2(oToday.getDate())
+                + " Tháng " + _pad2(oToday.getMonth() + 1)
+                + " Năm " + oToday.getFullYear();
+            iRow += 2;
+            ws.getCell("B" + iRow).value = "Người lập biểu";
+            ws.getCell("F" + iRow).value = "Kế toán trưởng";
+            ws.getCell("J" + iRow).value = "Giám đốc";
+            ["B", "F", "J"].forEach(function (col) {
+                ws.getCell(col + iRow).font = { bold: true };
+                ws.getCell(col + iRow).alignment = { horizontal: "center" };
+            });
+
+            // Number format cho cột tiền (G, I, J, K)
+            for (var nr = rowHeader + 1; nr <= iRowAfterTotal; nr++) {
+                [7, 9, 10, 11].forEach(function (nc) {
+                    ws.getRow(nr).getCell(nc).numFmt = "#,##0";
+                });
+            }
+
+            // Column widths (A -> K)
+            ws.columns = [
+                { width: 14 }, { width: 12 }, { width: 14 }, { width: 45 },
+                { width: 10 }, { width: 12 }, { width: 16 }, { width: 14 },
+                { width: 16 }, { width: 16 }, { width: 16 }
+            ];
+
+            ws.eachRow({ includeEmpty: false }, function (row) {
+                row.eachCell({ includeEmpty: false }, function (cell) {
+                    cell.font = Object.assign({}, cell.font, { name: "Times New Roman" });
+                });
+            });
+
+            workbook.xlsx.writeBuffer().then(function (buffer) {
+                var blob = new Blob([buffer], {
+                    type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                });
+                var url = URL.createObjectURL(blob);
+                var link = document.createElement("a");
+                link.href = url;
+                link.download = "BaoCaoTSCD_TheoNhom_"
+                    + new Date().toLocaleDateString("vi-VN").replace(/\//g, "-")
+                    + ".xlsx";
+                link.click();
+                URL.revokeObjectURL(url);
+                resolve();
+            }).catch(reject);
+        });
+    }
+
     function _loadExcelJS() {
         if (window.ExcelJS) { return Promise.resolve(); }
         return new Promise(function (resolve, reject) {
@@ -644,15 +864,106 @@ sap.ui.define([
             });
     }
 
+    function _doExportGeneric(oView, fnBuild) {
+        var oInfo = _getBindingInfo(oView);
+        if (!oInfo) {
+            MessageBox.warning("Vui lòng nhấn nút \"Go\" để tải dữ liệu trước khi Export.");
+            return;
+        }
+        if (oInfo.total === 0) {
+            MessageBox.warning("Không có dữ liệu để export. Vui lòng kiểm tra lại điều kiện lọc rồi nhấn \"Go\".");
+            return;
+        }
+
+        var oFromTo = _getFromToDate(oInfo);
+        var sFromDate = oFromTo.from;
+        var sToDate = oFromTo.to;
+
+        var oBusy = new BusyDialog({ title: "Đang xuất Excel", text: "Đang chuẩn bị..." });
+        oBusy.open();
+
+        _loadExcelJS()
+            .then(function () {
+                return new Promise(function (resolve, reject) {
+                    _fetchCompanyInfo(oView, function (oCompanyInfo) {
+                        _fetchAllBatched(oInfo, oBusy)
+                            .then(function (aData) {
+                                resolve({ data: aData, company: oCompanyInfo });
+                            })
+                            .catch(reject);
+                    });
+                });
+            })
+            .then(function (oResult) {
+                oBusy.setText("Đang tạo file Excel (" + oResult.data.length.toLocaleString("vi-VN") + " dòng)...");
+                return fnBuild(oResult.data, sFromDate, sToDate, oResult.company);
+            })
+            .then(function () {
+                oBusy.close();
+                oBusy.destroy();
+                MessageToast.show("Export thành công!");
+            })
+            .catch(function (oErr) {
+                oBusy.close();
+                oBusy.destroy();
+                var sMsg = oErr && oErr.message ? oErr.message
+                    : (oErr && oErr.responseText) ? oErr.responseText
+                        : JSON.stringify(oErr);
+                MessageBox.error("Lỗi export: " + sMsg);
+            });
+    }
+
+    function _replaceExportButtonWithMenu(oView, oController) {
+        var oButton = oView.byId("exportExcelButton");
+        if (!oButton || oButton._bReplacedByMenu) {
+            return;
+        }
+
+        var oToolbar = oButton.getParent();
+        if (!oToolbar || !oToolbar.getContent) {
+            return;
+        }
+
+        var iIndex = oToolbar.indexOfContent(oButton);
+
+        Fragment.load({
+            id: oView.getId(),
+            name: "zassetrpov2.ext.fragment.ExportMenuButton",
+            controller: oController
+        }).then(function (oMenuButton) {
+            oButton._bReplacedByMenu = true;
+            oButton.setVisible(false); // ẩn thay vì destroy để tránh lỗi id-binding của template
+            oToolbar.insertContent(oMenuButton, iIndex);
+        });
+    }
+
     return {
+        onInit: function () {
+            this.getView().addEventDelegate({
+                onAfterRendering: function () {
+                    _replaceExportButtonWithMenu(this.getView(), this);
+                }.bind(this)
+            });
+        },
+
         onAfterRendering: function () {
             var oButton = this.getView().byId("exportExcelButton");
             if (oButton) {
                 oButton.setIcon("sap-icon://excel-attachment");
             }
         },
-        exportExcel: function () {
-            _doExport(this.getView());
+        // THAY hàm exportExcel cũ:
+        exportExcel: function (oEvent) {
+            var oSource = oEvent.getSource();
+            var sFormType = (oSource.data && oSource.data("formType")) || "TSCD1";
+
+            if (sFormType === "TSCD2") {
+                _doExportGeneric(this.getView(), _buildExcelTSCD2);
+                return;
+            }
+
+            // TSCĐ 1 — giữ nguyên logic export hiện tại, KHÔNG đổi gì
+            _doExportGeneric(this.getView(), _buildExcel);
         }
     };
 });

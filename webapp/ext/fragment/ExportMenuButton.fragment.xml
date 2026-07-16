@@ -1,0 +1,30 @@
+<core:FragmentDefinition
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core">
+    <MenuButton
+        id="exportExcelMenuButton"
+        text="Export"
+        icon="sap-icon://excel-attachment"
+        type="Transparent">
+        <menu>
+            <Menu>
+                <MenuItem
+                    id="menuItemTSCD1"
+                    text="TSCĐ 1"
+                    press=".exportExcel">
+                    <customData>
+                        <core:CustomData key="formType" value="TSCD1"/>
+                    </customData>
+                </MenuItem>
+                <MenuItem
+                    id="menuItemTSCD2"
+                    text="TSCĐ 2"
+                    press=".exportExcel">
+                    <customData>
+                        <core:CustomData key="formType" value="TSCD2"/>
+                    </customData>
+                </MenuItem>
+            </Menu>
+        </menu>
+    </MenuButton>
+</core:FragmentDefinition>
