@@ -7,7 +7,7 @@
         icon="sap-icon://excel-attachment"
         type="Transparent">
         <menu>
-            <Menu>
+            <Menu id="_IDGenMenu">
                 <MenuItem
                     id="menuItemTSCD1"
                     text="TSCĐ 1"
