@@ -10,7 +10,7 @@
             <Menu id="_IDGenMenu">
                 <MenuItem
                     id="menuItemTSCD1"
-                    text="TSCĐ 1"
+                    text="Tổng hợp"
                     press=".exportExcel">
                     <customData>
                         <core:CustomData key="formType" value="TSCD1"/>
@@ -18,7 +18,7 @@
                 </MenuItem>
                 <MenuItem
                     id="menuItemTSCD2"
-                    text="TSCĐ 2"
+                    text="Nhóm hình cây"
                     press=".exportExcel">
                     <customData>
                         <core:CustomData key="formType" value="TSCD2"/>

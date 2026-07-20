@@ -178,7 +178,7 @@ sap.ui.define([
                     text: item[FIELD.assetClassText] || "",
                     items: [],
                     sum: {
-                        openBookValue: 0,
+                        closeBookValue: 0,
                         khTrongKy: 0,
                         khLuyKe: 0,
                         conLai: 0
@@ -191,7 +191,7 @@ sap.ui.define([
 
             var fKhTrongKy = _num(item[FIELD.increaseAccumDep]) - _num(item[FIELD.decreaseAccumDep]);
 
-            oGroup.sum.openBookValue += _num(item[FIELD.openBookValue]);
+            oGroup.sum.closeBookValue += _num(item[FIELD.closeBookValue]);
             oGroup.sum.khTrongKy += fKhTrongKy;
             oGroup.sum.khLuyKe += _num(item[FIELD.closeAccumDep]);
             oGroup.sum.conLai += _num(item[FIELD.closeNetValue]);
@@ -690,13 +690,13 @@ sap.ui.define([
 
             var iRow = rowHeader + 1;
 
-            var oGrandTotal = { openBookValue: 0, khTrongKy: 0, khLuyKe: 0, conLai: 0 };
+            var oGrandTotal = { closeBookValue: 0, khTrongKy: 0, khLuyKe: 0, conLai: 0 };
 
             oGroups.forEach(function (oGroup) {
                 var row = ws.getRow(iRow);
                 row.getCell(1).value = oGroup.code;               // Mã TSCĐ (group)
                 row.getCell(4).value = oGroup.text;                // Tên TSCĐ (group)
-                row.getCell(7).value = oGroup.sum.openBookValue;   // Nguyên giá
+                row.getCell(7).value = oGroup.sum.closeBookValue;  // Nguyên giá (cuối kỳ)
                 row.getCell(8).value = "";                          // Tổng tiêu thức - để trống ở group
                 row.getCell(9).value = oGroup.sum.khTrongKy;       // KH trong kỳ
                 row.getCell(10).value = oGroup.sum.khLuyKe;        // KH lũy kế
@@ -710,13 +710,13 @@ sap.ui.define([
 
                 oGroup.items.forEach(function (item) {
                     var r = ws.getRow(iRow);
-                    r.getCell(1).value = "";                                    // Mã TSCĐ để trống ở dòng leaf
+                    r.getCell(1).value = item[FIELD.assetNumber];
                     r.getCell(2).value = item[FIELD.assetNumber];                // Số thẻ = MaTaiSan
                     r.getCell(3).value = item[FIELD.location] || "";            // Bộ phận = DiaDiemSuDung
                     r.getCell(4).value = "    " + (item[FIELD.assetName] || ""); // Tên TSCĐ (indented)
                     r.getCell(5).value = item[FIELD.plant] || "";                // Nhà máy
                     r.getCell(6).value = _formatDMY(item[FIELD.usageDate]);      // Ngày SD
-                    r.getCell(7).value = _num(item[FIELD.openBookValue]);        // Nguyên giá
+                    r.getCell(7).value = _num(item[FIELD.closeBookValue]);       // Nguyên giá (cuối kỳ)
                     r.getCell(8).value = item[FIELD.totalCriteria]
                         ? parseInt(item[FIELD.totalCriteria], 10) : "";           // Tổng tiêu thức
                     r.getCell(9).value = _num(item[FIELD.increaseAccumDep])
@@ -732,7 +732,7 @@ sap.ui.define([
                     iRow++;
                 });
 
-                oGrandTotal.openBookValue += oGroup.sum.openBookValue;
+                oGrandTotal.closeBookValue += oGroup.sum.closeBookValue;
                 oGrandTotal.khTrongKy += oGroup.sum.khTrongKy;
                 oGrandTotal.khLuyKe += oGroup.sum.khLuyKe;
                 oGrandTotal.conLai += oGroup.sum.conLai;
@@ -742,7 +742,7 @@ sap.ui.define([
             var rowTotal = ws.getRow(iRow);
             rowTotal.getCell(1).value = "Cộng";
             rowTotal.getCell(1).font = { bold: true, color: { argb: "FFFF0000" } };
-            rowTotal.getCell(7).value = oGrandTotal.openBookValue;
+            rowTotal.getCell(7).value = oGrandTotal.closeBookValue;
             rowTotal.getCell(9).value = oGrandTotal.khTrongKy;
             rowTotal.getCell(10).value = oGrandTotal.khLuyKe;
             rowTotal.getCell(11).value = oGrandTotal.conLai;
