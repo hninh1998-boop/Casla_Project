@@ -258,15 +258,47 @@ sap.ui.define([
     // ────────────────────────────────────────────────────────
     // Load ExcelJS lib (lazy)
     // ────────────────────────────────────────────────────────
-    function _loadExcelJS() {
-        if (window.ExcelJS) { return Promise.resolve(); }
+    var MAX_LOAD_RETRIES = 2;
+    var _pExcelJSLoading  = null;
+
+    function _loadScriptOnce(sUrl) {
         return new Promise(function (resolve, reject) {
             var script = document.createElement("script");
-            script.src = sap.ui.require.toUrl("zrpsalesmgt/libs/exceljs.min.js");
+            script.src = sUrl;
             script.onload  = resolve;
-            script.onerror = function () { reject(new Error("Không load được ExcelJS")); };
+            script.onerror = function () {
+                script.parentNode && script.parentNode.removeChild(script);
+                reject(new Error("Không load được ExcelJS"));
+            };
             document.head.appendChild(script);
         });
+    }
+
+    function _loadExcelJS() {
+        if (window.ExcelJS) { return Promise.resolve(); }
+        if (_pExcelJSLoading) { return _pExcelJSLoading; }
+
+        var sBaseUrl = sap.ui.require.toUrl("zrpsalesmgt/libs/exceljs.min.js");
+
+        function attempt(iRetriesLeft) {
+            // Cache-bust các lần retry để tránh load lại đúng response lỗi từ cache/proxy
+            var sUrl = iRetriesLeft === MAX_LOAD_RETRIES ? sBaseUrl : sBaseUrl + "?retry=" + Date.now();
+            return _loadScriptOnce(sUrl).catch(function (oErr) {
+                if (iRetriesLeft <= 0) { throw oErr; }
+                return attempt(iRetriesLeft - 1);
+            });
+        }
+
+        function clearCache(vResult) {
+            _pExcelJSLoading = null;
+            return vResult;
+        }
+
+        _pExcelJSLoading = attempt(MAX_LOAD_RETRIES).then(clearCache, function (oErr) {
+            clearCache();
+            throw oErr;
+        });
+        return _pExcelJSLoading;
     }
 
     // ────────────────────────────────────────────────────────
