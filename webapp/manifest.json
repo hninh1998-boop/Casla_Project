@@ -1,0 +1,238 @@
+{
+  "_version": "1.80.0",
+  "sap.app": {
+    "id": "mchso",
+    "type": "application",
+    "i18n": "i18n/i18n.properties",
+    "applicationVersion": {
+      "version": "0.0.1"
+    },
+    "title": "{{appTitle}}",
+    "description": "{{appDescription}}",
+    "resources": "resources.json",
+    "sourceTemplate": {
+      "id": "@sap/generator-fiori:lrop",
+      "version": "1.28.0",
+      "toolsId": "1eb1bcf2-9804-4272-a6b2-02e526ae1b5b"
+    },
+    "dataSources": {
+      "annotation": {
+        "type": "ODataAnnotation",
+        "uri": "annotations/annotation.xml",
+        "settings": {
+          "localUri": "annotations/annotation.xml"
+        }
+      },
+      "mainService": {
+        "uri": "/sap/opu/odata4/sap/zui_m_mch_so_u_file/srvd/sap/zsd_m_mch_so_u_file/0001/",
+        "type": "OData",
+        "settings": {
+          "annotations": [
+            "annotation"
+          ],
+          "localUri": "localService/mainService/metadata.xml",
+          "odataVersion": "4.0"
+        }
+      }
+    },
+    "crossNavigation": {
+      "inbounds": {
+        "ZMC_SO-display": {
+          "semanticObject": "ZMC_SO",
+          "action": "display",
+          "title": "{{ZMC_SO-display.flpTitle}}",
+          "signature": {
+            "parameters": {},
+            "additionalParameters": "allowed"
+          }
+        }
+      }
+    }
+  },
+  "sap.ui": {
+    "technology": "UI5",
+    "icons": {
+      "icon": "",
+      "favIcon": "",
+      "phone": "",
+      "phone@2": "",
+      "tablet": "",
+      "tablet@2": ""
+    },
+    "deviceTypes": {
+      "desktop": true,
+      "tablet": true,
+      "phone": true
+    }
+  },
+  "sap.ui5": {
+    "flexEnabled": true,
+    "dependencies": {
+      "minUI5Version": "1.142.12",
+      "libs": {
+        "sap.m": {},
+        "sap.ui.core": {},
+        "sap.fe.templates": {}
+      }
+    },
+    "contentDensities": {
+      "compact": true,
+      "cozy": true
+    },
+    "models": {
+      "i18n": {
+        "type": "sap.ui.model.resource.ResourceModel",
+        "settings": {
+          "bundleName": "mchso.i18n.i18n"
+        }
+      },
+      "": {
+        "dataSource": "mainService",
+        "preload": true,
+        "settings": {
+          "operationMode": "Server",
+          "autoExpandSelect": true,
+          "earlyRequests": true
+        }
+      },
+      "@i18n": {
+        "type": "sap.ui.model.resource.ResourceModel",
+        "uri": "i18n/i18n.properties"
+      }
+    },
+    "resources": {
+      "css": []
+    },
+    "routing": {
+      "config": {},
+      "routes": [
+        {
+          "pattern": ":?query:",
+          "name": "ZC_M_MCH_SO_U_FILEList",
+          "target": "ZC_M_MCH_SO_U_FILEList"
+        },
+        {
+          "pattern": "ZC_M_MCH_SO_U_FILE({key}):?query:",
+          "name": "ZC_M_MCH_SO_U_FILEObjectPage",
+          "target": "ZC_M_MCH_SO_U_FILEObjectPage"
+        },
+        {
+          "pattern": "ZC_M_MCH_SO_U_FILE({key})/_DataFile({key2}):?query:",
+          "name": "ZC_D_MCH_SO_U_DATAObjectPage",
+          "target": "ZC_D_MCH_SO_U_DATAObjectPage"
+        }
+      ],
+      "targets": {
+        "ZC_M_MCH_SO_U_FILEList": {
+          "type": "Component",
+          "id": "ZC_M_MCH_SO_U_FILEList",
+          "name": "sap.fe.templates.ListReport",
+          "options": {
+            "settings": {
+              "contextPath": "/ZC_M_MCH_SO_U_FILE",
+              "variantManagement": "Page",
+              "navigation": {
+                "ZC_M_MCH_SO_U_FILE": {
+                  "detail": {
+                    "route": "ZC_M_MCH_SO_U_FILEObjectPage"
+                  }
+                }
+              },
+              "controlConfiguration": {
+                "@com.sap.vocabularies.UI.v1.LineItem": {
+                  "tableSettings": {
+                    "type": "GridTable",
+                    "sortConditions": {
+                      "sorters": [
+                        {
+                          "name": "createddate",
+                          "descending": true
+                        }
+                      ]
+                    }
+                  },
+                  "columns": {
+                    "DataField::Attachment": {
+                      "width": "28rem"
+                    }
+                  },
+                  "actions": {
+                    "UploadFile": {
+                      "press": ".extension.mchso.ext.controller.UploadExcelExt.uploadexceldialog",
+                      "visible": true,
+                      "enabled": true,
+                      "requiresSelection": false,
+                      "text": "Upload"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "ZC_M_MCH_SO_U_FILEObjectPage": {
+          "type": "Component",
+          "id": "ZC_M_MCH_SO_U_FILEObjectPage",
+          "name": "sap.fe.templates.ObjectPage",
+          "options": {
+            "settings": {
+              "editableHeaderContent": false,
+              "contextPath": "/ZC_M_MCH_SO_U_FILE",
+              "navigation": {
+                "_DataFile": {
+                  "detail": {
+                    "route": "ZC_D_MCH_SO_U_DATAObjectPage"
+                  }
+                }
+              },
+              "controlConfiguration": {
+                "_DataFile/@com.sap.vocabularies.UI.v1.LineItem": {
+                  "tableSettings": {
+                    "type": "GridTable"
+                  },
+                  "columns": {
+                    "DataField::Material": {
+                      "width": "8rem"
+                    },
+                    "DataField::Plant": {
+                      "width": "6rem"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "ZC_D_MCH_SO_U_DATAObjectPage": {
+          "type": "Component",
+          "id": "ZC_D_MCH_SO_U_DATAObjectPage",
+          "name": "sap.fe.templates.ObjectPage",
+          "options": {
+            "settings": {
+              "editableHeaderContent": false,
+              "contextPath": "/ZC_M_MCH_SO_U_FILE/_DataFile"
+            }
+          }
+        }
+      }
+    },
+    "extends": {
+      "extensions": {
+        "sap.ui.controllerExtensions": {
+          "sap.fe.templates.ListReport.ListReportController#mchso::ZC_M_MCH_SO_U_FILEList": {
+            "controllerName": "mchso.ext.controller.UploadExcelExt"
+          }
+        }
+      }
+    }
+  },
+  "sap.fiori": {
+    "registrationIds": [],
+    "archeType": "transactional"
+  },
+  "sap.fe": {
+    "app": {
+      "enableLazyLoading": true
+    }
+  }
+}
