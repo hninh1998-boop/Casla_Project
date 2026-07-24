@@ -75,12 +75,12 @@ sap.ui.define([
             const row3 = sheet.getRow(3);
             row3.getCell(1).value = "Bắt buộc nhập";                                              // SO*
             row3.getCell(2).value = "Bắt buộc nhập";                                              // SO item*
-            row3.getCell(3).value = "Chỉ update khi SO chưa điền plant";                          // Material
+            row3.getCell(3).value = "Chỉ update khi SO chưa được ước tính giá";                          // Material
             row3.getCell(4).value = "Chỉ update khi KHSX chưa tạo BOM order";                     // Plant
             row3.getCell(5).value = "Số lượng";                                                   // Order Quantity
             row3.getCell(6).value = {
                 richText: [
-                    { text: "Loại đơn giá\n", font: { name: "Calibri", size: 10, italic: true, color: { argb: "FF7F6000" } } },
+                    { text: "Loại đơn giá (ZPR0)\n", font: { name: "Calibri", size: 10, italic: true, color: { argb: "FF7F6000" } } },
                     { text: "Bắt buộc nếu đổi Amount/Crcy/Per", font: { name: "Calibri", size: 10, italic: true, bold: true, color: { argb: "FFFF0000" } } }
                 ]
             };                                                                                    // Condition Type*
@@ -123,6 +123,11 @@ sap.ui.define([
             });
             row1.height = 22;
             row2.height = 22;
+
+            // Tô cam cho các cột bắt buộc: SO*, SO item*, Conditon Type*
+            [row1.getCell(1), row1.getCell(2), row2.getCell(6)].forEach((cell) => {
+                cell.fill = { type: "pattern", pattern: "solid", fgColor: { argb: "FFED7D31" } };
+            });
 
             // ===== Style: hint row =====
             row3.eachCell({ includeEmpty: true }, (cell) => {
