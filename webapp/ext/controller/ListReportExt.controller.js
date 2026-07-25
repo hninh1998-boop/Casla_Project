@@ -174,7 +174,8 @@ sap.ui.define([
 				{ header: "PurReqnPriceQuantity", key: "PurReqnPriceQuantity", width: 24 },
 				{ header: "PurReqnItemCurrency", key: "PurReqnItemCurrency", width: 24 },
 				{ header: "PurchasingGroup", key: "PurchasingGroup", width: 20 },
-				{ header: "DeliveryDate", key: "DeliveryDate", width: 24 }
+				{ header: "DeliveryDate", key: "DeliveryDate", width: 24 },
+				{header: "RequirementTracking", key: "RequirementTracking", width: 20 }
 			];
 
 			const hintRow = {
@@ -186,14 +187,15 @@ sap.ui.define([
 				PurchaseRequisitionItem: "Điền các PR item\nChỉ áp dụng cho Type I",
 				Material: "Điền material\nChỉ áp dụng cho Type I",
 				RequestedQuantity: "Số lượng\nChỉ áp dụng cho Type I",
-				BaseUnit: "Đơn vị\nChỉ áp dụng cho Type I",
+				BaseUnit: "Đơn vị\nMặc định lấy Base Unit mã hàng\nChỉ áp dụng cho Type I",
 				Plant: "Plant xuất hàng\n6711,6712…\nChỉ áp dụng cho Type I",
 				StorageLocation: "Kho xuất\n1000,2000…\nChỉ áp dụng cho Type I",
 				PurchaseRequisitionPrice: "Đơn giá\nChỉ áp dụng cho Type I",
 				PurReqnPriceQuantity: "Per ( /10; /100..)\nChỉ áp dụng cho Type I",
 				PurReqnItemCurrency: "Loại tiền tệ ( VND, usd..)\nChỉ áp dụng cho Type I",
 				PurchasingGroup: "Nhóm mua hàng\nChỉ áp dụng cho Type I",
-				DeliveryDate: "Ngày giao hàng\nĐiền dạng dd.mm.yyyy\nChỉ áp dụng cho Type I"
+				DeliveryDate: "Ngày giao hàng\nĐiền dạng dd.mm.yyyy\nChỉ áp dụng cho Type I",
+				RequirementTracking: "Tracking Number\nĐiền tối đa 10 ký tự\nChỉ áp dụng cho Type I"
 			};
 
 			// Field thuộc Header API (PR Header) — tô cam đậm để phân biệt với Item API
@@ -246,7 +248,7 @@ sap.ui.define([
 				PurReqnItemCurrency: "Loại tiền tệ ( VND, usd..)",
 				PurchasingGroup: "Nhóm mua hàng",
 				DeliveryDate: "Ngày giao hàng\nĐiền dạng dd.mm.yyyy",
-				RequirementTracking: "Tracking Number"
+				RequirementTracking: "Tracking Number\nĐiền tối đa 10 ký tự"
 			};
 
 			// Field thuộc Header API
