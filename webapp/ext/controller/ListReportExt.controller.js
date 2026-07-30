@@ -44,7 +44,7 @@ sap.ui.define([
         tlKH: ""
     };
 
-    var REPORT_TITLE = "BÁO CÁO TÌNH HÌNH TĂNG GIẢM TÀI SẢN CHI TIẾT";
+    var REPORT_TITLE = "BÁO CÁO CHI TIẾT TÀI SẢN CỐ ĐỊNH";
 
     // ────────────────────────────────────────────────────────
     // Tìm SmartTable + binding (giữ nguyên pattern cũ)

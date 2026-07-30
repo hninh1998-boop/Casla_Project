@@ -21,7 +21,7 @@ builder:
           name: ZASSET_TGRP_OV2
           description: Báo cáo tăng giảm Tài Sản Cố Định
           package: ZPK_ASSET_TG_RP
-          transport: AK3K906452
+          transport: AK3K906885
         exclude:
           - /test/
           - /localService/
