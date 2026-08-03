@@ -1,0 +1,167 @@
+[
+    {
+        "RoutingGroup": "wUsEZJv2",
+        "GroupCounter": "MA",
+        "Plant": "Pla1",
+        "Material": "Material1",
+        "SalesOrder": "SalesOrde1",
+        "SalesOrderItem": "Sales1",
+        "MaterialDescription": "MaterialDescription1",
+        "DonGia": 4.466,
+        "DonVi": "DonV1"
+    },
+    {
+        "RoutingGroup": "EUECNbtZ",
+        "GroupCounter": "Ld",
+        "Plant": "Pla2",
+        "Material": "Material2",
+        "SalesOrder": "SalesOrde2",
+        "SalesOrderItem": "Sales2",
+        "MaterialDescription": "MaterialDescription2",
+        "DonGia": 5.936,
+        "DonVi": "DonV2"
+    },
+    {
+        "RoutingGroup": "N27XguiA",
+        "GroupCounter": "bo",
+        "Plant": "Pla3",
+        "Material": "Material3",
+        "SalesOrder": "SalesOrde3",
+        "SalesOrderItem": "Sales3",
+        "MaterialDescription": "MaterialDescription3",
+        "DonGia": 7.181,
+        "DonVi": "DonV3"
+    },
+    {
+        "RoutingGroup": "ngsvw5yI",
+        "GroupCounter": "vA",
+        "Plant": "Pla4",
+        "Material": "Material4",
+        "SalesOrder": "SalesOrde4",
+        "SalesOrderItem": "Sales4",
+        "MaterialDescription": "MaterialDescription4",
+        "DonGia": 2.04,
+        "DonVi": "DonV4"
+    },
+    {
+        "RoutingGroup": "zKWL1RWo",
+        "GroupCounter": "wL",
+        "Plant": "Pla5",
+        "Material": "Material5",
+        "SalesOrder": "SalesOrde5",
+        "SalesOrderItem": "Sales5",
+        "MaterialDescription": "MaterialDescription5",
+        "DonGia": 4.761,
+        "DonVi": "DonV5"
+    },
+    {
+        "RoutingGroup": "rACxkbna",
+        "GroupCounter": "D4",
+        "Plant": "Pla6",
+        "Material": "Material6",
+        "SalesOrder": "SalesOrde6",
+        "SalesOrderItem": "Sales6",
+        "MaterialDescription": "MaterialDescription6",
+        "DonGia": 4.857,
+        "DonVi": "DonV6"
+    },
+    {
+        "RoutingGroup": "xSbTvX40",
+        "GroupCounter": "m8",
+        "Plant": "Pla7",
+        "Material": "Material7",
+        "SalesOrder": "SalesOrde7",
+        "SalesOrderItem": "Sales7",
+        "MaterialDescription": "MaterialDescription7",
+        "DonGia": 9.377,
+        "DonVi": "DonV7"
+    },
+    {
+        "RoutingGroup": "jARDKZp9",
+        "GroupCounter": "RI",
+        "Plant": "Pla8",
+        "Material": "Material8",
+        "SalesOrder": "SalesOrde8",
+        "SalesOrderItem": "Sales8",
+        "MaterialDescription": "MaterialDescription8",
+        "DonGia": 3.733,
+        "DonVi": "DonV8"
+    },
+    {
+        "RoutingGroup": "lkZRcZF3",
+        "GroupCounter": "08",
+        "Plant": "Pla9",
+        "Material": "Material9",
+        "SalesOrder": "SalesOrde9",
+        "SalesOrderItem": "Sales9",
+        "MaterialDescription": "MaterialDescription9",
+        "DonGia": 0.795,
+        "DonVi": "DonV9"
+    },
+    {
+        "RoutingGroup": "XWRFaPtm",
+        "GroupCounter": "Qf",
+        "Plant": "Pl10",
+        "Material": "Material10",
+        "SalesOrder": "SalesOrd10",
+        "SalesOrderItem": "Sale10",
+        "MaterialDescription": "MaterialDescription10",
+        "DonGia": 2.349,
+        "DonVi": "Don10"
+    },
+    {
+        "RoutingGroup": "Yg0PUBug",
+        "GroupCounter": "nh",
+        "Plant": "Pl11",
+        "Material": "Material11",
+        "SalesOrder": "SalesOrd11",
+        "SalesOrderItem": "Sale11",
+        "MaterialDescription": "MaterialDescription11",
+        "DonGia": 3.78,
+        "DonVi": "Don11"
+    },
+    {
+        "RoutingGroup": "siHStU4N",
+        "GroupCounter": "Es",
+        "Plant": "Pl12",
+        "Material": "Material12",
+        "SalesOrder": "SalesOrd12",
+        "SalesOrderItem": "Sale12",
+        "MaterialDescription": "MaterialDescription12",
+        "DonGia": 9.613,
+        "DonVi": "Don12"
+    },
+    {
+        "RoutingGroup": "C3xLlOj7",
+        "GroupCounter": "hv",
+        "Plant": "Pl13",
+        "Material": "Material13",
+        "SalesOrder": "SalesOrd13",
+        "SalesOrderItem": "Sale13",
+        "MaterialDescription": "MaterialDescription13",
+        "DonGia": 6.552,
+        "DonVi": "Don13"
+    },
+    {
+        "RoutingGroup": "58eY8Zdw",
+        "GroupCounter": "1j",
+        "Plant": "Pl14",
+        "Material": "Material14",
+        "SalesOrder": "SalesOrd14",
+        "SalesOrderItem": "Sale14",
+        "MaterialDescription": "MaterialDescription14",
+        "DonGia": 2.883,
+        "DonVi": "Don14"
+    },
+    {
+        "RoutingGroup": "bUtJZEoZ",
+        "GroupCounter": "BJ",
+        "Plant": "Pl15",
+        "Material": "Material15",
+        "SalesOrder": "SalesOrd15",
+        "SalesOrderItem": "Sale15",
+        "MaterialDescription": "MaterialDescription15",
+        "DonGia": 8.841,
+        "DonVi": "Don15"
+    }
+]

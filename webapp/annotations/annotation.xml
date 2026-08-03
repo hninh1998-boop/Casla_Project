@@ -1,0 +1,115 @@
+<edmx:Edmx xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx" Version="4.0">
+    <edmx:Reference Uri="https://sap.github.io/odata-vocabularies/vocabularies/UI.xml">
+        <edmx:Include Namespace="com.sap.vocabularies.UI.v1" Alias="UI"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/sap/opu/odata4/sap/zui_dongia_ngc_ov4/srvd/sap/zui_dongia_ngc/0001/$metadata">
+        <edmx:Include Namespace="com.sap.gateway.srvd.zui_dongia_ngc.v0001" Alias="SAP__self"/>
+    </edmx:Reference>
+    <edmx:DataServices>
+        <Schema xmlns="http://docs.oasis-open.org/odata/ns/edm" Namespace="local">
+            <Annotations Target="SAP__self.dgthType">
+                <Annotation Term="UI.SelectionPresentationVariant" Qualifier="dgth">
+                    <Record Type="UI.SelectionPresentationVariantType">
+                        <PropertyValue Property="PresentationVariant">
+                            <Record Type="UI.PresentationVariantType">
+                                <PropertyValue Property="Visualizations">
+                                    <Collection>
+                                        <AnnotationPath>@UI.LineItem</AnnotationPath>
+                                    </Collection>
+                                </PropertyValue>
+                            </Record>
+                        </PropertyValue>
+                        <PropertyValue Property="SelectionVariant">
+                            <Record Type="UI.SelectionVariantType">
+                                <PropertyValue Property="SelectOptions">
+                                    <Collection/>
+                                </PropertyValue>
+                            </Record>
+                        </PropertyValue>
+                        <PropertyValue Property="Text" String="{@i18n>dgth}"/>
+                    </Record>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="SAP__self.dgctType">
+                <Annotation Term="UI.HeaderInfo">
+                    <Record Type="UI.HeaderInfoType">
+                        <PropertyValue Property="TypeName" String="{@i18n>dgct}"/>
+                        <PropertyValue Property="TypeNamePlural" String="{@i18n>dgct}"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="UI.Facets">
+                    <Collection>
+                        <Record Type="UI.ReferenceFacet">
+                            <PropertyValue Property="ID" String="GeneralInfo"/>
+                            <PropertyValue Property="Label" String="{@i18n>dgctGeneralInfo}"/>
+                            <PropertyValue Property="Target" AnnotationPath="@UI.Identification"/>
+                        </Record>
+                    </Collection>
+                </Annotation>
+                <Annotation Term="UI.Identification">
+                    <Collection>
+                        <Record Type="UI.DataField"><PropertyValue Property="Value" Path="Material"/></Record>
+                        <Record Type="UI.DataField"><PropertyValue Property="Value" Path="MaterialDescription"/></Record>
+                        <Record Type="UI.DataField"><PropertyValue Property="Value" Path="SalesOrder"/></Record>
+                        <Record Type="UI.DataField"><PropertyValue Property="Value" Path="SalesOrderItem"/></Record>
+                        <Record Type="UI.DataField"><PropertyValue Property="Value" Path="RoutingGroup"/></Record>
+                        <Record Type="UI.DataField"><PropertyValue Property="Value" Path="GroupCounter"/></Record>
+                        <Record Type="UI.DataField"><PropertyValue Property="Value" Path="CongDoan"/></Record>
+                        <Record Type="UI.DataField"><PropertyValue Property="Value" Path="TenCongDoan"/></Record>
+                        <Record Type="UI.DataField"><PropertyValue Property="Value" Path="MaHoaCongDoan"/></Record>
+                        <Record Type="UI.DataField"><PropertyValue Property="Value" Path="DonGia"/></Record>
+                        <Record Type="UI.DataField"><PropertyValue Property="Value" Path="DonVi"/></Record>
+                        <Record Type="UI.DataField"><PropertyValue Property="Value" Path="Plant"/></Record>
+                    </Collection>
+                </Annotation>
+                <Annotation Term="UI.LineItem" Qualifier="dgct">
+                    <Collection>
+                        <Record Type="UI.DataField"><PropertyValue Property="Value" Path="Material"/></Record>
+                        <Record Type="UI.DataField"><PropertyValue Property="Value" Path="MaterialDescription"/></Record>
+                        <Record Type="UI.DataField"><PropertyValue Property="Value" Path="SalesOrder"/></Record>
+                        <Record Type="UI.DataField"><PropertyValue Property="Value" Path="SalesOrderItem"/></Record>
+                        <Record Type="UI.DataField"><PropertyValue Property="Value" Path="RoutingGroup"/></Record>
+                        <Record Type="UI.DataField"><PropertyValue Property="Value" Path="GroupCounter"/></Record>
+                        <Record Type="UI.DataField"><PropertyValue Property="Value" Path="CongDoan"/></Record>
+                        <Record Type="UI.DataField"><PropertyValue Property="Value" Path="TenCongDoan"/></Record>
+                        <Record Type="UI.DataField"><PropertyValue Property="Value" Path="MaHoaCongDoan"/></Record>
+                        <Record Type="UI.DataField"><PropertyValue Property="Value" Path="DonGia"/></Record>
+                        <Record Type="UI.DataField"><PropertyValue Property="Value" Path="DonVi"/></Record>
+                        <Record Type="UI.DataField"><PropertyValue Property="Value" Path="Plant"/></Record>
+                    </Collection>
+                </Annotation>
+                <Annotation Term="UI.SelectionFields">
+                    <Collection>
+                        <PropertyPath>Material</PropertyPath>
+                        <PropertyPath>Plant</PropertyPath>
+                        <PropertyPath>SalesOrder</PropertyPath>
+                        <PropertyPath>SalesOrderItem</PropertyPath>
+                    </Collection>
+                </Annotation>
+                <Annotation Term="UI.PresentationVariant" Qualifier="dgct">
+                    <Record Type="UI.PresentationVariantType">
+                        <PropertyValue Property="Visualizations">
+                            <Collection>
+                                <AnnotationPath>@UI.LineItem#dgct</AnnotationPath>
+                            </Collection>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+                <Annotation Term="UI.SelectionVariant" Qualifier="dgct">
+                    <Record Type="UI.SelectionVariantType">
+                        <PropertyValue Property="SelectOptions">
+                            <Collection/>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+                <Annotation Term="UI.SelectionPresentationVariant" Qualifier="dgct">
+                    <Record>
+                        <PropertyValue Property="Text" String="{@i18n>dgct}"/>
+                        <PropertyValue Property="SelectionVariant" Path="@UI.SelectionVariant#dgct"/>
+                        <PropertyValue Property="PresentationVariant" Path="@UI.PresentationVariant#dgct"/>
+                    </Record>
+                </Annotation>
+            </Annotations>
+        </Schema>
+    </edmx:DataServices>
+</edmx:Edmx>

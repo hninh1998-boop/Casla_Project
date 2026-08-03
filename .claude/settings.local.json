@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python3 -c \"import xml.dom.minidom as m; m.parse\\('/home/user/projects/zdongia_ngc_ov4/webapp/annotations/annotation.xml'\\); print\\('annotation.xml is well-formed XML'\\)\")",
+      "Bash(kill 71332 71333 71345 71358)",
+      "Bash(curl -s http://localhost:8080/manifest.json -o /dev/null -w \"manifest.json: %{http_code}\\\\n\")",
+      "Bash(curl -s http://localhost:8080/annotations/annotation.xml -o /dev/null -w \"annotation.xml: %{http_code}\\\\n\")",
+      "Bash(curl -s http://localhost:8080/annotations/annotation.xml)",
+      "Bash(python3 -c \"import sys,xml.dom.minidom as m; m.parseString\\(sys.stdin.read\\(\\)\\); print\\('served annotation.xml is well-formed'\\)\")",
+      "Bash(grep -rn 'CountRestrictions\\\\|Countable\\\\|$count\\\\|hideTableTitle\\\\|EnableExport\\\\|SearchRestrictions' /home/user/projects/zdongia_ngc_ov4/webapp)"
+    ]
+  }
+}
