@@ -21,7 +21,7 @@ builder:
           name: ZMAPIM
           description: Mapping hóa đơn - chứng từ kho
           package: ZPK_ZMAPINVMATDOC
-          transport: AK3K906048
+          transport: AK3K907051
         exclude:
           - /test/
           - /localService/

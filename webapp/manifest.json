@@ -130,7 +130,15 @@
             "controllerName": "zmapim.ext.controller.ListReportExt",
             "sap.ui.generic.app": {
               "zce_mapim": {
-                "EntitySet": "zce_mapim"
+                "EntitySet": "zce_mapim",
+                "Actions": {
+                  "customExportExcel": {
+                    "id": "exportExcelButton",
+                    "text": "Xuất Excel",
+                    "press": "exportExcel",
+                    "requiresSelection": false
+                  }
+                }
               }
             }
           }
