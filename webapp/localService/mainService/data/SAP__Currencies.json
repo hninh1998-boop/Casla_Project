@@ -1,0 +1,62 @@
+[
+    {
+        "CurrencyCode": "0yb2K",
+        "ISOCode": "IS1",
+        "Text": "Text1",
+        "DecimalPlaces": 249
+    },
+    {
+        "CurrencyCode": "uGk0B",
+        "ISOCode": "IS2",
+        "Text": "Text2",
+        "DecimalPlaces": 158
+    },
+    {
+        "CurrencyCode": "Wc5hw",
+        "ISOCode": "IS3",
+        "Text": "Text3",
+        "DecimalPlaces": 106
+    },
+    {
+        "CurrencyCode": "pw24s",
+        "ISOCode": "IS4",
+        "Text": "Text4",
+        "DecimalPlaces": 151
+    },
+    {
+        "CurrencyCode": "wmdPm",
+        "ISOCode": "IS5",
+        "Text": "Text5",
+        "DecimalPlaces": 162
+    },
+    {
+        "CurrencyCode": "KUht7",
+        "ISOCode": "IS6",
+        "Text": "Text6",
+        "DecimalPlaces": 235
+    },
+    {
+        "CurrencyCode": "9TZdO",
+        "ISOCode": "IS7",
+        "Text": "Text7",
+        "DecimalPlaces": 100
+    },
+    {
+        "CurrencyCode": "Wk1iZ",
+        "ISOCode": "IS8",
+        "Text": "Text8",
+        "DecimalPlaces": 160
+    },
+    {
+        "CurrencyCode": "49bpM",
+        "ISOCode": "IS9",
+        "Text": "Text9",
+        "DecimalPlaces": 136
+    },
+    {
+        "CurrencyCode": "p9jxq",
+        "ISOCode": "I10",
+        "Text": "Text10",
+        "DecimalPlaces": 245
+    }
+]

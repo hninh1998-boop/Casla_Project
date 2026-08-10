@@ -1,0 +1,72 @@
+[
+    {
+        "UnitCode": "Ii5",
+        "ISOCode": "IS1",
+        "ExternalCode": "Ex1",
+        "Text": "Text1",
+        "DecimalPlaces": 30987
+    },
+    {
+        "UnitCode": "sQ3",
+        "ISOCode": "IS2",
+        "ExternalCode": "Ex2",
+        "Text": "Text2",
+        "DecimalPlaces": 21751
+    },
+    {
+        "UnitCode": "tQo",
+        "ISOCode": "IS3",
+        "ExternalCode": "Ex3",
+        "Text": "Text3",
+        "DecimalPlaces": 330
+    },
+    {
+        "UnitCode": "OSK",
+        "ISOCode": "IS4",
+        "ExternalCode": "Ex4",
+        "Text": "Text4",
+        "DecimalPlaces": 8722
+    },
+    {
+        "UnitCode": "o86",
+        "ISOCode": "IS5",
+        "ExternalCode": "Ex5",
+        "Text": "Text5",
+        "DecimalPlaces": 4428
+    },
+    {
+        "UnitCode": "Lrf",
+        "ISOCode": "IS6",
+        "ExternalCode": "Ex6",
+        "Text": "Text6",
+        "DecimalPlaces": 7296
+    },
+    {
+        "UnitCode": "cYd",
+        "ISOCode": "IS7",
+        "ExternalCode": "Ex7",
+        "Text": "Text7",
+        "DecimalPlaces": 18613
+    },
+    {
+        "UnitCode": "IJs",
+        "ISOCode": "IS8",
+        "ExternalCode": "Ex8",
+        "Text": "Text8",
+        "DecimalPlaces": 7304
+    },
+    {
+        "UnitCode": "M7r",
+        "ISOCode": "IS9",
+        "ExternalCode": "Ex9",
+        "Text": "Text9",
+        "DecimalPlaces": 30273
+    },
+    {
+        "UnitCode": "VKF",
+        "ISOCode": "I10",
+        "ExternalCode": "E10",
+        "Text": "Text10",
+        "DecimalPlaces": 681
+    }
+]
