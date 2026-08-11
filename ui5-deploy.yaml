@@ -21,7 +21,7 @@ builder:
           name: ZRP_SALES_MGT
           description: Báo cáo quản lý luồng bán hàng
           package: ZPK_BC_QLY_LUONG_BAN
-          transport: AK3K906167
+          transport: AK3K907084
         exclude:
           - /test/
           - /localService/
