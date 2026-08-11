@@ -437,8 +437,12 @@ sap.ui.define([
                         cell.value = oDate;
                         if (oDate) { cell.numFmt = "dd/mm/yyyy"; }
                     } else if (oColDef.quantity) {
-                        cell.value = toNumber(vValue);
-                        cell.numFmt = "#,##0.###";
+                        var fQty = toNumber(vValue);
+                        cell.value = fQty;
+                        // "#" là placeholder tùy chọn, nếu số nguyên thì phần thập phân rỗng
+                        // nhưng dấu chấm literal vẫn bị in ra -> chỉ dùng numFmt có thập phân
+                        // khi giá trị thực sự có phần lẻ.
+                        cell.numFmt = Number.isInteger(fQty) ? "#,##0" : "#,##0.###";
                     } else if (oColDef.amount) {
                         cell.value = toNumber(vValue);
                         cell.numFmt = "#,##0.00";
