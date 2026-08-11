@@ -1,0 +1,46 @@
+<core:FragmentDefinition
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+    xmlns:f="sap.ui.layout.form">
+
+    <Dialog id="idUdtInvoiceStatusDialog"
+            title="Cập nhật trạng thái hóa đơn"
+            draggable="true"
+            contentWidth="450px">
+
+        <VBox id="idUdtInvoiceStatusVBox" width="100%">
+            <f:SimpleForm id="idUdtInvoiceStatusSimpleForm"
+                editable="true"
+                labelSpanL="5" labelSpanM="5"
+                columnsL="1">
+                <f:content>
+
+                    <Label id="idUdtStartDateLabel" text="Start date" required="true"/>
+                    <DatePicker id="idUdtStartDateDatePicker"
+                                value="{udtInvoiceStatusModel>/StartDate}"
+                                valueFormat="yyyy-MM-dd"/>
+
+                    <Label id="idUdtEndDateLabel" text="End date" required="true"/>
+                    <DatePicker id="idUdtEndDateDatePicker"
+                                value="{udtInvoiceStatusModel>/EndDate}"
+                                valueFormat="yyyy-MM-dd"/>
+
+                </f:content>
+            </f:SimpleForm>
+        </VBox>
+
+        <footer>
+            <Toolbar id="idUdtInvoiceStatusToolbar">
+                <content>
+                    <ToolbarSpacer id="idUdtInvoiceStatusToolbarSpacer"/>
+                    <Button id="idCapNhatButton" text="Cập nhật"
+                            type="Emphasized"
+                            press=".onCapNhatButtonPress"/>
+                    <Button id="idUdtDongButton" text="Đóng"
+                            press=".onUdtDongButtonPress"/>
+                </content>
+            </Toolbar>
+        </footer>
+
+    </Dialog>
+</core:FragmentDefinition>

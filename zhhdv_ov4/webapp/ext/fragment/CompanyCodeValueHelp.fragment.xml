@@ -1,0 +1,46 @@
+<core:FragmentDefinition
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core">
+
+    <Dialog id="idCompanyCodeVHDialog"
+            title="Company Code"
+            contentWidth="600px"
+            contentHeight="400px"
+            resizable="true"
+            draggable="true">
+
+        <VBox id="idCompanyCodeVHVBox" width="100%">
+            <SearchField id="idCompanyCodeVHSearchField"
+                         width="100%"
+                         liveChange=".onSearchFieldLiveChange"/>
+
+            <Table id="idCompanyCodeVHTable"
+                   items="{path: '/CompanyCodeVH'}">
+                <columns>
+                    <Column id="idCompanyCodeColumn"><Text id="idCompanyCodeColumnText" text="Company Code"/></Column>
+                    <Column id="idCompanyCodeNameColumn"><Text id="idCompanyCodeNameColumnText" text="Company Code Name"/></Column>
+                    <Column id="idCityNameColumn"><Text id="idCityNameColumnText" text="City"/></Column>
+                </columns>
+                <items>
+                    <ColumnListItem id="idCompanyCodeVHColumnListItem" type="Active" press=".onColumnListItemPress">
+                        <cells>
+                            <Text id="idCompanyCodeCellText" text="{CompanyCode}"/>
+                            <Text id="idCompanyCodeNameCellText" text="{CompanyCodeName}"/>
+                            <Text id="idCityNameCellText" text="{CityName}"/>
+                        </cells>
+                    </ColumnListItem>
+                </items>
+            </Table>
+        </VBox>
+
+        <footer>
+            <Toolbar id="idCompanyCodeVHToolbar">
+                <content>
+                    <ToolbarSpacer id="idCompanyCodeVHToolbarSpacer"/>
+                    <Button id="idNgVHButton" text="Đóng" press=".onNgButtonVHPress"/>
+                </content>
+            </Toolbar>
+        </footer>
+
+    </Dialog>
+</core:FragmentDefinition>

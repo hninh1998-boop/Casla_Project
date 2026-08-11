@@ -1,0 +1,53 @@
+<core:FragmentDefinition
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+    xmlns:f="sap.ui.layout.form">
+
+    <Dialog id="idLayDuLieuDialog"
+            title="Lấy dữ liệu"
+            draggable="true"
+            contentWidth="450px">
+
+        <VBox id="idLayDuLieuVBox" width="100%">
+            <f:SimpleForm id="idLayDuLieuSimpleForm"
+                editable="true"
+                labelSpanL="5" labelSpanM="5"
+                columnsL="1">
+                <f:content>
+
+                    <Label id="idCompanyCodeLabel" text="Company code" required="true"/>
+                    <Input id="idCompanyCodeInput"
+                           value="{layDuLieuModel>/CompanyCode}"
+                           maxLength="4"
+                           showValueHelp="true"
+                           valueHelpRequest=".onCompanyCodeInputValueHelpRequest"/>
+
+                    <Label id="idStartDateLabel" text="Start date" required="true"/>
+                    <DatePicker id="idStartDateDatePicker"
+                                value="{layDuLieuModel>/StartDate}"
+                                valueFormat="yyyy-MM-dd"/>
+
+                    <Label id="idEndDateLabel" text="End date" required="true"/>
+                    <DatePicker id="idEndDateDatePicker"
+                                value="{layDuLieuModel>/EndDate}"
+                                valueFormat="yyyy-MM-dd"/>
+
+                </f:content>
+            </f:SimpleForm>
+        </VBox>
+
+        <footer>
+            <Toolbar id="idLayDuLieuToolbar">
+                <content>
+                    <ToolbarSpacer id="idLayDuLieuToolbarSpacer"/>
+                    <Button id="idLyButton" text="Lấy"
+                            type="Emphasized"
+                            press=".onLyButtonPress"/>
+                    <Button id="idNgButton" text="Đóng"
+                            press=".onNgButtonPress"/>
+                </content>
+            </Toolbar>
+        </footer>
+
+    </Dialog>
+</core:FragmentDefinition>

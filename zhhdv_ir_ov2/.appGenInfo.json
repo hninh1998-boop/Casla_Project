@@ -1,0 +1,28 @@
+{
+  "generationParameters": {
+    "generationDate": "Wed Aug 05 2026 09:33:52 GMT+0000 (Coordinated Universal Time)",
+    "generatorPlatform": "SAP Business Application Studio",
+    "serviceType": "SAP System (ABAP On-Premise)",
+    "metadataFilename": "",
+    "serviceUrl": "https://my426517.s4hana.cloud.sap/sap/opu/odata/sap/ZUI_HHDV_ITEM_RAW_OV2",
+    "appName": "zhhdv_ir_ov2",
+    "appTitle": "HHDV Item Raw",
+    "appDescription": "An SAP Fiori application.",
+    "appNamespace": "",
+    "ui5Theme": "sap_horizon",
+    "ui5Version": "1.142.12",
+    "enableEslint": true,
+    "enableTypeScript": false,
+    "showMockDataInfo": true,
+    "generatorVersion": "1.30.0",
+    "template": "List Report Page V2",
+    "generatorName": "SAP Fiori Application Generator",
+    "entityRelatedConfig": [
+      {
+        "type": "Main Entity",
+        "value": "zi_hhdv_ITEM_raw"
+      }
+    ],
+    "launchText": "To launch the generated application, run the following from the generated application root folder:\n\n```\n    npm start\n```"
+  }
+}
