@@ -21,7 +21,7 @@ builder:
           name: ZCONT_OV2
           description: Kế hoạch đóng cont
           package: ZPK_CONT
-          transport: AK3K906939
+          transport: AK3K907094
         exclude:
           - /test/
           - /localService/

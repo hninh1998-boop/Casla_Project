@@ -8,8 +8,6 @@ sap.ui.define([
     var BATCH_SIZE = 1000;
     var CONCURRENCY = 4;
 
-    var COMPANY_NAME = "CÔNG TY CP CASABLANCA";
-    var PLANT_NAME = "NHÀ MÁY TÂN DĨNH";
     var DEPT_NAME = "PHÒNG KD-XNK";
 
     // Cột hiển thị trên Excel, theo đúng thứ tự trên mẫu "Tem KH đóng cont".
@@ -38,7 +36,8 @@ sap.ui.define([
         { label: "Số lượng trên lệnh xuất hàng", field: "SoLuongTrenLenhXuatHang", width: 16, quantity: true },
         { label: "Số lượng chưa lên lệnh xuất hàng", field: "SoLuongChuaLenLenhXuatHang", width: 16, quantity: true },
         { label: "Trạng thái OD", field: "TrangThaiOD", width: 14 },
-        { label: "Kế hoạch đóng cont", field: "KeHoachDongCont", width: 14 }
+        { label: "Kế hoạch đóng cont", field: "KeHoachDongCont", width: 14 },
+        { label: "Ghi chú khác", field: "GhiChuKhac", width: 20, wrap: true }
     ];
 
     var FIRST_COL = 2;                                  // B
@@ -287,6 +286,8 @@ sap.ui.define([
             var sFirst = colLetter(FIRST_COL);
             var sLast = colLetter(LAST_COL);
             var oWeek = getCurrentWeekInfo();
+            var sCompanyName = (aData[0] && aData[0].CompanyCodeName) || "";
+            var sPlantName = (aData[0] && aData[0].PlantName) || "";
 
             //1. Dòng 1-3, cột B-C: Phòng ban
             ws.mergeCells(sFirst + "1:" + colLetter(FIRST_COL + 1) + "3");
@@ -299,14 +300,14 @@ sap.ui.define([
             //2. Dòng 1: Tên công ty
             ws.mergeCells(colLetter(FIRST_COL + 2) + "1:" + sLast + "1");
             var oCompany = ws.getCell(colLetter(FIRST_COL + 2) + "1");
-            oCompany.value = COMPANY_NAME;
+            oCompany.value = sCompanyName;
             oCompany.font = { bold: true, size: 14, color: { argb: "FFFF0000" }, name: FONT };
             oCompany.alignment = { horizontal: "center", vertical: "middle" };
 
             //3. Dòng 2: Tên nhà máy
             ws.mergeCells(colLetter(FIRST_COL + 2) + "2:" + sLast + "2");
             var oPlant = ws.getCell(colLetter(FIRST_COL + 2) + "2");
-            oPlant.value = PLANT_NAME;
+            oPlant.value = sPlantName;
             oPlant.font = { bold: true, size: 14, color: { argb: "FFFF0000" }, name: FONT };
             oPlant.alignment = { horizontal: "center", vertical: "middle" };
 
@@ -336,24 +337,36 @@ sap.ui.define([
             var iRow = iHeaderRow + 1;
             var r, item, c, oColDef, vValue;
 
-            // Gộp ô cột SỐ CONT khi các dòng liên tiếp có cùng số cont
-            var iSoContCol = FIRST_COL + COLUMNS.findIndex(function (oCol) {
-                return oCol.field === "SoCont";
+            // Gộp ô cột SỐ CONT và cột Cont khi các dòng liên tiếp có cùng giá trị
+            var MERGE_FIELDS = ["SoCont", "Cont"];
+            var oMergeInfo = {};
+            MERGE_FIELDS.forEach(function (sField) {
+                oMergeInfo[sField] = {
+                    col: FIRST_COL + COLUMNS.findIndex(function (oCol) {
+                        return oCol.field === sField;
+                    }),
+                    startRow: iRow,
+                    prevValue: null
+                };
             });
-            var iMergeStartRow = iRow;
-            var sPrevSoCont = null;
 
             for (r = 0; r < aData.length; r++) {
                 item = aData[r];
-                var sSoCont = item.SoCont || "";
-                var bIsContinuation = r > 0 && sSoCont && sSoCont === sPrevSoCont;
 
-                if (!bIsContinuation) {
-                    if (iRow - iMergeStartRow > 1) {
-                        ws.mergeCells(iMergeStartRow, iSoContCol, iRow - 1, iSoContCol);
+                var oContinuation = {};
+                MERGE_FIELDS.forEach(function (sField) {
+                    var oInfo = oMergeInfo[sField];
+                    var sValue = item[sField] || "";
+                    var bIsContinuation = r > 0 && sValue && sValue === oInfo.prevValue;
+                    oContinuation[sField] = bIsContinuation;
+
+                    if (!bIsContinuation) {
+                        if (iRow - oInfo.startRow > 1) {
+                            ws.mergeCells(oInfo.startRow, oInfo.col, iRow - 1, oInfo.col);
+                        }
+                        oInfo.startRow = iRow;
                     }
-                    iMergeStartRow = iRow;
-                }
+                });
 
                 for (i = 0; i < COLUMNS.length; i++) {
                     c = FIRST_COL + i;
@@ -363,8 +376,8 @@ sap.ui.define([
                     if (!oColDef.field) {
                         // 4 cột đầu: chưa có nguồn dữ liệu -> tạm để trống
                         vValue = "";
-                    } else if (oColDef.field === "SoCont" && bIsContinuation) {
-                        // Dòng thuộc cùng 1 cont với dòng trên -> để trống, sẽ được gộp ô
+                    } else if (oContinuation[oColDef.field]) {
+                        // Dòng thuộc cùng 1 giá trị với dòng trên -> để trống, sẽ được gộp ô
                         vValue = "";
                     } else {
                         vValue = item[oColDef.field];
@@ -388,13 +401,18 @@ sap.ui.define([
                     };
                 }
 
-                sPrevSoCont = sSoCont;
+                MERGE_FIELDS.forEach(function (sField) {
+                    oMergeInfo[sField].prevValue = item[sField] || "";
+                });
                 iRow++;
             }
 
-            if (iRow - iMergeStartRow > 1) {
-                ws.mergeCells(iMergeStartRow, iSoContCol, iRow - 1, iSoContCol);
-            }
+            MERGE_FIELDS.forEach(function (sField) {
+                var oInfo = oMergeInfo[sField];
+                if (iRow - oInfo.startRow > 1) {
+                    ws.mergeCells(oInfo.startRow, oInfo.col, iRow - 1, oInfo.col);
+                }
+            });
 
             //7. Độ rộng cột
             var aColumns = [{ width: 3 }]; // A (ẩn)
