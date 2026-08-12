@@ -137,6 +137,12 @@
                     "text": "{i18n>exportExcelButtonText}",
                     "press": "exportExcel",
                     "requiresSelection": false
+                  },
+                  "UdtInvoiceStatus": {
+                    "id": "udtInvoiceStatusButton",
+                    "text": "{i18n>udtInvoiceStatusButtonText}",
+                    "press": "onUdtInvoiceStatusButtonPress",
+                    "requiresSelection": false
                   }
                 }
               }

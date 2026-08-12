@@ -514,6 +514,10 @@
                     <End EntitySet="SAP__MyDocumentDescriptions" Role="FromRole_to_coverpage"/>
                     <End EntitySet="SAP__CoverPageSet" Role="ToRole_to_coverpage"/>
                 </AssociationSet>
+                <FunctionImport Name="UdtInvoiceStatus" ReturnType="Edm.String" m:HttpMethod="POST" sap:action-for="cds_zui_hhdv_rp.HHDVRPType">
+                    <Parameter Name="StartDate" Type="Edm.DateTime" Precision="0" Mode="In"/>
+                    <Parameter Name="EndDate" Type="Edm.DateTime" Precision="0" Mode="In"/>
+                </FunctionImport>
             </EntityContainer>
             <Annotation Term="Core.SchemaVersion" String="1.0.0" xmlns="http://docs.oasis-open.org/odata/ns/edm"/>
             <Annotations Target="cds_zui_hhdv_rp.HHDVRPType/CompanyCode" xmlns="http://docs.oasis-open.org/odata/ns/edm">

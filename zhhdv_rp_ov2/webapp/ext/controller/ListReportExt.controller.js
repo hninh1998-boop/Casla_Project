@@ -1,8 +1,10 @@
 sap.ui.define([
     "sap/m/MessageToast",
     "sap/m/MessageBox",
-    "sap/m/BusyDialog"
-], function (MessageToast, MessageBox, BusyDialog) {
+    "sap/m/BusyDialog",
+    "sap/ui/core/Fragment",
+    "sap/ui/model/json/JSONModel"
+], function (MessageToast, MessageBox, BusyDialog, Fragment, JSONModel) {
     "use strict";
 
     var BATCH_SIZE = 1000;
@@ -180,6 +182,81 @@ sap.ui.define([
          */
         exportExcel: function () {
             mainExport(this.getView());
+        },
+
+        /**
+         * Cập nhật trạng thái hóa đơn - gọi từ nút "Cập nhật trạng thái hóa đơn"
+         * trên toolbar của List Report (khai báo trong manifest.json - sap.ui.generic.app > Actions)
+         */
+        onUdtInvoiceStatusButtonPress: async function () {
+            var oView = this.getView();
+
+            if (!this._oUdtInvoiceStatusDialog) {
+                this._oUdtInvoiceStatusDialog = await Fragment.load({
+                    id: oView.getId(),
+                    name: "zhhdvrpov2.ext.fragment.UdtInvoiceStatus",
+                    controller: this
+                });
+                oView.addDependent(this._oUdtInvoiceStatusDialog);
+            }
+            this._openUdtInvoiceStatusDialog();
+        },
+
+        _openUdtInvoiceStatusDialog: function () {
+            // Mặc định Start date/End date = đầu năm - cuối năm hiện tại.
+            // DatePicker bind trực tiếp property "value" (valueFormat yyyy-MM-dd)
+            // nên set chuỗi, không phải Date object.
+            var iYear = new Date().getFullYear();
+            var oModel = new JSONModel({
+                StartDate: iYear + "-01-01",
+                EndDate: iYear + "-12-31"
+            });
+            this._oUdtInvoiceStatusDialog.setModel(oModel, "udtInvoiceStatusModel");
+            this._oUdtInvoiceStatusDialog.open();
+        },
+
+        onCapNhatButtonPress: function () {
+            var oView = this.getView();
+            var sViewId = oView.getId();
+
+            // StartDate/EndDate trên backend là abap.dats (Edm.DateTime) nên phải
+            // truyền JS Date object (getDateValue) chứ không phải chuỗi yyyy-MM-dd,
+            // để ODataModel v2 tự format đúng thành datetime'...' literal.
+            var oStartDate = Fragment.byId(sViewId, "idUdtStartDateDatePicker").getDateValue();
+            var oEndDate = Fragment.byId(sViewId, "idUdtEndDateDatePicker").getDateValue();
+
+            if (!oStartDate || !oEndDate) {
+                MessageToast.show("Vui lòng nhập đủ Start date, End date.");
+                return;
+            }
+
+            var oModel = oView.getModel();
+            var that = this;
+
+            this._oUdtInvoiceStatusDialog.setBusy(true);
+
+            oModel.callFunction("/UdtInvoiceStatus", {
+                method: "POST",
+                urlParameters: {
+                    StartDate: oStartDate,
+                    EndDate: oEndDate
+                },
+                success: function () {
+                    that._oUdtInvoiceStatusDialog.setBusy(false);
+                    MessageToast.show("Cập nhật trạng thái thành công.");
+                    that._oUdtInvoiceStatusDialog.close();
+                    refreshSmartTable(oView);
+                },
+                error: function (oError) {
+                    that._oUdtInvoiceStatusDialog.setBusy(false);
+                    var sMsg = (oError && oError.responseText) || (oError && oError.message) || "";
+                    MessageBox.error("Cập nhật trạng thái thất bại: " + sMsg);
+                }
+            });
+        },
+
+        onUdtDongButtonPress: function () {
+            this._oUdtInvoiceStatusDialog.close();
         }
     };
 
@@ -276,6 +353,20 @@ sap.ui.define([
             sorters: oBinding.aSorters || [],
             totalLength: oBinding.getLength()
         };
+    }
+
+
+    //////////////////////////////////////////////////////////////////////////
+    // Rebind lại SmartTable trên view (dùng sau khi cập nhật trạng thái hóa đơn)
+    function refreshSmartTable(oView) {
+        var oAll = oView.findAggregatedObjects(true);
+
+        for (var i = 0; i < oAll.length; i++) {
+            if (oAll[i].getMetadata().getName() === "sap.ui.comp.smarttable.SmartTable") {
+                oAll[i].rebindTable();
+                return;
+            }
+        }
     }
 
 
