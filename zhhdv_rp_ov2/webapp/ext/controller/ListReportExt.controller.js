@@ -245,7 +245,6 @@ sap.ui.define([
                     that._oUdtInvoiceStatusDialog.setBusy(false);
                     MessageToast.show("Cập nhật trạng thái thành công.");
                     that._oUdtInvoiceStatusDialog.close();
-                    refreshSmartTable(oView);
                 },
                 error: function (oError) {
                     that._oUdtInvoiceStatusDialog.setBusy(false);
@@ -353,20 +352,6 @@ sap.ui.define([
             sorters: oBinding.aSorters || [],
             totalLength: oBinding.getLength()
         };
-    }
-
-
-    //////////////////////////////////////////////////////////////////////////
-    // Rebind lại SmartTable trên view (dùng sau khi cập nhật trạng thái hóa đơn)
-    function refreshSmartTable(oView) {
-        var oAll = oView.findAggregatedObjects(true);
-
-        for (var i = 0; i < oAll.length; i++) {
-            if (oAll[i].getMetadata().getName() === "sap.ui.comp.smarttable.SmartTable") {
-                oAll[i].rebindTable();
-                return;
-            }
-        }
     }
 
 
