@@ -1,0 +1,187 @@
+{
+  "_version": "1.80.0",
+  "sap.app": {
+    "id": "ordcfm",
+    "type": "application",
+    "i18n": "i18n/i18n.properties",
+    "applicationVersion": {
+      "version": "0.0.1"
+    },
+    "title": "{{appTitle}}",
+    "description": "{{appDescription}}",
+    "resources": "resources.json",
+    "sourceTemplate": {
+      "id": "@sap/generator-fiori:lrop",
+      "version": "1.28.0",
+      "toolsId": "f7ed938b-f1b1-4334-a5ea-53c613c8817a"
+    },
+    "dataSources": {
+      "annotation": {
+        "type": "ODataAnnotation",
+        "uri": "annotations/annotation.xml",
+        "settings": {
+          "localUri": "annotations/annotation.xml"
+        }
+      },
+      "mainService": {
+        "uri": "/sap/opu/odata4/sap/zui_ord_conf_item/srvd/sap/zsd_ord_conf_item/0001/",
+        "type": "OData",
+        "settings": {
+          "annotations": [
+            "annotation"
+          ],
+          "localUri": "localService/mainService/metadata.xml",
+          "odataVersion": "4.0"
+        }
+      }
+    },
+    "crossNavigation": {
+      "inbounds": {
+        "zord_cfm-display": {
+          "semanticObject": "zord_cfm",
+          "action": "display",
+          "title": "{{zord_cfm-display.flpTitle}}",
+          "signature": {
+            "parameters": {},
+            "additionalParameters": "allowed"
+          }
+        }
+      }
+    }
+  },
+  "sap.ui": {
+    "technology": "UI5",
+    "icons": {
+      "icon": "",
+      "favIcon": "",
+      "phone": "",
+      "phone@2": "",
+      "tablet": "",
+      "tablet@2": ""
+    },
+    "deviceTypes": {
+      "desktop": true,
+      "tablet": true,
+      "phone": true
+    }
+  },
+  "sap.ui5": {
+    "flexEnabled": true,
+    "dependencies": {
+      "minUI5Version": "1.142.12",
+      "libs": {
+        "sap.m": {},
+        "sap.ui.core": {},
+        "sap.fe.templates": {}
+      }
+    },
+    "contentDensities": {
+      "compact": true,
+      "cozy": true
+    },
+    "models": {
+      "i18n": {
+        "type": "sap.ui.model.resource.ResourceModel",
+        "settings": {
+          "bundleName": "ordcfm.i18n.i18n"
+        }
+      },
+      "": {
+        "dataSource": "mainService",
+        "preload": true,
+        "settings": {
+          "operationMode": "Server",
+          "autoExpandSelect": true,
+          "earlyRequests": true
+        }
+      },
+      "@i18n": {
+        "type": "sap.ui.model.resource.ResourceModel",
+        "uri": "i18n/i18n.properties"
+      }
+    },
+    "resources": {
+      "css": []
+    },
+    "routing": {
+      "config": {},
+      "routes": [
+        {
+          "pattern": ":?query:",
+          "name": "ZI_ORD_CONF_ITEMList",
+          "target": "ZI_ORD_CONF_ITEMList"
+        },
+        {
+          "pattern": "ZI_ORD_CONF_ITEM({key}):?query:",
+          "name": "ZI_ORD_CONF_ITEMObjectPage",
+          "target": "ZI_ORD_CONF_ITEMObjectPage"
+        }
+      ],
+      "targets": {
+        "ZI_ORD_CONF_ITEMList": {
+          "type": "Component",
+          "id": "ZI_ORD_CONF_ITEMList",
+          "name": "sap.fe.templates.ListReport",
+          "options": {
+            "settings": {
+              "contextPath": "/ZI_ORD_CONF_ITEM",
+              "variantManagement": "Page",
+              "navigation": {
+                "ZI_ORD_CONF_ITEM": {
+                  "detail": {
+                    "route": "ZI_ORD_CONF_ITEMObjectPage"
+                  }
+                }
+              },
+              "controlConfiguration": {
+                "@com.sap.vocabularies.UI.v1.LineItem": {
+                  "tableSettings": {
+                    "type": "GridTable"
+                  },
+                  "actions": {
+                    "PDF": {
+                      "press": ".extension.ordcfm.ext.controller.PDF.btnPrintPDF",
+                      "visible": true,
+                      "enabled": true,
+                      "requiresSelection": true,
+                      "text": "View PDF"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "ZI_ORD_CONF_ITEMObjectPage": {
+          "type": "Component",
+          "id": "ZI_ORD_CONF_ITEMObjectPage",
+          "name": "sap.fe.templates.ObjectPage",
+          "options": {
+            "settings": {
+              "editableHeaderContent": false,
+              "contextPath": "/ZI_ORD_CONF_ITEM"
+            }
+          }
+        }
+      }
+    },
+    "extends": {
+      "extensions": {
+        "sap.ui.controllerExtensions": {
+          "sap.fe.templates.ListReport.ListReportController#ordcfm::ZI_ORD_CONF_ITEMList": {
+            "controllerName": "ordcfm.ext.controller.PDF"
+          }
+        }
+      }
+    }
+  },
+  "sap.fiori": {
+    "registrationIds": [],
+    "archeType": "transactional"
+  },
+  "sap.fe": {
+    "app": {
+      "enableLazyLoading": true
+    }
+  }
+}
