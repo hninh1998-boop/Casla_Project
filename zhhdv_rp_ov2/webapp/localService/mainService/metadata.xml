@@ -191,6 +191,7 @@
                 <Property Name="UserHachToan" Type="Edm.String" MaxLength="80" sap:label="User hạch toán"/>
                 <Property Name="InvoiceKey" Type="Edm.String" sap:label="Invoice Key"/>
                 <Property Name="DoanhSo" Type="Edm.Decimal" Precision="23" Scale="5" sap:label="Doanh số"/>
+                <Property Name="DoanhSoSauLamTron" Type="Edm.Decimal" Precision="23" Scale="5" sap:label="Doanh số sau làm tròn"/>
                 <Property Name="ThueGTGT" Type="Edm.Decimal" Precision="23" Scale="5" sap:label="Thuế GTGT"/>
                 <Property Name="TongCong" Type="Edm.Decimal" Precision="23" Scale="5" sap:label="Tổng cộng"/>
                 <Property Name="SoToKhai" Type="Edm.String" sap:label="Số tờ khai"/>

@@ -20,7 +20,7 @@ sap.ui.define([
         { label: "Tên Đ.v - K.hàng", field: "TenDVKHang", width: 30, wrap: true },
         { label: "Mã số thuế", field: "MaSoThue", width: 16 },
         { label: "Tên hàng", field: "TenHang", width: 26, wrap: true },
-        { label: "Doanh số", field: "DoanhSo", width: 16, numeric: true },
+        { label: "Doanh số", field: "DoanhSoSauLamTron", width: 16, numeric: true },
         { label: "Thuế suất", field: "ThueSuat", width: 10, numeric: true, numFmt: "0.00" },
         { label: "Thuế GTGT", field: "ThueGTGT", width: 16, numeric: true },
         { label: "Tổng cộng", field: "TongCong", width: 16, numeric: true },
