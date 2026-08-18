@@ -383,7 +383,7 @@ sap.ui.define([
             };
             var CENTER = { horizontal: "center", vertical: "middle", wrapText: true };
             var HEADER_FILL = { type: "pattern", pattern: "solid", fgColor: { argb: "FFF2F2F2" } };
-            // var NUM_FMT = "#,##0;[Red](#,##0)";
+            var NUM_FMT = "#,##0;(#,##0)";
 
             // Group trước để lấy dòng "Tài khoản"
             var oGroups = _groupData(aData);
@@ -603,12 +603,12 @@ sap.ui.define([
                 ws.getCell(a).alignment = { horizontal: "center", vertical: "center" };
             });
 
-            // // Number format cho các cột tiền (G-S, trừ P đã có riêng)
-            // for (var nr = rowCol + 1; nr <= iRowAfterTotal; nr++) {
-            //     for (var nc = 7; nc <= 19; nc++) {
-            //         ws.getRow(nr).getCell(nc).numFmt = NUM_FMT;
-            //     }
-            // }
+            // Number format cho các cột tiền (G-S)
+            for (var nr = rowGroup + 2; nr <= iRowAfterTotal; nr++) {
+                for (var nc = 7; nc <= 19; nc++) {
+                    ws.getRow(nr).getCell(nc).numFmt = NUM_FMT;
+                }
+            }
 
             // Column widths (B -> S)
             ws.columns = [

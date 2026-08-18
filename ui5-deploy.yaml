@@ -1,6 +1,6 @@
 # yaml-language-server: $schema=https://sap.github.io/ui5-tooling/schema/ui5.yaml.json
 
-specVersion: "4.0"
+specVersion: "3.0"
 metadata:
   name: zassettgrpov2
 type: application
@@ -21,7 +21,7 @@ builder:
           name: ZASSET_TGRP_OV2
           description: Báo cáo tăng giảm Tài Sản Cố Định
           package: ZPK_ASSET_TG_RP
-          transport: AK3K906885
+          transport: AK3K907235
         exclude:
           - /test/
           - /localService/
