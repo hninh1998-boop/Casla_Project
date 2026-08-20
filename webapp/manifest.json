@@ -1,0 +1,187 @@
+{
+  "_version": "1.80.0",
+  "sap.app": {
+    "id": "empxnsl",
+    "type": "application",
+    "i18n": "i18n/i18n.properties",
+    "applicationVersion": {
+      "version": "0.0.1"
+    },
+    "title": "{{appTitle}}",
+    "description": "{{appDescription}}",
+    "resources": "resources.json",
+    "sourceTemplate": {
+      "id": "@sap/generator-fiori:lrop",
+      "version": "1.30.0",
+      "toolsId": "1bd635d1-b861-4a5e-81a4-63a8f93d4258"
+    },
+    "dataSources": {
+      "annotation": {
+        "type": "ODataAnnotation",
+        "uri": "annotations/annotation.xml",
+        "settings": {
+          "localUri": "annotations/annotation.xml"
+        }
+      },
+      "mainService": {
+        "uri": "/sap/opu/odata4/sap/zui_employee_o4/srvd/sap/zui_employee_o4/0001/",
+        "type": "OData",
+        "settings": {
+          "annotations": [
+            "annotation"
+          ],
+          "localUri": "localService/mainService/metadata.xml",
+          "odataVersion": "4.0"
+        }
+      }
+    },
+    "crossNavigation": {
+      "inbounds": {
+        "ZSO_XNSL_SM_NV_EXT-display": {
+          "semanticObject": "ZSO_XNSL_SM_NV_EXT",
+          "action": "display",
+          "title": "{{ZSO_XNSL_SM_NV_EXT-display.flpTitle}}",
+          "signature": {
+            "parameters": {},
+            "additionalParameters": "allowed"
+          }
+        }
+      }
+    }
+  },
+  "sap.ui": {
+    "technology": "UI5",
+    "icons": {
+      "icon": "",
+      "favIcon": "",
+      "phone": "",
+      "phone@2": "",
+      "tablet": "",
+      "tablet@2": ""
+    },
+    "deviceTypes": {
+      "desktop": true,
+      "tablet": true,
+      "phone": true
+    }
+  },
+  "sap.ui5": {
+    "flexEnabled": true,
+    "dependencies": {
+      "minUI5Version": "1.142.12",
+      "libs": {
+        "sap.m": {},
+        "sap.ui.core": {},
+        "sap.fe.templates": {}
+      }
+    },
+    "contentDensities": {
+      "compact": true,
+      "cozy": true
+    },
+    "models": {
+      "i18n": {
+        "type": "sap.ui.model.resource.ResourceModel",
+        "settings": {
+          "bundleName": "empxnsl.i18n.i18n"
+        }
+      },
+      "": {
+        "dataSource": "mainService",
+        "preload": true,
+        "settings": {
+          "operationMode": "Server",
+          "autoExpandSelect": true,
+          "earlyRequests": true
+        }
+      },
+      "@i18n": {
+        "type": "sap.ui.model.resource.ResourceModel",
+        "uri": "i18n/i18n.properties"
+      }
+    },
+    "resources": {
+      "css": []
+    },
+    "routing": {
+      "config": {},
+      "routes": [
+        {
+          "pattern": ":?query:",
+          "name": "ZC_EMPLOYEEList",
+          "target": "ZC_EMPLOYEEList"
+        },
+        {
+          "pattern": "ZC_EMPLOYEE({key}):?query:",
+          "name": "ZC_EMPLOYEEObjectPage",
+          "target": "ZC_EMPLOYEEObjectPage"
+        }
+      ],
+      "targets": {
+        "ZC_EMPLOYEEList": {
+          "type": "Component",
+          "id": "ZC_EMPLOYEEList",
+          "name": "sap.fe.templates.ListReport",
+          "options": {
+            "settings": {
+              "contextPath": "/ZC_EMPLOYEE",
+              "variantManagement": "Page",
+              "navigation": {
+                "ZC_EMPLOYEE": {
+                  "detail": {
+                    "route": "ZC_EMPLOYEEObjectPage"
+                  }
+                }
+              },
+              "controlConfiguration": {
+                "@com.sap.vocabularies.UI.v1.LineItem": {
+                  "tableSettings": {
+                    "type": "ResponsiveTable"
+                  },
+                  "actions": {
+                    "PDF": {
+                      "press": ".extension.empxnsl.ext.controller.PDF.btnPrintPDF",
+                      "visible": true,
+                      "enabled": true,
+                      "requiresSelection": true,
+                      "text": "View PDF"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "ZC_EMPLOYEEObjectPage": {
+          "type": "Component",
+          "id": "ZC_EMPLOYEEObjectPage",
+          "name": "sap.fe.templates.ObjectPage",
+          "options": {
+            "settings": {
+              "editableHeaderContent": false,
+              "contextPath": "/ZC_EMPLOYEE"
+            }
+          }
+        }
+      }
+    },
+    "extends": {
+      "extensions": {
+        "sap.ui.controllerExtensions": {
+          "sap.fe.templates.ListReport.ListReportController#empxnsl::ZC_EMPLOYEEList": {
+            "controllerName": "empxnsl.ext.controller.PDF"
+          }
+        }
+      }
+    }
+  },
+  "sap.fiori": {
+    "registrationIds": [],
+    "archeType": "transactional"
+  },
+  "sap.fe": {
+    "app": {
+      "enableLazyLoading": true
+    }
+  }
+}
