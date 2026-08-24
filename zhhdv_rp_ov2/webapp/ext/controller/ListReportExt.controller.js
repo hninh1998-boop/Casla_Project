@@ -2,9 +2,12 @@ sap.ui.define([
     "sap/m/MessageToast",
     "sap/m/MessageBox",
     "sap/m/BusyDialog",
+    "sap/m/MenuButton",
+    "sap/m/Menu",
+    "sap/m/MenuItem",
     "sap/ui/core/Fragment",
     "sap/ui/model/json/JSONModel"
-], function (MessageToast, MessageBox, BusyDialog, Fragment, JSONModel) {
+], function (MessageToast, MessageBox, BusyDialog, MenuButton, Menu, MenuItem, Fragment, JSONModel) {
     "use strict";
 
     var BATCH_SIZE = 1000;
@@ -39,6 +42,16 @@ sap.ui.define([
 
     var REPORT_TITLE = "BẢNG KÊ HĐ HH, DV BÁN RA 01-1/GTGT - TT28";
 
+    // "Bảng kê tổng hợp" - group các line item có cùng giá trị ở toàn bộ các field
+    // dưới đây thành 1 dòng. Field không nằm trong danh sách này (Tên hàng, Doanh
+    // số, Thuế GTGT, Tổng cộng) sẽ được gộp: Tên hàng nối chuỗi "; ", còn lại cộng dồn.
+    var SUMMARY_GROUP_FIELDS = [
+        "KyHieuMauHoaDon", "KyHieuHD", "SoHD", "Ngay", "TenDVKHang", "MaSoThue",
+        "ThueSuat", "ChungTu", "SoToKhai", "TK", "TKDU", "TyGia",
+        "UserHachToan", "GhiChu"
+    ];
+    var SUMMARY_SUM_FIELDS = ["DoanhSoSauLamTron", "ThueGTGT", "TongCong", "NgoaiTe"];
+
     return {
 
         /**
@@ -49,13 +62,47 @@ sap.ui.define([
         },
 
         /**
-         * Gán icon cho nút Export Excel (được khai báo qua manifest.json - actions)
+         * Thay nút "Xuất Excel" (khai báo qua manifest.json - actions, mặc định là
+         * sap.m.Button đơn) bằng sap.m.MenuButton có 2 lựa chọn: "Bảng kê chi tiết"
+         * / "Bảng kê tổng hợp". Chỉ thay 1 lần, các lần onAfterRendering sau (re-render
+         * toolbar) sẽ bỏ qua vì control đã là MenuButton.
          */
         onAfterRendering: function () {
+            this._setupExportExcelMenuButton();
+        },
+
+        _setupExportExcelMenuButton: function () {
             var oButton = this.getView().byId("exportExcelButton");
-            if (oButton) {
-                oButton.setIcon("sap-icon://excel-attachment");
+            if (!oButton || oButton.getMetadata().getName() === "sap.m.MenuButton") {
+                return;
             }
+
+            var oParent = oButton.getParent();
+            var sAggregation = oButton.sParentAggregationName;
+            var iIndex = oParent.indexOfAggregation(sAggregation, oButton);
+            var sButtonId = oButton.getId();
+            var that = this;
+
+            oButton.destroy();
+
+            var oMenuButton = new MenuButton(sButtonId, {
+                text: "{i18n>exportExcelButtonText}",
+                icon: "sap-icon://excel-attachment",
+                menu: new Menu({
+                    items: [
+                        new MenuItem({
+                            text: "{i18n>exportExcelDetailMenuText}",
+                            press: function () { that.exportExcel(); }
+                        }),
+                        new MenuItem({
+                            text: "{i18n>exportExcelSummaryMenuText}",
+                            press: function () { that.exportExcelSummary(); }
+                        })
+                    ]
+                })
+            });
+
+            oParent.insertAggregation(sAggregation, oMenuButton, iIndex);
         },
 
         /**
@@ -177,11 +224,20 @@ sap.ui.define([
         },
 
         /**
-         * Export Excel - gọi từ nút "Xuất Excel" trên toolbar của List Report
-         * (khai báo trong manifest.json - sap.ui.generic.app > actions)
+         * Export Excel - "Bảng kê chi tiết", gọi từ menu item của MenuButton
+         * "Xuất Excel" trên toolbar của List Report.
          */
         exportExcel: function () {
-            mainExport(this.getView());
+            mainExport(this.getView(), false);
+        },
+
+        /**
+         * Export Excel - "Bảng kê tổng hợp", gọi từ menu item của MenuButton
+         * "Xuất Excel" trên toolbar của List Report. Group các line item theo
+         * cùng 1 hóa đơn (xem SUMMARY_GROUP_FIELDS) trước khi build file.
+         */
+        exportExcelSummary: function () {
+            mainExport(this.getView(), true);
         },
 
         /**
@@ -262,7 +318,9 @@ sap.ui.define([
 
     //////////////////////////////////////////////////////////////////////////
     // Main Logic Export Excel
-    function mainExport(oView) {
+    // bSummary = true -> "Bảng kê tổng hợp" (group line item theo SUMMARY_GROUP_FIELDS)
+    // bSummary = false -> "Bảng kê chi tiết" (giữ nguyên từng line item)
+    function mainExport(oView, bSummary) {
         var oRaw = getRaw(oView);
 
         if (!oRaw) {
@@ -291,9 +349,12 @@ sap.ui.define([
                 if (!sCompanyCode && aData.length) {
                     sCompanyCode = aData[0].CompanyCode;
                 }
+                if (bSummary) {
+                    aData = groupDataForSummary(aData);
+                }
                 return fetchCompanyInfo(oRaw.model, sCompanyCode).then(function (oCompany) {
                     oBusy.setText("Đang tạo file Excel (" + aData.length.toLocaleString("vi-VN") + " dòng)...");
-                    return buildExcel(aData, oCompany, sCompanyCode, oPeriod);
+                    return buildExcel(aData, oCompany, sCompanyCode, oPeriod, bSummary);
                 });
             })
             .then(function () {
@@ -504,6 +565,55 @@ sap.ui.define([
 
 
     //////////////////////////////////////////////////////////////////////////
+    // "Bảng kê tổng hợp" - group các line item cùng hóa đơn (giống nhau ở toàn bộ
+    // SUMMARY_GROUP_FIELDS) thành 1 dòng: Tên hàng nối chuỗi "; ", các field tiền
+    // trong SUMMARY_SUM_FIELDS cộng dồn.
+    function groupDataForSummary(aData) {
+        var aGroups = [];
+        var oIndexByKey = {};
+
+        aData.forEach(function (item) {
+            var sKey = buildSummaryGroupKey(item);
+            var iIdx = oIndexByKey[sKey];
+
+            if (iIdx === undefined) {
+                oIndexByKey[sKey] = aGroups.length;
+
+                var oGroup = {};
+                SUMMARY_GROUP_FIELDS.forEach(function (f) { oGroup[f] = item[f]; });
+                SUMMARY_SUM_FIELDS.forEach(function (f) { oGroup[f] = toNumber(item[f]); });
+                oGroup._aTenHang = [item.TenHang || ""];
+
+                aGroups.push(oGroup);
+            } else {
+                var oExisting = aGroups[iIdx];
+                SUMMARY_SUM_FIELDS.forEach(function (f) { oExisting[f] += toNumber(item[f]); });
+                oExisting._aTenHang.push(item.TenHang || "");
+            }
+        });
+
+        aGroups.forEach(function (oGroup) {
+            oGroup.TenHang = oGroup._aTenHang.join("; ");
+            delete oGroup._aTenHang;
+        });
+
+        return aGroups;
+    }
+
+    function buildSummaryGroupKey(item) {
+        return SUMMARY_GROUP_FIELDS.map(function (f) {
+            return normalizeGroupKeyValue(item[f]);
+        }).join("||");
+    }
+
+    function normalizeGroupKeyValue(v) {
+        if (v === null || v === undefined) { return ""; }
+        if (v instanceof Date) { return v.getTime(); }
+        return String(v);
+    }
+
+
+    //////////////////////////////////////////////////////////////////////////
     // Helpers - format
     function colLetter(iIndex) {
         var s = "";
@@ -534,10 +644,10 @@ sap.ui.define([
     //////////////////////////////////////////////////////////////////////////
     // Build file Excel theo mẫu "BẢNG KÊ HĐ HH, DV BÁN RA 01-1/GTGT - TT28",
     // rồi tải về máy. Header ở dòng 7, dữ liệu bắt đầu từ dòng 8.
-    function buildExcel(aData, oCompany, sCompanyCode, oPeriod) {
+    function buildExcel(aData, oCompany, sCompanyCode, oPeriod, bSummary) {
         return new Promise(function (resolve, reject) {
             var workbook = new ExcelJS.Workbook();
-            var ws = workbook.addWorksheet("BangKe HHDV");
+            var ws = workbook.addWorksheet(bSummary ? "BangKe HHDV Tong hop" : "BangKe HHDV Chi tiet");
 
             var BORDER = {
                 top: { style: "thin" }, left: { style: "thin" },
@@ -632,14 +742,77 @@ sap.ui.define([
                 iRow++;
             }
 
-            //7. Độ rộng cột
+            //7. Dòng "Cộng" - tổng tiền theo cột Doanh số / Thuế GTGT / Tổng cộng,
+            // dùng công thức SUM tham chiếu vùng dữ liệu (không hard-code số) để
+            // luôn khớp khi số dòng dữ liệu thay đổi.
+            var iFirstDataRow = iHeaderRow + 1;
+            var iLastDataRow = iRow - 1;
+            var iTotalRow = iRow;
+            var bHasData = iLastDataRow >= iFirstDataRow;
+
+            var sDoanhSoCol = colLetter(FIRST_COL + 7);   // H
+            var sThueGTGTCol = colLetter(FIRST_COL + 9);  // J
+            var sTongCongCol = colLetter(FIRST_COL + 10); // K
+
+            ws.mergeCells(colLetter(FIRST_COL + 2) + iTotalRow + ":" + colLetter(FIRST_COL + 6) + iTotalRow); // C:G
+            var oTotalLabelCell = ws.getCell(colLetter(FIRST_COL + 2) + iTotalRow);
+            oTotalLabelCell.value = "Cộng";
+            oTotalLabelCell.font = { bold: true, size: 11, name: FONT };
+            oTotalLabelCell.alignment = { horizontal: "center", vertical: "middle" };
+
+            [sDoanhSoCol, sThueGTGTCol, sTongCongCol].forEach(function (sCol) {
+                var oTotalCell = ws.getCell(sCol + iTotalRow);
+                oTotalCell.value = bHasData
+                    ? { formula: "SUM(" + sCol + iFirstDataRow + ":" + sCol + iLastDataRow + ")" }
+                    : 0;
+                oTotalCell.numFmt = "#,##0";
+                oTotalCell.font = { bold: true, size: 10, name: FONT };
+                oTotalCell.alignment = { horizontal: "right", vertical: "middle" };
+            });
+
+            for (i = 0; i < COLUMNS.length; i++) {
+                ws.getCell(iTotalRow, FIRST_COL + i).border = BORDER;
+            }
+            ws.getRow(iTotalRow).height = 22;
+
+            //8. Khối ký tên - cách dòng "Cộng" 2 dòng trống. Dòng "Ngày .. tháng ..
+            // năm .." nằm riêng 1 dòng phía trên, còn "Tổng giám đốc", "Kế toán
+            // trưởng", "Người lập biểu" nằm cùng 1 dòng phía dưới.
+            var iDateRow = iTotalRow + 3;
+            var iSignRow = iDateRow + 1;
+
+            ws.mergeCells(colLetter(FIRST_COL + 16) + iDateRow + ":" + sLast + iDateRow); // Q:S
+            var oDateCell = ws.getCell(colLetter(FIRST_COL + 16) + iDateRow);
+            oDateCell.value = "Ngày ….. tháng ….. năm …..";
+            oDateCell.font = { italic: true, size: 10, name: FONT };
+            oDateCell.alignment = { horizontal: "center", vertical: "middle" };
+
+            ws.mergeCells(colLetter(FIRST_COL + 2) + iSignRow + ":" + colLetter(FIRST_COL + 4) + iSignRow); // C:E
+            var oCeoCell = ws.getCell(colLetter(FIRST_COL + 2) + iSignRow);
+            oCeoCell.value = "Tổng giám đốc";
+            oCeoCell.font = { bold: true, size: 11, name: FONT };
+            oCeoCell.alignment = { horizontal: "center", vertical: "middle" };
+
+            ws.mergeCells(colLetter(FIRST_COL + 6) + iSignRow + ":" + colLetter(FIRST_COL + 10) + iSignRow); // G:K
+            var oChiefAccCell = ws.getCell(colLetter(FIRST_COL + 6) + iSignRow);
+            oChiefAccCell.value = "Kế toán trưởng";
+            oChiefAccCell.font = { bold: true, size: 11, name: FONT };
+            oChiefAccCell.alignment = { horizontal: "center", vertical: "middle" };
+
+            ws.mergeCells(colLetter(FIRST_COL + 16) + iSignRow + ":" + sLast + iSignRow); // Q:S
+            var oPreparerCell = ws.getCell(colLetter(FIRST_COL + 16) + iSignRow);
+            oPreparerCell.value = "Người lập biểu";
+            oPreparerCell.font = { bold: true, size: 11, name: FONT };
+            oPreparerCell.alignment = { horizontal: "center", vertical: "middle" };
+
+            //9. Độ rộng cột
             var aColumns = [];
             for (i = 0; i < COLUMNS.length; i++) {
                 aColumns.push({ width: COLUMNS[i].width });
             }
             ws.columns = aColumns;
 
-            //8. Xuất file và tải về
+            //10. Xuất file và tải về
             workbook.xlsx.writeBuffer().then(function (buffer) {
                 var blob = new Blob([buffer], {
                     type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
@@ -648,11 +821,7 @@ sap.ui.define([
                 var link = document.createElement("a");
                 link.href = url;
 
-                var sPeriodPart = oPeriod
-                    ? formatDateVN(oPeriod.from).replace(/\//g, "") + "-" + formatDateVN(oPeriod.to).replace(/\//g, "")
-                    : new Date().toLocaleDateString("vi-VN").replace(/\//g, "-");
-
-                link.download = "BangKe_HHDV_01-1_GTGT_" + (sCompanyCode || "") + "_" + sPeriodPart + ".xlsx";
+                link.download = (bSummary ? "TH_Bảng kê_hhdv.xlsx" : "CT_Bảng kê_hhdv.xlsx");
                 link.click();
                 URL.revokeObjectURL(url);
                 resolve();

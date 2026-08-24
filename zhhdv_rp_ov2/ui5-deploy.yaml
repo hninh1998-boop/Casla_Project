@@ -21,7 +21,7 @@ builder:
           name: ZHHDV_RP_OV2
           description: Bảng kê HĐ HH, DV bán ra
           package: ZPK_HHDV_RP
-          transport: AK3K907120
+          transport: AK3K907279
         exclude:
           - /test/
           - /localService/
