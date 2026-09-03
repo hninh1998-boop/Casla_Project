@@ -57,7 +57,11 @@ sap.ui.define([
         { label: "Delivery Item", field: "DeliveryItem", width: 12, numeric: true },
         { label: "PO Type", field: "POType", width: 10 },
         { label: "GR Fiscal year", field: "GRFiscalYear", width: 12 },
-        { label: "Invoice Fiscal year", field: "InvFiscalYear", width: 14 }
+        { label: "Invoice Fiscal year", field: "InvFiscalYear", width: 14 },
+        { label: "Allocated GR Amount ComCode", field: "AllocatedGRAmountComCode", width: 20, amount: true },
+        { label: "Allocated GR Amount TransCode", field: "AllocatedGRAmountTransCode", width: 20, amount: true },
+        { label: "Allocated Invoice Amount ComCode", field: "AllocatedInvoiceAmountComCode", width: 22, amount: true },
+        { label: "Allocated Invoice Amount Trans", field: "AllocatedInvoiceAmountTrans", width: 22, amount: true }
     ];
 
     var FIRST_COL = 1;                                   // A
