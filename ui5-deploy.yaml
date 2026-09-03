@@ -21,7 +21,7 @@ builder:
           name: ZMASS_PO_OV42
           description: Mass Change PO
           package: ZPK_MASS_PO
-          transport: AK3K906318
+          transport: AK3K907534
         exclude:
           - /test/
           - /localService/
