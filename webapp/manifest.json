@@ -1,0 +1,198 @@
+{
+  "_version": "1.80.0",
+  "sap.app": {
+    "id": "zudbank",
+    "type": "application",
+    "i18n": "i18n/i18n.properties",
+    "applicationVersion": {
+      "version": "0.0.1"
+    },
+    "title": "{{appTitle}}",
+    "description": "{{appDescription}}",
+    "resources": "resources.json",
+    "sourceTemplate": {
+      "id": "@sap/generator-fiori:lrop",
+      "version": "1.29.0",
+      "toolsId": "aa73acef-3c74-4a65-ac44-260d38b95b1e"
+    },
+    "dataSources": {
+      "annotation": {
+        "type": "ODataAnnotation",
+        "uri": "annotations/annotation.xml",
+        "settings": {
+          "localUri": "annotations/annotation.xml"
+        }
+      },
+      "mainService": {
+        "uri": "/sap/opu/odata4/sap/zui_tbbank_upl_o4/srvd/sap/zui_tbbank_upl_o4/0001/",
+        "type": "OData",
+        "settings": {
+          "annotations": [
+            "annotation"
+          ],
+          "localUri": "localService/mainService/metadata.xml",
+          "odataVersion": "4.0"
+        }
+      }
+    },
+    "crossNavigation": {
+      "inbounds": {
+        "zud_bank-display": {
+          "semanticObject": "zud_bank",
+          "action": "display",
+          "title": "{{zud_bank-display.flpTitle}}",
+          "signature": {
+            "parameters": {},
+            "additionalParameters": "allowed"
+          }
+        }
+      }
+    }
+  },
+  "sap.ui": {
+    "technology": "UI5",
+    "icons": {
+      "icon": "",
+      "favIcon": "",
+      "phone": "",
+      "phone@2": "",
+      "tablet": "",
+      "tablet@2": ""
+    },
+    "deviceTypes": {
+      "desktop": true,
+      "tablet": true,
+      "phone": true
+    }
+  },
+  "sap.ui5": {
+    "flexEnabled": true,
+    "dependencies": {
+      "minUI5Version": "1.142.12",
+      "libs": {
+        "sap.m": {},
+        "sap.ui.core": {},
+        "sap.fe.templates": {}
+      }
+    },
+    "contentDensities": {
+      "compact": true,
+      "cozy": true
+    },
+    "models": {
+      "i18n": {
+        "type": "sap.ui.model.resource.ResourceModel",
+        "settings": {
+          "bundleName": "zudbank.i18n.i18n"
+        }
+      },
+      "": {
+        "dataSource": "mainService",
+        "preload": true,
+        "settings": {
+          "operationMode": "Server",
+          "autoExpandSelect": true,
+          "earlyRequests": true
+        }
+      },
+      "@i18n": {
+        "type": "sap.ui.model.resource.ResourceModel",
+        "uri": "i18n/i18n.properties"
+      }
+    },
+    "resources": {
+      "css": []
+    },
+    "routing": {
+      "config": {},
+      "routes": [
+        {
+          "pattern": ":?query:",
+          "name": "ZC_TBBANK_UPLList",
+          "target": "ZC_TBBANK_UPLList"
+        },
+        {
+          "pattern": "ZC_TBBANK_UPL({key}):?query:",
+          "name": "ZC_TBBANK_UPLObjectPage",
+          "target": "ZC_TBBANK_UPLObjectPage"
+        }
+      ],
+      "targets": {
+        "ZC_TBBANK_UPLList": {
+          "type": "Component",
+          "id": "ZC_TBBANK_UPLList",
+          "name": "sap.fe.templates.ListReport",
+          "options": {
+            "settings": {
+              "contextPath": "/ZC_TBBANK_UPL",
+              "variantManagement": "Page",
+              "navigation": {
+                "ZC_TBBANK_UPL": {
+                  "detail": {
+                    "route": "ZC_TBBANK_UPLObjectPage"
+                  }
+                }
+              },
+              "controlConfiguration": {
+                "@com.sap.vocabularies.UI.v1.LineItem": {
+                  "tableSettings": {
+                    "type": "GridTable",
+                    "selectAll": true,
+                    "selectionLimit": 20,
+                    "selectionMode": "Multi"
+                  },
+                  "actions": {
+                    "UploadExcel": {
+                      "press": ".extension.zudbank.ext.controller.UploadExcel.UploadExcel",
+                      "visible": true,
+                      "enabled": true,
+                      "requiresSelection": false,
+                      "text": "Upload Excel"
+                    },
+                    "DownloadTempate": {
+                      "press": "zudbank.ext.controller.DownloadTempate.DownloadTempate",
+                      "visible": true,
+                      "enabled": true,
+                      "requiresSelection": false,
+                      "text": "Download Tempate"
+                    }
+                  }
+                }
+              },
+              "initialLoad": "Auto"
+            }
+          }
+        },
+        "ZC_TBBANK_UPLObjectPage": {
+          "type": "Component",
+          "id": "ZC_TBBANK_UPLObjectPage",
+          "name": "sap.fe.templates.ObjectPage",
+          "options": {
+            "settings": {
+              "editableHeaderContent": false,
+              "contextPath": "/ZC_TBBANK_UPL"
+            }
+          }
+        }
+      }
+    },
+    "extends": {
+      "extensions": {
+        "sap.ui.controllerExtensions": {
+          "sap.fe.templates.ListReport.ListReportController#zudbank::ZC_TBBANK_UPLList": {
+            "controllerName": "zudbank.ext.controller.UploadExcel"
+          }
+        }
+      }
+    }
+  },
+  "sap.fiori": {
+    "registrationIds": [],
+    "archeType": "transactional"
+  },
+  "sap.fe": {
+    "app": {
+      "enableLazyLoading": true
+    }
+  }
+}
