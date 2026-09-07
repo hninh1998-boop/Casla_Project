@@ -1,0 +1,2126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="4.0" xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+    <edmx:Reference Uri="/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_COMMUNICATION',Version='0001',SAP__Origin='LOCAL')/$value">
+        <edmx:Include Namespace="com.sap.vocabularies.Communication.v1" Alias="Communication"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_PERSONALDATA',Version='0001',SAP__Origin='LOCAL')/$value">
+        <edmx:Include Namespace="com.sap.vocabularies.PersonalData.v1" Alias="PersonalData"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_ANALYTICS',Version='0001',SAP__Origin='LOCAL')/$value">
+        <edmx:Include Namespace="com.sap.vocabularies.Analytics.v1" Alias="Analytics"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_AGGREGATION',Version='0001',SAP__Origin='LOCAL')/$value">
+        <edmx:Include Namespace="Org.OData.Aggregation.V1" Alias="SAP__aggregation"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_CAPABILITIES',Version='0001',SAP__Origin='LOCAL')/$value">
+        <edmx:Include Namespace="Org.OData.Capabilities.V1" Alias="SAP__capabilities"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_CODELIST',Version='0001',SAP__Origin='LOCAL')/$value">
+        <edmx:Include Namespace="com.sap.vocabularies.CodeList.v1" Alias="SAP__CodeList"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_COMMON',Version='0001',SAP__Origin='LOCAL')/$value">
+        <edmx:Include Namespace="com.sap.vocabularies.Common.v1" Alias="SAP__common"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_CORE',Version='0001',SAP__Origin='LOCAL')/$value">
+        <edmx:Include Namespace="Org.OData.Core.V1" Alias="SAP__core"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_HIERARCHY',Version='0001',SAP__Origin='LOCAL')/$value">
+        <edmx:Include Namespace="com.sap.vocabularies.Hierarchy.v1" Alias="SAP__hierarchy"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_HTML5',Version='0001',SAP__Origin='LOCAL')/$value">
+        <edmx:Include Namespace="com.sap.vocabularies.HTML5.v1" Alias="SAP__HTML5"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_MEASURES',Version='0001',SAP__Origin='LOCAL')/$value">
+        <edmx:Include Namespace="Org.OData.Measures.V1" Alias="SAP__measures"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_ODM',Version='0001',SAP__Origin='LOCAL')/$value">
+        <edmx:Include Namespace="com.sap.vocabularies.ODM.v1" Alias="SAP__ODM"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_PDF',Version='0001',SAP__Origin='LOCAL')/$value">
+        <edmx:Include Namespace="com.sap.vocabularies.PDF.v1" Alias="SAP__PDF"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_SESSION',Version='0001',SAP__Origin='LOCAL')/$value">
+        <edmx:Include Namespace="com.sap.vocabularies.Session.v1" Alias="SAP__session"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_SUPPORT',Version='0001',SAP__Origin='LOCAL')/$value">
+        <edmx:Include Namespace="com.sap.vocabularies.Support.v1" Alias="SAP__support"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_UI',Version='0001',SAP__Origin='LOCAL')/$value">
+        <edmx:Include Namespace="com.sap.vocabularies.UI.v1" Alias="SAP__UI"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_VALIDATION',Version='0001',SAP__Origin='LOCAL')/$value">
+        <edmx:Include Namespace="Org.OData.Validation.V1" Alias="SAP__validation"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="../../../../srvd/sap/zsd_ngc_stock_custome/0001/$metadata">
+        <edmx:Include Namespace="com.sap.gateway.srvd.zsd_ngc_stock_custome.v0001" Alias="SAP__ParentService"/>
+    </edmx:Reference>
+    <edmx:DataServices>
+        <Schema Namespace="com.sap.gateway.srvd_f4.i_purchaseorderapi01.v0001" Alias="SAP__self">
+            <Annotation Term="SAP__core.SchemaVersion" String="1.0.0"/>
+            <EntityType Name="I_CompanyCodeStdVHType">
+                <Key>
+                    <PropertyRef Name="CompanyCode"/>
+                </Key>
+                <Property Name="CompanyCode" Type="Edm.String" Nullable="false" MaxLength="4"/>
+                <Property Name="CompanyCodeName" Type="Edm.String" Nullable="false" MaxLength="25"/>
+            </EntityType>
+            <EntityType Name="I_PlantStdVHType">
+                <Key>
+                    <PropertyRef Name="Plant"/>
+                </Key>
+                <Property Name="Plant" Type="Edm.String" Nullable="false" MaxLength="4"/>
+                <Property Name="PlantName" Type="Edm.String" Nullable="false" MaxLength="30"/>
+            </EntityType>
+            <EntityType Name="I_PurgAggrgdSftyDataSheetStsType">
+                <Key>
+                    <PropertyRef Name="PurgAggrgdSftyDataSheetStatus"/>
+                </Key>
+                <Property Name="PurgAggrgdSftyDataSheetStatus" Type="Edm.String" Nullable="false" MaxLength="1"/>
+                <Property Name="PurgAggrgdSftyDataSheetStatus_Text" Type="Edm.String" Nullable="false" MaxLength="60"/>
+            </EntityType>
+            <EntityType Name="I_PurchaseOrderAPI01Type">
+                <Key>
+                    <PropertyRef Name="PurchaseOrder"/>
+                </Key>
+                <Property Name="PurchaseOrder" Type="Edm.String" Nullable="false" MaxLength="10"/>
+                <Property Name="PurchaseOrderType" Type="Edm.String" Nullable="false" MaxLength="4"/>
+                <Property Name="PurchaseOrderType_Text" Type="Edm.String" Nullable="false" MaxLength="20"/>
+                <Property Name="PurchaseOrderSubtype" Type="Edm.String" Nullable="false" MaxLength="1"/>
+                <Property Name="PurchasingDocumentOrigin" Type="Edm.String" Nullable="false" MaxLength="1"/>
+                <Property Name="CreatedByUser" Type="Edm.String" Nullable="false" MaxLength="12"/>
+                <Property Name="CreationDate" Type="Edm.Date"/>
+                <Property Name="PurchaseOrderDate" Type="Edm.Date"/>
+                <Property Name="Language" Type="Edm.String" Nullable="false" MaxLength="2"/>
+                <Property Name="CorrespncExternalReference" Type="Edm.String" Nullable="false" MaxLength="12"/>
+                <Property Name="CorrespncInternalReference" Type="Edm.String" Nullable="false" MaxLength="12"/>
+                <Property Name="PurchasingDocumentDeletionCode" Type="Edm.String" Nullable="false" MaxLength="1"/>
+                <Property Name="PurchasingDocumentDeletionCode_Text" Type="Edm.String" Nullable="false" MaxLength="60"/>
+                <Property Name="ReleaseIsNotCompleted" Type="Edm.Boolean" Nullable="false"/>
+                <Property Name="PurchasingCompletenessStatus" Type="Edm.Boolean" Nullable="false"/>
+                <Property Name="PurchasingProcessingStatus" Type="Edm.String" Nullable="false" MaxLength="2"/>
+                <Property Name="PurgReleaseSequenceStatus" Type="Edm.String" Nullable="false" MaxLength="8"/>
+                <Property Name="ReleaseCode" Type="Edm.String" Nullable="false" MaxLength="1"/>
+                <Property Name="CompanyCode" Type="Edm.String" Nullable="false" MaxLength="4"/>
+                <Property Name="PurchasingOrganization" Type="Edm.String" Nullable="false" MaxLength="4"/>
+                <Property Name="PurchasingGroup" Type="Edm.String" Nullable="false" MaxLength="3"/>
+                <Property Name="Supplier" Type="Edm.String" Nullable="false" MaxLength="10"/>
+                <Property Name="ManualSupplierAddressID" Type="Edm.String" Nullable="false" MaxLength="10"/>
+                <Property Name="SupplierRespSalesPersonName" Type="Edm.String" Nullable="false" MaxLength="30"/>
+                <Property Name="SupplierPhoneNumber" Type="Edm.String" Nullable="false" MaxLength="16"/>
+                <Property Name="SupplyingSupplier" Type="Edm.String" Nullable="false" MaxLength="10"/>
+                <Property Name="SupplyingPlant" Type="Edm.String" Nullable="false" MaxLength="4"/>
+                <Property Name="InvoicingParty" Type="Edm.String" Nullable="false" MaxLength="10"/>
+                <Property Name="Customer" Type="Edm.String" Nullable="false" MaxLength="10"/>
+                <Property Name="SupplierQuotationExternalID" Type="Edm.String" Nullable="false" MaxLength="10"/>
+                <Property Name="PaymentTerms" Type="Edm.String" Nullable="false" MaxLength="4"/>
+                <Property Name="CashDiscount1Days" Type="Edm.Decimal" Nullable="false" Precision="3"/>
+                <Property Name="CashDiscount2Days" Type="Edm.Decimal" Nullable="false" Precision="3"/>
+                <Property Name="NetPaymentDays" Type="Edm.Decimal" Nullable="false" Precision="3"/>
+                <Property Name="CashDiscount1Percent" Type="Edm.Decimal" Nullable="false" Precision="5" Scale="3"/>
+                <Property Name="CashDiscount2Percent" Type="Edm.Decimal" Nullable="false" Precision="5" Scale="3"/>
+                <Property Name="DownPaymentType" Type="Edm.String" Nullable="false" MaxLength="4"/>
+                <Property Name="DownPaymentPercentageOfTotAmt" Type="Edm.Decimal" Nullable="false" Precision="5" Scale="2"/>
+                <Property Name="DownPaymentAmount" Type="Edm.Decimal" Nullable="false" Precision="11" Scale="variable"/>
+                <Property Name="DownPaymentDueDate" Type="Edm.Date"/>
+                <Property Name="IncotermsClassification" Type="Edm.String" Nullable="false" MaxLength="3"/>
+                <Property Name="IncotermsClassification_Text" Type="Edm.String" Nullable="false" MaxLength="30"/>
+                <Property Name="IncotermsTransferLocation" Type="Edm.String" Nullable="false" MaxLength="28"/>
+                <Property Name="IncotermsVersion" Type="Edm.String" Nullable="false" MaxLength="4"/>
+                <Property Name="IncotermsVersion_Text" Type="Edm.String" Nullable="false" MaxLength="30"/>
+                <Property Name="IncotermsLocation1" Type="Edm.String" Nullable="false" MaxLength="70"/>
+                <Property Name="IncotermsLocation2" Type="Edm.String" Nullable="false" MaxLength="70"/>
+                <Property Name="IsIntrastatReportingRelevant" Type="Edm.Boolean" Nullable="false"/>
+                <Property Name="IsIntrastatReportingExcluded" Type="Edm.Boolean" Nullable="false"/>
+                <Property Name="PricingDocument" Type="Edm.String" Nullable="false" MaxLength="10"/>
+                <Property Name="PricingProcedure" Type="Edm.String" Nullable="false" MaxLength="6"/>
+                <Property Name="DocumentCurrency" Type="Edm.String" Nullable="false" MaxLength="5"/>
+                <Property Name="DocumentCurrency_Text" Type="Edm.String" Nullable="false" MaxLength="40"/>
+                <Property Name="ValidityStartDate" Type="Edm.Date"/>
+                <Property Name="ValidityEndDate" Type="Edm.Date"/>
+                <Property Name="ExchangeRate" Type="Edm.Decimal" Nullable="false" Precision="9" Scale="5"/>
+                <Property Name="ExchangeRateIsFixed" Type="Edm.Boolean" Nullable="false"/>
+                <Property Name="LastChangeDateTime" Type="Edm.DateTimeOffset" Precision="7"/>
+                <Property Name="TaxReturnCountry" Type="Edm.String" Nullable="false" MaxLength="3"/>
+                <Property Name="TaxReturnCountry_Text" Type="Edm.String" Nullable="false" MaxLength="50"/>
+                <Property Name="VATRegistration" Type="Edm.String" Nullable="false" MaxLength="20"/>
+                <Property Name="VATRegistrationCountry" Type="Edm.String" Nullable="false" MaxLength="3"/>
+                <Property Name="VATRegistrationCountry_Text" Type="Edm.String" Nullable="false" MaxLength="50"/>
+                <Property Name="PurgReasonForDocCancellation" Type="Edm.String" Nullable="false" MaxLength="2"/>
+                <Property Name="PurgReleaseTimeTotalAmount" Type="Edm.Decimal" Nullable="false" Precision="15" Scale="variable"/>
+                <Property Name="PurgAggrgdProdCmplncSuplrSts" Type="Edm.String" Nullable="false" MaxLength="1"/>
+                <Property Name="PurgAggrgdProdCmplncSuplrSts_Text" Type="Edm.String" Nullable="false" MaxLength="60"/>
+                <Property Name="PurgAggrgdProdMarketabilitySts" Type="Edm.String" Nullable="false" MaxLength="1"/>
+                <Property Name="PurgAggrgdProdMarketabilitySts_Text" Type="Edm.String" Nullable="false" MaxLength="60"/>
+                <Property Name="PurgAggrgdSftyDataSheetStatus" Type="Edm.String" Nullable="false" MaxLength="1"/>
+                <Property Name="PurgAggrgdSftyDataSheetStatus_Text" Type="Edm.String" Nullable="false" MaxLength="60"/>
+                <Property Name="PurgProdCmplncTotDngrsGoodsSts" Type="Edm.String" Nullable="false" MaxLength="1"/>
+                <Property Name="PurgProdCmplncTotDngrsGoodsSts_Text" Type="Edm.String" Nullable="false" MaxLength="60"/>
+                <Property Name="YY1_Telephone_PDH" Type="Edm.String" Nullable="false" MaxLength="30"/>
+                <Property Name="YY1_Email_PDH" Type="Edm.String" Nullable="false" MaxLength="30"/>
+                <Property Name="YY1_Purchaser_PDH" Type="Edm.String" Nullable="false" MaxLength="50"/>
+            </EntityType>
+            <EntityType Name="I_CountryVHType">
+                <Key>
+                    <PropertyRef Name="Country"/>
+                </Key>
+                <Property Name="Country" Type="Edm.String" Nullable="false" MaxLength="3"/>
+                <Property Name="Country_Text" Type="Edm.String" Nullable="false" MaxLength="50"/>
+                <Property Name="Description" Type="Edm.String" Nullable="false" MaxLength="50"/>
+                <Property Name="CountryThreeLetterISOCode" Type="Edm.String" Nullable="false" MaxLength="3"/>
+                <Property Name="CountryThreeDigitISOCode" Type="Edm.String" Nullable="false" MaxLength="3"/>
+            </EntityType>
+            <EntityType Name="I_CurrencyStdVHType">
+                <Key>
+                    <PropertyRef Name="Currency"/>
+                </Key>
+                <Property Name="Currency" Type="Edm.String" Nullable="false" MaxLength="5"/>
+                <Property Name="Currency_Text" Type="Edm.String" Nullable="false" MaxLength="40"/>
+            </EntityType>
+            <EntityType Name="I_PurgProdCmplncTotDngrsGdsStsType">
+                <Key>
+                    <PropertyRef Name="PurgProdCmplncTotDngrsGoodsSts"/>
+                </Key>
+                <Property Name="PurgProdCmplncTotDngrsGoodsSts" Type="Edm.String" Nullable="false" MaxLength="1"/>
+                <Property Name="PurgProdCmplncTotDngrsGoodsSts_Text" Type="Edm.String" Nullable="false" MaxLength="60"/>
+            </EntityType>
+            <EntityType Name="I_PurgTotProdMarketabilityStsType">
+                <Key>
+                    <PropertyRef Name="PurgAggrgdProdMarketabilitySts"/>
+                </Key>
+                <Property Name="PurgAggrgdProdMarketabilitySts" Type="Edm.String" Nullable="false" MaxLength="1"/>
+                <Property Name="PurgAggrgdProdMarketabilitySts_Text" Type="Edm.String" Nullable="false" MaxLength="60"/>
+            </EntityType>
+            <EntityType Name="I_Supplier_VHType">
+                <Key>
+                    <PropertyRef Name="Supplier"/>
+                </Key>
+                <Property Name="Supplier" Type="Edm.String" Nullable="false" MaxLength="10"/>
+                <Property Name="SupplierName" Type="Edm.String" Nullable="false" MaxLength="35"/>
+                <Property Name="BusinessPartnerName1" Type="Edm.String" Nullable="false" MaxLength="40"/>
+                <Property Name="BPSupplierName" Type="Edm.String" Nullable="false" MaxLength="81"/>
+                <Property Name="AuthorizationGroup" Type="Edm.String" Nullable="false" MaxLength="4"/>
+                <Property Name="SupplierAccountGroup" Type="Edm.String" Nullable="false" MaxLength="4"/>
+                <Property Name="IsBusinessPurposeCompleted" Type="Edm.String" Nullable="false" MaxLength="1"/>
+                <Property Name="BusinessPartner" Type="Edm.String" Nullable="false" MaxLength="10"/>
+                <Property Name="BusinessPartnerType" Type="Edm.String" Nullable="false" MaxLength="4"/>
+                <Property Name="DataControllerSet" Type="Edm.String" Nullable="false" MaxLength="1"/>
+                <Property Name="DataController1" Type="Edm.String" Nullable="false" MaxLength="30"/>
+                <Property Name="DataController2" Type="Edm.String" Nullable="false" MaxLength="30"/>
+                <Property Name="DataController3" Type="Edm.String" Nullable="false" MaxLength="30"/>
+                <Property Name="DataController4" Type="Edm.String" Nullable="false" MaxLength="30"/>
+                <Property Name="DataController5" Type="Edm.String" Nullable="false" MaxLength="30"/>
+                <Property Name="DataController6" Type="Edm.String" Nullable="false" MaxLength="30"/>
+                <Property Name="DataController7" Type="Edm.String" Nullable="false" MaxLength="30"/>
+                <Property Name="DataController8" Type="Edm.String" Nullable="false" MaxLength="30"/>
+                <Property Name="DataController9" Type="Edm.String" Nullable="false" MaxLength="30"/>
+                <Property Name="DataController10" Type="Edm.String" Nullable="false" MaxLength="30"/>
+            </EntityType>
+            <EntityType Name="I_PurgAggrgdProdCmplncSuplrStsType">
+                <Key>
+                    <PropertyRef Name="PurgAggrgdProdCmplncSuplrSts"/>
+                </Key>
+                <Property Name="PurgAggrgdProdCmplncSuplrSts" Type="Edm.String" Nullable="false" MaxLength="1"/>
+                <Property Name="PurgAggrgdProdCmplncSuplrSts_Text" Type="Edm.String" Nullable="false" MaxLength="60"/>
+            </EntityType>
+            <EntityType Name="I_Customer_VHType">
+                <Key>
+                    <PropertyRef Name="Customer"/>
+                </Key>
+                <Property Name="Customer" Type="Edm.String" Nullable="false" MaxLength="10"/>
+                <Property Name="OrganizationBPName1" Type="Edm.String" Nullable="false" MaxLength="35"/>
+                <Property Name="BusinessPartnerName1" Type="Edm.String" Nullable="false" MaxLength="40"/>
+                <Property Name="OrganizationBPName2" Type="Edm.String" Nullable="false" MaxLength="35"/>
+                <Property Name="BusinessPartnerName2" Type="Edm.String" Nullable="false" MaxLength="40"/>
+                <Property Name="Country" Type="Edm.String" Nullable="false" MaxLength="3"/>
+                <Property Name="CityName" Type="Edm.String" Nullable="false" MaxLength="35"/>
+                <Property Name="BPAddrCityName" Type="Edm.String" Nullable="false" MaxLength="40"/>
+                <Property Name="StreetName" Type="Edm.String" Nullable="false" MaxLength="35"/>
+                <Property Name="BPAddrStreetName" Type="Edm.String" Nullable="false" MaxLength="60"/>
+                <Property Name="PostalCode" Type="Edm.String" Nullable="false" MaxLength="10"/>
+                <Property Name="CustomerName" Type="Edm.String" Nullable="false" MaxLength="80"/>
+                <Property Name="BPCustomerName" Type="Edm.String" Nullable="false" MaxLength="81"/>
+                <Property Name="CustomerAccountGroup" Type="Edm.String" Nullable="false" MaxLength="4"/>
+                <Property Name="AuthorizationGroup" Type="Edm.String" Nullable="false" MaxLength="4"/>
+                <Property Name="IsBusinessPurposeCompleted" Type="Edm.String" Nullable="false" MaxLength="1"/>
+                <Property Name="IsCompetitor" Type="Edm.Boolean" Nullable="false"/>
+                <Property Name="BusinessPartner" Type="Edm.String" Nullable="false" MaxLength="10"/>
+                <Property Name="BusinessPartnerType" Type="Edm.String" Nullable="false" MaxLength="4"/>
+                <Property Name="DataControllerSet" Type="Edm.String" Nullable="false" MaxLength="1"/>
+                <Property Name="DataController1" Type="Edm.String" Nullable="false" MaxLength="30"/>
+                <Property Name="DataController2" Type="Edm.String" Nullable="false" MaxLength="30"/>
+                <Property Name="DataController3" Type="Edm.String" Nullable="false" MaxLength="30"/>
+                <Property Name="DataController4" Type="Edm.String" Nullable="false" MaxLength="30"/>
+                <Property Name="DataController5" Type="Edm.String" Nullable="false" MaxLength="30"/>
+                <Property Name="DataController6" Type="Edm.String" Nullable="false" MaxLength="30"/>
+                <Property Name="DataController7" Type="Edm.String" Nullable="false" MaxLength="30"/>
+                <Property Name="DataController8" Type="Edm.String" Nullable="false" MaxLength="30"/>
+                <Property Name="DataController9" Type="Edm.String" Nullable="false" MaxLength="30"/>
+                <Property Name="DataController10" Type="Edm.String" Nullable="false" MaxLength="30"/>
+            </EntityType>
+            <EntityContainer Name="Container">
+                <EntitySet Name="I_CompanyCodeStdVH" EntityType="com.sap.gateway.srvd_f4.i_purchaseorderapi01.v0001.I_CompanyCodeStdVHType"/>
+                <EntitySet Name="I_CountryVH" EntityType="com.sap.gateway.srvd_f4.i_purchaseorderapi01.v0001.I_CountryVHType"/>
+                <EntitySet Name="I_CurrencyStdVH" EntityType="com.sap.gateway.srvd_f4.i_purchaseorderapi01.v0001.I_CurrencyStdVHType"/>
+                <EntitySet Name="I_Customer_VH" EntityType="com.sap.gateway.srvd_f4.i_purchaseorderapi01.v0001.I_Customer_VHType"/>
+                <EntitySet Name="I_PlantStdVH" EntityType="com.sap.gateway.srvd_f4.i_purchaseorderapi01.v0001.I_PlantStdVHType"/>
+                <EntitySet Name="I_PurchaseOrderAPI01" EntityType="com.sap.gateway.srvd_f4.i_purchaseorderapi01.v0001.I_PurchaseOrderAPI01Type"/>
+                <EntitySet Name="I_PurgAggrgdProdCmplncSuplrSts" EntityType="com.sap.gateway.srvd_f4.i_purchaseorderapi01.v0001.I_PurgAggrgdProdCmplncSuplrStsType"/>
+                <EntitySet Name="I_PurgAggrgdSftyDataSheetSts" EntityType="com.sap.gateway.srvd_f4.i_purchaseorderapi01.v0001.I_PurgAggrgdSftyDataSheetStsType"/>
+                <EntitySet Name="I_PurgProdCmplncTotDngrsGdsSts" EntityType="com.sap.gateway.srvd_f4.i_purchaseorderapi01.v0001.I_PurgProdCmplncTotDngrsGdsStsType"/>
+                <EntitySet Name="I_PurgTotProdMarketabilitySts" EntityType="com.sap.gateway.srvd_f4.i_purchaseorderapi01.v0001.I_PurgTotProdMarketabilityStsType"/>
+                <EntitySet Name="I_Supplier_VH" EntityType="com.sap.gateway.srvd_f4.i_purchaseorderapi01.v0001.I_Supplier_VHType"/>
+            </EntityContainer>
+            <Annotations Target="SAP__self.I_CompanyCodeStdVHType/CompanyCode">
+                <Annotation Term="SAP__common.Text" Path="CompanyCodeName"/>
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="Company Code"/>
+                <Annotation Term="SAP__common.Heading" String="CoCd"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=BUKRS"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_PurchaseOrderAPI01Type/CompanyCode">
+                <Annotation Term="SAP__common.ValueListMapping">
+                    <Record>
+                        <PropertyValue Property="Label" String="Company Code"/>
+                        <PropertyValue Property="CollectionPath" String="I_CompanyCodeStdVH"/>
+                        <PropertyValue Property="Parameters">
+                            <Collection>
+                                <Record Type="SAP__common.ValueListParameterInOut">
+                                    <PropertyValue Property="LocalDataProperty" PropertyPath="CompanyCode"/>
+                                    <PropertyValue Property="ValueListProperty" String="CompanyCode"/>
+                                </Record>
+                                <Record Type="SAP__common.ValueListParameterDisplayOnly">
+                                    <PropertyValue Property="ValueListProperty" String="CompanyCodeName"/>
+                                </Record>
+                            </Collection>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="Company Code"/>
+                <Annotation Term="SAP__common.Heading" String="CoCd"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=BUKRS"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_CompanyCodeStdVHType">
+                <Annotation Term="SAP__common.Label" String="Company Code"/>
+            </Annotations>
+            <Annotations Target="SAP__self.Container/I_CompanyCodeStdVH">
+                <Annotation Term="SAP__capabilities.SearchRestrictions">
+                    <Record>
+                        <PropertyValue Property="Searchable" Bool="true"/>
+                        <PropertyValue Property="UnsupportedExpressions" EnumMember="SAP__capabilities.SearchExpressions/AND SAP__capabilities.SearchExpressions/NOT SAP__capabilities.SearchExpressions/group "/>
+                        <PropertyValue Property="SearchSyntax" String="https://url.sap/odata-search"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.InsertRestrictions">
+                    <Record>
+                        <PropertyValue Property="Insertable" Bool="false"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.DeleteRestrictions">
+                    <Record>
+                        <PropertyValue Property="Deletable" Bool="false"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.UpdateRestrictions">
+                    <Record>
+                        <PropertyValue Property="Updatable" Bool="false"/>
+                        <PropertyValue Property="QueryOptions">
+                            <Record>
+                                <PropertyValue Property="SelectSupported" Bool="true"/>
+                            </Record>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="SAP__self.I_PlantStdVHType/Plant">
+                <Annotation Term="SAP__common.Text" Path="PlantName"/>
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="Plant"/>
+                <Annotation Term="SAP__common.Heading" String="Plnt"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=WERKS_D"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_PurchaseOrderAPI01Type/SupplyingPlant">
+                <Annotation Term="SAP__common.ValueListMapping">
+                    <Record>
+                        <PropertyValue Property="Label" String="Plant by Name"/>
+                        <PropertyValue Property="CollectionPath" String="I_PlantStdVH"/>
+                        <PropertyValue Property="Parameters">
+                            <Collection>
+                                <Record Type="SAP__common.ValueListParameterInOut">
+                                    <PropertyValue Property="LocalDataProperty" PropertyPath="SupplyingPlant"/>
+                                    <PropertyValue Property="ValueListProperty" String="Plant"/>
+                                </Record>
+                                <Record Type="SAP__common.ValueListParameterDisplayOnly">
+                                    <PropertyValue Property="ValueListProperty" String="PlantName"/>
+                                </Record>
+                            </Collection>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="Supplying Plant"/>
+                <Annotation Term="SAP__common.Heading" String="SPlt"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Supplying (issuing) plant in case of stock transport order"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=RESWK"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_PlantStdVHType">
+                <Annotation Term="SAP__common.Label" String="Plant by Name"/>
+            </Annotations>
+            <Annotations Target="SAP__self.Container/I_PlantStdVH">
+                <Annotation Term="SAP__capabilities.SearchRestrictions">
+                    <Record>
+                        <PropertyValue Property="Searchable" Bool="true"/>
+                        <PropertyValue Property="UnsupportedExpressions" EnumMember="SAP__capabilities.SearchExpressions/AND SAP__capabilities.SearchExpressions/NOT SAP__capabilities.SearchExpressions/group "/>
+                        <PropertyValue Property="SearchSyntax" String="https://url.sap/odata-search"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.InsertRestrictions">
+                    <Record>
+                        <PropertyValue Property="Insertable" Bool="false"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.DeleteRestrictions">
+                    <Record>
+                        <PropertyValue Property="Deletable" Bool="false"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.UpdateRestrictions">
+                    <Record>
+                        <PropertyValue Property="Updatable" Bool="false"/>
+                        <PropertyValue Property="QueryOptions">
+                            <Record>
+                                <PropertyValue Property="SelectSupported" Bool="true"/>
+                            </Record>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="SAP__self.I_PurgAggrgdSftyDataSheetStsType/PurgAggrgdSftyDataSheetStatus">
+                <Annotation Term="SAP__common.Text" Path="PurgAggrgdSftyDataSheetStatus_Text"/>
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="Sfty Data Sheet Sts"/>
+                <Annotation Term="SAP__common.Heading" String="SftyDataSheetS"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Safety Data Sheet Status (All Items)"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=MMPUR_PC_TOTAL_STATUS_SDS"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_PurgAggrgdSftyDataSheetStsType/PurgAggrgdSftyDataSheetStatus_Text">
+                <Annotation Term="SAP__core.Computed"/>
+                <Annotation Term="SAP__common.Label" String="Safety Data Sheet Status Name"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Description of Safety Data Sheet Status (All Items)"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=MMPUR_PC_TOTAL_STATUS_SDS_DSCR"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_PurchaseOrderAPI01Type/PurgAggrgdSftyDataSheetStatus">
+                <Annotation Term="SAP__common.ValueListMapping">
+                    <Record>
+                        <PropertyValue Property="Label" String="Compliance Status of Safety Data Sheet"/>
+                        <PropertyValue Property="CollectionPath" String="I_PurgAggrgdSftyDataSheetSts"/>
+                        <PropertyValue Property="Parameters">
+                            <Collection>
+                                <Record Type="SAP__common.ValueListParameterInOut">
+                                    <PropertyValue Property="LocalDataProperty" PropertyPath="PurgAggrgdSftyDataSheetStatus"/>
+                                    <PropertyValue Property="ValueListProperty" String="PurgAggrgdSftyDataSheetStatus"/>
+                                </Record>
+                                <Record Type="SAP__common.ValueListParameterDisplayOnly">
+                                    <PropertyValue Property="ValueListProperty" String="PurgAggrgdSftyDataSheetStatus_Text"/>
+                                </Record>
+                            </Collection>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__common.ValueListWithFixedValues"/>
+                <Annotation Term="SAP__common.Text" Path="PurgAggrgdSftyDataSheetStatus_Text"/>
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="Sfty Data Sheet Sts"/>
+                <Annotation Term="SAP__common.Heading" String="SftyDataSheetS"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Safety Data Sheet Status (All Items)"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=MMPUR_PC_TOTAL_STATUS_SDS"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_PurgAggrgdSftyDataSheetStsType">
+                <Annotation Term="SAP__common.Label" String="Compliance Status of Safety Data Sheet"/>
+                <Annotation Term="SAP__common.SAPObjectNodeType">
+                    <Record>
+                        <PropertyValue Property="Name" String="PurgAggrgdSftyDataSheetStatus"/>
+                    </Record>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="SAP__self.Container/I_PurgAggrgdSftyDataSheetSts">
+                <Annotation Term="SAP__capabilities.SearchRestrictions">
+                    <Record>
+                        <PropertyValue Property="Searchable" Bool="true"/>
+                        <PropertyValue Property="UnsupportedExpressions" EnumMember="SAP__capabilities.SearchExpressions/AND SAP__capabilities.SearchExpressions/NOT SAP__capabilities.SearchExpressions/group "/>
+                        <PropertyValue Property="SearchSyntax" String="https://url.sap/odata-search"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.InsertRestrictions">
+                    <Record>
+                        <PropertyValue Property="Insertable" Bool="false"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.DeleteRestrictions">
+                    <Record>
+                        <PropertyValue Property="Deletable" Bool="false"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.UpdateRestrictions">
+                    <Record>
+                        <PropertyValue Property="Updatable" Bool="false"/>
+                        <PropertyValue Property="QueryOptions">
+                            <Record>
+                                <PropertyValue Property="SelectSupported" Bool="true"/>
+                            </Record>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="SAP__self.I_PurchaseOrderAPI01Type/PurchaseOrder">
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="Purchase Order"/>
+                <Annotation Term="SAP__common.Heading" String="Purchase Order Number"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Purchase Order Number"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_PurchaseOrderAPI01Type/PurchaseOrderType">
+                <Annotation Term="SAP__common.Text" Path="PurchaseOrderType_Text"/>
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="Purchasing Doc. Type"/>
+                <Annotation Term="SAP__common.Heading" String="Type"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Purchasing Document Type"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=ESART"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_PurchaseOrderAPI01Type/PurchaseOrderType_Text">
+                <Annotation Term="SAP__core.Computed"/>
+                <Annotation Term="SAP__common.Label" String="Doc. Type Descript."/>
+                <Annotation Term="SAP__common.QuickInfo" String="Short Description of Purchasing Document Type"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=BATXT"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_PurchaseOrderAPI01Type/PurchaseOrderSubtype">
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="Control indicator"/>
+                <Annotation Term="SAP__common.Heading" String="Ctl"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Control indicator for purchasing document type"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=BSAKZ"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_PurchaseOrderAPI01Type/PurchasingDocumentOrigin">
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="Status"/>
+                <Annotation Term="SAP__common.Heading" String="S"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Status of Purchasing Document"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=ESTAK"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_PurchaseOrderAPI01Type/CreatedByUser">
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="Created By"/>
+                <Annotation Term="SAP__common.QuickInfo" String="User of person who created a purchasing document"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=MMPUR_ERNAM"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_PurchaseOrderAPI01Type/PurchasingDocumentDeletionCode">
+                <Annotation Term="SAP__common.Text" Path="PurchasingDocumentDeletionCode_Text"/>
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="Deletion Code"/>
+                <Annotation Term="SAP__common.Heading" String="Purchase Order Deletion Code"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Purchase Order Deletion Code"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_PurchaseOrderAPI01Type/PurchasingDocumentDeletionCode_Text">
+                <Annotation Term="SAP__core.Computed"/>
+                <Annotation Term="SAP__common.Label" String="Short Description"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Short Text for Fixed Values"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=VAL_TEXT"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_PurchaseOrderAPI01Type/PurchasingProcessingStatus">
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="Proc. State"/>
+                <Annotation Term="SAP__common.Heading" String="Purchasing Doc. Processing State"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Purchasing Document Processing State"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_PurchaseOrderAPI01Type/PurgReleaseSequenceStatus">
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="Release Status"/>
+                <Annotation Term="SAP__common.Heading" String="Release"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=FRGZU"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_PurchaseOrderAPI01Type/ReleaseCode">
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="Release indicator"/>
+                <Annotation Term="SAP__common.Heading" String="Rel"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Release Indicator: Purchasing Document"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=FRGKE"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_PurchaseOrderAPI01Type/PurchasingOrganization">
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="Purch. Organization"/>
+                <Annotation Term="SAP__common.Heading" String="POrg"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Purchasing Organization"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=EKORG"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_PurchaseOrderAPI01Type/PurchasingGroup">
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="Purchasing Group"/>
+                <Annotation Term="SAP__common.Heading" String="PGr"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=BKGRP"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_PurchaseOrderAPI01Type/Supplier">
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.ValueListMapping">
+                    <Record>
+                        <PropertyValue Property="Label" String="Supplier"/>
+                        <PropertyValue Property="CollectionPath" String="I_Supplier_VH"/>
+                        <PropertyValue Property="Parameters">
+                            <Collection>
+                                <Record Type="SAP__common.ValueListParameterInOut">
+                                    <PropertyValue Property="LocalDataProperty" PropertyPath="Supplier"/>
+                                    <PropertyValue Property="ValueListProperty" String="Supplier"/>
+                                </Record>
+                                <Record Type="SAP__common.ValueListParameterDisplayOnly">
+                                    <PropertyValue Property="ValueListProperty" String="SupplierName"/>
+                                </Record>
+                                <Record Type="SAP__common.ValueListParameterDisplayOnly">
+                                    <PropertyValue Property="ValueListProperty" String="BusinessPartnerName1"/>
+                                </Record>
+                                <Record Type="SAP__common.ValueListParameterDisplayOnly">
+                                    <PropertyValue Property="ValueListProperty" String="BPSupplierName"/>
+                                </Record>
+                                <Record Type="SAP__common.ValueListParameterDisplayOnly">
+                                    <PropertyValue Property="ValueListProperty" String="BusinessPartner"/>
+                                </Record>
+                                <Record Type="SAP__common.ValueListParameterDisplayOnly">
+                                    <PropertyValue Property="ValueListProperty" String="BusinessPartnerType"/>
+                                </Record>
+                            </Collection>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__common.Label" String="Supplier"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_PurchaseOrderAPI01Type/ManualSupplierAddressID">
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="Address Number"/>
+                <Annotation Term="SAP__common.Heading" String="Addr. No."/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=AD_ADDRNUM"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_PurchaseOrderAPI01Type/SupplyingSupplier">
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="Goods Supplier"/>
+                <Annotation Term="SAP__common.Heading" String="Goods Supp"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=LLIEF"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_PurchaseOrderAPI01Type/InvoicingParty">
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="Invoicing Party"/>
+                <Annotation Term="SAP__common.Heading" String="Inv. Pty"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Different Invoicing Party"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=LIFRE"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_PurchaseOrderAPI01Type/Customer">
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.ValueListMapping">
+                    <Record>
+                        <PropertyValue Property="Label" String="Customer"/>
+                        <PropertyValue Property="CollectionPath" String="I_Customer_VH"/>
+                        <PropertyValue Property="Parameters">
+                            <Collection>
+                                <Record Type="SAP__common.ValueListParameterInOut">
+                                    <PropertyValue Property="LocalDataProperty" PropertyPath="Customer"/>
+                                    <PropertyValue Property="ValueListProperty" String="Customer"/>
+                                </Record>
+                                <Record Type="SAP__common.ValueListParameterDisplayOnly">
+                                    <PropertyValue Property="ValueListProperty" String="OrganizationBPName1"/>
+                                </Record>
+                                <Record Type="SAP__common.ValueListParameterDisplayOnly">
+                                    <PropertyValue Property="ValueListProperty" String="BusinessPartnerName1"/>
+                                </Record>
+                                <Record Type="SAP__common.ValueListParameterDisplayOnly">
+                                    <PropertyValue Property="ValueListProperty" String="OrganizationBPName2"/>
+                                </Record>
+                                <Record Type="SAP__common.ValueListParameterDisplayOnly">
+                                    <PropertyValue Property="ValueListProperty" String="BusinessPartnerName2"/>
+                                </Record>
+                                <Record Type="SAP__common.ValueListParameterDisplayOnly">
+                                    <PropertyValue Property="ValueListProperty" String="Country"/>
+                                </Record>
+                                <Record Type="SAP__common.ValueListParameterDisplayOnly">
+                                    <PropertyValue Property="ValueListProperty" String="CityName"/>
+                                </Record>
+                                <Record Type="SAP__common.ValueListParameterDisplayOnly">
+                                    <PropertyValue Property="ValueListProperty" String="StreetName"/>
+                                </Record>
+                                <Record Type="SAP__common.ValueListParameterDisplayOnly">
+                                    <PropertyValue Property="ValueListProperty" String="PostalCode"/>
+                                </Record>
+                                <Record Type="SAP__common.ValueListParameterDisplayOnly">
+                                    <PropertyValue Property="ValueListProperty" String="CustomerName"/>
+                                </Record>
+                                <Record Type="SAP__common.ValueListParameterDisplayOnly">
+                                    <PropertyValue Property="ValueListProperty" String="BPCustomerName"/>
+                                </Record>
+                                <Record Type="SAP__common.ValueListParameterDisplayOnly">
+                                    <PropertyValue Property="ValueListProperty" String="BusinessPartner"/>
+                                </Record>
+                            </Collection>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__common.Label" String="Customer"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Customer Number"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=KUNNR"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_PurchaseOrderAPI01Type/SupplierQuotationExternalID">
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="Quotation"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Quotation Number"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=ANGNR"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_PurchaseOrderAPI01Type/PaymentTerms">
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="Payment Terms"/>
+                <Annotation Term="SAP__common.Heading" String="PayT"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Terms of Payment Key"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=FARP_DZTERM"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_PurchaseOrderAPI01Type/DownPaymentType">
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="Down Payment"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Down Payment Indicator"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=ME_DPTYP"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_PurchaseOrderAPI01Type/DownPaymentAmount">
+                <Annotation Term="SAP__measures.ISOCurrency" Path="DocumentCurrency"/>
+                <Annotation Term="SAP__common.Label" String="Down Payment Amount"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Down Payment Amount in Document Currency"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=ME_DPAMNT"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_PurchaseOrderAPI01Type/IncotermsClassification">
+                <Annotation Term="SAP__common.Text" Path="IncotermsClassification_Text"/>
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="Incoterms"/>
+                <Annotation Term="SAP__common.Heading" String="IncoT"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Incoterms (Part 1)"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=INCO1"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_PurchaseOrderAPI01Type/IncotermsClassification_Text">
+                <Annotation Term="SAP__core.Computed"/>
+                <Annotation Term="SAP__common.Label" String="Incoterms Classification Description"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_PurchaseOrderAPI01Type/IncotermsVersion">
+                <Annotation Term="SAP__common.Text" Path="IncotermsVersion_Text"/>
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="Incoterms Version"/>
+                <Annotation Term="SAP__common.Heading" String="IncoV"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=INCOV"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_PurchaseOrderAPI01Type/IncotermsVersion_Text">
+                <Annotation Term="SAP__core.Computed"/>
+                <Annotation Term="SAP__common.Label" String="Description"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=BEZEI30"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_PurchaseOrderAPI01Type/PricingDocument">
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="Doc. Condition No."/>
+                <Annotation Term="SAP__common.Heading" String="Doc.Cond."/>
+                <Annotation Term="SAP__common.QuickInfo" String="Number of the Document Condition"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=KNUMV"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_PurchaseOrderAPI01Type/PricingProcedure">
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="Procedure"/>
+                <Annotation Term="SAP__common.Heading" String="Proc."/>
+                <Annotation Term="SAP__common.QuickInfo" String="Procedure (Pricing, Output Control, Acct. Det., Costing,...)"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=KALSM_D"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_PurchaseOrderAPI01Type/DocumentCurrency">
+                <Annotation Term="SAP__common.IsCurrency"/>
+                <Annotation Term="SAP__common.Text" Path="DocumentCurrency_Text"/>
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.ValueListMapping">
+                    <Record>
+                        <PropertyValue Property="Label" String="Currency"/>
+                        <PropertyValue Property="CollectionPath" String="I_CurrencyStdVH"/>
+                        <PropertyValue Property="Parameters">
+                            <Collection>
+                                <Record Type="SAP__common.ValueListParameterInOut">
+                                    <PropertyValue Property="LocalDataProperty" PropertyPath="DocumentCurrency"/>
+                                    <PropertyValue Property="ValueListProperty" String="Currency"/>
+                                </Record>
+                                <Record Type="SAP__common.ValueListParameterDisplayOnly">
+                                    <PropertyValue Property="ValueListProperty" String="Currency_Text"/>
+                                </Record>
+                            </Collection>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__common.Label" String="Currency"/>
+                <Annotation Term="SAP__common.Heading" String="Crcy"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Currency Key"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=WAERS"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_PurchaseOrderAPI01Type/DocumentCurrency_Text">
+                <Annotation Term="SAP__core.Computed"/>
+                <Annotation Term="SAP__common.Label" String="Description"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=LTEXT_CDS"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_PurchaseOrderAPI01Type/TaxReturnCountry">
+                <Annotation Term="SAP__common.Text" Path="TaxReturnCountry_Text"/>
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.ValueListMapping">
+                    <Record>
+                        <PropertyValue Property="Label" String="Country/Region"/>
+                        <PropertyValue Property="CollectionPath" String="I_CountryVH"/>
+                        <PropertyValue Property="Parameters">
+                            <Collection>
+                                <Record Type="SAP__common.ValueListParameterInOut">
+                                    <PropertyValue Property="LocalDataProperty" PropertyPath="TaxReturnCountry"/>
+                                    <PropertyValue Property="ValueListProperty" String="Country"/>
+                                </Record>
+                                <Record Type="SAP__common.ValueListParameterDisplayOnly">
+                                    <PropertyValue Property="ValueListProperty" String="Country_Text"/>
+                                </Record>
+                                <Record Type="SAP__common.ValueListParameterDisplayOnly">
+                                    <PropertyValue Property="ValueListProperty" String="CountryThreeLetterISOCode"/>
+                                </Record>
+                                <Record Type="SAP__common.ValueListParameterDisplayOnly">
+                                    <PropertyValue Property="ValueListProperty" String="CountryThreeDigitISOCode"/>
+                                </Record>
+                            </Collection>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__common.Label" String="Reporting C/R"/>
+                <Annotation Term="SAP__common.Heading" String="TR"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Country/Region for Tax Report"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=LAND1_STML"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_PurchaseOrderAPI01Type/TaxReturnCountry_Text">
+                <Annotation Term="SAP__core.Computed"/>
+                <Annotation Term="SAP__common.Label" String="Country/Region Name"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=LANDX50"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_PurchaseOrderAPI01Type/VATRegistration">
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="VAT Registration No."/>
+                <Annotation Term="SAP__common.QuickInfo" String="VAT Registration Number"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=STCEG"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_PurchaseOrderAPI01Type/VATRegistrationCountry">
+                <Annotation Term="SAP__common.Text" Path="VATRegistrationCountry_Text"/>
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="Country/R. of VAT ID"/>
+                <Annotation Term="SAP__common.Heading" String="VCR"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Country/Region of VAT Registration Number (VAT ID)"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=STCEG_L"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_PurchaseOrderAPI01Type/VATRegistrationCountry_Text">
+                <Annotation Term="SAP__core.Computed"/>
+                <Annotation Term="SAP__common.Label" String="Country/Region Name"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=LANDX50"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_PurchaseOrderAPI01Type/PurgReasonForDocCancellation">
+                <Annotation Term="SAP__common.IsDigitSequence"/>
+                <Annotation Term="SAP__common.Label" String="Reason for Canc."/>
+                <Annotation Term="SAP__common.Heading" String="Reas. Canc."/>
+                <Annotation Term="SAP__common.QuickInfo" String="Reason for Cancellation"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=ABSGR"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_PurchaseOrderAPI01Type/PurgReleaseTimeTotalAmount">
+                <Annotation Term="SAP__measures.ISOCurrency" Path="DocumentCurrency"/>
+                <Annotation Term="SAP__common.Label" String="Tot. val. rel."/>
+                <Annotation Term="SAP__common.Heading" String="Total val. upon release"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Total value at time of release"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=RLWRT"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_PurchaseOrderAPI01Type/PurgAggrgdProdCmplncSuplrSts">
+                <Annotation Term="SAP__common.Text" Path="PurgAggrgdProdCmplncSuplrSts_Text"/>
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.ValueListMapping">
+                    <Record>
+                        <PropertyValue Property="Label" String="Compliance Status of Supplier"/>
+                        <PropertyValue Property="CollectionPath" String="I_PurgAggrgdProdCmplncSuplrSts"/>
+                        <PropertyValue Property="Parameters">
+                            <Collection>
+                                <Record Type="SAP__common.ValueListParameterInOut">
+                                    <PropertyValue Property="LocalDataProperty" PropertyPath="PurgAggrgdProdCmplncSuplrSts"/>
+                                    <PropertyValue Property="ValueListProperty" String="PurgAggrgdProdCmplncSuplrSts"/>
+                                </Record>
+                                <Record Type="SAP__common.ValueListParameterDisplayOnly">
+                                    <PropertyValue Property="ValueListProperty" String="PurgAggrgdProdCmplncSuplrSts_Text"/>
+                                </Record>
+                            </Collection>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__common.ValueListWithFixedValues"/>
+                <Annotation Term="SAP__common.Label" String="Supplier Check Sts"/>
+                <Annotation Term="SAP__common.Heading" String="Supplier Ck Sts"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Product Compliance Supplier Check Status (All Items)"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=MMPUR_PC_TOTAL_STATUS_PCS"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_PurchaseOrderAPI01Type/PurgAggrgdProdCmplncSuplrSts_Text">
+                <Annotation Term="SAP__core.Computed"/>
+                <Annotation Term="SAP__common.Label" String="Supplier Compliance Check Status Name"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Description Prod. Compl. Supplier Check Status (All Items)"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=MMPUR_PC_TOTAL_STATUS_PCS_DSCR"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_PurchaseOrderAPI01Type/PurgAggrgdProdMarketabilitySts">
+                <Annotation Term="SAP__common.Text" Path="PurgAggrgdProdMarketabilitySts_Text"/>
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.ValueListMapping">
+                    <Record>
+                        <PropertyValue Property="Label" String="Compliance Status of Marketability"/>
+                        <PropertyValue Property="CollectionPath" String="I_PurgTotProdMarketabilitySts"/>
+                        <PropertyValue Property="Parameters">
+                            <Collection>
+                                <Record Type="SAP__common.ValueListParameterInOut">
+                                    <PropertyValue Property="LocalDataProperty" PropertyPath="PurgAggrgdProdMarketabilitySts"/>
+                                    <PropertyValue Property="ValueListProperty" String="PurgAggrgdProdMarketabilitySts"/>
+                                </Record>
+                                <Record Type="SAP__common.ValueListParameterDisplayOnly">
+                                    <PropertyValue Property="ValueListProperty" String="PurgAggrgdProdMarketabilitySts_Text"/>
+                                </Record>
+                            </Collection>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__common.ValueListWithFixedValues"/>
+                <Annotation Term="SAP__common.Label" String="Prod. Marktablty Sts"/>
+                <Annotation Term="SAP__common.Heading" String="ProdMarktabltyS"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Product Marketability Status (All Items)"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=MMPUR_PC_TOTAL_STATUS_PMA"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_PurchaseOrderAPI01Type/PurgAggrgdProdMarketabilitySts_Text">
+                <Annotation Term="SAP__core.Computed"/>
+                <Annotation Term="SAP__common.Label" String="Product Marketability Status Name"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Description of Product Marketability Status (All Items)"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=MMPUR_PC_TOTAL_STATUS_PMA_DSCR"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_PurchaseOrderAPI01Type/PurgAggrgdSftyDataSheetStatus_Text">
+                <Annotation Term="SAP__core.Computed"/>
+                <Annotation Term="SAP__common.Label" String="Safety Data Sheet Status Name"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Description of Safety Data Sheet Status (All Items)"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=MMPUR_PC_TOTAL_STATUS_SDS_DSCR"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_PurchaseOrderAPI01Type/PurgProdCmplncTotDngrsGoodsSts">
+                <Annotation Term="SAP__common.Text" Path="PurgProdCmplncTotDngrsGoodsSts_Text"/>
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.ValueListMapping">
+                    <Record>
+                        <PropertyValue Property="Label" String="Compliance Status of Dangerous Goods"/>
+                        <PropertyValue Property="CollectionPath" String="I_PurgProdCmplncTotDngrsGdsSts"/>
+                        <PropertyValue Property="Parameters">
+                            <Collection>
+                                <Record Type="SAP__common.ValueListParameterInOut">
+                                    <PropertyValue Property="LocalDataProperty" PropertyPath="PurgProdCmplncTotDngrsGoodsSts"/>
+                                    <PropertyValue Property="ValueListProperty" String="PurgProdCmplncTotDngrsGoodsSts"/>
+                                </Record>
+                                <Record Type="SAP__common.ValueListParameterDisplayOnly">
+                                    <PropertyValue Property="ValueListProperty" String="PurgProdCmplncTotDngrsGoodsSts_Text"/>
+                                </Record>
+                            </Collection>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__common.ValueListWithFixedValues"/>
+                <Annotation Term="SAP__common.Label" String="Dangerous Goods Sts"/>
+                <Annotation Term="SAP__common.Heading" String="Dngrs Goods Sts"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Dangerous Goods Status (All Items)"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=MMPUR_PC_TOTAL_STATUS_DG"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_PurchaseOrderAPI01Type/PurgProdCmplncTotDngrsGoodsSts_Text">
+                <Annotation Term="SAP__core.Computed"/>
+                <Annotation Term="SAP__common.Label" String="Dangerous Goods Status Name"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Description of Dangerous Goods Status (All Items)"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=MMPUR_PC_TOTAL_STATUS_DG_DSCR"/>
+            </Annotations>
+            <Annotations Target="SAP__ParentService.ZCE_NGC_STOCK_CUSTOMType/PurchaseOrder">
+                <Annotation Term="SAP__common.ValueListMapping">
+                    <Record>
+                        <PropertyValue Property="Label" String="Purchase Order"/>
+                        <PropertyValue Property="CollectionPath" String="I_PurchaseOrderAPI01"/>
+                        <PropertyValue Property="Parameters">
+                            <Collection>
+                                <Record Type="SAP__common.ValueListParameterInOut">
+                                    <PropertyValue Property="LocalDataProperty" PropertyPath="PurchaseOrder"/>
+                                    <PropertyValue Property="ValueListProperty" String="PurchaseOrder"/>
+                                </Record>
+                                <Record Type="SAP__common.ValueListParameterDisplayOnly">
+                                    <PropertyValue Property="ValueListProperty" String="PurchaseOrderType"/>
+                                </Record>
+                                <Record Type="SAP__common.ValueListParameterDisplayOnly">
+                                    <PropertyValue Property="ValueListProperty" String="PurchaseOrderType_Text"/>
+                                </Record>
+                                <Record Type="SAP__common.ValueListParameterDisplayOnly">
+                                    <PropertyValue Property="ValueListProperty" String="PurchaseOrderSubtype"/>
+                                </Record>
+                                <Record Type="SAP__common.ValueListParameterDisplayOnly">
+                                    <PropertyValue Property="ValueListProperty" String="PurchasingDocumentOrigin"/>
+                                </Record>
+                                <Record Type="SAP__common.ValueListParameterDisplayOnly">
+                                    <PropertyValue Property="ValueListProperty" String="CreatedByUser"/>
+                                </Record>
+                                <Record Type="SAP__common.ValueListParameterDisplayOnly">
+                                    <PropertyValue Property="ValueListProperty" String="CreationDate"/>
+                                </Record>
+                                <Record Type="SAP__common.ValueListParameterDisplayOnly">
+                                    <PropertyValue Property="ValueListProperty" String="PurchaseOrderDate"/>
+                                </Record>
+                                <Record Type="SAP__common.ValueListParameterDisplayOnly">
+                                    <PropertyValue Property="ValueListProperty" String="Language"/>
+                                </Record>
+                                <Record Type="SAP__common.ValueListParameterDisplayOnly">
+                                    <PropertyValue Property="ValueListProperty" String="CorrespncExternalReference"/>
+                                </Record>
+                                <Record Type="SAP__common.ValueListParameterDisplayOnly">
+                                    <PropertyValue Property="ValueListProperty" String="CorrespncInternalReference"/>
+                                </Record>
+                                <Record Type="SAP__common.ValueListParameterDisplayOnly">
+                                    <PropertyValue Property="ValueListProperty" String="PurchasingDocumentDeletionCode"/>
+                                </Record>
+                                <Record Type="SAP__common.ValueListParameterDisplayOnly">
+                                    <PropertyValue Property="ValueListProperty" String="PurchasingDocumentDeletionCode_Text"/>
+                                </Record>
+                                <Record Type="SAP__common.ValueListParameterDisplayOnly">
+                                    <PropertyValue Property="ValueListProperty" String="ReleaseIsNotCompleted"/>
+                                </Record>
+                                <Record Type="SAP__common.ValueListParameterDisplayOnly">
+                                    <PropertyValue Property="ValueListProperty" String="PurchasingCompletenessStatus"/>
+                                </Record>
+                                <Record Type="SAP__common.ValueListParameterDisplayOnly">
+                                    <PropertyValue Property="ValueListProperty" String="PurchasingProcessingStatus"/>
+                                </Record>
+                                <Record Type="SAP__common.ValueListParameterDisplayOnly">
+                                    <PropertyValue Property="ValueListProperty" String="PurgReleaseSequenceStatus"/>
+                                </Record>
+                                <Record Type="SAP__common.ValueListParameterDisplayOnly">
+                                    <PropertyValue Property="ValueListProperty" String="ReleaseCode"/>
+                                </Record>
+                                <Record Type="SAP__common.ValueListParameterDisplayOnly">
+                                    <PropertyValue Property="ValueListProperty" String="CompanyCode"/>
+                                </Record>
+                                <Record Type="SAP__common.ValueListParameterDisplayOnly">
+                                    <PropertyValue Property="ValueListProperty" String="PurchasingOrganization"/>
+                                </Record>
+                                <Record Type="SAP__common.ValueListParameterDisplayOnly">
+                                    <PropertyValue Property="ValueListProperty" String="PurchasingGroup"/>
+                                </Record>
+                                <Record Type="SAP__common.ValueListParameterDisplayOnly">
+                                    <PropertyValue Property="ValueListProperty" String="Supplier"/>
+                                </Record>
+                                <Record Type="SAP__common.ValueListParameterDisplayOnly">
+                                    <PropertyValue Property="ValueListProperty" String="ManualSupplierAddressID"/>
+                                </Record>
+                                <Record Type="SAP__common.ValueListParameterDisplayOnly">
+                                    <PropertyValue Property="ValueListProperty" String="SupplierRespSalesPersonName"/>
+                                </Record>
+                                <Record Type="SAP__common.ValueListParameterDisplayOnly">
+                                    <PropertyValue Property="ValueListProperty" String="SupplierPhoneNumber"/>
+                                </Record>
+                                <Record Type="SAP__common.ValueListParameterDisplayOnly">
+                                    <PropertyValue Property="ValueListProperty" String="SupplyingSupplier"/>
+                                </Record>
+                                <Record Type="SAP__common.ValueListParameterDisplayOnly">
+                                    <PropertyValue Property="ValueListProperty" String="SupplyingPlant"/>
+                                </Record>
+                                <Record Type="SAP__common.ValueListParameterDisplayOnly">
+                                    <PropertyValue Property="ValueListProperty" String="InvoicingParty"/>
+                                </Record>
+                                <Record Type="SAP__common.ValueListParameterDisplayOnly">
+                                    <PropertyValue Property="ValueListProperty" String="Customer"/>
+                                </Record>
+                                <Record Type="SAP__common.ValueListParameterDisplayOnly">
+                                    <PropertyValue Property="ValueListProperty" String="SupplierQuotationExternalID"/>
+                                </Record>
+                                <Record Type="SAP__common.ValueListParameterDisplayOnly">
+                                    <PropertyValue Property="ValueListProperty" String="PaymentTerms"/>
+                                </Record>
+                                <Record Type="SAP__common.ValueListParameterDisplayOnly">
+                                    <PropertyValue Property="ValueListProperty" String="CashDiscount1Days"/>
+                                </Record>
+                                <Record Type="SAP__common.ValueListParameterDisplayOnly">
+                                    <PropertyValue Property="ValueListProperty" String="CashDiscount2Days"/>
+                                </Record>
+                                <Record Type="SAP__common.ValueListParameterDisplayOnly">
+                                    <PropertyValue Property="ValueListProperty" String="NetPaymentDays"/>
+                                </Record>
+                                <Record Type="SAP__common.ValueListParameterDisplayOnly">
+                                    <PropertyValue Property="ValueListProperty" String="CashDiscount1Percent"/>
+                                </Record>
+                                <Record Type="SAP__common.ValueListParameterDisplayOnly">
+                                    <PropertyValue Property="ValueListProperty" String="CashDiscount2Percent"/>
+                                </Record>
+                                <Record Type="SAP__common.ValueListParameterDisplayOnly">
+                                    <PropertyValue Property="ValueListProperty" String="DownPaymentType"/>
+                                </Record>
+                                <Record Type="SAP__common.ValueListParameterDisplayOnly">
+                                    <PropertyValue Property="ValueListProperty" String="DownPaymentPercentageOfTotAmt"/>
+                                </Record>
+                                <Record Type="SAP__common.ValueListParameterDisplayOnly">
+                                    <PropertyValue Property="ValueListProperty" String="DownPaymentAmount"/>
+                                </Record>
+                                <Record Type="SAP__common.ValueListParameterDisplayOnly">
+                                    <PropertyValue Property="ValueListProperty" String="DownPaymentDueDate"/>
+                                </Record>
+                                <Record Type="SAP__common.ValueListParameterDisplayOnly">
+                                    <PropertyValue Property="ValueListProperty" String="IncotermsClassification"/>
+                                </Record>
+                                <Record Type="SAP__common.ValueListParameterDisplayOnly">
+                                    <PropertyValue Property="ValueListProperty" String="IncotermsClassification_Text"/>
+                                </Record>
+                                <Record Type="SAP__common.ValueListParameterDisplayOnly">
+                                    <PropertyValue Property="ValueListProperty" String="IncotermsTransferLocation"/>
+                                </Record>
+                                <Record Type="SAP__common.ValueListParameterDisplayOnly">
+                                    <PropertyValue Property="ValueListProperty" String="IncotermsVersion"/>
+                                </Record>
+                                <Record Type="SAP__common.ValueListParameterDisplayOnly">
+                                    <PropertyValue Property="ValueListProperty" String="IncotermsVersion_Text"/>
+                                </Record>
+                                <Record Type="SAP__common.ValueListParameterDisplayOnly">
+                                    <PropertyValue Property="ValueListProperty" String="IncotermsLocation1"/>
+                                </Record>
+                                <Record Type="SAP__common.ValueListParameterDisplayOnly">
+                                    <PropertyValue Property="ValueListProperty" String="IncotermsLocation2"/>
+                                </Record>
+                                <Record Type="SAP__common.ValueListParameterDisplayOnly">
+                                    <PropertyValue Property="ValueListProperty" String="IsIntrastatReportingRelevant"/>
+                                </Record>
+                                <Record Type="SAP__common.ValueListParameterDisplayOnly">
+                                    <PropertyValue Property="ValueListProperty" String="IsIntrastatReportingExcluded"/>
+                                </Record>
+                                <Record Type="SAP__common.ValueListParameterDisplayOnly">
+                                    <PropertyValue Property="ValueListProperty" String="PricingDocument"/>
+                                </Record>
+                                <Record Type="SAP__common.ValueListParameterDisplayOnly">
+                                    <PropertyValue Property="ValueListProperty" String="PricingProcedure"/>
+                                </Record>
+                                <Record Type="SAP__common.ValueListParameterDisplayOnly">
+                                    <PropertyValue Property="ValueListProperty" String="DocumentCurrency"/>
+                                </Record>
+                                <Record Type="SAP__common.ValueListParameterDisplayOnly">
+                                    <PropertyValue Property="ValueListProperty" String="DocumentCurrency_Text"/>
+                                </Record>
+                                <Record Type="SAP__common.ValueListParameterDisplayOnly">
+                                    <PropertyValue Property="ValueListProperty" String="ValidityStartDate"/>
+                                </Record>
+                                <Record Type="SAP__common.ValueListParameterDisplayOnly">
+                                    <PropertyValue Property="ValueListProperty" String="ValidityEndDate"/>
+                                </Record>
+                                <Record Type="SAP__common.ValueListParameterDisplayOnly">
+                                    <PropertyValue Property="ValueListProperty" String="ExchangeRate"/>
+                                </Record>
+                                <Record Type="SAP__common.ValueListParameterDisplayOnly">
+                                    <PropertyValue Property="ValueListProperty" String="ExchangeRateIsFixed"/>
+                                </Record>
+                                <Record Type="SAP__common.ValueListParameterDisplayOnly">
+                                    <PropertyValue Property="ValueListProperty" String="LastChangeDateTime"/>
+                                </Record>
+                                <Record Type="SAP__common.ValueListParameterDisplayOnly">
+                                    <PropertyValue Property="ValueListProperty" String="TaxReturnCountry"/>
+                                </Record>
+                                <Record Type="SAP__common.ValueListParameterDisplayOnly">
+                                    <PropertyValue Property="ValueListProperty" String="TaxReturnCountry_Text"/>
+                                </Record>
+                                <Record Type="SAP__common.ValueListParameterDisplayOnly">
+                                    <PropertyValue Property="ValueListProperty" String="VATRegistration"/>
+                                </Record>
+                                <Record Type="SAP__common.ValueListParameterDisplayOnly">
+                                    <PropertyValue Property="ValueListProperty" String="VATRegistrationCountry"/>
+                                </Record>
+                                <Record Type="SAP__common.ValueListParameterDisplayOnly">
+                                    <PropertyValue Property="ValueListProperty" String="VATRegistrationCountry_Text"/>
+                                </Record>
+                                <Record Type="SAP__common.ValueListParameterDisplayOnly">
+                                    <PropertyValue Property="ValueListProperty" String="PurgReasonForDocCancellation"/>
+                                </Record>
+                                <Record Type="SAP__common.ValueListParameterDisplayOnly">
+                                    <PropertyValue Property="ValueListProperty" String="PurgReleaseTimeTotalAmount"/>
+                                </Record>
+                                <Record Type="SAP__common.ValueListParameterDisplayOnly">
+                                    <PropertyValue Property="ValueListProperty" String="PurgAggrgdProdCmplncSuplrSts"/>
+                                </Record>
+                                <Record Type="SAP__common.ValueListParameterDisplayOnly">
+                                    <PropertyValue Property="ValueListProperty" String="PurgAggrgdProdCmplncSuplrSts_Text"/>
+                                </Record>
+                                <Record Type="SAP__common.ValueListParameterDisplayOnly">
+                                    <PropertyValue Property="ValueListProperty" String="PurgAggrgdProdMarketabilitySts"/>
+                                </Record>
+                                <Record Type="SAP__common.ValueListParameterDisplayOnly">
+                                    <PropertyValue Property="ValueListProperty" String="PurgAggrgdProdMarketabilitySts_Text"/>
+                                </Record>
+                                <Record Type="SAP__common.ValueListParameterDisplayOnly">
+                                    <PropertyValue Property="ValueListProperty" String="PurgAggrgdSftyDataSheetStatus"/>
+                                </Record>
+                                <Record Type="SAP__common.ValueListParameterDisplayOnly">
+                                    <PropertyValue Property="ValueListProperty" String="PurgAggrgdSftyDataSheetStatus_Text"/>
+                                </Record>
+                                <Record Type="SAP__common.ValueListParameterDisplayOnly">
+                                    <PropertyValue Property="ValueListProperty" String="PurgProdCmplncTotDngrsGoodsSts"/>
+                                </Record>
+                                <Record Type="SAP__common.ValueListParameterDisplayOnly">
+                                    <PropertyValue Property="ValueListProperty" String="PurgProdCmplncTotDngrsGoodsSts_Text"/>
+                                </Record>
+                                <Record Type="SAP__common.ValueListParameterDisplayOnly">
+                                    <PropertyValue Property="ValueListProperty" String="YY1_Telephone_PDH"/>
+                                </Record>
+                                <Record Type="SAP__common.ValueListParameterDisplayOnly">
+                                    <PropertyValue Property="ValueListProperty" String="YY1_Email_PDH"/>
+                                </Record>
+                                <Record Type="SAP__common.ValueListParameterDisplayOnly">
+                                    <PropertyValue Property="ValueListProperty" String="YY1_Purchaser_PDH"/>
+                                </Record>
+                            </Collection>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="SAP__self.I_PurchaseOrderAPI01Type">
+                <Annotation Term="SAP__common.Label" String="Purchase Order"/>
+            </Annotations>
+            <Annotations Target="SAP__self.Container/I_PurchaseOrderAPI01">
+                <Annotation Term="SAP__capabilities.SearchRestrictions">
+                    <Record>
+                        <PropertyValue Property="Searchable" Bool="false"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.InsertRestrictions">
+                    <Record>
+                        <PropertyValue Property="Insertable" Bool="false"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.DeleteRestrictions">
+                    <Record>
+                        <PropertyValue Property="Deletable" Bool="false"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.UpdateRestrictions">
+                    <Record>
+                        <PropertyValue Property="Updatable" Bool="false"/>
+                        <PropertyValue Property="QueryOptions">
+                            <Record>
+                                <PropertyValue Property="SelectSupported" Bool="true"/>
+                            </Record>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.FilterRestrictions">
+                    <Record>
+                        <PropertyValue Property="FilterExpressionRestrictions">
+                            <Collection>
+                                <Record>
+                                    <PropertyValue Property="Property" PropertyPath="DownPaymentAmount"/>
+                                    <PropertyValue Property="AllowedExpressions" String="MultiValue"/>
+                                </Record>
+                                <Record>
+                                    <PropertyValue Property="Property" PropertyPath="PurgReleaseTimeTotalAmount"/>
+                                    <PropertyValue Property="AllowedExpressions" String="MultiValue"/>
+                                </Record>
+                            </Collection>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="SAP__self.I_CountryVHType/Country">
+                <Annotation Term="SAP__common.Text" Path="Country_Text"/>
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="Country/Region Key"/>
+                <Annotation Term="SAP__common.Heading" String="C/R"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=LAND1"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_CountryVHType/Country_Text">
+                <Annotation Term="SAP__core.Computed"/>
+                <Annotation Term="SAP__common.Label" String="Country/Region Name"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=LANDX50"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_CountryVHType/CountryThreeLetterISOCode">
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="ISO Code 3 Char"/>
+                <Annotation Term="SAP__common.Heading" String="ISO Code 3 Characters"/>
+                <Annotation Term="SAP__common.QuickInfo" String="ISO Country/Region Code 3 Characters"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=INTCA3"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_CountryVHType/CountryThreeDigitISOCode">
+                <Annotation Term="SAP__common.IsDigitSequence"/>
+                <Annotation Term="SAP__common.Label" String="ISO Code Num. 3"/>
+                <Annotation Term="SAP__common.Heading" String="ISO Code Numeric 3-Characters"/>
+                <Annotation Term="SAP__common.QuickInfo" String="ISO Country/Region Code Numeric 3-Characters"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=INTCN3"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_CountryVHType">
+                <Annotation Term="SAP__common.Label" String="Country/Region"/>
+            </Annotations>
+            <Annotations Target="SAP__self.Container/I_CountryVH">
+                <Annotation Term="SAP__capabilities.SearchRestrictions">
+                    <Record>
+                        <PropertyValue Property="Searchable" Bool="true"/>
+                        <PropertyValue Property="UnsupportedExpressions" EnumMember="SAP__capabilities.SearchExpressions/AND SAP__capabilities.SearchExpressions/NOT SAP__capabilities.SearchExpressions/group "/>
+                        <PropertyValue Property="SearchSyntax" String="https://url.sap/odata-search"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.InsertRestrictions">
+                    <Record>
+                        <PropertyValue Property="Insertable" Bool="false"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.DeleteRestrictions">
+                    <Record>
+                        <PropertyValue Property="Deletable" Bool="false"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.UpdateRestrictions">
+                    <Record>
+                        <PropertyValue Property="Updatable" Bool="false"/>
+                        <PropertyValue Property="QueryOptions">
+                            <Record>
+                                <PropertyValue Property="SelectSupported" Bool="true"/>
+                            </Record>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="SAP__self.I_CurrencyStdVHType/Currency">
+                <Annotation Term="SAP__common.IsCurrency"/>
+                <Annotation Term="SAP__common.Text" Path="Currency_Text"/>
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="Currency"/>
+                <Annotation Term="SAP__common.Heading" String="Crcy"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Currency Key"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=WAERS_CURC"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_CurrencyStdVHType/Currency_Text">
+                <Annotation Term="SAP__core.Computed"/>
+                <Annotation Term="SAP__common.Label" String="Description"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=LTEXT_CDS"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_CurrencyStdVHType">
+                <Annotation Term="SAP__common.Label" String="Currency"/>
+            </Annotations>
+            <Annotations Target="SAP__self.Container/I_CurrencyStdVH">
+                <Annotation Term="SAP__capabilities.SearchRestrictions">
+                    <Record>
+                        <PropertyValue Property="Searchable" Bool="true"/>
+                        <PropertyValue Property="UnsupportedExpressions" EnumMember="SAP__capabilities.SearchExpressions/AND SAP__capabilities.SearchExpressions/NOT SAP__capabilities.SearchExpressions/group "/>
+                        <PropertyValue Property="SearchSyntax" String="https://url.sap/odata-search"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.InsertRestrictions">
+                    <Record>
+                        <PropertyValue Property="Insertable" Bool="false"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.DeleteRestrictions">
+                    <Record>
+                        <PropertyValue Property="Deletable" Bool="false"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.UpdateRestrictions">
+                    <Record>
+                        <PropertyValue Property="Updatable" Bool="false"/>
+                        <PropertyValue Property="QueryOptions">
+                            <Record>
+                                <PropertyValue Property="SelectSupported" Bool="true"/>
+                            </Record>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="SAP__self.I_PurgProdCmplncTotDngrsGdsStsType/PurgProdCmplncTotDngrsGoodsSts">
+                <Annotation Term="SAP__common.Text" Path="PurgProdCmplncTotDngrsGoodsSts_Text"/>
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="Dangerous Goods Sts"/>
+                <Annotation Term="SAP__common.Heading" String="Dngrs Goods Sts"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Dangerous Goods Status (All Items)"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=MMPUR_PC_TOTAL_STATUS_DG"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_PurgProdCmplncTotDngrsGdsStsType/PurgProdCmplncTotDngrsGoodsSts_Text">
+                <Annotation Term="SAP__core.Computed"/>
+                <Annotation Term="SAP__common.Label" String="Dangerous Goods Status Name"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Description of Dangerous Goods Status (All Items)"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=MMPUR_PC_TOTAL_STATUS_DG_DSCR"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_PurgProdCmplncTotDngrsGdsStsType">
+                <Annotation Term="SAP__common.Label" String="Compliance Status of Dangerous Goods"/>
+                <Annotation Term="SAP__common.SAPObjectNodeType">
+                    <Record>
+                        <PropertyValue Property="Name" String="PurgProdCmplncTotDngrsGoodsSts"/>
+                    </Record>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="SAP__self.Container/I_PurgProdCmplncTotDngrsGdsSts">
+                <Annotation Term="SAP__capabilities.SearchRestrictions">
+                    <Record>
+                        <PropertyValue Property="Searchable" Bool="true"/>
+                        <PropertyValue Property="UnsupportedExpressions" EnumMember="SAP__capabilities.SearchExpressions/AND SAP__capabilities.SearchExpressions/NOT SAP__capabilities.SearchExpressions/group "/>
+                        <PropertyValue Property="SearchSyntax" String="https://url.sap/odata-search"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.InsertRestrictions">
+                    <Record>
+                        <PropertyValue Property="Insertable" Bool="false"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.DeleteRestrictions">
+                    <Record>
+                        <PropertyValue Property="Deletable" Bool="false"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.UpdateRestrictions">
+                    <Record>
+                        <PropertyValue Property="Updatable" Bool="false"/>
+                        <PropertyValue Property="QueryOptions">
+                            <Record>
+                                <PropertyValue Property="SelectSupported" Bool="true"/>
+                            </Record>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="SAP__self.I_PurgTotProdMarketabilityStsType/PurgAggrgdProdMarketabilitySts">
+                <Annotation Term="SAP__common.Text" Path="PurgAggrgdProdMarketabilitySts_Text"/>
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="Prod. Marktablty Sts"/>
+                <Annotation Term="SAP__common.Heading" String="ProdMarktabltyS"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Product Marketability Status (All Items)"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=MMPUR_PC_TOTAL_STATUS_PMA"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_PurgTotProdMarketabilityStsType/PurgAggrgdProdMarketabilitySts_Text">
+                <Annotation Term="SAP__core.Computed"/>
+                <Annotation Term="SAP__common.Label" String="Product Marketability Status Name"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Description of Product Marketability Status (All Items)"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=MMPUR_PC_TOTAL_STATUS_PMA_DSCR"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_PurgTotProdMarketabilityStsType">
+                <Annotation Term="SAP__common.Label" String="Compliance Status of Marketability"/>
+                <Annotation Term="SAP__common.SAPObjectNodeType">
+                    <Record>
+                        <PropertyValue Property="Name" String="PurgAggrgdProdMarketabilitySts"/>
+                    </Record>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="SAP__self.Container/I_PurgTotProdMarketabilitySts">
+                <Annotation Term="SAP__capabilities.SearchRestrictions">
+                    <Record>
+                        <PropertyValue Property="Searchable" Bool="true"/>
+                        <PropertyValue Property="UnsupportedExpressions" EnumMember="SAP__capabilities.SearchExpressions/AND SAP__capabilities.SearchExpressions/NOT SAP__capabilities.SearchExpressions/group "/>
+                        <PropertyValue Property="SearchSyntax" String="https://url.sap/odata-search"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.InsertRestrictions">
+                    <Record>
+                        <PropertyValue Property="Insertable" Bool="false"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.DeleteRestrictions">
+                    <Record>
+                        <PropertyValue Property="Deletable" Bool="false"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.UpdateRestrictions">
+                    <Record>
+                        <PropertyValue Property="Updatable" Bool="false"/>
+                        <PropertyValue Property="QueryOptions">
+                            <Record>
+                                <PropertyValue Property="SelectSupported" Bool="true"/>
+                            </Record>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="SAP__self.I_Supplier_VHType/Supplier">
+                <Annotation Term="SAP__common.Text" Path="BPSupplierName"/>
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="Supplier"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Account Number of Supplier"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=LIFNR"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_Supplier_VHType/SupplierName">
+                <Annotation Term="SAP__common.Label" String="Supplier Name1"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Supplier Name"/>
+                <Annotation Term="SAP__common.Heading" String="Name"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=NAME1_GP"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_Supplier_VHType/BusinessPartnerName1">
+                <Annotation Term="SAP__common.Label" String="Business Partner Name1"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Business Partner Name1"/>
+                <Annotation Term="SAP__common.Heading" String="Name"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=AD_NAME1"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_Supplier_VHType/BPSupplierName">
+                <Annotation Term="SAP__common.Label" String="Business Partner Supplier Name"/>
+                <Annotation Term="SAP__common.Heading" String="Supplier Name"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Supplier Name"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_Supplier_VHType/AuthorizationGroup">
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__UI.HiddenFilter"/>
+                <Annotation Term="SAP__UI.Hidden"/>
+                <Annotation Term="SAP__common.Label" String="Authorization"/>
+                <Annotation Term="SAP__common.Heading" String="AuGr"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Authorization Group"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=BRGRU"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_Supplier_VHType/SupplierAccountGroup">
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__UI.HiddenFilter"/>
+                <Annotation Term="SAP__UI.Hidden"/>
+                <Annotation Term="SAP__common.Label" String="Account Group"/>
+                <Annotation Term="SAP__common.Heading" String="Group"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Supplier Account Group"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=KTOKK"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_Supplier_VHType/IsBusinessPurposeCompleted">
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__UI.HiddenFilter"/>
+                <Annotation Term="SAP__UI.Hidden"/>
+                <Annotation Term="SAP__common.Label" String="Purpose Completed"/>
+                <Annotation Term="SAP__common.Heading" String="Business Purpose Completed Flag"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Business Purpose Completed Flag"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=CVP_XBLCK"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_Supplier_VHType/BusinessPartner">
+                <Annotation Term="SAP__common.Label" String="Business Partner"/>
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Heading" String="Business Partner"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Business Partner Number"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=BU_PARTNER"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_Supplier_VHType/BusinessPartnerType">
+                <Annotation Term="SAP__common.Label" String="Business Partner Type"/>
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Heading" String="Type"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Business Partner Type"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=BU_BPKIND"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_Supplier_VHType/DataControllerSet">
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__UI.HiddenFilter"/>
+                <Annotation Term="SAP__UI.Hidden"/>
+                <Annotation Term="SAP__common.Label" String="Data Ctrlr. Set"/>
+                <Annotation Term="SAP__common.Heading" String="Data Controller Set Flag"/>
+                <Annotation Term="SAP__common.QuickInfo" String="BP: Data Controller Set Flag"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=BU_XDCSET"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_Supplier_VHType/DataController1">
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__UI.HiddenFilter"/>
+                <Annotation Term="SAP__UI.Hidden"/>
+                <Annotation Term="SAP__common.Label" String="Data Controller"/>
+                <Annotation Term="SAP__common.QuickInfo" String="BP: Data Controller (Internal Use Only)"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=BU_DATA_CONTROLLER"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_Supplier_VHType/DataController2">
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__UI.HiddenFilter"/>
+                <Annotation Term="SAP__UI.Hidden"/>
+                <Annotation Term="SAP__common.Label" String="Data Controller"/>
+                <Annotation Term="SAP__common.QuickInfo" String="BP: Data Controller (Internal Use Only)"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=BU_DATA_CONTROLLER"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_Supplier_VHType/DataController3">
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__UI.HiddenFilter"/>
+                <Annotation Term="SAP__UI.Hidden"/>
+                <Annotation Term="SAP__common.Label" String="Data Controller"/>
+                <Annotation Term="SAP__common.QuickInfo" String="BP: Data Controller (Internal Use Only)"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=BU_DATA_CONTROLLER"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_Supplier_VHType/DataController4">
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__UI.HiddenFilter"/>
+                <Annotation Term="SAP__UI.Hidden"/>
+                <Annotation Term="SAP__common.Label" String="Data Controller"/>
+                <Annotation Term="SAP__common.QuickInfo" String="BP: Data Controller (Internal Use Only)"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=BU_DATA_CONTROLLER"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_Supplier_VHType/DataController5">
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__UI.HiddenFilter"/>
+                <Annotation Term="SAP__UI.Hidden"/>
+                <Annotation Term="SAP__common.Label" String="Data Controller"/>
+                <Annotation Term="SAP__common.QuickInfo" String="BP: Data Controller (Internal Use Only)"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=BU_DATA_CONTROLLER"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_Supplier_VHType/DataController6">
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__UI.HiddenFilter"/>
+                <Annotation Term="SAP__UI.Hidden"/>
+                <Annotation Term="SAP__common.Label" String="Data Controller"/>
+                <Annotation Term="SAP__common.QuickInfo" String="BP: Data Controller (Internal Use Only)"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=BU_DATA_CONTROLLER"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_Supplier_VHType/DataController7">
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__UI.HiddenFilter"/>
+                <Annotation Term="SAP__UI.Hidden"/>
+                <Annotation Term="SAP__common.Label" String="Data Controller"/>
+                <Annotation Term="SAP__common.QuickInfo" String="BP: Data Controller (Internal Use Only)"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=BU_DATA_CONTROLLER"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_Supplier_VHType/DataController8">
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__UI.HiddenFilter"/>
+                <Annotation Term="SAP__UI.Hidden"/>
+                <Annotation Term="SAP__common.Label" String="Data Controller"/>
+                <Annotation Term="SAP__common.QuickInfo" String="BP: Data Controller (Internal Use Only)"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=BU_DATA_CONTROLLER"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_Supplier_VHType/DataController9">
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__UI.HiddenFilter"/>
+                <Annotation Term="SAP__UI.Hidden"/>
+                <Annotation Term="SAP__common.Label" String="Data Controller"/>
+                <Annotation Term="SAP__common.QuickInfo" String="BP: Data Controller (Internal Use Only)"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=BU_DATA_CONTROLLER"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_Supplier_VHType/DataController10">
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__UI.HiddenFilter"/>
+                <Annotation Term="SAP__UI.Hidden"/>
+                <Annotation Term="SAP__common.Label" String="Data Controller"/>
+                <Annotation Term="SAP__common.QuickInfo" String="BP: Data Controller (Internal Use Only)"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=BU_DATA_CONTROLLER"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_Supplier_VHType">
+                <Annotation Term="SAP__common.Label" String="Supplier"/>
+            </Annotations>
+            <Annotations Target="SAP__self.Container/I_Supplier_VH">
+                <Annotation Term="SAP__capabilities.SearchRestrictions">
+                    <Record>
+                        <PropertyValue Property="Searchable" Bool="true"/>
+                        <PropertyValue Property="UnsupportedExpressions" EnumMember="SAP__capabilities.SearchExpressions/AND SAP__capabilities.SearchExpressions/NOT SAP__capabilities.SearchExpressions/group "/>
+                        <PropertyValue Property="SearchSyntax" String="https://url.sap/odata-search"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.InsertRestrictions">
+                    <Record>
+                        <PropertyValue Property="Insertable" Bool="false"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.DeleteRestrictions">
+                    <Record>
+                        <PropertyValue Property="Deletable" Bool="false"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.UpdateRestrictions">
+                    <Record>
+                        <PropertyValue Property="Updatable" Bool="false"/>
+                        <PropertyValue Property="QueryOptions">
+                            <Record>
+                                <PropertyValue Property="SelectSupported" Bool="true"/>
+                            </Record>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="SAP__self.I_PurgAggrgdProdCmplncSuplrStsType/PurgAggrgdProdCmplncSuplrSts">
+                <Annotation Term="SAP__common.Text" Path="PurgAggrgdProdCmplncSuplrSts_Text"/>
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="Supplier Check Sts"/>
+                <Annotation Term="SAP__common.Heading" String="Supplier Ck Sts"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Product Compliance Supplier Check Status (All Items)"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=MMPUR_PC_TOTAL_STATUS_PCS"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_PurgAggrgdProdCmplncSuplrStsType/PurgAggrgdProdCmplncSuplrSts_Text">
+                <Annotation Term="SAP__core.Computed"/>
+                <Annotation Term="SAP__common.Label" String="Supplier Compliance Check Status Name"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Description Prod. Compl. Supplier Check Status (All Items)"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=MMPUR_PC_TOTAL_STATUS_PCS_DSCR"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_PurgAggrgdProdCmplncSuplrStsType">
+                <Annotation Term="SAP__common.Label" String="Compliance Status of Supplier"/>
+                <Annotation Term="SAP__common.SAPObjectNodeType">
+                    <Record>
+                        <PropertyValue Property="Name" String="PurgAggrgdProdCmplncSuplrSts"/>
+                    </Record>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="SAP__self.Container/I_PurgAggrgdProdCmplncSuplrSts">
+                <Annotation Term="SAP__capabilities.SearchRestrictions">
+                    <Record>
+                        <PropertyValue Property="Searchable" Bool="true"/>
+                        <PropertyValue Property="UnsupportedExpressions" EnumMember="SAP__capabilities.SearchExpressions/AND SAP__capabilities.SearchExpressions/NOT SAP__capabilities.SearchExpressions/group "/>
+                        <PropertyValue Property="SearchSyntax" String="https://url.sap/odata-search"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.InsertRestrictions">
+                    <Record>
+                        <PropertyValue Property="Insertable" Bool="false"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.DeleteRestrictions">
+                    <Record>
+                        <PropertyValue Property="Deletable" Bool="false"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.UpdateRestrictions">
+                    <Record>
+                        <PropertyValue Property="Updatable" Bool="false"/>
+                        <PropertyValue Property="QueryOptions">
+                            <Record>
+                                <PropertyValue Property="SelectSupported" Bool="true"/>
+                            </Record>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="SAP__self.I_Customer_VHType/Customer">
+                <Annotation Term="SAP__common.Text" Path="BPCustomerName"/>
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="Customer"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Customer Number"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=KUNNR"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_Customer_VHType/OrganizationBPName1">
+                <Annotation Term="SAP__common.Label" String="Customer Name 1"/>
+                <Annotation Term="SAP__common.Heading" String="Name"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Name"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=NAME1_GP"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_Customer_VHType/BusinessPartnerName1">
+                <Annotation Term="SAP__common.Label" String="Business Partner Name 1"/>
+                <Annotation Term="SAP__common.Heading" String="Name"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Name 1"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=AD_NAME1"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_Customer_VHType/OrganizationBPName2">
+                <Annotation Term="SAP__common.Label" String="Customer Name 2"/>
+                <Annotation Term="SAP__common.Heading" String="Name 2"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Name 2"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=NAME2_GP"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_Customer_VHType/BusinessPartnerName2">
+                <Annotation Term="SAP__common.Label" String="Business Partner Name 2"/>
+                <Annotation Term="SAP__common.Heading" String="Name 2"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Name 2"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_Customer_VHType/Country">
+                <Annotation Term="SAP__common.Label" String="Country/Region"/>
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Heading" String="Country/Region Key"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Country/Region Key"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=LAND1_GP"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_Customer_VHType/CityName">
+                <Annotation Term="SAP__common.Label" String="City"/>
+                <Annotation Term="SAP__common.Heading" String="City"/>
+                <Annotation Term="SAP__common.QuickInfo" String="City"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=ORT01_GP"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_Customer_VHType/BPAddrCityName">
+                <Annotation Term="SAP__common.Label" String="Business Partner Address City"/>
+                <Annotation Term="SAP__UI.HiddenFilter"/>
+                <Annotation Term="SAP__UI.Hidden"/>
+                <Annotation Term="SAP__common.Heading" String="City"/>
+                <Annotation Term="SAP__common.QuickInfo" String="City"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=AD_CITY1"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_Customer_VHType/StreetName">
+                <Annotation Term="SAP__common.Label" String="Street"/>
+                <Annotation Term="SAP__common.Heading" String="Street"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Street and House Number"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=STRAS_GP"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_Customer_VHType/BPAddrStreetName">
+                <Annotation Term="SAP__common.Label" String="Business Partner Address Street"/>
+                <Annotation Term="SAP__UI.HiddenFilter"/>
+                <Annotation Term="SAP__UI.Hidden"/>
+                <Annotation Term="SAP__common.Heading" String="Street"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Street"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=AD_STREET"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_Customer_VHType/PostalCode">
+                <Annotation Term="SAP__common.Label" String="Postal Code"/>
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Heading" String="PostalCode"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Postal Code"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=PSTLZ"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_Customer_VHType/CustomerName">
+                <Annotation Term="SAP__common.Label" String="Customer Name"/>
+                <Annotation Term="SAP__common.Heading" String="Customer"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Name of Customer"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_Customer_VHType/BPCustomerName">
+                <Annotation Term="SAP__common.Label" String="Business Partner Customer Name"/>
+                <Annotation Term="SAP__common.Heading" String="Customer"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Customer Name"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_Customer_VHType/CustomerAccountGroup">
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__UI.HiddenFilter"/>
+                <Annotation Term="SAP__UI.Hidden"/>
+                <Annotation Term="SAP__common.Label" String="Account Group"/>
+                <Annotation Term="SAP__common.Heading" String="Group"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Customer Account Group"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=KTOKD"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_Customer_VHType/AuthorizationGroup">
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__UI.HiddenFilter"/>
+                <Annotation Term="SAP__UI.Hidden"/>
+                <Annotation Term="SAP__common.Label" String="Authorization"/>
+                <Annotation Term="SAP__common.Heading" String="AuGr"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Authorization Group"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=BRGRU"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_Customer_VHType/IsBusinessPurposeCompleted">
+                <Annotation Term="SAP__common.Label" String="Purpose Complete Flag"/>
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__UI.HiddenFilter"/>
+                <Annotation Term="SAP__UI.Hidden"/>
+                <Annotation Term="SAP__common.Heading" String="Business Purpose Completed Flag"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Business Purpose Completed Flag"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=CVP_XBLCK"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_Customer_VHType/BusinessPartner">
+                <Annotation Term="SAP__common.Label" String="Business Partner"/>
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Heading" String="Business Partner"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Business Partner Number"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=BU_PARTNER"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_Customer_VHType/BusinessPartnerType">
+                <Annotation Term="SAP__common.Label" String="Business Partner Type"/>
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__UI.HiddenFilter"/>
+                <Annotation Term="SAP__UI.Hidden"/>
+                <Annotation Term="SAP__common.Heading" String="Type"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Business Partner Type"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=BU_BPKIND"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_Customer_VHType/DataControllerSet">
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__UI.HiddenFilter"/>
+                <Annotation Term="SAP__UI.Hidden"/>
+                <Annotation Term="SAP__common.Label" String="Data Ctrlr. Set"/>
+                <Annotation Term="SAP__common.Heading" String="Data Controller Set Flag"/>
+                <Annotation Term="SAP__common.QuickInfo" String="BP: Data Controller Set Flag"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=BU_XDCSET"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_Customer_VHType/DataController1">
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__UI.HiddenFilter"/>
+                <Annotation Term="SAP__UI.Hidden"/>
+                <Annotation Term="SAP__common.Label" String="Data Controller"/>
+                <Annotation Term="SAP__common.QuickInfo" String="BP: Data Controller (Internal Use Only)"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=BU_DATA_CONTROLLER"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_Customer_VHType/DataController2">
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__UI.HiddenFilter"/>
+                <Annotation Term="SAP__UI.Hidden"/>
+                <Annotation Term="SAP__common.Label" String="Data Controller"/>
+                <Annotation Term="SAP__common.QuickInfo" String="BP: Data Controller (Internal Use Only)"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=BU_DATA_CONTROLLER"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_Customer_VHType/DataController3">
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__UI.HiddenFilter"/>
+                <Annotation Term="SAP__UI.Hidden"/>
+                <Annotation Term="SAP__common.Label" String="Data Controller"/>
+                <Annotation Term="SAP__common.QuickInfo" String="BP: Data Controller (Internal Use Only)"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=BU_DATA_CONTROLLER"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_Customer_VHType/DataController4">
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__UI.HiddenFilter"/>
+                <Annotation Term="SAP__UI.Hidden"/>
+                <Annotation Term="SAP__common.Label" String="Data Controller"/>
+                <Annotation Term="SAP__common.QuickInfo" String="BP: Data Controller (Internal Use Only)"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=BU_DATA_CONTROLLER"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_Customer_VHType/DataController5">
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__UI.HiddenFilter"/>
+                <Annotation Term="SAP__UI.Hidden"/>
+                <Annotation Term="SAP__common.Label" String="Data Controller"/>
+                <Annotation Term="SAP__common.QuickInfo" String="BP: Data Controller (Internal Use Only)"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=BU_DATA_CONTROLLER"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_Customer_VHType/DataController6">
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__UI.HiddenFilter"/>
+                <Annotation Term="SAP__UI.Hidden"/>
+                <Annotation Term="SAP__common.Label" String="Data Controller"/>
+                <Annotation Term="SAP__common.QuickInfo" String="BP: Data Controller (Internal Use Only)"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=BU_DATA_CONTROLLER"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_Customer_VHType/DataController7">
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__UI.HiddenFilter"/>
+                <Annotation Term="SAP__UI.Hidden"/>
+                <Annotation Term="SAP__common.Label" String="Data Controller"/>
+                <Annotation Term="SAP__common.QuickInfo" String="BP: Data Controller (Internal Use Only)"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=BU_DATA_CONTROLLER"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_Customer_VHType/DataController8">
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__UI.HiddenFilter"/>
+                <Annotation Term="SAP__UI.Hidden"/>
+                <Annotation Term="SAP__common.Label" String="Data Controller"/>
+                <Annotation Term="SAP__common.QuickInfo" String="BP: Data Controller (Internal Use Only)"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=BU_DATA_CONTROLLER"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_Customer_VHType/DataController9">
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__UI.HiddenFilter"/>
+                <Annotation Term="SAP__UI.Hidden"/>
+                <Annotation Term="SAP__common.Label" String="Data Controller"/>
+                <Annotation Term="SAP__common.QuickInfo" String="BP: Data Controller (Internal Use Only)"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=BU_DATA_CONTROLLER"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_Customer_VHType/DataController10">
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__UI.HiddenFilter"/>
+                <Annotation Term="SAP__UI.Hidden"/>
+                <Annotation Term="SAP__common.Label" String="Data Controller"/>
+                <Annotation Term="SAP__common.QuickInfo" String="BP: Data Controller (Internal Use Only)"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=BU_DATA_CONTROLLER"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_Customer_VHType">
+                <Annotation Term="SAP__common.Label" String="Customer"/>
+            </Annotations>
+            <Annotations Target="SAP__self.Container/I_Customer_VH">
+                <Annotation Term="SAP__capabilities.SearchRestrictions">
+                    <Record>
+                        <PropertyValue Property="Searchable" Bool="true"/>
+                        <PropertyValue Property="UnsupportedExpressions" EnumMember="SAP__capabilities.SearchExpressions/AND SAP__capabilities.SearchExpressions/NOT SAP__capabilities.SearchExpressions/group "/>
+                        <PropertyValue Property="SearchSyntax" String="https://url.sap/odata-search"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.InsertRestrictions">
+                    <Record>
+                        <PropertyValue Property="Insertable" Bool="false"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.DeleteRestrictions">
+                    <Record>
+                        <PropertyValue Property="Deletable" Bool="false"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.UpdateRestrictions">
+                    <Record>
+                        <PropertyValue Property="Updatable" Bool="false"/>
+                        <PropertyValue Property="QueryOptions">
+                            <Record>
+                                <PropertyValue Property="SelectSupported" Bool="true"/>
+                            </Record>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="SAP__self.Container">
+                <Annotation Term="SAP__common.ApplyMultiUnitBehaviorForSortingAndFiltering" Bool="true"/>
+                <Annotation Term="SAP__capabilities.FilterFunctions">
+                    <Collection>
+                        <String>eq</String>
+                        <String>ne</String>
+                        <String>gt</String>
+                        <String>ge</String>
+                        <String>lt</String>
+                        <String>le</String>
+                        <String>and</String>
+                        <String>or</String>
+                        <String>contains</String>
+                        <String>startswith</String>
+                        <String>endswith</String>
+                        <String>any</String>
+                        <String>all</String>
+                    </Collection>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.SupportedFormats">
+                    <Collection>
+                        <String>application/json</String>
+                        <String>application/pdf</String>
+                    </Collection>
+                </Annotation>
+                <Annotation Term="SAP__PDF.Features">
+                    <Record>
+                        <PropertyValue Property="DocumentDescriptionReference" String="../../../../default/iwbep/common/0001/$metadata"/>
+                        <PropertyValue Property="DocumentDescriptionCollection" String="MyDocumentDescriptions"/>
+                        <PropertyValue Property="ArchiveFormat" Bool="true"/>
+                        <PropertyValue Property="Border" Bool="true"/>
+                        <PropertyValue Property="CoverPage" Bool="true"/>
+                        <PropertyValue Property="FitToPage" Bool="true"/>
+                        <PropertyValue Property="FontName" Bool="true"/>
+                        <PropertyValue Property="FontSize" Bool="true"/>
+                        <PropertyValue Property="HeaderFooter" Bool="true"/>
+                        <PropertyValue Property="IANATimezoneFormat" Bool="true"/>
+                        <PropertyValue Property="Margin" Bool="true"/>
+                        <PropertyValue Property="Padding" Bool="true"/>
+                        <PropertyValue Property="ResultSizeDefault" Int="100"/>
+                        <PropertyValue Property="ResultSizeMaximum" Int="5000"/>
+                        <PropertyValue Property="Signature" Bool="true"/>
+                        <PropertyValue Property="TextDirectionLayout" Bool="true"/>
+                        <PropertyValue Property="Treeview" Bool="true"/>
+                        <PropertyValue Property="UploadToFileShare" Bool="true"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.KeyAsSegmentSupported"/>
+                <Annotation Term="SAP__capabilities.AsynchronousRequestsSupported"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_CountryVHType/Description">
+                <Annotation Term="SAP__UI.HiddenFilter"/>
+                <Annotation Term="SAP__UI.Hidden"/>
+                <Annotation Term="SAP__common.Label" String="Country/Region Name"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=LANDX50"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_Customer_VHType/IsCompetitor">
+                <Annotation Term="SAP__UI.Hidden"/>
+                <Annotation Term="SAP__common.Label" String="Competitors"/>
+                <Annotation Term="SAP__common.Heading" String="C"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Indicator: Competitor"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_CompanyCodeStdVHType/CompanyCodeName">
+                <Annotation Term="SAP__common.Label" String="Company Name"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Name of Company Code or Company"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_PlantStdVHType/PlantName">
+                <Annotation Term="SAP__common.Label" String="Plant Name"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_PurchaseOrderAPI01Type/CreationDate">
+                <Annotation Term="SAP__common.Label" String="Created On"/>
+                <Annotation Term="SAP__common.Heading" String="Created"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Creation Date of Purchasing Document"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=MMPUR_ERDAT"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_PurchaseOrderAPI01Type/PurchaseOrderDate">
+                <Annotation Term="SAP__common.Label" String="Purchase Order Date"/>
+                <Annotation Term="SAP__common.Heading" String="PO Date"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=BEDAT"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_PurchaseOrderAPI01Type/Language">
+                <Annotation Term="SAP__common.Label" String="Language Key"/>
+                <Annotation Term="SAP__common.Heading" String="Language"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=SPRAS"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_PurchaseOrderAPI01Type/CorrespncExternalReference">
+                <Annotation Term="SAP__common.Label" String="Your Reference"/>
+                <Annotation Term="SAP__common.Heading" String="Your Ref."/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=IHREZ"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_PurchaseOrderAPI01Type/CorrespncInternalReference">
+                <Annotation Term="SAP__common.Label" String="Our Reference"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=UNSEZ"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_PurchaseOrderAPI01Type/ReleaseIsNotCompleted">
+                <Annotation Term="SAP__common.Label" String="Subject to Release"/>
+                <Annotation Term="SAP__common.Heading" String="R"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Release Not Yet Completely Effected"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=FRGRL"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_PurchaseOrderAPI01Type/PurchasingCompletenessStatus">
+                <Annotation Term="SAP__common.Label" String="Incomplete"/>
+                <Annotation Term="SAP__common.Heading" String="I"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Purchase order not yet complete"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=MEMER"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_PurchaseOrderAPI01Type/SupplierRespSalesPersonName">
+                <Annotation Term="SAP__common.Label" String="Salesperson"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Responsible Salesperson at Supplier's Office"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=EVERK"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_PurchaseOrderAPI01Type/SupplierPhoneNumber">
+                <Annotation Term="SAP__common.Label" String="Supplier Phone"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Supplier's Phone Number"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=TELFNR0"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_PurchaseOrderAPI01Type/CashDiscount1Days">
+                <Annotation Term="SAP__common.Label" String="Days 1"/>
+                <Annotation Term="SAP__common.Heading" String="Day1"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Cash Discount Days 1"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=DZBD1T"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_PurchaseOrderAPI01Type/CashDiscount2Days">
+                <Annotation Term="SAP__common.Label" String="Days 2"/>
+                <Annotation Term="SAP__common.Heading" String="Day2"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Cash Discount Days 2"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=DZBD2T"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_PurchaseOrderAPI01Type/NetPaymentDays">
+                <Annotation Term="SAP__common.Label" String="Days Net"/>
+                <Annotation Term="SAP__common.Heading" String="Net"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Net Payment Terms Period"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=DZBD3T"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_PurchaseOrderAPI01Type/CashDiscount1Percent">
+                <Annotation Term="SAP__common.Label" String="CD Percentage 1"/>
+                <Annotation Term="SAP__common.Heading" String="CD P.1"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Cash Discount Percentage 1"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=DZBD1P"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_PurchaseOrderAPI01Type/CashDiscount2Percent">
+                <Annotation Term="SAP__common.Label" String="CD Percentage 2"/>
+                <Annotation Term="SAP__common.Heading" String="CD P.2"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Cash Discount Percentage 2"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=DZBD2P"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_PurchaseOrderAPI01Type/DownPaymentPercentageOfTotAmt">
+                <Annotation Term="SAP__common.Label" String="Down Payment %"/>
+                <Annotation Term="SAP__common.Heading" String="Down Payt Percentage"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Down Payment Percentage"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=ME_DPPCNT"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_PurchaseOrderAPI01Type/DownPaymentDueDate">
+                <Annotation Term="SAP__common.Label" String="Due Date for DP"/>
+                <Annotation Term="SAP__common.Heading" String="Due Date for Down Payment"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Due Date for Down Payment"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=ME_DPDDAT"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_PurchaseOrderAPI01Type/IncotermsTransferLocation">
+                <Annotation Term="SAP__common.Label" String="Incoterms (Part 2)"/>
+                <Annotation Term="SAP__common.Heading" String="Inco. 2"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=INCO2"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_PurchaseOrderAPI01Type/IncotermsLocation1">
+                <Annotation Term="SAP__common.Label" String="Incoterms Location 1"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=INCO2_L"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_PurchaseOrderAPI01Type/IncotermsLocation2">
+                <Annotation Term="SAP__common.Label" String="Incoterms Location 2"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=INCO3_L"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_PurchaseOrderAPI01Type/IsIntrastatReportingRelevant">
+                <Annotation Term="SAP__common.Label" String="Intrastat Relevance"/>
+                <Annotation Term="SAP__common.Heading" String="relevant for Intrastat"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Relevant for Intrastat Reporting"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=INTRA_REL"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_PurchaseOrderAPI01Type/IsIntrastatReportingExcluded">
+                <Annotation Term="SAP__common.Label" String="Intrastat Exclusion"/>
+                <Annotation Term="SAP__common.Heading" String="exclude from Intrastat"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Exclude from Intrastat Reporting"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=INTRA_EXCL"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_PurchaseOrderAPI01Type/ValidityStartDate">
+                <Annotation Term="SAP__common.Label" String="Validity Per. Start"/>
+                <Annotation Term="SAP__common.Heading" String="VP Start"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Start of Validity Period"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=KDATB"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_PurchaseOrderAPI01Type/ValidityEndDate">
+                <Annotation Term="SAP__common.Label" String="Validity Period End"/>
+                <Annotation Term="SAP__common.Heading" String="VPer.End"/>
+                <Annotation Term="SAP__common.QuickInfo" String="End of Validity Period"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=KDATE"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_PurchaseOrderAPI01Type/ExchangeRate">
+                <Annotation Term="SAP__common.Label" String="Exchange Rate"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_PurchaseOrderAPI01Type/ExchangeRateIsFixed">
+                <Annotation Term="SAP__common.Label" String="Fixed Exchange Rate"/>
+                <Annotation Term="SAP__common.Heading" String="Fix"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Indicator for Fixed Exchange Rate"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=KUFIX"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_PurchaseOrderAPI01Type/LastChangeDateTime">
+                <Annotation Term="SAP__common.Label" String="Last Changed"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Change Time Stamp"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=CHANGEDATETIME"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_PurchaseOrderAPI01Type/YY1_Telephone_PDH">
+                <Annotation Term="SAP__common.Label" String="Telephone"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_PurchaseOrderAPI01Type/YY1_Email_PDH">
+                <Annotation Term="SAP__common.Label" String="Email"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_PurchaseOrderAPI01Type/YY1_Purchaser_PDH">
+                <Annotation Term="SAP__common.Label" String="Purchaser"/>
+            </Annotations>
+        </Schema>
+    </edmx:DataServices>
+</edmx:Edmx>

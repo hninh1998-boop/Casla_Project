@@ -1,0 +1,40 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(timeout 30 npm start)",
+      "Bash(npm --version)",
+      "Bash(timeout 30 npx fiori run --open \"test/flp.html#app-preview\" --verbose)",
+      "Bash(npm start *)",
+      "Bash(echo \"EXIT_CODE=$?\")",
+      "Bash(cp /home/user/projects/bao-cao-nxt-nvl-nha-gia-cong/node_modules/@sap/ux-ui5-tooling/dist/cli/index.cjs /tmp/claude-2048/-home-user-projects-bao-cao-nxt-nvl-nha-gia-cong/c1f4031a-7292-4577-9a90-50683625be9e/scratchpad/index.cjs.bak)",
+      "Bash(grep -n \"the context of the page on which the event was fired\" -B 30 -A 10 /extbin/globals/bun/global/install/node_modules/@sap/generator-fiori/generators/fe-fpm-writer/dist/index.js | head -150)",
+      "Read(//extbin/globals/bun/global/install/node_modules/@sap/generator-fiori/generators/fe-fpm-writer/dist/**)",
+      "Bash(cd /home/user/projects/bao-cao-nxt-nvl-nha-gia-cong/webapp && mv \"libs \" libs && ls -la libs/)",
+      "Bash(node --check webapp/ext/controller/ExportExcel.js)",
+      "Bash(timeout 60 npx eslint webapp/ext/controller/ExportExcel.js)",
+      "Bash(curl -s http://localhost:8081/ext/controller/ExportExcel.js)",
+      "Bash(curl -s -o /dev/null -w \"HTTP %{http_code}, size %{size_download} bytes\\\\n\" http://localhost:8081/libs/exceljs.min.js)",
+      "Bash(curl -s -o /dev/null -w 'metadata HTTP %{http_code}\\\\n' 'http://localhost:8081/sap/opu/odata4/sap/zui_ngc_stock/srvd/sap/zsd_ngc_stock_custome/0001/$metadata')",
+      "Bash(curl -s 'http://localhost:8081/sap/opu/odata4/sap/zui_ngc_stock/srvd/sap/zsd_ngc_stock_custome/0001/$metadata' -o /tmp/claude-2048/-home-user-projects-bao-cao-nxt-nvl-nha-gia-cong/c1f4031a-7292-4577-9a90-50683625be9e/scratchpad/live-metadata.xml)",
+      "Bash(curl -sv 'http://localhost:8081/sap/opu/odata4/sap/zui_ngc_stock/srvd/sap/zsd_ngc_stock_custome/0001/$metadata')",
+      "Bash(curl -s 'http://localhost:8081/sap/opu/odata4/sap/zui_ngc_stock/srvd/sap/zsd_ngc_stock_custome/0001/$metadata')",
+      "Bash(python3 -)",
+      "Bash(node --check /dev/stdin)",
+      "Bash(curl -s http://localhost:8081/ext/controller/ExportExcel.js -o /tmp/claude-2048/-home-user-projects-bao-cao-nxt-nvl-nha-gia-cong/c1f4031a-7292-4577-9a90-50683625be9e/scratchpad/served-ExportExcel.js)",
+      "Bash(node --check /tmp/claude-2048/-home-user-projects-bao-cao-nxt-nvl-nha-gia-cong/c1f4031a-7292-4577-9a90-50683625be9e/scratchpad/served-ExportExcel.js)",
+      "Bash(pkill -f \"fiori run\")",
+      "Bash(pkill -f \"ui5 serve\")",
+      "Bash(ps -p 60057 -o pid,cmd)",
+      "Bash(kill 60057 60044)",
+      "Bash(claude mcp *)",
+      "Read(//home/user/.claude/**)",
+      "Read(//home/user/**)",
+      "Bash(python3 -c ' *)",
+      "Bash(node -e ' *)"
+    ],
+    "additionalDirectories": [
+      "/home/user/projects/bao-cao-nxt-nvl-nha-gia-cong/node_modules/@sap/ux-ui5-tooling/dist/cli",
+      "/home/user/projects/bao-cao-nxt-nvl-nha-gia-cong/webapp"
+    ]
+  }
+}
