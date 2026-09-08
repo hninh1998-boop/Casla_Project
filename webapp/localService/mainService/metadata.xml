@@ -68,6 +68,11 @@
                 <Property Name="Material" Type="Edm.String" Nullable="false" MaxLength="40"/>
                 <Property Name="Batch" Type="Edm.String" Nullable="false" MaxLength="10"/>
                 <Property Name="Plant" Type="Edm.String" Nullable="false" MaxLength="4"/>
+                <Property Name="DateOfManufacture" Type="Edm.Date"/>
+                <Property Name="SledBbd" Type="Edm.Date"/>
+                <Property Name="ValuationType" Type="Edm.String" Nullable="false" MaxLength="10"/>
+                <Property Name="Supplier" Type="Edm.String" Nullable="false" MaxLength="10"/>
+                <Property Name="SupplierBatch" Type="Edm.String" Nullable="false" MaxLength="15"/>
                 <Property Name="Characteristic" Type="Edm.String" Nullable="false" MaxLength="30"/>
                 <Property Name="CharcValue" Type="Edm.String" Nullable="false" MaxLength="70"/>
                 <Property Name="OverallStatusText" Type="Edm.String" Nullable="false" MaxLength="60"/>
@@ -280,6 +285,34 @@
                 <Annotation Term="SAP__common.Heading" String="Plnt"/>
                 <Annotation Term="SAP__common.QuickInfo" String="Plant"/>
                 <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=WERKS_D"/>
+            </Annotations>
+            <Annotations Target="SAP__self.DataFileType/DateOfManufacture">
+                <Annotation Term="SAP__common.Label" String="Date of Manufacture"/>
+                <Annotation Term="SAP__common.Heading" String="Manuf. Date"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Date of Manufacture"/>
+            </Annotations>
+            <Annotations Target="SAP__self.DataFileType/SledBbd">
+                <Annotation Term="SAP__common.Label" String="SLED/BBD"/>
+                <Annotation Term="SAP__common.Heading" String="SLED/BBD"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Shelf Life Expiration or Best-Before Date"/>
+            </Annotations>
+            <Annotations Target="SAP__self.DataFileType/ValuationType">
+                <Annotation Term="SAP__common.Label" String="Valuation Type"/>
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Heading" String="Val. Type"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Valuation Type"/>
+            </Annotations>
+            <Annotations Target="SAP__self.DataFileType/Supplier">
+                <Annotation Term="SAP__common.Label" String="Supplier"/>
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Heading" String="Supplier"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Account Number of Supplier"/>
+            </Annotations>
+            <Annotations Target="SAP__self.DataFileType/SupplierBatch">
+                <Annotation Term="SAP__common.Label" String="Supplier Batch"/>
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Heading" String="Supplier Batch"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Supplier's Batch Number"/>
             </Annotations>
             <Annotations Target="SAP__self.DataFileType/Characteristic">
                 <Annotation Term="SAP__common.Label" String="Tên thuộc tính"/>
@@ -544,6 +577,21 @@
                             <PropertyValue Property="Value" Path="Plant"/>
                         </Record>
                         <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Value" Path="DateOfManufacture"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Value" Path="SledBbd"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Value" Path="ValuationType"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Value" Path="Supplier"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Value" Path="SupplierBatch"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
                             <PropertyValue Property="Value" Path="Characteristic"/>
                         </Record>
                         <Record Type="SAP__UI.DataField">
@@ -579,6 +627,21 @@
                         </Record>
                         <Record Type="SAP__UI.DataField">
                             <PropertyValue Property="Value" Path="Plant"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Value" Path="DateOfManufacture"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Value" Path="SledBbd"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Value" Path="ValuationType"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Value" Path="Supplier"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Value" Path="SupplierBatch"/>
                         </Record>
                         <Record Type="SAP__UI.DataField">
                             <PropertyValue Property="Value" Path="Characteristic"/>

@@ -21,7 +21,7 @@ builder:
           name: ZCRT_BATCH_OV4
           description: Tool tạo batch
           package: ZPK_CRT_BATCH
-          transport: AK3K906161
+          transport: AK3K907613
         exclude:
           - /test/
           - /localService/
