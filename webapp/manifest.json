@@ -170,8 +170,8 @@
               }
             },
             "tableSettings": {
-              "type": "GridTable", 
-              "multiSelect": false
+              "type": "GridTable",
+              "multiSelect": true
             }
           }
         },
