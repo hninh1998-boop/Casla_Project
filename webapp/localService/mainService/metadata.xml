@@ -105,6 +105,24 @@
                 <Property Name="IVFullyInvoiced" Type="Edm.String" MaxLength="3" sap:label="IV Fully Invoiced"/>
                 <Property Name="POFullyInvoiced" Type="Edm.String" MaxLength="3" sap:label="PO fully invoiced"/>
                 <Property Name="Plant" Type="Edm.String" MaxLength="4" sap:display-format="UpperCase" sap:label="Plant" sap:value-list="standard"/>
+                <Property Name="POType" Type="Edm.String" MaxLength="4" sap:display-format="UpperCase" sap:required-in-filter="true" sap:label="PO Type" sap:quickinfo="Purchasing Document Type" sap:value-list="standard"/>
+                <Property Name="StorageLocation" Type="Edm.String" MaxLength="4" sap:display-format="UpperCase" sap:label="Storage Location" sap:value-list="standard"/>
+                <Property Name="StorageLocationName" Type="Edm.String" MaxLength="16" sap:label="Storage Location Name"/>
+                <Property Name="ItemText" Type="Edm.String" sap:label="Item Text"/>
+                <Property Name="HeaderText" Type="Edm.String" sap:label="Header Text"/>
+                <Property Name="GRCategory" Type="Edm.String" MaxLength="10" sap:label="GR Category"/>
+                <Property Name="IVCategory" Type="Edm.String" MaxLength="10" sap:label="INV Category"/>
+                <Property Name="GhiChu" Type="Edm.String" sap:label="Ghi chú"/>
+                <Property Name="GRFiscalYear" Type="Edm.String" MaxLength="4" sap:display-format="NonNegative" sap:label="GR Fiscal year"/>
+                <Property Name="InvFiscalYear" Type="Edm.String" MaxLength="4" sap:display-format="NonNegative" sap:label="Invoice Fiscal year"/>
+                <Property Name="POCurrency" Type="Edm.String" MaxLength="5" sap:display-format="UpperCase" sap:label="PO Currency" sap:quickinfo="Currency Key" sap:semantics="currency-code"/>
+                <Property Name="PONetprice" Type="Edm.Decimal" Precision="13" Scale="3" sap:unit="POCurrency" sap:variable-scale="true" sap:label="PO Net Price"/>
+                <Property Name="INVNetPriceTransCur" Type="Edm.Decimal" Precision="13" Scale="3" sap:unit="TransCur" sap:variable-scale="true" sap:label="INV Net price TransCur"/>
+                <Property Name="AllocatedGRAmountComCode" Type="Edm.Decimal" Precision="13" Scale="3" sap:unit="LocaCurrencyKey" sap:variable-scale="true" sap:label="Allocated GR Amount ComCode"/>
+                <Property Name="AllocatedGRAmountTransCode" Type="Edm.Decimal" Precision="13" Scale="3" sap:unit="TransCur" sap:variable-scale="true" sap:label="Allocated GR Amount TransCode"/>
+                <Property Name="AllocatedInvoiceAmountComCode" Type="Edm.Decimal" Precision="13" Scale="3" sap:unit="LocaCurrencyKey" sap:variable-scale="true" sap:label="Allocated Invoice Amount ComCode"/>
+                <Property Name="AllocatedInvoiceAmountTrans" Type="Edm.Decimal" Precision="13" Scale="3" sap:unit="Currency" sap:variable-scale="true" sap:label="Allocated Invoice Amount Trans"/>
+                <Property Name="SortOrder" Type="Edm.String" MaxLength="10" sap:label="Sort Order"/>
             </EntityType>
             <EntityType Name="ZI_COMPANYCODE_VHType" sap:label="Company Code VH" sap:value-list="true" sap:content-version="1">
                 <Key>

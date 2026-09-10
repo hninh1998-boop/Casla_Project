@@ -5,6 +5,9 @@ sap.ui.define([
 ], function (MessageToast, MessageBox, BusyDialog) {
     "use strict";
 
+    // Entity set của bảng chính trên List Report (khớp manifest routing).
+    var MAIN_ENTITY_SET = "zce_mapim";
+
     var BATCH_SIZE = 1000;
     var CONCURRENCY = 4;
 
@@ -257,26 +260,66 @@ sap.ui.define([
     function getRaw(oView) {
         var oAll = oView.findAggregatedObjects(true);
 
-        var oSmartTable;
-        for (var i = 0; i < oAll.length; i++) {
-            if (oAll[i].getMetadata().getName() === "sap.ui.comp.smarttable.SmartTable") {
-                oSmartTable = oAll[i];
-                break;
+        // Chỉ nhận đúng SmartTable bind vào entity set chính. Bỏ qua các
+        // SmartTable của value help (vd _I_PurchaseOrderType khi mở F4 PO Type),
+        // adapt filters, personalization... Nhận diện qua entitySet HOẶC path
+        // của binding (FE nhiều khi không set property entitySet).
+        var oSmartTable, oTable, oBinding, i;
+        for (i = 0; i < oAll.length; i++) {
+            if (oAll[i].getMetadata().getName() !== "sap.ui.comp.smarttable.SmartTable") {
+                continue;
+            }
+            var oST = oAll[i];
+            var sES = (oST.getEntitySet && oST.getEntitySet()) || "";
+            var sTblPath = (oST.getTableBindingPath && oST.getTableBindingPath()) || "";
+            var oInner = oST.getTable && oST.getTable();
+            var oBnd = oInner && (oInner.getBinding("rows") || oInner.getBinding("items"));
+            var sBndPath = oBnd ? (oBnd.getPath() || "") : "";
+
+            console.log(">>> ZMAPIM export: found SmartTable id =", oST.getId(),
+                "| entitySet =", sES || "(none)",
+                "| tableBindingPath =", sTblPath || "(none)",
+                "| bindingPath =", sBndPath || "(none)",
+                "| bound =", !!oBnd);
+
+            var bMatch = sES === MAIN_ENTITY_SET
+                || sTblPath === MAIN_ENTITY_SET || sTblPath === "/" + MAIN_ENTITY_SET
+                || sBndPath === MAIN_ENTITY_SET || sBndPath === "/" + MAIN_ENTITY_SET;
+
+            if (bMatch) {
+                oSmartTable = oST;
+                oTable = oInner;
+                oBinding = oBnd;
+                if (oBnd) { break; }   // ưu tiên cái đã có binding
             }
         }
-        if (!oSmartTable) { return null; }
-
-        var oTable = oSmartTable.getTable();
-        if (!oTable) { return null; }
-
-        var oBinding = oTable.getBinding("rows") || oTable.getBinding("items");
-        if (!oBinding) { return null; }
+        if (!oSmartTable) {
+            console.error(">>> ZMAPIM export: không tìm thấy SmartTable của entity set", MAIN_ENTITY_SET);
+            return null;
+        }
+        if (!oTable) { oTable = oSmartTable.getTable(); }
+        if (!oBinding && oTable) {
+            oBinding = oTable.getBinding("rows") || oTable.getBinding("items");
+        }
+        if (!oBinding) {
+            console.error(">>> ZMAPIM export: SmartTable chưa có binding dữ liệu (bấm Go trước).");
+            return null;
+        }
 
         var oModel = oBinding.getModel();
-        // getPath() có thể trả về path tương đối (vd khi bảng bind qua context của
-        // SmartTable) -> phải resolve về path tuyệt đối thì model.read() mới đúng,
-        // nếu không request sẽ sai URL và báo lỗi "HTTP request failed".
-        var sPath = oModel.resolve(oBinding.getPath(), oBinding.getContext()) || oBinding.getPath();
+
+        // Đã khớp đúng bảng chính -> path chắc chắn là entity set chính.
+        var sPath = "/" + MAIN_ENTITY_SET;
+
+        // Gộp cả application filters (từ SmartFilterBar) lẫn control filters.
+        var aFilters = []
+            .concat(oBinding.aApplicationFilters || [])
+            .concat(oBinding.aFilters || []);
+
+        console.log(">>> ZMAPIM export: path =", sPath,
+            "| filters =", aFilters.length,
+            "| binding length =", oBinding.getLength(),
+            "| isLengthFinal =", oBinding.isLengthFinal && oBinding.isLengthFinal());
 
         return {
             smartTable: oSmartTable,
@@ -284,7 +327,7 @@ sap.ui.define([
             binding: oBinding,
             model: oModel,
             path: sPath,
-            filters: oBinding.aApplicationFilters || [],
+            filters: aFilters,
             sorters: oBinding.aSorters || [],
             totalLength: oBinding.getLength()
         };
@@ -292,60 +335,132 @@ sap.ui.define([
 
 
     //////////////////////////////////////////////////////////////////////////
-    // Tải toàn bộ dữ liệu qua $skip/$top theo batch, chạy song song CONCURRENCY batch
-    // để tối ưu tốc độ khi dữ liệu nhiều.
+    // Tách các query option ($select/$filter/$orderby/$expand) ra khỏi URL.
+    function parseQueryOptions(sUrl) {
+        var oOut = {};
+        var iQ = sUrl.indexOf("?");
+        if (iQ < 0) { return oOut; }
+        sUrl.slice(iQ + 1).split("&").forEach(function (sPair) {
+            var iEq = sPair.indexOf("=");
+            if (iEq < 0) { return; }
+            var sKey = decodeURIComponent(sPair.slice(0, iEq));
+            if (["$select", "$filter", "$orderby", "$expand"].indexOf(sKey) >= 0) {
+                oOut[sKey] = decodeURIComponent(sPair.slice(iEq + 1));
+            }
+        });
+        return oOut;
+    }
+
+    //////////////////////////////////////////////////////////////////////////
+    // Tải toàn bộ dữ liệu qua $skip/$top theo batch, chạy song song CONCURRENCY batch.
+    //
+    // Lấy nguyên bộ $select/$filter/$orderby mà binding SmartTable tự sinh ra
+    // (getDownloadUrl -> đã đúng cho service analytical, trả dòng chi tiết) rồi
+    // gửi lại qua model.read(). ODataModel v2 gói request trong $batch POST nên
+    // $filter dài (multi-select PO Type...) nằm trong body -> KHÔNG bị lỗi URL quá dài.
     function fetchAllData(oRaw, oBusyDialog) {
         return new Promise(function (resolve, reject) {
-            var iTotal = oRaw.totalLength;
-            if (iTotal === 0) { resolve([]); return; }
 
-            var iNumBatches = Math.ceil(iTotal / BATCH_SIZE);
-            var aResults = new Array(iNumBatches);
-            var iNextIdx = 0;
-            var iCompleted = 0;
-            var bHasError = false;
+            var sUrl = oRaw.binding.getDownloadUrl && oRaw.binding.getDownloadUrl("json");
+            if (!sUrl) {
+                reject(new Error("Không lấy được URL tải dữ liệu từ bảng (getDownloadUrl rỗng)"));
+                return;
+            }
+            var oBaseParams = parseQueryOptions(sUrl);
+            console.log(">>> ZMAPIM export: downloadUrl =", sUrl);
+            console.log(">>> ZMAPIM export: $select =", oBaseParams.$select || "(không có)",
+                "| $filter =", oBaseParams.$filter || "(không có)");
 
-            function updateProgress() {
-                var iLoaded = Math.min(iCompleted * BATCH_SIZE, iTotal);
-                oBusyDialog.setText("Đang tải dữ liệu: " + iLoaded.toLocaleString("vi-VN")
-                    + " / " + iTotal.toLocaleString("vi-VN") + " dòng");
+            // Nếu không parse được $filter thì fallback dùng Filter object của binding.
+            var bUseFilterObjects = !oBaseParams.$filter && oRaw.filters.length > 0;
+
+            function readBatch(iSkip, bCount) {
+                return new Promise(function (res, rej) {
+                    var oUrlParams = { "$skip": iSkip, "$top": BATCH_SIZE };
+                    Object.keys(oBaseParams).forEach(function (k) {
+                        if (!(bUseFilterObjects && k === "$filter")) {
+                            oUrlParams[k] = oBaseParams[k];
+                        }
+                    });
+                    if (bCount) { oUrlParams["$inlinecount"] = "allpages"; }
+
+                    oRaw.model.read(oRaw.path, {
+                        filters: bUseFilterObjects ? oRaw.filters : undefined,
+                        urlParameters: oUrlParams,
+                        success: function (oData) {
+                            res({ results: oData.results || [], count: oData.__count });
+                        },
+                        error: function (oErr) {
+                            var sText = (oErr && (oErr.responseText || oErr.message)) || "unknown error";
+                            rej(new Error(String(sText).replace(/\s+/g, " ").slice(0, 400)));
+                        }
+                    });
+                });
             }
 
-            function runBatch(iBatchIdx) {
-                if (bHasError) { return; }
+            // Batch đầu tiên kèm $inlinecount để lấy tổng số dòng thật từ server,
+            // không phụ thuộc oBinding.getLength() (có thể sai / chưa load đủ).
+            readBatch(0, true).then(function (oFirst) {
+                var aFirst = oFirst.results || [];
+                var iTotal = parseInt(oFirst.count, 10);
+                if (isNaN(iTotal)) { iTotal = aFirst.length; }
 
-                oRaw.model.read(oRaw.path, {
-                    filters: oRaw.filters,
-                    sorters: oRaw.sorters,
-                    urlParameters: {
-                        "$skip": iBatchIdx * BATCH_SIZE,
-                        "$top": BATCH_SIZE
-                    },
-                    success: function (oData) {
+                console.log(">>> ZMAPIM export: server __count =", oFirst.count,
+                    "| batch đầu =", aFirst.length, "dòng",
+                    "| keys dòng đầu =", aFirst[0] ? Object.keys(aFirst[0]).join(",") : "(rỗng)");
+
+                if (aFirst[0] && aFirst[0].CompanyCode === undefined) {
+                    console.warn(">>> ZMAPIM export: dữ liệu trả về KHÔNG có field 'CompanyCode' "
+                        + "-> URL tải dữ liệu đang sai entity.");
+                }
+
+                if (iTotal <= aFirst.length) {
+                    resolve(aFirst);
+                    return;
+                }
+
+                var iNumBatches = Math.ceil(iTotal / BATCH_SIZE);
+                var aResults = new Array(iNumBatches);
+                aResults[0] = aFirst;
+
+                var iNextBatch = 1;
+                var iCompleted = 1;
+                var bHasError = false;
+
+                function updateProgress() {
+                    var iLoaded = Math.min(iCompleted * BATCH_SIZE, iTotal);
+                    oBusyDialog.setText("Đang tải dữ liệu: " + iLoaded.toLocaleString("vi-VN")
+                        + " / " + iTotal.toLocaleString("vi-VN") + " dòng");
+                }
+
+                function runNext() {
+                    if (bHasError) { return; }
+                    if (iNextBatch >= iNumBatches) { return; }
+
+                    var iBatchIdx = iNextBatch++;
+                    readBatch(iBatchIdx * BATCH_SIZE, false).then(function (oData) {
                         if (bHasError) { return; }
                         aResults[iBatchIdx] = oData.results || [];
                         iCompleted++;
                         updateProgress();
 
-                        if (iNextIdx < iNumBatches) {
-                            runBatch(iNextIdx++);
-                        } else if (iCompleted === iNumBatches) {
-                            var aAll = [].concat.apply([], aResults);
-                            resolve(aAll);
+                        if (iCompleted === iNumBatches) {
+                            resolve([].concat.apply([], aResults));
+                        } else {
+                            runNext();
                         }
-                    },
-                    error: function (oErr) {
+                    }).catch(function (oErr) {
                         bHasError = true;
                         reject(oErr);
-                    }
-                });
-            }
+                    });
+                }
 
-            updateProgress();
-            var iInitial = Math.min(CONCURRENCY, iNumBatches);
-            for (var k = 0; k < iInitial; k++) {
-                runBatch(iNextIdx++);
-            }
+                updateProgress();
+                var iInitial = Math.min(CONCURRENCY, iNumBatches - 1);
+                for (var k = 0; k < iInitial; k++) {
+                    runNext();
+                }
+            }).catch(reject);
         });
     }
 
