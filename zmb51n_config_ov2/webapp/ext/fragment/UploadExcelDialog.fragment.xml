@@ -1,0 +1,44 @@
+<core:FragmentDefinition
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+    xmlns:f="sap.ui.layout.form"
+    xmlns:u="sap.ui.unified">
+    <Dialog
+        id="idUploadExcelDialog"
+        title="{i18n>uploadExcelDialogTitle}"
+        contentWidth="28rem">
+        <content>
+            <f:SimpleForm
+                id="idUploadExcelForm"
+                editable="true"
+                layout="ResponsiveGridLayout"
+                maxContainerCols="2">
+                <f:content>
+                    <Label text="{i18n>uploadExcelChooseFile}" required="true" labelFor="idExcelFileUploader"/>
+                    <u:FileUploader
+                        id="idExcelFileUploader"
+                        name="excelFile"
+                        fileType="xlsx,xls"
+                        change="onFileChange"
+                        placeholder="{i18n>uploadExcelChooseFile}"
+                        style="Emphasized"
+                        width="100%"/>
+                </f:content>
+            </f:SimpleForm>
+        </content>
+        <footer>
+            <Toolbar id="idUploadExcelToolbar">
+                <ToolbarSpacer/>
+                <Button
+                    text="{i18n>uploadExcelSubmit}"
+                    type="Emphasized"
+                    icon="sap-icon://upload"
+                    press="onUploadExcelSubmit"/>
+                <Button
+                    text="{i18n>uploadExcelCancel}"
+                    icon="sap-icon://cancel"
+                    press="onUploadDialogClose"/>
+            </Toolbar>
+        </footer>
+    </Dialog>
+</core:FragmentDefinition>

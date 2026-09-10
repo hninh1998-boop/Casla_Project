@@ -1,0 +1,147 @@
+{
+  "_version": "1.80.0",
+  "sap.app": {
+    "id": "zmb51nov4",
+    "type": "application",
+    "i18n": "i18n/i18n.properties",
+    "applicationVersion": {
+      "version": "0.0.1"
+    },
+    "title": "{{appTitle}}",
+    "description": "{{appDescription}}",
+    "resources": "resources.json",
+    "sourceTemplate": {
+      "id": "@sap/generator-fiori:basic",
+      "version": "1.30.0",
+      "toolsId": "ed916891-3a23-4801-aeb6-4f66838f6774"
+    },
+    "dataSources": {
+      "mainService": {
+        "uri": "/sap/opu/odata4/sap/zui_zmb51n_ov4/srvd/sap/zui_zmb51n/0001/",
+        "type": "OData",
+        "settings": {
+          "localUri": "localService/mainService/metadata.xml",
+          "odataVersion": "4.0"
+        }
+      }
+    },
+    "crossNavigation": {
+      "inbounds": {
+        "zmb51n_ov4-display": {
+          "semanticObject": "zmb51n_ov4",
+          "action": "display",
+          "title": "{{zmb51n_ov4-display.flpTitle}}",
+          "signature": {
+            "parameters": {},
+            "additionalParameters": "allowed"
+          }
+        }
+      }
+    }
+  },
+  "sap.ui": {
+    "technology": "UI5",
+    "icons": {
+      "icon": "",
+      "favIcon": "",
+      "phone": "",
+      "phone@2": "",
+      "tablet": "",
+      "tablet@2": ""
+    },
+    "deviceTypes": {
+      "desktop": true,
+      "tablet": true,
+      "phone": true
+    }
+  },
+  "sap.ui5": {
+    "flexEnabled": false,
+    "config": {
+      "fullWidth": true
+    },
+    "rootView": {
+      "viewName": "zmb51nov4.view.App",
+      "type": "XML",
+      "async": true,
+      "id": "app"
+    },
+    "dependencies": {
+      "minUI5Version": "1.142.12",
+      "libs": {
+        "sap.m": {},
+        "sap.ui.core": {},
+        "sap.ui.table": {},
+        "sap.ui.layout": {},
+        "sap.ui.mdc": {},
+        "sap.ui.export": {},
+        "sap.ui.fl": {}
+      }
+    },
+    "contentDensities": {
+      "compact": true,
+      "cozy": true
+    },
+    "models": {
+      "i18n": {
+        "type": "sap.ui.model.resource.ResourceModel",
+        "settings": {
+          "bundleName": "zmb51nov4.i18n.i18n"
+        }
+      },
+      "": {
+        "dataSource": "mainService",
+        "preload": true,
+        "settings": {
+          "operationMode": "Server",
+          "autoExpandSelect": true,
+          "earlyRequests": true
+        }
+      },
+      "@i18n": {
+        "type": "sap.ui.model.resource.ResourceModel",
+        "uri": "i18n/i18n.properties"
+      }
+    },
+    "resources": {
+      "css": []
+    },
+    "routing": {
+      "config": {
+        "routerClass": "sap.m.routing.Router",
+        "viewType": "XML",
+        "viewPath": "zmb51nov4.view",
+        "controlId": "app",
+        "controlAggregation": "pages",
+        "transition": "slide",
+        "async": true
+      },
+      "routes": [
+        {
+          "pattern": "",
+          "name": "list",
+          "target": "list"
+        },
+        {
+          "pattern": "detail/{key}",
+          "name": "detail",
+          "target": "detail"
+        }
+      ],
+      "targets": {
+        "list": {
+          "viewId": "list",
+          "viewName": "List"
+        },
+        "detail": {
+          "viewId": "detail",
+          "viewName": "Detail"
+        }
+      }
+    }
+  },
+  "sap.fiori": {
+    "registrationIds": [],
+    "archeType": "transactional"
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "generationParameters": {
+    "generationDate": "Thu Aug 20 2026 01:04:31 GMT+0000 (Coordinated Universal Time)",
+    "generatorPlatform": "SAP Business Application Studio",
+    "serviceType": "SAP System (ABAP On-Premise)",
+    "metadataFilename": "",
+    "serviceUrl": "https://my426517.s4hana.cloud.sap/sap/opu/odata/sap/ZUI_ZMB51_CONFIG_OV2",
+    "appName": "zmb51n_config_ov2",
+    "appTitle": "ZMB51N Config Product Group",
+    "appDescription": "An SAP Fiori application.",
+    "appNamespace": "",
+    "ui5Theme": "sap_horizon",
+    "ui5Version": "1.148.8",
+    "enableEslint": true,
+    "enableTypeScript": false,
+    "showMockDataInfo": true,
+    "generatorVersion": "1.31.0",
+    "template": "List Report Page V2",
+    "generatorName": "SAP Fiori Application Generator",
+    "entityRelatedConfig": [
+      {
+        "type": "Main Entity",
+        "value": "ZC_ZMB51_CONFIG"
+      }
+    ],
+    "launchText": "To launch the generated application, run the following from the generated application root folder:\n\n```\n    npm start\n```"
+  }
+}

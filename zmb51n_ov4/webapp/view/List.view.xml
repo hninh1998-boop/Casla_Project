@@ -1,0 +1,85 @@
+<mvc:View
+    controllerName="zmb51nov4.controller.List"
+    xmlns="sap.m"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns:table="sap.ui.table"
+    xmlns:rowmodes="sap.ui.table.rowmodes"
+    xmlns:core="sap.ui.core"
+>
+    <Page id="listPage">
+        <content>
+            <!-- sap.m.VariantManagement ("My Views" Save/Save As/Manage) - a pure UI control,
+                 built by List.controller.js#_wireVariantManagement. Persistence of each view
+                 (Main Entity + filter conditions) is handled by the controller itself via
+                 sap.ui.util.Storage, NOT the sap.ui.fl layer - see the VARIANT_STORAGE_ID note. -->
+            <HBox id="variantManagementHolder" class="sapUiTinyMarginBottom"/>
+
+            <!-- Main Entity: standalone box above the filter bar -->
+            <Panel id="mainEntityPanel" headerText="{i18n>mainEntity.panelTitle}" class="sapUiNoContentPadding sapUiTinyMarginBottom">
+                <VBox class="sapUiSmallMargin" width="16rem">
+                    <Label id="mainEntityLabel" text="{i18n>mainEntity.panelTitle}" labelFor="mainEntitySelect"/>
+                    <Select
+                        id="mainEntitySelect"
+                        width="100%"
+                        forceSelection="false"
+                        autoAdjustWidth="true"
+                        selectedKey="CHUNG"
+                        items="{path: '/ZVH_ZMB51_CONFIG', parameters: {$$groupId: '$direct'}}"
+                        change=".onMainEntityChange"
+                    >
+                        <core:Item key="{Nhom}" text="{Nhom} - {TenNhom}"/>
+                    </Select>
+                </VBox>
+            </Panel>
+
+            <!-- Filter bar: sap.ui.mdc.FilterBar, built/rebuilt at runtime by the controller from
+                 @UI.SelectionFields (see FilterBarDelegate.js) - the control itself is created in
+                 JS so it can be destroyed and rebuilt whenever Main Entity changes the field set.
+                 Its own built-in Go button is hidden (showGoButton: false in the controller) so the
+                 button below is the only one, kept outside the Filters panel in its own section. -->
+            <Panel headerText="{i18n>filterBar.panelTitle}" expandable="true" expanded="true" class="sapUiTinyMarginBottom">
+                <VBox id="filterBarHolder"/>
+            </Panel>
+            <Toolbar class="sapUiTinyMarginBottom">
+                <ToolbarSpacer/>
+                <Button id="goButton" text="{i18n>filterBar.go}" type="Emphasized" press=".onGo"/>
+            </Toolbar>
+
+            <!-- Material Documents table, columns built at runtime from @UI.LineItem. Column
+                 headers get a native sortProperty (see List.controller.js#_buildColumns), whose
+                 built-in menu only offers Sort Ascending/Descending - resetToggle button below
+                 covers the "back to original order" case the menu itself doesn't provide. Title
+                 text is "<UI.headerInfo/TypeNamePlural> (<row count>)", kept in sync with the
+                 rows binding by List.controller.js#_updateRecordCount. -->
+            <Toolbar class="sapUiTinyMarginTop">
+                <Title id="recordCountTitle" level="H4"/>
+                <ToolbarSpacer/>
+                <Button id="exportButton" text="{i18n>table.export}" icon="sap-icon://excel-attachment" press=".onExport"/>
+                <Button id="resetSortButton" text="{i18n>table.resetSort}" press=".onResetSort"/>
+                <!-- Opens a standalone dialog (see List.controller.js#onOpenGroupBy) rather than
+                     grouping this table's own rows in place - that would mean tearing down the
+                     $$getKeepAliveContext rows binding Detail navigation relies on (see onRowPress),
+                     so it's kept as a separate read-only summary instead. -->
+                <Button id="groupByButton" text="{i18n>table.groupBy}" icon="sap-icon://group-2" press=".onOpenGroupBy"/>
+                <Button id="settingsButton" tooltip="{i18n>table.settings}" icon="sap-icon://action-settings" press=".onSettings"/>
+            </Toolbar>
+            <table:Table
+                id="materialDocumentsTable"
+                selectionMode="Single"
+                enableColumnReordering="true"
+                rowActionCount="1"
+            >
+                <table:rowMode>
+                    <rowmodes:Auto minRowCount="5"/>
+                </table:rowMode>
+                <!-- Standard Fiori Elements-style navigation column (">" at the row's end) instead
+                     of the whole row being clickable - matches the reference list report's UX. -->
+                <table:rowActionTemplate>
+                    <table:RowAction>
+                        <table:RowActionItem type="Navigation" press=".onRowPress"/>
+                    </table:RowAction>
+                </table:rowActionTemplate>
+            </table:Table>
+        </content>
+    </Page>
+</mvc:View>
