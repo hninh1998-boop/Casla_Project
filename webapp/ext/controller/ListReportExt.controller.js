@@ -175,7 +175,8 @@ sap.ui.define([
 				{ header: "PurReqnItemCurrency", key: "PurReqnItemCurrency", width: 24 },
 				{ header: "PurchasingGroup", key: "PurchasingGroup", width: 20 },
 				{ header: "DeliveryDate", key: "DeliveryDate", width: 24 },
-				{header: "RequirementTracking", key: "RequirementTracking", width: 20 }
+				{header: "RequirementTracking", key: "RequirementTracking", width: 20 },
+				{ header: "RequisitionerName", key: "RequisitionerName", width: 22 }
 			];
 
 			const hintRow = {
@@ -195,7 +196,8 @@ sap.ui.define([
 				PurReqnItemCurrency: "Loại tiền tệ ( VND, usd..)\nChỉ áp dụng cho Type I",
 				PurchasingGroup: "Nhóm mua hàng\nChỉ áp dụng cho Type I",
 				DeliveryDate: "Ngày giao hàng\nĐiền dạng dd.mm.yyyy\nChỉ áp dụng cho Type I",
-				RequirementTracking: "Tracking Number\nĐiền tối đa 10 ký tự\nChỉ áp dụng cho Type I"
+				RequirementTracking: "Tracking Number\nĐiền tối đa 10 ký tự\nChỉ áp dụng cho Type I",
+				RequisitionerName: "Requisitioner Name\nBắt buộc điền\nChỉ áp dụng cho Type I"
 			};
 
 			// Field thuộc Header API (PR Header) — tô cam đậm để phân biệt với Item API
