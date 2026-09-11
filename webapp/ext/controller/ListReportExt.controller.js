@@ -6,6 +6,9 @@ sap.ui.define([
 ], function (MessageToast, MessageBox, BusyDialog, DragDropInfo) {
     'use strict';
 
+    // Entity set của bảng chính trên List Report (khớp manifest sap.ui.generic.app).
+    var MAIN_ENTITY_SET = "zce_cont";
+
     var BATCH_SIZE = 1000;
     var CONCURRENCY = 4;
 
@@ -43,7 +46,7 @@ sap.ui.define([
         { label: "Kich thước túi", field: "KichThhuocTui", width: 12 },
         { label: "Người phụ trách cont", field: "NguoiPhuTrachCont", width: 12 },
         { label: "Thời gian cắt máng", field: "ThoiGianCatMang", width: 12 },
-        { label: "Địa điểm đóng hàng", field: "PlantName", width: 16 },
+        { label: "Địa điểm đóng hàng", field: "DiaDiemDongHangContName", width: 16 },
         { label: "Cont", field: "Cont", width: 10 },
         { label: "Số lệnh xuất hàng (OD)", field: "SoLenhXuatHang", width: 14, numeric: true },
         { label: "OD item", field: "SoLenhXuatHangItem", width: 8, numeric: true },
@@ -53,6 +56,12 @@ sap.ui.define([
         { label: "Kế hoạch đóng cont", field: "KeHoachDongCont", width: 14 },
         { label: "Ghi chú khác", field: "GhiChuKhac", width: 20, wrap: true }
     ];
+
+    // Field chỉ dùng để in tiêu đề Excel (Tên công ty), KHÔNG phải cột hiển thị
+    // trên SmartTable -> $select mà SmartTable tự sinh (dùng trong getDownloadUrl,
+    // xem fetchAllData) sẽ không có field này, phải tự ép thêm vào, tương tự cách
+    // ensureSortOrderSelected ép thêm SortOrder cho binding của GridTable.
+    var EXPORT_ONLY_SELECT_FIELDS = ["CompanyCodeName"];
 
     var FIRST_COL = 2;                                  // B
     var LAST_COL = FIRST_COL + COLUMNS.length - 1;       // S
@@ -375,22 +384,46 @@ sap.ui.define([
 
     //////////////////////////////////////////////////////////////////////////
     // Lấy dữ liệu Raw từ SmartTable đang hiển thị trên view
+    //
+    // CHÚ Ý: view List Report còn chứa các value-help dialog (F4) của các field
+    // filter dùng annotation ValueList (vd "Địa điểm đóng hàng" -> I_PlantStdVH,
+    // "Số SO" -> I_SalesOrderStdVH, "Số lệnh xuất hàng (DO)" -> I_OutboundDelivery).
+    // Các dialog này được dựng bằng SmartFilterBar + SmartTable riêng và gắn làm
+    // dependent của control filter -> vẫn nằm trong view tree. Sau khi user đã mở
+    // 1 trong các F4 đó, findAggregatedObjects(true) có thể trả về SmartTable của
+    // value help TRƯỚC SmartTable dữ liệu chính, khiến export đọc nhầm entity
+    // -> lỗi hoặc dữ liệu sai. Phải lọc đúng SmartTable bind vào MAIN_ENTITY_SET.
     function getRaw(oView) {
         var oAll = oView.findAggregatedObjects(true);
 
-        var oSmartTable;
-        for (var i = 0; i < oAll.length; i++) {
-            if (oAll[i].getMetadata().getName() === "sap.ui.comp.smarttable.SmartTable") {
-                oSmartTable = oAll[i];
-                break;
+        var oSmartTable, oTable, oBinding, i;
+        for (i = 0; i < oAll.length; i++) {
+            if (oAll[i].getMetadata().getName() !== "sap.ui.comp.smarttable.SmartTable") {
+                continue;
+            }
+            var oST = oAll[i];
+            var sES = (oST.getEntitySet && oST.getEntitySet()) || "";
+            var sTblPath = (oST.getTableBindingPath && oST.getTableBindingPath()) || "";
+            var oInner = oST.getTable && oST.getTable();
+            var oBnd = oInner && (oInner.getBinding("rows") || oInner.getBinding("items"));
+            var sBndPath = oBnd ? (oBnd.getPath() || "") : "";
+
+            var bMatch = sES === MAIN_ENTITY_SET
+                || sTblPath === MAIN_ENTITY_SET || sTblPath === "/" + MAIN_ENTITY_SET
+                || sBndPath === MAIN_ENTITY_SET || sBndPath === "/" + MAIN_ENTITY_SET;
+
+            if (bMatch) {
+                oSmartTable = oST;
+                oTable = oInner;
+                oBinding = oBnd;
+                if (oBnd) { break; }   // ưu tiên cái đã có binding
             }
         }
         if (!oSmartTable) { return null; }
-
-        var oTable = oSmartTable.getTable();
-        if (!oTable) { return null; }
-
-        var oBinding = oTable.getBinding("rows") || oTable.getBinding("items");
+        if (!oTable) { oTable = oSmartTable.getTable(); }
+        if (!oBinding && oTable) {
+            oBinding = oTable.getBinding("rows") || oTable.getBinding("items");
+        }
         if (!oBinding) { return null; }
 
         var oModel = oBinding.getModel();
@@ -399,13 +432,19 @@ sap.ui.define([
         // nếu không request sẽ sai URL và báo lỗi "HTTP request failed".
         var sPath = oModel.resolve(oBinding.getPath(), oBinding.getContext()) || oBinding.getPath();
 
+        // Gộp cả application filters (từ SmartFilterBar) lẫn control filters (vd
+        // search box trên toolbar) để export đúng những gì đang hiển thị.
+        var aFilters = []
+            .concat(oBinding.aApplicationFilters || [])
+            .concat(oBinding.aFilters || []);
+
         return {
             smartTable: oSmartTable,
             table: oTable,
             binding: oBinding,
             model: oModel,
             path: sPath,
-            filters: oBinding.aApplicationFilters || [],
+            filters: aFilters,
             sorters: oBinding.aSorters || [],
             totalLength: oBinding.getLength()
         };
@@ -413,60 +452,135 @@ sap.ui.define([
 
 
     //////////////////////////////////////////////////////////////////////////
-    // Tải toàn bộ dữ liệu qua $skip/$top theo batch, chạy song song CONCURRENCY batch
-    // để tối ưu tốc độ khi dữ liệu nhiều.
+    // Tách các query option ($select/$filter/$orderby/$expand) ra khỏi URL.
+    function parseQueryOptions(sUrl) {
+        var oOut = {};
+        var iQ = sUrl.indexOf("?");
+        if (iQ < 0) { return oOut; }
+        sUrl.slice(iQ + 1).split("&").forEach(function (sPair) {
+            var iEq = sPair.indexOf("=");
+            if (iEq < 0) { return; }
+            var sKey = decodeURIComponent(sPair.slice(0, iEq));
+            if (["$select", "$filter", "$orderby", "$expand"].indexOf(sKey) >= 0) {
+                oOut[sKey] = decodeURIComponent(sPair.slice(iEq + 1));
+            }
+        });
+        return oOut;
+    }
+
+    //////////////////////////////////////////////////////////////////////////
+    // Tải toàn bộ dữ liệu qua $skip/$top theo batch, chạy song song CONCURRENCY batch.
+    //
+    // Lấy nguyên bộ $select/$filter/$orderby mà binding SmartTable tự sinh ra
+    // (getDownloadUrl -> đúng 100% với dữ liệu đang hiển thị trên bảng) rồi gửi
+    // lại qua model.read(). Không tự dựng lại filter từ aApplicationFilters/aFilters
+    // vì dễ lệch với filter thật của bảng (vd đã từng lấy nhầm object binding cũ,
+    // hoặc control filter/application filter không được gộp đúng cách) -> export
+    // sai dữ liệu so với những gì đang hiển thị trên màn hình (âm thầm, không báo lỗi).
     function fetchAllData(oRaw, oBusyDialog) {
         return new Promise(function (resolve, reject) {
-            var iTotal = oRaw.totalLength;
-            if (iTotal === 0) { resolve([]); return; }
 
-            var iNumBatches = Math.ceil(iTotal / BATCH_SIZE);
-            var aResults = new Array(iNumBatches);
-            var iNextIdx = 0;
-            var iCompleted = 0;
-            var bHasError = false;
+            var sUrl = oRaw.binding.getDownloadUrl && oRaw.binding.getDownloadUrl("json");
+            if (!sUrl) {
+                reject(new Error("Không lấy được URL tải dữ liệu từ bảng (getDownloadUrl rỗng)"));
+                return;
+            }
+            var oBaseParams = parseQueryOptions(sUrl);
 
-            function updateProgress() {
-                var iLoaded = Math.min(iCompleted * BATCH_SIZE, iTotal);
-                oBusyDialog.setText("Đang tải dữ liệu: " + iLoaded.toLocaleString("vi-VN")
-                    + " / " + iTotal.toLocaleString("vi-VN") + " dòng");
+            // SmartTable chỉ $select đúng những cột đang HIỂN THỊ trên bảng ->
+            // các field chỉ dùng để in tiêu đề Excel (không phải cột trên bảng)
+            // sẽ bị thiếu, phải ép thêm vào đây.
+            if (oBaseParams.$select) {
+                var aSelectFields = oBaseParams.$select.split(",");
+                EXPORT_ONLY_SELECT_FIELDS.forEach(function (sField) {
+                    if (aSelectFields.indexOf(sField) < 0) {
+                        aSelectFields.push(sField);
+                    }
+                });
+                oBaseParams.$select = aSelectFields.join(",");
             }
 
-            function runBatch(iBatchIdx) {
-                if (bHasError) { return; }
+            // Nếu không parse được $filter (vd không có filter nào) thì fallback
+            // dùng Filter object của binding.
+            var bUseFilterObjects = !oBaseParams.$filter && oRaw.filters.length > 0;
 
-                oRaw.model.read(oRaw.path, {
-                    filters: oRaw.filters,
-                    sorters: oRaw.sorters,
-                    urlParameters: {
-                        "$skip": iBatchIdx * BATCH_SIZE,
-                        "$top": BATCH_SIZE
-                    },
-                    success: function (oData) {
-                        if (bHasError) { return; }
-                        aResults[iBatchIdx] = oData.results || [];
-                        iCompleted++;
-                        updateProgress();
-
-                        if (iNextIdx < iNumBatches) {
-                            runBatch(iNextIdx++);
-                        } else if (iCompleted === iNumBatches) {
-                            var aAll = [].concat.apply([], aResults);
-                            resolve(aAll);
+            function readBatch(iSkip, bCount) {
+                return new Promise(function (res, rej) {
+                    var oUrlParams = { "$skip": iSkip, "$top": BATCH_SIZE };
+                    Object.keys(oBaseParams).forEach(function (k) {
+                        if (!(bUseFilterObjects && k === "$filter")) {
+                            oUrlParams[k] = oBaseParams[k];
                         }
-                    },
-                    error: function (oErr) {
-                        bHasError = true;
-                        reject(oErr);
-                    }
+                    });
+                    if (bCount) { oUrlParams["$inlinecount"] = "allpages"; }
+
+                    oRaw.model.read(oRaw.path, {
+                        filters: bUseFilterObjects ? oRaw.filters : undefined,
+                        sorters: bUseFilterObjects ? oRaw.sorters : undefined,
+                        urlParameters: oUrlParams,
+                        success: function (oData) {
+                            res({ results: oData.results || [], count: oData.__count });
+                        },
+                        error: function (oErr) {
+                            rej(oErr);
+                        }
+                    });
                 });
             }
 
-            updateProgress();
-            var iInitial = Math.min(CONCURRENCY, iNumBatches);
-            for (var k = 0; k < iInitial; k++) {
-                runBatch(iNextIdx++);
-            }
+            // Batch đầu tiên kèm $inlinecount để lấy tổng số dòng thật từ server,
+            // không phụ thuộc oBinding.getLength() (có thể sai / chưa load đủ).
+            readBatch(0, true).then(function (oFirst) {
+                var aFirst = oFirst.results || [];
+                var iTotal = parseInt(oFirst.count, 10);
+                if (isNaN(iTotal)) { iTotal = aFirst.length; }
+
+                function updateProgress(iLoaded) {
+                    oBusyDialog.setText("Đang tải dữ liệu: " + Math.min(iLoaded, iTotal).toLocaleString("vi-VN")
+                        + " / " + iTotal.toLocaleString("vi-VN") + " dòng");
+                }
+                updateProgress(aFirst.length);
+
+                if (iTotal <= aFirst.length) {
+                    resolve(aFirst);
+                    return;
+                }
+
+                var iNumBatches = Math.ceil(iTotal / BATCH_SIZE);
+                var aResults = new Array(iNumBatches);
+                aResults[0] = aFirst;
+
+                var iNextBatch = 1;
+                var iCompleted = 1;
+                var bHasError = false;
+
+                function runNext() {
+                    if (bHasError) { return; }
+                    if (iNextBatch >= iNumBatches) { return; }
+
+                    var iBatchIdx = iNextBatch++;
+                    readBatch(iBatchIdx * BATCH_SIZE, false).then(function (oData) {
+                        if (bHasError) { return; }
+                        aResults[iBatchIdx] = oData.results || [];
+                        iCompleted++;
+                        updateProgress(iCompleted * BATCH_SIZE);
+
+                        if (iCompleted === iNumBatches) {
+                            resolve([].concat.apply([], aResults));
+                        } else {
+                            runNext();
+                        }
+                    }).catch(function (oErr) {
+                        bHasError = true;
+                        reject(oErr);
+                    });
+                }
+
+                var iInitial = Math.min(CONCURRENCY, iNumBatches - 1);
+                for (var k = 0; k < iInitial; k++) {
+                    runNext();
+                }
+            }).catch(reject);
         });
     }
 
@@ -556,7 +670,7 @@ sap.ui.define([
             var sLast = colLetter(LAST_COL);
             var oWeek = getCurrentWeekInfo();
             var sCompanyName = (aData[0] && aData[0].CompanyCodeName) || "";
-            var sPlantName = (aData[0] && aData[0].PlantName) || "";
+            var sPlantName = (aData[0] && aData[0].DiaDiemDongHangContName) || "";
 
             //1. Dòng 1-3, cột B-C: Phòng ban
             ws.mergeCells(sFirst + "1:" + colLetter(FIRST_COL + 1) + "3");
