@@ -170,6 +170,8 @@
                 <Property Name="TrangThai4" Type="Edm.String" Nullable="false" MaxLength="70"/>
                 <Property Name="DaSua4" Type="Edm.String" Nullable="false" MaxLength="70"/>
                 <Property Name="GhiChu4" Type="Edm.String" Nullable="false" MaxLength="70"/>
+                <Property Name="PoGiaCong4" Type="Edm.String" Nullable="false" MaxLength="70"/>
+                <Property Name="POItemGC4" Type="Edm.String" Nullable="false" MaxLength="70"/>
                 <Property Name="MaHang5" Type="Edm.String" Nullable="false" MaxLength="70"/>
                 <Property Name="CheDoMai5" Type="Edm.String" Nullable="false" MaxLength="70"/>
                 <Property Name="ChieuDai5" Type="Edm.String" Nullable="false" MaxLength="70"/>
@@ -1369,6 +1371,14 @@
                 <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=ATWRT"/>
             </Annotations>
             <Annotations Target="SAP__self.zce_zmb51nType/GhiChu4">
+                <Annotation Term="SAP__common.Label" String="Characteristic Value"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=ATWRT"/>
+            </Annotations>
+            <Annotations Target="SAP__self.zce_zmb51nType/PoGiaCong4">
+                <Annotation Term="SAP__common.Label" String="Characteristic Value"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=ATWRT"/>
+            </Annotations>
+            <Annotations Target="SAP__self.zce_zmb51nType/POItemGC4">
                 <Annotation Term="SAP__common.Label" String="Characteristic Value"/>
                 <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=ATWRT"/>
             </Annotations>

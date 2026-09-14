@@ -217,7 +217,9 @@ sap.ui.define(
                 "MangPhu4",
                 "TrangThai4",
                 "DaSua4",
-                "GhiChu4"
+                "GhiChu4",
+                "PoGiaCong4",
+                "POItemGC4"
             ],
             TP: ["MaHang5", "CheDoMai5", "ChieuDai5", "ChieuRong5", "DoDay5", "MaDuAn5", "KieuMaiCanh5", "DungSai5", "TemMau5", "MauSac5"],
             DA: ["MaHang6", "DoDay6", "CheDoMai6", "Vein6", "ChieuDai6", "ChieuRong6", "Lot6", "STTSlab6", "Shade6"]
