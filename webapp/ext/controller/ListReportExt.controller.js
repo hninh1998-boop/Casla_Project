@@ -38,30 +38,33 @@ sap.ui.define([
         { label: "SỐ CHÌ", field: "SoChi", width: 10 },
         { label: "Ngày tàu chạy", field: "NgayTauChay", width: 12 },
         { label: "Số Booking", field: "Booking", width: 12 },
+        { label: "Thời gian cắt máng", field: "ThoiGianCatMang", width: 12 },
         { label: "Phương thức đóng hàng & phối thùng", field: "GhiChuGiaoHang", width: 42, wrap: true },
         { label: "Số SO", field: "SO", width: 12, numeric: true },
         { label: "Item", field: "SOItem", width: 8, numeric: true },
         { label: "SỐ KH", field: "SoKH", width: 14 },
         { label: "TÊN TÚI", field: "TenHang", width: 14 },
-        { label: "Kich thước túi", field: "KichThhuocTui", width: 12 },
-        { label: "Người phụ trách cont", field: "NguoiPhuTrachCont", width: 12 },
-        { label: "Thời gian cắt máng", field: "ThoiGianCatMang", width: 12 },
-        { label: "Địa điểm đóng hàng", field: "DiaDiemDongHangContName", width: 16 },
+        { label: "Số lượng trên lệnh xuất hàng", field: "SoLuongTrenLenhXuatHang", width: 16, quantity: true },
         { label: "Cont", field: "Cont", width: 10 },
+        { label: "Địa điểm đóng hàng", field: "DiaDiemDongHangContName", width: 16 },
+        { label: "Plant", field: "PlantName", width: 16 },
         { label: "Số lệnh xuất hàng (OD)", field: "SoLenhXuatHang", width: 14, numeric: true },
         { label: "OD item", field: "SoLenhXuatHangItem", width: 8, numeric: true },
-        { label: "Số lượng trên lệnh xuất hàng", field: "SoLuongTrenLenhXuatHang", width: 16, quantity: true },
         { label: "Số lượng chưa lên lệnh xuất hàng", field: "SoLuongChuaLenLenhXuatHang", width: 16, quantity: true },
+        { label: "Kich thước túi", field: "KichThhuocTui", width: 12 },
+        { label: "Loại màng", field: "LoaiMang", width: 12 },
+        { label: "Loại manh", field: "LoaiManh", width: 12 },
         { label: "Trạng thái OD", field: "TrangThaiOD", width: 14 },
         { label: "Kế hoạch đóng cont", field: "KeHoachDongCont", width: 14 },
         { label: "Ghi chú khác", field: "GhiChuKhac", width: 20, wrap: true }
     ];
 
-    // Field chỉ dùng để in tiêu đề Excel (Tên công ty), KHÔNG phải cột hiển thị
-    // trên SmartTable -> $select mà SmartTable tự sinh (dùng trong getDownloadUrl,
-    // xem fetchAllData) sẽ không có field này, phải tự ép thêm vào, tương tự cách
-    // ensureSortOrderSelected ép thêm SortOrder cho binding của GridTable.
-    var EXPORT_ONLY_SELECT_FIELDS = ["CompanyCodeName"];
+    // Các field dùng trong Excel (tiêu đề, hoặc cột trong COLUMNS) nhưng có thể
+    // KHÔNG phải cột hiển thị trên SmartTable -> $select mà SmartTable tự sinh
+    // (dùng trong getDownloadUrl, xem fetchAllData) sẽ không có field này, phải
+    // tự ép thêm vào, tương tự cách ensureSortOrderSelected ép thêm SortOrder
+    // cho binding của GridTable.
+    var EXPORT_ONLY_SELECT_FIELDS = ["CompanyCodeName", "LoaiMang", "LoaiManh", "PlantName"];
 
     var FIRST_COL = 2;                                  // B
     var LAST_COL = FIRST_COL + COLUMNS.length - 1;       // S
