@@ -12,6 +12,10 @@ sap.ui.define([
     var BATCH_SIZE = 1000;
     var CONCURRENCY = 4;
 
+    // Chiều cao dòng Excel (pt): mặc định 1 dòng, và mỗi dòng chữ khi wrapText (font size 10).
+    var DEFAULT_ROW_HEIGHT = 15;
+    var LINE_HEIGHT = 13.5;
+
     var DEPT_NAME = "PHÒNG KD-XNK";
 
     // Kéo-thả sắp xếp thứ tự dòng: yêu cầu backend (RAP custom entity zce_cont)
@@ -43,6 +47,7 @@ sap.ui.define([
         { label: "Số SO", field: "SO", width: 12, numeric: true },
         { label: "Item", field: "SOItem", width: 8, numeric: true },
         { label: "SỐ KH", field: "SoKH", width: 14 },
+        { label: "Mã hàng", field: "MaHang", width: 14 },
         { label: "TÊN TÚI", field: "TenHang", width: 14 },
         { label: "Số lượng trên lệnh xuất hàng", field: "SoLuongTrenLenhXuatHang", width: 16, quantity: true },
         { label: "Cont", field: "Cont", width: 10 },
@@ -64,7 +69,7 @@ sap.ui.define([
     // (dùng trong getDownloadUrl, xem fetchAllData) sẽ không có field này, phải
     // tự ép thêm vào, tương tự cách ensureSortOrderSelected ép thêm SortOrder
     // cho binding của GridTable.
-    var EXPORT_ONLY_SELECT_FIELDS = ["CompanyCodeName", "LoaiMang", "LoaiManh", "PlantName"];
+    var EXPORT_ONLY_SELECT_FIELDS = ["CompanyCodeName", "LoaiMang", "LoaiManh", "PlantName", "MaHang"];
 
     var FIRST_COL = 2;                                  // B
     var LAST_COL = FIRST_COL + COLUMNS.length - 1;       // S
@@ -654,6 +659,63 @@ sap.ui.define([
     }
 
 
+    // OData V2 trả Edm.DateTime (vd field Ngay, kiểu abap.dats) dưới dạng object Date
+    // JS -> so 2 giá trị bằng "===" luôn ra false dù cùng ngày (khác instance object).
+    // Quy về giá trị nguyên thuỷ (timestamp) trước khi so sánh/lưu prevValue.
+    function toComparable(v) {
+        if (v instanceof Date) { return v.getTime(); }
+        return v || "";
+    }
+
+    // Khoá nhóm để gộp ô: đã có SỐ CONT -> nhóm theo SỐ CONT; chưa có SỐ CONT nhưng
+    // đã có OD -> nhóm theo OD; không có cả hai -> "" (dòng này không gộp với ai).
+    function getMergeGroupKey(oItem) {
+        if (oItem.SoCont) { return "C|" + oItem.SoCont; }
+        if (oItem.SoLenhXuatHang) { return "O|" + oItem.SoLenhXuatHang; }
+        return "";
+    }
+
+    // Ước lượng (thiên cao) chiều cao cần để hiển thị hết 1 ô wrapText trong cột rộng iColWidth.
+    function estimateTextHeight(sText, iColWidth) {
+        if (!sText) { return DEFAULT_ROW_HEIGHT; }
+        var iCharsPerLine = Math.max(1, Math.floor(iColWidth * 1.2));
+        var iLines = String(sText).split(/\r?\n/).reduce(function (iSum, sLine) {
+            return iSum + Math.max(1, Math.ceil(sLine.length / iCharsPerLine));
+        }, 0);
+        return Math.max(DEFAULT_ROW_HEIGHT, iLines * LINE_HEIGHT + 3);
+    }
+
+    // Chiều cao 1 dòng nếu chỉ tính các ô wrapText KHÔNG bị gộp (sExcludeField là cột đã gộp).
+    function ownRowHeight(oItem, sExcludeField) {
+        return COLUMNS.reduce(function (iMax, oCol) {
+            return (oCol.wrap && oCol.field !== sExcludeField)
+                ? Math.max(iMax, estimateTextHeight(oItem[oCol.field], oCol.width))
+                : iMax;
+        }, DEFAULT_ROW_HEIGHT);
+    }
+
+    // Excel không tự giãn chiều cao dòng theo ô đã gộp -> với ô wrapText gộp nhiều dòng
+    // (vd Phương thức đóng hàng & phối thùng) mà tổng chiều cao các dòng không đủ chứa
+    // nội dung thì tăng chiều cao các dòng đó, tránh bị cắt chữ.
+    function fitMergedRowHeights(ws, aBlocks, aData, iFirstDataRow) {
+        aBlocks.forEach(function (oBlock) {
+            var aOwn = [];
+            var iOwnTotal = 0;
+            for (var iRow = oBlock.startRow; iRow <= oBlock.endRow; iRow++) {
+                var iOwn = ownRowHeight(aData[iRow - iFirstDataRow], oBlock.field);
+                aOwn.push(iOwn);
+                iOwnTotal += iOwn;
+            }
+            var iNeeded = estimateTextHeight(aData[oBlock.startRow - iFirstDataRow][oBlock.field], oBlock.width);
+            if (iNeeded <= iOwnTotal) { return; }
+            var iExtra = (iNeeded - iOwnTotal) / aOwn.length;
+            aOwn.forEach(function (iRowHeight, k) {
+                ws.getRow(oBlock.startRow + k).height = iRowHeight + iExtra;
+            });
+        });
+    }
+
+
     //////////////////////////////////////////////////////////////////////////
     // Build file Excel theo mẫu "Tem KH đóng cont", rồi tải về máy
     function buildExcel(aData) {
@@ -723,39 +785,64 @@ sap.ui.define([
             var iRow = iHeaderRow + 1;
             var r, item, c, oColDef, vValue;
 
-            // Gộp ô cột SỐ CONT, Cont, SỐ CHÌ và Giờ gọi cont khi các dòng liên tiếp
-            // có cùng giá trị. Cont/SỐ CHÌ/Giờ gọi cont là con của SỐ CONT -> chỉ gộp
-            // trong phạm vi cùng 1 nhóm SỐ CONT, dù giá trị trùng nhau nhưng khác
-            // nhóm SỐ CONT thì vẫn tách riêng.
-            var MERGE_FIELDS = ["SoCont", "Cont", "SoChi", "GioGoiContVeNM"];
-            var MERGE_PARENT = { "Cont": "SoCont", "SoChi": "SoCont", "GioGoiContVeNM": "SoCont" };
+            // Gộp ô các dòng liên tiếp cùng "nhóm" (xem getMergeGroupKey): đã có SỐ CONT
+            // thì nhóm theo SỐ CONT, chưa có SỐ CONT thì nhóm theo OD. Trong cùng nhóm,
+            // cột nào có cùng giá trị (kể cả cùng để trống) thì gộp; khác nhóm thì luôn
+            // tách riêng dù giá trị trùng nhau.
+            // Riêng cột OD chỉ gộp khi chưa có SỐ CONT (đã có SỐ CONT thì không gộp OD).
+            var MERGE_FIELDS = [
+                "Ngay", "SoCont", "GioGoiContVeNM", "SoChi", "NgayTauChay", "Booking",
+                "ThoiGianCatMang", "GhiChuGiaoHang", "Cont", "DiaDiemDongHangContName",
+                "PlantName", "SoLenhXuatHang"
+            ];
+            var MERGE_WITHOUT_CONT_ONLY = ["SoLenhXuatHang"];
+            var iFirstDataRow = iRow;
+            var aWrapBlocks = [];
             var oMergeInfo = {};
             MERGE_FIELDS.forEach(function (sField) {
+                var iColIdx = COLUMNS.findIndex(function (oCol) {
+                    return oCol.field === sField;
+                });
                 oMergeInfo[sField] = {
-                    col: FIRST_COL + COLUMNS.findIndex(function (oCol) {
-                        return oCol.field === sField;
-                    }),
+                    field: sField,
+                    col: FIRST_COL + iColIdx,
+                    wrap: !!COLUMNS[iColIdx].wrap,
+                    width: COLUMNS[iColIdx].width,
                     startRow: iRow,
                     prevValue: null
                 };
             });
 
+            // Chốt khối đang gộp của 1 cột: gộp ô từ startRow đến dòng liền trước iEndRow.
+            function closeMergeBlock(oInfo, iEndRow) {
+                if (iEndRow - oInfo.startRow <= 1) { return; }
+                ws.mergeCells(oInfo.startRow, oInfo.col, iEndRow - 1, oInfo.col);
+                if (oInfo.wrap) {
+                    aWrapBlocks.push({
+                        field: oInfo.field, width: oInfo.width,
+                        startRow: oInfo.startRow, endRow: iEndRow - 1
+                    });
+                }
+            }
+
+            var sPrevGroupKey = "";
             for (r = 0; r < aData.length; r++) {
                 item = aData[r];
+
+                var sGroupKey = getMergeGroupKey(item);
+                var bSameGroup = r > 0 && sGroupKey !== "" && sGroupKey === sPrevGroupKey;
+                var bNoCont = sGroupKey.charAt(0) === "O";
 
                 var oContinuation = {};
                 MERGE_FIELDS.forEach(function (sField) {
                     var oInfo = oMergeInfo[sField];
-                    var sValue = item[sField] || "";
-                    var sParentField = MERGE_PARENT[sField];
-                    var bIsContinuation = r > 0 && sValue && sValue === oInfo.prevValue
-                        && (!sParentField || oContinuation[sParentField]);
+                    var bIsContinuation = bSameGroup
+                        && toComparable(item[sField]) === oInfo.prevValue
+                        && (bNoCont || MERGE_WITHOUT_CONT_ONLY.indexOf(sField) < 0);
                     oContinuation[sField] = bIsContinuation;
 
                     if (!bIsContinuation) {
-                        if (iRow - oInfo.startRow > 1) {
-                            ws.mergeCells(oInfo.startRow, oInfo.col, iRow - 1, oInfo.col);
-                        }
+                        closeMergeBlock(oInfo, iRow);
                         oInfo.startRow = iRow;
                     }
                 });
@@ -796,17 +883,16 @@ sap.ui.define([
                 }
 
                 MERGE_FIELDS.forEach(function (sField) {
-                    oMergeInfo[sField].prevValue = item[sField] || "";
+                    oMergeInfo[sField].prevValue = toComparable(item[sField]);
                 });
+                sPrevGroupKey = sGroupKey;
                 iRow++;
             }
 
             MERGE_FIELDS.forEach(function (sField) {
-                var oInfo = oMergeInfo[sField];
-                if (iRow - oInfo.startRow > 1) {
-                    ws.mergeCells(oInfo.startRow, oInfo.col, iRow - 1, oInfo.col);
-                }
+                closeMergeBlock(oMergeInfo[sField], iRow);
             });
+            fitMergedRowHeights(ws, aWrapBlocks, aData, iFirstDataRow);
 
             //7. Độ rộng cột
             var aColumns = [{ width: 3 }]; // A (ẩn)
