@@ -20,7 +20,7 @@ builder:
         app:
           name: ZSUI_MC_SO_H
           package: ZPK_MASS_C_SO_H
-          transport: AK3K907414
+          transport: AK3K908087
         exclude:
           - /test/
           - /localService/
