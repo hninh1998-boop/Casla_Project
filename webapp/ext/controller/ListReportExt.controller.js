@@ -386,9 +386,9 @@ sap.ui.define([
     // ────────────────────────────────────────────────────────
     // Build Excel theo đúng mẫu ảnh (cấu trúc cột A -> M)
     // ────────────────────────────────────────────────────────
-    function _buildExcel(aData, sFromDate, sToDate, oCompanyInfo) {
+    function _buildExcel(aData, sFromDate, sToDate, oCompanyInfo, oExcelJS) {
         return new Promise(function (resolve, reject) {
-            var workbook = new ExcelJS.Workbook();
+            var workbook = new oExcelJS.Workbook();
             var ws = workbook.addWorksheet("Sheet1");
 
             var BORDER = {
@@ -622,9 +622,9 @@ sap.ui.define([
         });
     }
 
-    function _buildExcelTSCD2(aData, sFromDate, sToDate, oCompanyInfo) {
+    function _buildExcelTSCD2(aData, sFromDate, sToDate, oCompanyInfo, oExcelJS) {
         return new Promise(function (resolve, reject) {
-            var workbook = new ExcelJS.Workbook();
+            var workbook = new oExcelJS.Workbook();
             var ws = workbook.addWorksheet("Sheet1");
 
             var BORDER = {
@@ -804,14 +804,91 @@ sap.ui.define([
         });
     }
 
-    function _loadExcelJS() {
-        if (window.ExcelJS) { return Promise.resolve(); }
+    // Nạp ExcelJS qua UI5 loader (shim) thay vì chèn thẻ <script>:
+    // file UMD sẽ gọi define() nếu define.amd đang bật (FLP/plugin) và không gán window.ExcelJS,
+    // shim amd + exports xử lý được cả 2 trường hợp (AMD hoặc global).
+    // TẠM THỜI để tái hiện lỗi: thêm "?exceljs-legacy=true" vào URL (trước dấu #)
+    // sẽ dùng lại cách cũ (thẻ <script> + window.ExcelJS). Xoá khi đã xác nhận xong.
+    // Thông tin môi trường quyết định nhánh UMD của exceljs.min.js (CommonJS / AMD / global).
+    // Được log ra console, và hiện trong phần "Chi tiết" của thông báo lỗi để user chụp màn hình gửi lại.
+    function _getExcelJSEnv() {
+        return "define=" + typeof window.define
+            + ", define.amd=" + !!(window.define && window.define.amd)
+            + ", module=" + typeof window.module
+            + ", exports=" + typeof window.exports
+            + ", window.ExcelJS=" + typeof window.ExcelJS;
+    }
+
+    // Log của lần nạp gần nhất, chỉ hiện cho user (phần "Chi tiết" của MessageBox) khi export lỗi
+    var _aExcelJSLog = [];
+
+    function _logExcelJSEnv(sStep) {
+        var sLine = "[ExcelJS] " + sStep + " | " + _getExcelJSEnv();
+        _aExcelJSLog.push(sLine);
+        /* eslint-disable no-console */
+        console.log(sLine);
+        /* eslint-enable no-console */
+    }
+
+    function _showExportError(oErr) {
+        var sMsg = oErr && oErr.message ? oErr.message
+            : (oErr && oErr.responseText) ? oErr.responseText
+                : JSON.stringify(oErr);
+        var oOptions = {};
+        if (_aExcelJSLog.length) {
+            oOptions.details = _aExcelJSLog.join("\n");
+        }
+        MessageBox.error("Lỗi export: " + sMsg, oOptions);
+    }
+
+    function _loadExcelJSLegacy() {
+        _aExcelJSLog = [];
+        _logExcelJSEnv("legacy - trước khi nạp");
+        if (window.ExcelJS) { return Promise.resolve(window.ExcelJS); }
         return new Promise(function (resolve, reject) {
             var script = document.createElement("script");
-            script.src = sap.ui.require.toUrl("zassetrpov2/libs/exceljs.min.js"); // TODO confirm path
-            script.onload = resolve;
+            script.src = sap.ui.require.toUrl("zassetrpov2/libs/exceljs.min.js");
+            script.onload = function () {
+                _logExcelJSEnv("legacy - sau khi nạp");
+                if (!window.ExcelJS) {
+                    reject(new ReferenceError("ExcelJS is not defined"));
+                    return;
+                }
+                resolve(window.ExcelJS);
+            };
             script.onerror = function () { reject(new Error("Không load được ExcelJS")); };
             document.head.appendChild(script);
+        });
+    }
+
+    function _loadExcelJS() {
+        if (new URLSearchParams(window.location.search).get("exceljs-legacy") === "true") {
+            return _loadExcelJSLegacy();
+        }
+        _aExcelJSLog = [];
+        _logExcelJSEnv("trước khi nạp");
+        if (window.ExcelJS) { return Promise.resolve(window.ExcelJS); }
+        return new Promise(function (resolve, reject) {
+            sap.ui.loader.config({
+                shim: {
+                    "zassetrpov2/libs/exceljs.min": { amd: true, exports: "ExcelJS" }
+                }
+            });
+            sap.ui.require(["zassetrpov2/libs/exceljs.min"], function (oExcelJS) {
+                _logExcelJSEnv("sau khi nạp, AMD trả về=" + typeof oExcelJS);
+                // Nếu trang có sẵn global module/exports, UMD rơi vào nhánh CommonJS
+                var oModule = window.module && window.module.exports;
+                var oLib = oExcelJS || window.ExcelJS
+                    || (oModule && oModule.Workbook ? oModule : null);
+                if (!oLib || !oLib.Workbook) {
+                    reject(new Error("Không load được ExcelJS"));
+                    return;
+                }
+                window.ExcelJS = oLib;
+                resolve(oLib);
+            }, function (oErr) {
+                reject(new Error("Không load được ExcelJS: " + (oErr && oErr.message ? oErr.message : oErr)));
+            });
         });
     }
 
@@ -834,12 +911,12 @@ sap.ui.define([
         oBusy.open();
 
         _loadExcelJS()
-            .then(function () {
+            .then(function (oExcelJS) {
                 return new Promise(function (resolve, reject) {
                     _fetchCompanyInfo(oView, function (oCompanyInfo) {
                         _fetchAllBatched(oInfo, oBusy)
                             .then(function (aData) {
-                                resolve({ data: aData, company: oCompanyInfo });
+                                resolve({ data: aData, company: oCompanyInfo, excelJS: oExcelJS });
                             })
                             .catch(reject);
                     });
@@ -847,7 +924,7 @@ sap.ui.define([
             })
             .then(function (oResult) {
                 oBusy.setText("Đang tạo file Excel (" + oResult.data.length.toLocaleString("vi-VN") + " dòng)...");
-                return _buildExcel(oResult.data, sFromDate, sToDate, oResult.company);
+                return _buildExcel(oResult.data, sFromDate, sToDate, oResult.company, oResult.excelJS);
             })
             .then(function () {
                 oBusy.close();
@@ -857,10 +934,7 @@ sap.ui.define([
             .catch(function (oErr) {
                 oBusy.close();
                 oBusy.destroy();
-                var sMsg = oErr && oErr.message ? oErr.message
-                    : (oErr && oErr.responseText) ? oErr.responseText
-                        : JSON.stringify(oErr);
-                MessageBox.error("Lỗi export: " + sMsg);
+                _showExportError(oErr);
             });
     }
 
@@ -883,12 +957,12 @@ sap.ui.define([
         oBusy.open();
 
         _loadExcelJS()
-            .then(function () {
+            .then(function (oExcelJS) {
                 return new Promise(function (resolve, reject) {
                     _fetchCompanyInfo(oView, function (oCompanyInfo) {
                         _fetchAllBatched(oInfo, oBusy)
                             .then(function (aData) {
-                                resolve({ data: aData, company: oCompanyInfo });
+                                resolve({ data: aData, company: oCompanyInfo, excelJS: oExcelJS });
                             })
                             .catch(reject);
                     });
@@ -896,7 +970,7 @@ sap.ui.define([
             })
             .then(function (oResult) {
                 oBusy.setText("Đang tạo file Excel (" + oResult.data.length.toLocaleString("vi-VN") + " dòng)...");
-                return fnBuild(oResult.data, sFromDate, sToDate, oResult.company);
+                return fnBuild(oResult.data, sFromDate, sToDate, oResult.company, oResult.excelJS);
             })
             .then(function () {
                 oBusy.close();
@@ -906,10 +980,7 @@ sap.ui.define([
             .catch(function (oErr) {
                 oBusy.close();
                 oBusy.destroy();
-                var sMsg = oErr && oErr.message ? oErr.message
-                    : (oErr && oErr.responseText) ? oErr.responseText
-                        : JSON.stringify(oErr);
-                MessageBox.error("Lỗi export: " + sMsg);
+                _showExportError(oErr);
             });
     }
 
