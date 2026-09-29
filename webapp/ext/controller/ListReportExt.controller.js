@@ -142,6 +142,26 @@ sap.ui.define([
 		 * READ ENTITIES by filter.
 		 */
 		onExplodeExcelBOM: function () {
+			var that = this;
+			var sYes = "Có";
+			var sNo = "Không";
+
+			MessageBox.confirm(
+				"Chương trình sẽ tiến hành xuất dữ liệu ra file excel và gửi về mail " +
+				"của bạn sau khi chạy xong, bạn có đồng ý xuất dữ liệu không?",
+				{
+					actions: [sYes, sNo],
+					emphasizedAction: sYes,
+					onClose: function (sAction) {
+						if (sAction === sYes) {
+							that._scheduleExcelExport();
+						}
+					}
+				}
+			);
+		},
+
+		_scheduleExcelExport: function () {
 			var oExtensionAPI = this.extensionAPI;
 			var oView = this.getView();
 			var oModel = oView.getModel();
