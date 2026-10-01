@@ -33,7 +33,7 @@ sap.ui.define([
             const workbook = new ExcelJS.Workbook();
             const sheet = workbook.addWorksheet("Template");
 
-            // ===== Cấu trúc cột (14 cột, key theo field CDS ZC_D_MCH_SO_U_DATA) =====
+            // ===== Cấu trúc cột (15 cột, key theo field CDS ZC_D_MCH_SO_U_DATA) =====
             sheet.columns = [
                 { key: "SalesOrder", width: 16 },                // 1  SO
                 { key: "SalesOrderItem", width: 14 },            // 2  SO item
@@ -48,7 +48,8 @@ sap.ui.define([
                 { key: "TextOrderTolerance", width: 24 },        // 11 Dung sai đơn hàng
                 { key: "TextSalesNoteCustomer", width: 30 },     // 12 Sales Note for Customer
                 { key: "CustomerReference", width: 20 },         // 13 Customer Reference
-                { key: "DeliveryDate", width: 18, style: { numFmt: "@" } } // 14 Delivery Date (định dạng Text)
+                { key: "DeliveryDate", width: 18, style: { numFmt: "@" } }, // 14 Delivery Date (định dạng Text)
+                { key: "ReasonForReject", width: 20 }            // 15 Reason for reject
             ];
 
             // ===== Row 1: Group header =====
@@ -62,6 +63,7 @@ sap.ui.define([
             row1.getCell(10).value = "SO Item Text";
             row1.getCell(13).value = "Customer Reference";
             row1.getCell(14).value = "Delivery Date";
+            row1.getCell(15).value = "Reason for reject";
 
             // ===== Row 2: Column header =====
             const row2 = sheet.getRow(2);
@@ -94,6 +96,7 @@ sap.ui.define([
             row3.getCell(12).value = "";                                                          // Sales Note for Customer
             row3.getCell(13).value = "Số KHSX";                                                   // Customer Reference
             row3.getCell(14).value = "dd/mm/yyyy";                                                // Delivery Date
+            row3.getCell(15).value = "";                                                          // Reason for reject
 
             // Bật wrap text cho các ô có nhiều dòng để hiển thị đúng như mẫu
             [1, 2, 3, 4, 5, 6, 7, 8, 9, 13, 14].forEach((col) => {
@@ -110,6 +113,7 @@ sap.ui.define([
             sheet.mergeCells("J1:L1"); // SO Item Text
             sheet.mergeCells("M1:M2"); // Customer Reference (row3 = hint riêng)
             sheet.mergeCells("N1:N2"); // Delivery Date (row3 = hint riêng)
+            sheet.mergeCells("O1:O2"); // Reason for reject (row3 = hint riêng)
 
             // ===== Style: 3 header rows (group + column header) =====
             [row1, row2].forEach((row) => {
