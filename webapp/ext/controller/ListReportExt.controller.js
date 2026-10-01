@@ -51,6 +51,7 @@ sap.ui.define([
         { label: "TÊN TÚI", field: "TenHang", width: 14 },
         { label: "Số lượng trên lệnh xuất hàng", field: "SoLuongTrenLenhXuatHang", width: 16, quantity: true },
         { label: "Cont", field: "Cont", width: 10 },
+        { label: "Nhà cung cấp VT", field: "NhaCungCapVanTai", width: 14, wrap: true },
         { label: "Địa điểm đóng hàng", field: "DiaDiemDongHangContName", width: 16 },
         { label: "Plant", field: "PlantName", width: 16 },
         { label: "Số lệnh xuất hàng (OD)", field: "SoLenhXuatHang", width: 14, numeric: true },
@@ -69,7 +70,7 @@ sap.ui.define([
     // (dùng trong getDownloadUrl, xem fetchAllData) sẽ không có field này, phải
     // tự ép thêm vào, tương tự cách ensureSortOrderSelected ép thêm SortOrder
     // cho binding của GridTable.
-    var EXPORT_ONLY_SELECT_FIELDS = ["CompanyCodeName", "LoaiMang", "LoaiManh", "PlantName", "MaHang"];
+    var EXPORT_ONLY_SELECT_FIELDS = ["CompanyCodeName", "LoaiMang", "LoaiManh", "PlantName", "MaHang", "NhaCungCapVanTai"];
 
     var FIRST_COL = 2;                                  // B
     var LAST_COL = FIRST_COL + COLUMNS.length - 1;       // S
@@ -792,7 +793,7 @@ sap.ui.define([
             // Riêng cột OD chỉ gộp khi chưa có SỐ CONT (đã có SỐ CONT thì không gộp OD).
             var MERGE_FIELDS = [
                 "Ngay", "SoCont", "GioGoiContVeNM", "SoChi", "NgayTauChay", "Booking",
-                "ThoiGianCatMang", "GhiChuGiaoHang", "Cont", "DiaDiemDongHangContName",
+                "ThoiGianCatMang", "GhiChuGiaoHang", "Cont", "NhaCungCapVanTai", "DiaDiemDongHangContName",
                 "PlantName", "SoLenhXuatHang"
             ];
             var MERGE_WITHOUT_CONT_ONLY = ["SoLenhXuatHang"];
