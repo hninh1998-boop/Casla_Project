@@ -21,7 +21,7 @@ builder:
           name: ZBOM_OV2
           description: Báo cáo chi tiết BOM đa cấp
           package: ZPK_ZBOM_HDR_ITM
-          transport: AK3K908054
+          transport: AK3K908142
         exclude:
           - /test/
           - /localService/

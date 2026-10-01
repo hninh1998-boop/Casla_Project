@@ -174,25 +174,6 @@
               "multiSelect": true
             }
           }
-        },
-        "pages": {
-          "ObjectPage|ExplodeZBOMHead": {
-            "entitySet": "ExplodeZBOMHead",
-            "defaultLayoutTypeIfExternalNavigation": "MidColumnFullScreen",
-            "component": {
-              "name": "sap.suite.ui.generic.template.ObjectPage"
-            },
-            "pages": {
-              "ObjectPage|to_Item": {
-                "navigationProperty": "to_Item",
-                "entitySet": "ExplodeZBOMItem",
-                "defaultLayoutTypeIfExternalNavigation": "MidColumnFullScreen",
-                "component": {
-                  "name": "sap.suite.ui.generic.template.ObjectPage"
-                }
-              }
-            }
-          }
         }
       }
     }
