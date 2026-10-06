@@ -1,0 +1,23 @@
+specVersion: "3.1"
+metadata:
+  name: zmasschangepro
+type: application
+builder:
+  resources:
+    excludes:
+      - /test/**
+      - /localService/**
+  customTasks:
+    - name: deploy-to-abap
+      afterTask: generateCachebusterInfo
+      configuration:
+        target:
+          url: https://my426501.s4hana.cloud.sap
+        app:
+          name: ZMASSCHANGEPRO_UI5R
+          description: Mass Change Production Order
+          package: ZPK_MASSCHANGE_PRODUCT_ORDER
+          # Fill in the transport request before deploying
+          transport: ""
+        exclude:
+          - /test/

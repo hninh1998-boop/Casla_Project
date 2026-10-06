@@ -1,0 +1,175 @@
+{
+  "_version": "1.60.0",
+  "sap.app": {
+    "id": "zmasschangepro",
+    "type": "application",
+    "i18n": "i18n/i18n.properties",
+    "applicationVersion": {
+      "version": "0.0.1"
+    },
+    "title": "{{appTitle}}",
+    "description": "{{appDescription}}",
+    "resources": "resources.json",
+    "dataSources": {
+      "mainService": {
+        "uri": "/sap/opu/odata4/sap/zsb_masschange_product_order/srvd/sap/zsd_masschange_product_order/0001/",
+        "type": "OData",
+        "settings": {
+          "annotations": ["annotation"],
+          "odataVersion": "4.0"
+        }
+      },
+      "annotation": {
+        "type": "ODataAnnotation",
+        "uri": "annotations/annotation.xml",
+        "settings": {
+          "localUri": "annotations/annotation.xml"
+        }
+      }
+    },
+    "crossNavigation": {
+      "inbounds": {
+        "zmasschangepro-manage": {
+          "semanticObject": "zmasschangepro",
+          "action": "manage",
+          "title": "{{flpTitle}}",
+          "signature": {
+            "parameters": {},
+            "additionalParameters": "allowed"
+          }
+        }
+      }
+    }
+  },
+  "sap.ui": {
+    "technology": "UI5",
+    "icons": {
+      "icon": "",
+      "favIcon": "",
+      "phone": "",
+      "phone@2": "",
+      "tablet": "",
+      "tablet@2": ""
+    },
+    "deviceTypes": {
+      "desktop": true,
+      "tablet": true,
+      "phone": true
+    }
+  },
+  "sap.ui5": {
+    "flexEnabled": true,
+    "dependencies": {
+      "minUI5Version": "1.120.0",
+      "libs": {
+        "sap.m": {},
+        "sap.ui.core": {},
+        "sap.fe.templates": {}
+      }
+    },
+    "contentDensities": {
+      "compact": true,
+      "cozy": true
+    },
+    "models": {
+      "i18n": {
+        "type": "sap.ui.model.resource.ResourceModel",
+        "settings": {
+          "bundleName": "zmasschangepro.i18n.i18n"
+        }
+      },
+      "": {
+        "dataSource": "mainService",
+        "preload": true,
+        "settings": {
+          "operationMode": "Server",
+          "autoExpandSelect": true,
+          "earlyRequests": true
+        }
+      },
+      "@i18n": {
+        "type": "sap.ui.model.resource.ResourceModel",
+        "uri": "i18n/i18n.properties"
+      }
+    },
+    "resources": {
+      "css": []
+    },
+    "routing": {
+      "config": {},
+      "routes": [
+        {
+          "pattern": ":?query:",
+          "name": "zc_MASSCHANGE_PRODUCT_ORDERList",
+          "target": "zc_MASSCHANGE_PRODUCT_ORDERList"
+        },
+        {
+          "pattern": "zc_MASSCHANGE_PRODUCT_ORDER({key}):?query:",
+          "name": "zc_MASSCHANGE_PRODUCT_ORDERObjectPage",
+          "target": "zc_MASSCHANGE_PRODUCT_ORDERObjectPage"
+        }
+      ],
+      "targets": {
+        "zc_MASSCHANGE_PRODUCT_ORDERList": {
+          "type": "Component",
+          "id": "zc_MASSCHANGE_PRODUCT_ORDERList",
+          "name": "sap.fe.templates.ListReport",
+          "options": {
+            "settings": {
+              "contextPath": "/zc_MASSCHANGE_PRODUCT_ORDER",
+              "variantManagement": "Page",
+              "navigation": {
+                "zc_MASSCHANGE_PRODUCT_ORDER": {
+                  "detail": {
+                    "route": "zc_MASSCHANGE_PRODUCT_ORDERObjectPage"
+                  }
+                }
+              },
+              "controlConfiguration": {
+                "@com.sap.vocabularies.UI.v1.LineItem": {
+                  "tableSettings": {
+                    "type": "ResponsiveTable",
+                    "selectionMode": "Multi"
+                  },
+                  "actions": {
+                    "ExcelUpload": {
+                      "press": "zmasschangepro.ext.controller.ListReportExt.onExcelUpload",
+                      "text": "{i18n>actionExcelUpload}",
+                      "enabled": true,
+                      "requiresSelection": false
+                    },
+                    "DownloadTemplate": {
+                      "press": "zmasschangepro.ext.controller.ListReportExt.onDownloadTemplate",
+                      "text": "{i18n>actionDownload}",
+                      "enabled": true,
+                      "requiresSelection": false,
+                      "position": {
+                        "placement": "After",
+                        "anchor": "ExcelUpload"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "zc_MASSCHANGE_PRODUCT_ORDERObjectPage": {
+          "type": "Component",
+          "id": "zc_MASSCHANGE_PRODUCT_ORDERObjectPage",
+          "name": "sap.fe.templates.ObjectPage",
+          "options": {
+            "settings": {
+              "editableHeaderContent": false,
+              "contextPath": "/zc_MASSCHANGE_PRODUCT_ORDER"
+            }
+          }
+        }
+      }
+    }
+  },
+  "sap.fiori": {
+    "registrationIds": [],
+    "archeType": "transactional"
+  }
+}

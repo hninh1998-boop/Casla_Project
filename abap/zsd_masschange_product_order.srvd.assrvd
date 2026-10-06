@@ -1,0 +1,4 @@
+@EndUserText.label: 'MASSCHANGE_PRODUCT_ORDER'
+define service ZSD_MASSCHANGE_PRODUCT_ORDER {
+  expose zc_MASSCHANGE_PRODUCT_ORDER;
+}

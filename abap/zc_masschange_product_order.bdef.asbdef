@@ -1,0 +1,17 @@
+unmanaged implementation in class zbp_c_masschange_product_order unique;
+strict ( 2 );
+
+define behavior for zc_MASSCHANGE_PRODUCT_ORDER //alias <alias_name>
+//late numbering
+lock master
+authorization master ( instance )
+//etag master <field_name>
+{
+//  create ( authorization : global );
+//  update;
+//  delete;
+  field ( readonly ) ManufacturingOrder;
+  static action ExcelUpload parameter ZI_FILE_ABS;
+  static action DownloadTemplate parameter ZC_DOWNLOAD_PARAM result [1] ZI_FILE_ABS;
+  action ( authorization : global ) setDeliveryComplete;
+}
