@@ -4,184 +4,108 @@ sap.ui.define([
 ], function (MessageToast, MessageBox) {
     'use strict';
 
-    function _getTableData(oView) {
-        var aAllControls = oView.findAggregatedObjects(true);
-        var oSmartTable = aAllControls.filter(function (o) {
-            return o.getMetadata().getName() === "sap.ui.comp.smarttable.SmartTable";
-        })[0];
+    // Các filter mà action ExportExcel nhận (ty_filter trong zbp_ce_sales_report_exp)
+    var FILTER_FIELDS = ["CompanyCode", "PostingDate", "Plant", "Product", "SalesDistrict"];
 
-        console.log("SmartTable found:", oSmartTable ? oSmartTable.getId() : "NOT FOUND");
+    // Operation của SmartFilterBar → option của select-option
+    var OPTIONS = {
+        EQ: "EQ", BT: "BT", LT: "LT", LE: "LE", GT: "GT", GE: "GE",
+        Contains: "CP", StartsWith: "CP", EndsWith: "CP"
+    };
 
-        if (!oSmartTable) return [];
-
-        var oTable = oSmartTable.getTable();
-        console.log("Table:", oTable ? oTable.getId() : "NOT FOUND");
-
-        var oBinding = oTable.getBinding("rows");
-        console.log("Binding length:", oBinding ? oBinding.getLength() : "NO BINDING");
-
-        if (!oBinding) return [];
-
-        var iLength = oBinding.getLength();
-        var aContexts = oBinding.getContexts(0, iLength);
-        console.log("Contexts:", aContexts.length);
-        console.log("Sample:", aContexts[0] ? JSON.stringify(aContexts[0].getObject()) : "empty");
-
-        return aContexts.map(function (oCtx) { return oCtx.getObject(); });
+    // Date → YYYYMMDD, còn lại giữ nguyên dạng chuỗi
+    function _toValue(vValue) {
+        if (vValue instanceof Date) {
+            return String(vValue.getFullYear())
+                + String(vValue.getMonth() + 1).padStart(2, "0")
+                + String(vValue.getDate()).padStart(2, "0");
+        }
+        return vValue === null || vValue === undefined ? "" : String(vValue);
     }
 
-    function _buildExcel(aData, lv_month, lv_year) {
-        var workbook = new ExcelJS.Workbook();
-        var worksheet = workbook.addWorksheet("Báo cáo bán hàng");
-
-        var YELLOW = { argb: "FFFFFF00" };
-        var BORDER = {
-            top: { style: "thin" },
-            left: { style: "thin" },
-            bottom: { style: "thin" },
-            right: { style: "thin" }
+    function _toRange(oRange) {
+        var sOption = OPTIONS[oRange.operation];
+        var sLow = _toValue(oRange.value1);
+        if (!sOption || !sLow) {
+            return null;
+        }
+        if (oRange.operation === "Contains") {
+            sLow = "*" + sLow + "*";
+        } else if (oRange.operation === "StartsWith") {
+            sLow = sLow + "*";
+        } else if (oRange.operation === "EndsWith") {
+            sLow = "*" + sLow;
+        }
+        return {
+            sign: oRange.exclude ? "E" : "I",
+            option: sOption,
+            low: sLow,
+            high: sOption === "BT" ? _toValue(oRange.value2) : ""
         };
-
-        // ── Row 1: Tiêu đề ──────────────────────────
-        worksheet.mergeCells("A1:J1");
-        var titleCell = worksheet.getCell("A1");
-        titleCell.value = "BÁO CÁO BÁN HÀNG";
-        titleCell.font = { bold: true, size: 13 };
-        titleCell.alignment = { horizontal: "center", vertical: "middle" };
-        worksheet.getRow(1).height = 20;
-
-        // ── Row 2: Tháng/Năm ────────────────────────
-        worksheet.mergeCells("A2:J2");
-        var subCell = worksheet.getCell("A2");
-        subCell.value = "Tháng " + (lv_month || "...") + " năm " + (lv_year || "...");
-        subCell.alignment = { horizontal: "center" };
-
-        // ── Row 3: Trống ────────────────────────────
-        worksheet.addRow([]);
-
-        // ── Row 4: Header ───────────────────────────
-        var headers = [
-            "STT", "Tên nhà máy", "Mã hàng", "Tên hàng",
-            "Loại hàng", "Số lượng",
-            "Doanh thu USD", "Doanh thu VND",
-            "Giá vốn VND", "Thị trường xuất khẩu"
-        ];
-
-        var headerRow = worksheet.addRow(headers);
-        headerRow.height = 30;
-        headerRow.eachCell(function (cell) {
-            cell.fill = { type: "pattern", pattern: "solid", fgColor: YELLOW };
-            cell.font = { bold: true };
-            cell.border = BORDER;
-            cell.alignment = { horizontal: "center", vertical: "middle", wrapText: true };
-        });
-
-        // ── Data rows ────────────────────────────────
-        var totalQty = 0;
-        var totalRevUSD = 0;
-        var totalRevVND = 0;
-        var totalCOGS = 0;
-
-        aData.forEach(function (item, idx) {
-            var qty = parseFloat(item.Quantity || 0);
-            var revUSD = parseFloat(item.RevenueUSD || 0);
-            var revVND = parseFloat(item.RevenueVND || 0);
-            var cogs = parseFloat(item.COGSVND || 0);
-
-            var row = worksheet.addRow([
-                idx + 1,
-                item.Plant,
-                item.Product,
-                item.ProductName,
-                // item.BaseUnit,
-                item.ProductGroup
-                    ? item.ProductGroup + ' (' + item.ProductGroupName + ')'
-                    : '',
-                qty,
-                revUSD,
-                revVND,
-                cogs,
-                item.SalesDistrict
-                    ? item.SalesDistrict + ' (' + item.SalesDistrictName + ')'
-                    : ''
-            ]);
-
-            row.getCell(6).numFmt = "#,##0.000";
-            row.getCell(7).numFmt = "#,##0.00";
-            row.getCell(8).numFmt = "#,##0";
-            row.getCell(9).numFmt = "#,##0";
-            row.eachCell(function (cell) { cell.border = BORDER; });
-
-            totalQty += qty;
-            totalRevUSD += revUSD;
-            totalRevVND += revVND;
-            totalCOGS += cogs;
-        });
-
-        // ── Total row ────────────────────────────────
-        var totalRow = worksheet.addRow([
-            "", "", "", "", "",
-            totalQty, totalRevUSD, totalRevVND, totalCOGS, ""
-        ]);
-        totalRow.eachCell(function (cell) {
-            cell.fill = { type: "pattern", pattern: "solid", fgColor: YELLOW };
-            cell.font = { bold: true };
-            cell.border = BORDER;
-        });
-        totalRow.getCell(6).numFmt = "#,##0.000";
-        totalRow.getCell(7).numFmt = "#,##0.00";
-        totalRow.getCell(8).numFmt = "#,##0";
-        totalRow.getCell(9).numFmt = "#,##0";
-
-        // ── Column widths ────────────────────────────
-        worksheet.columns = [
-            { width: 6 },
-            { width: 15 },
-            { width: 20 },
-            { width: 30 },
-            // { width: 8 },
-            { width: 12 },
-            { width: 16 },
-            { width: 16 },
-            { width: 16 },
-            { width: 16 },
-            { width: 22 }
-        ];
-
-        // ── Download ─────────────────────────────────
-        workbook.xlsx.writeBuffer().then(function (buffer) {
-            var blob = new Blob([buffer], {
-                type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-            });
-            var url = URL.createObjectURL(blob);
-            var link = document.createElement("a");
-            link.href = url;
-            link.download = "BaoCaoBanHang_"
-                + new Date().toLocaleDateString("vi-VN").replace(/\//g, "-")
-                + ".xlsx";
-            link.click();
-            URL.revokeObjectURL(url);
-            MessageToast.show("Export thành công!");
-        });
     }
 
-    function _doExport(oView) {
-        var aData = _getTableData(oView);
-        if (!aData.length) {
-            MessageBox.error("Không có dữ liệu để export");
-            return;
+    // Giá trị 1 field trong getFilterData() → bảng range [{ sign, option, low, high }]
+    function _toRanges(vFilter) {
+        if (vFilter === null || vFilter === undefined || vFilter === "") {
+            return [];
         }
+        // Single value
+        if (typeof vFilter !== "object" || vFilter instanceof Date) {
+            return [{ sign: "I", option: "EQ", low: _toValue(vFilter), high: "" }];
+        }
+        // Interval
+        if (vFilter.low !== undefined && !vFilter.ranges) {
+            var sLow = _toValue(vFilter.low);
+            var sHigh = _toValue(vFilter.high);
+            if (!sLow) {
+                return [];
+            }
+            return [{ sign: "I", option: sHigh ? "BT" : "EQ", low: sLow, high: sHigh }];
+        }
+        // Multi value / date range
+        var aRanges = (vFilter.items || []).map(function (oItem) {
+            return { sign: "I", option: "EQ", low: _toValue(oItem.key), high: "" };
+        });
+        (vFilter.ranges || []).forEach(function (oRange) {
+            var oResult = _toRange(oRange);
+            if (oResult) {
+                aRanges.push(oResult);
+            }
+        });
+        return aRanges;
+    }
 
-        var lv_month = "";
-        var lv_year = "";
+    function _getFilter(oView) {
         var oSmartFilterBar = oView.byId("listReportFilter");
-        if (oSmartFilterBar) {
-            var oFilterData = oSmartFilterBar.getFilterData();
-            lv_month = oFilterData.FiscalPeriod || "";
-            lv_year = oFilterData.FiscalYear || "";
-        }
+        var oFilterData = oSmartFilterBar ? oSmartFilterBar.getFilterData() : {};
+        var oFilter = {};
+        FILTER_FIELDS.forEach(function (sField) {
+            oFilter[sField] = _toRanges(oFilterData[sField]);
+        });
+        return oFilter;
+    }
 
-        _buildExcel(aData, lv_month, lv_year);
+    function _download(oFile) {
+        var sBinary = atob(oFile.fileContent);
+        var aBytes = new Uint8Array(sBinary.length);
+        for (var i = 0; i < sBinary.length; i++) {
+            aBytes[i] = sBinary.charCodeAt(i);
+        }
+        var blob = new Blob([aBytes], { type: oFile.mimeType });
+        var url = URL.createObjectURL(blob);
+        var link = document.createElement("a");
+        link.href = url;
+        link.download = oFile.fileName + "." + oFile.fileExtension;
+        link.click();
+        URL.revokeObjectURL(url);
+    }
+
+    function _getErrorText(oError) {
+        try {
+            return JSON.parse(oError.responseText).error.message.value;
+        } catch (e) {
+            return oError.message || "Export thất bại";
+        }
     }
 
     return {
@@ -194,19 +118,38 @@ sap.ui.define([
 
         exportExcel: function () {
             var oView = this.getView();
+            var oModel = oView.getModel();
 
-            if (window.ExcelJS) {
-                _doExport(oView);
+            if (!oModel.getMetaModel().getODataFunctionImport("ExportExcel")) {
+                MessageBox.error("Service chưa có action ExportExcel");
                 return;
             }
 
-            var script = document.createElement("script");
-            script.src = sap.ui.require.toUrl("zrpsalesv2/libs/exceljs.min.js");
-            script.onload = function () { _doExport(oView); };
-            script.onerror = function () {
-                MessageBox.error("Không load được ExcelJS library");
-            };
-            document.head.appendChild(script);
+            var oFilter = _getFilter(oView);
+            if (!oFilter.CompanyCode.length || !oFilter.PostingDate.length) {
+                MessageBox.error("Vui lòng nhập Company Code và Posting Date");
+                return;
+            }
+
+            oView.setBusy(true);
+            oModel.callFunction("/ExportExcel", {
+                method: "POST",
+                urlParameters: { json_string: JSON.stringify(oFilter) },
+                success: function (oData) {
+                    oView.setBusy(false);
+                    var oFile = oData && (oData.ExportExcel || oData);
+                    if (!oFile || !oFile.fileContent) {
+                        MessageBox.error("Không có dữ liệu để export");
+                        return;
+                    }
+                    _download(oFile);
+                    MessageToast.show("Export thành công!");
+                },
+                error: function (oError) {
+                    oView.setBusy(false);
+                    MessageBox.error(_getErrorText(oError));
+                }
+            });
         }
     };
 });

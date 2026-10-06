@@ -21,6 +21,7 @@ builder:
           name: ZRP_SALES_V2
           description: Báo cáo bán hàng - V2
           package: ZPK_SALES_REPORT_V2
-          transport: AK3K904907
+          transport: AK3K906653
         exclude:
           - /test/
+          - /localService/
