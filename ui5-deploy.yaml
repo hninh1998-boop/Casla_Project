@@ -1,0 +1,27 @@
+# yaml-language-server: $schema=https://sap.github.io/ui5-tooling/schema/ui5.yaml.json
+
+specVersion: "4.0"
+metadata:
+  name: zmcanmatdoc
+type: application
+builder:
+  resources:
+    excludes:
+      - /test/**
+      - /localService/**
+  customTasks:
+    - name: deploy-to-abap
+      afterTask: generateCachebusterInfo
+      configuration:
+        target:
+          destination: CASLA
+          url: https://my426517.s4hana.cloud.sap
+          authenticationType: reentranceTicket # SAML support for vscode
+        app:
+          name: ZM_CAN_MATDOC
+          description: Mass Cancel Material Document
+          package: ZPK_MASS_CANCEL_MATDOC
+          transport: AK3K908231
+        exclude:
+          - /test/
+          - /localService/

@@ -1,0 +1,196 @@
+{
+  "_version": "1.86.0",
+  "sap.app": {
+    "id": "zmcanmatdoc",
+    "type": "application",
+    "i18n": "i18n/i18n.properties",
+    "applicationVersion": {
+      "version": "0.0.1"
+    },
+    "title": "{{appTitle}}",
+    "description": "{{appDescription}}",
+    "resources": "resources.json",
+    "sourceTemplate": {
+      "id": "@sap/generator-fiori:lrop",
+      "version": "1.33.0",
+      "toolsId": "1b4c4a9f-dbfb-47b4-afcc-546d99543243"
+    },
+    "dataSources": {
+      "annotation": {
+        "type": "ODataAnnotation",
+        "uri": "annotations/annotation.xml",
+        "settings": {
+          "localUri": "annotations/annotation.xml"
+        }
+      },
+      "mainService": {
+        "uri": "/sap/opu/odata4/sap/zui_m_can_matdoc_ov4/srvd/sap/zui_m_can_matdoc/0001/",
+        "type": "OData",
+        "settings": {
+          "annotations": [
+            "annotation"
+          ],
+          "localUri": "localService/mainService/metadata.xml",
+          "odataVersion": "4.0"
+        }
+      }
+    },
+    "crossNavigation": {
+      "inbounds": {
+        "zm_can_matdoc-display": {
+          "semanticObject": "zm_can_matdoc",
+          "action": "display",
+          "title": "{{zm_can_matdoc-display.flpTitle}}",
+          "signature": {
+            "parameters": {},
+            "additionalParameters": "allowed"
+          }
+        }
+      }
+    }
+  },
+  "sap.ui": {
+    "technology": "UI5",
+    "icons": {
+      "icon": "",
+      "favIcon": "",
+      "phone": "",
+      "phone@2": "",
+      "tablet": "",
+      "tablet@2": ""
+    },
+    "deviceTypes": {
+      "desktop": true,
+      "tablet": true,
+      "phone": true
+    }
+  },
+  "sap.ui5": {
+    "flexEnabled": true,
+    "dependencies": {
+      "minUI5Version": "1.148.10",
+      "libs": {
+        "sap.m": {},
+        "sap.ui.core": {},
+        "sap.fe.templates": {}
+      }
+    },
+    "contentDensities": {
+      "compact": true,
+      "cozy": true
+    },
+    "models": {
+      "i18n": {
+        "type": "sap.ui.model.resource.ResourceModel",
+        "settings": {
+          "bundleName": "zmcanmatdoc.i18n.i18n"
+        }
+      },
+      "": {
+        "dataSource": "mainService",
+        "preload": true,
+        "settings": {
+          "operationMode": "Server",
+          "autoExpandSelect": true,
+          "earlyRequests": true
+        }
+      },
+      "@i18n": {
+        "type": "sap.ui.model.resource.ResourceModel",
+        "uri": "i18n/i18n.properties"
+      }
+    },
+    "resources": {
+      "css": []
+    },
+    "extends": {
+      "extensions": {
+        "sap.ui.controllerExtensions": {
+          "sap.fe.templates.ObjectPage.ObjectPageController": {
+            "controllerName": "zmcanmatdoc.ext.controller.ObjectPageExt"
+          }
+        }
+      }
+    },
+    "routing": {
+      "config": {},
+      "routes": [
+        {
+          "pattern": ":?query:",
+          "name": "ZC_M_CAN_MATDOCList",
+          "target": "ZC_M_CAN_MATDOCList"
+        },
+        {
+          "pattern": "ZC_M_CAN_MATDOC({key}):?query:",
+          "name": "ZC_M_CAN_MATDOCObjectPage",
+          "target": "ZC_M_CAN_MATDOCObjectPage"
+        }
+      ],
+      "targets": {
+        "ZC_M_CAN_MATDOCList": {
+          "type": "Component",
+          "id": "ZC_M_CAN_MATDOCList",
+          "name": "sap.fe.templates.ListReport",
+          "options": {
+            "settings": {
+              "contextPath": "/ZC_M_CAN_MATDOC",
+              "variantManagement": "Page",
+              "navigation": {
+                "ZC_M_CAN_MATDOC": {
+                  "detail": {
+                    "route": "ZC_M_CAN_MATDOCObjectPage"
+                  }
+                }
+              },
+              "controlConfiguration": {
+                "@com.sap.vocabularies.UI.v1.LineItem": {
+                  "tableSettings": {
+                    "type": "GridTable",
+                    "selectionMode": "Multi"
+                  },
+                  "columns": {
+                    "DataField::Message": {
+                      "width": "40rem"
+                    }
+                  },
+                  "actions": {
+                    "cancelItem": {
+                      "press": "zmcanmatdoc.ext.controller.CancelItem.onCancelItem",
+                      "text": "{i18n>cancelItem}",
+                      "requiresSelection": true
+                    },
+                    "cancelHeader": {
+                      "press": "zmcanmatdoc.ext.controller.CancelItem.onCancelHeader",
+                      "text": "{i18n>cancelHeader}",
+                      "requiresSelection": true
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "ZC_M_CAN_MATDOCObjectPage": {
+          "type": "Component",
+          "id": "ZC_M_CAN_MATDOCObjectPage",
+          "name": "sap.fe.templates.ObjectPage",
+          "options": {
+            "settings": {
+              "editableHeaderContent": false,
+              "contextPath": "/ZC_M_CAN_MATDOC"
+            }
+          }
+        }
+      }
+    }
+  },
+  "sap.fiori": {
+    "registrationIds": [],
+    "archeType": "transactional"
+  },
+  "sap.fe": {
+    "app": {
+      "enableLazyLoading": true
+    }
+  }
+}
