@@ -21,7 +21,7 @@ builder:
           name: ZM_CAN_MATDOC
           description: Mass Cancel Material Document
           package: ZPK_MASS_CANCEL_MATDOC
-          transport: AK3K908231
+          transport: AK3K908308
         exclude:
           - /test/
           - /localService/
