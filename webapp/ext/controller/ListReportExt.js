@@ -125,6 +125,7 @@ sap.ui.define([
     const STATUS_POSTED = "POSTED";
     const STATUS_DRAFT = "DRAFT";
     const STATUS_CHECKED = "CHECKED";
+    const STATUS_ERROR = "ERROR";
     const ACTION_CHECK = "checkDocuments";
     const ACTION_POST = "postDocuments";
 
@@ -197,8 +198,10 @@ sap.ui.define([
         return getStatus(oContext) === STATUS_POSTED;
     }
 
-    function isDraft(oContext) {
-        return getStatus(oContext) === STATUS_DRAFT;
+    /** Check được chứng từ Draft và Error (Error -> check lại sau khi sửa dữ liệu / master data) */
+    function isCheckable(oContext) {
+        const sStatus = getStatus(oContext);
+        return sStatus === STATUS_DRAFT || sStatus === STATUS_ERROR;
     }
 
     function isChecked(oContext) {
@@ -436,18 +439,18 @@ sap.ui.define([
             oDialog.open();
         },
 
-        /** Check chỉ bật khi có ít nhất 1 chứng từ Draft */
+        /** Check chỉ bật khi có ít nhất 1 chứng từ Draft / Error */
         isCheckEnabled: function (oContext, aSelectedContexts) {
-            return (aSelectedContexts || []).some(isDraft);
+            return (aSelectedContexts || []).some(isCheckable);
         },
 
         /**
          * Check = test run API Journal Entry - Post (TestDataIndicator = true), không tạo chứng từ.
-         * Không lỗi -> Checked, có lỗi -> Error + Message. Chỉ chứng từ Draft được check.
+         * Không lỗi -> Checked, có lỗi -> Error + Message. Chỉ chứng từ Draft / Error được check.
          */
         onCheck: async function (oContext, aSelectedContexts) {
             const oBundle = this.getModel("i18n").getResourceBundle();
-            const aContexts = (aSelectedContexts || []).filter(isDraft);
+            const aContexts = (aSelectedContexts || []).filter(isCheckable);
 
             if (!aContexts.length) {
                 MessageBox.warning(oBundle.getText("msgCheckNone"));

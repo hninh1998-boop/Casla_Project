@@ -212,7 +212,7 @@
                     "CheckDocument": {
                       "press": "zupdnttrp.ext.controller.ObjectPageExt.onCheck",
                       "visible": "{= !${ui>/isEditable} }",
-                      "enabled": "{= ${Status} === 'Draft' }",
+                      "enabled": "{= ${Status} === 'Draft' || ${Status} === 'Error' }",
                       "text": "{i18n>btnCheck}"
                     },
                     "PostDocument": {

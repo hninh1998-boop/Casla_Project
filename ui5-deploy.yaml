@@ -21,7 +21,7 @@ builder:
           name: ZUP_DNTT_RP
           description: Upload Đề nghị thanh toán
           package: ZPK_UPLOAD_DNTT
-          transport: AK3K908164
+          transport: AK3K908310
         exclude:
           - /test/
           - /localService/
