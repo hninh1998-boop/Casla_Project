@@ -1,0 +1,45 @@
+<soap-env:Envelope
+	xmlns:soap-env="http://schemas.xmlsoap.org/soap/envelope/">
+	<soap-env:Header/>
+	<soap-env:Body>
+		<n0:JournalEntryBulkCreateConfirmation
+			xmlns:n0="http://sap.com/xi/SAPSCORE/SFIN"
+			xmlns:prx="urn:sap.com:proxy:AK3:/1SAI/TAS3D871C7855B59197A671:920">
+			<MessageHeader>
+				<UUID>fa163ef8-0c7e-1fd1-afc1-70eb27b5edf3</UUID>
+				<ReferenceID>FA163EF80C7E1FD1AFC1673EC22ACDF3</ReferenceID>
+				<CreationDateTime>2026-10-02T02:46:55.044992Z</CreationDateTime>
+				<SenderBusinessSystemID>AK3</SenderBusinessSystemID>
+			</MessageHeader>
+			<ConfirmationInterfaceOrignName/>
+			<JournalEntryCreateConfirmation>
+				<MessageHeader>
+					<UUID>fa163ef8-0c7e-1fd1-afc1-70eb27b60df3</UUID>
+					<ReferenceID>A4</ReferenceID>
+					<CreationDateTime>2026-10-02T02:46:55.045046Z</CreationDateTime>
+				</MessageHeader>
+				<JournalEntryCreateConfirmation>
+					<AccountingDocument>0000000000</AccountingDocument>
+					<CompanyCode>6710</CompanyCode>
+					<FiscalYear>2026</FiscalYear>
+				</JournalEntryCreateConfirmation>
+				<Log>
+					<MaximumLogItemSeverityCode>3</MaximumLogItemSeverityCode>
+					<Item>
+						<TypeID>609(RW)</TypeID>
+						<SeverityCode>3</SeverityCode>
+						<Note>Error in document: BKPFF $ 0M70GQF</Note>
+						<WebURI>https://my426501.s4hana.cloud.sap:443/sap/xi/docu_apperror?ID=NA&amp;OBJECT=RW609&amp;LANGUAGE=E&amp;MSGV1=BKPFF&amp;MSGV2=%24&amp;MSGV3=0M70GQF</WebURI>
+					</Item>
+					<Item>
+						<TypeID>808(F5)</TypeID>
+						<SeverityCode>3</SeverityCode>
+						<Note>Field Profit Ctr is a required field for G/L account 6710 3311001000</Note>
+						<WebURI>https://my426501.s4hana.cloud.sap:443/sap/xi/docu_apperror?ID=NA&amp;OBJECT=F5808&amp;LANGUAGE=E&amp;MSGV1=Profit%20Ctr&amp;MSGV2=6710&amp;MSGV3=3311001000&amp;MSGV4=39</WebURI>
+					</Item>
+				</Log>
+			</JournalEntryCreateConfirmation>
+			<Log/>
+		</n0:JournalEntryBulkCreateConfirmation>
+	</soap-env:Body>
+</soap-env:Envelope>

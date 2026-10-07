@@ -1,0 +1,252 @@
+{
+  "_version": "1.86.0",
+  "sap.app": {
+    "id": "zupdnttrp",
+    "type": "application",
+    "i18n": "i18n/i18n.properties",
+    "applicationVersion": {
+      "version": "0.0.1"
+    },
+    "title": "{{appTitle}}",
+    "description": "{{appDescription}}",
+    "resources": "resources.json",
+    "sourceTemplate": {
+      "id": "@sap/generator-fiori:lrop",
+      "version": "1.33.0",
+      "toolsId": "d97cf0b1-4a34-463f-a503-3afcbf04f639"
+    },
+    "dataSources": {
+      "annotation": {
+        "type": "ODataAnnotation",
+        "uri": "annotations/annotation.xml",
+        "settings": {
+          "localUri": "annotations/annotation.xml"
+        }
+      },
+      "mainService": {
+        "uri": "/sap/opu/odata4/sap/zui_up_dntt_rp_ov4/srvd/sap/zui_up_dntt_rp/0001/",
+        "type": "OData",
+        "settings": {
+          "annotations": [
+            "annotation"
+          ],
+          "localUri": "localService/mainService/metadata.xml",
+          "odataVersion": "4.01"
+        }
+      }
+    },
+    "crossNavigation": {
+      "inbounds": {
+        "zup_dntt_rp-display": {
+          "semanticObject": "zup_dntt_rp",
+          "action": "display",
+          "title": "{{zup_dntt_rp-display.flpTitle}}",
+          "signature": {
+            "parameters": {},
+            "additionalParameters": "allowed"
+          }
+        }
+      }
+    }
+  },
+  "sap.ui": {
+    "technology": "UI5",
+    "icons": {
+      "icon": "",
+      "favIcon": "",
+      "phone": "",
+      "phone@2": "",
+      "tablet": "",
+      "tablet@2": ""
+    },
+    "deviceTypes": {
+      "desktop": true,
+      "tablet": true,
+      "phone": true
+    }
+  },
+  "sap.ui5": {
+    "flexEnabled": true,
+    "dependencies": {
+      "minUI5Version": "1.148.10",
+      "libs": {
+        "sap.m": {},
+        "sap.ui.core": {},
+        "sap.fe.templates": {},
+        "sap.ui.unified": {}
+      }
+    },
+    "contentDensities": {
+      "compact": true,
+      "cozy": true
+    },
+    "models": {
+      "i18n": {
+        "type": "sap.ui.model.resource.ResourceModel",
+        "settings": {
+          "bundleName": "zupdnttrp.i18n.i18n"
+        }
+      },
+      "": {
+        "dataSource": "mainService",
+        "preload": true,
+        "settings": {
+          "operationMode": "Server",
+          "autoExpandSelect": true,
+          "earlyRequests": true
+        }
+      },
+      "@i18n": {
+        "type": "sap.ui.model.resource.ResourceModel",
+        "uri": "i18n/i18n.properties"
+      }
+    },
+    "resources": {
+      "css": []
+    },
+    "extends": {
+      "extensions": {
+        "sap.ui.controllerExtensions": {
+          "sap.fe.templates.ListReport.ListReportController#zupdnttrp::DnttListList": {
+            "controllerName": "zupdnttrp.ext.controller.ListReportController"
+          }
+        }
+      }
+    },
+    "routing": {
+      "config": {},
+      "routes": [
+        {
+          "pattern": ":?query:",
+          "name": "DnttListList",
+          "target": "DnttListList"
+        },
+        {
+          "pattern": "DnttHead({key}):?query:",
+          "name": "DnttHeadObjectPage",
+          "target": "DnttHeadObjectPage"
+        }
+      ],
+      "targets": {
+        "DnttListList": {
+          "type": "Component",
+          "id": "DnttListList",
+          "name": "sap.fe.templates.ListReport",
+          "options": {
+            "settings": {
+              "contextPath": "/DnttList",
+              "variantManagement": "Page",
+              "navigation": {
+                "DnttList": {
+                  "detail": {
+                    "route": "DnttHeadObjectPage"
+                  }
+                }
+              },
+              "controlConfiguration": {
+                "@com.sap.vocabularies.UI.v1.LineItem": {
+                  "tableSettings": {
+                    "type": "GridTable",
+                    "selectionMode": "Multi"
+                  },
+                  "actions": {
+                    "DownloadTemplate": {
+                      "press": "zupdnttrp.ext.controller.ListReportExt.onDownloadTemplate",
+                      "visible": true,
+                      "enabled": true,
+                      "requiresSelection": false,
+                      "text": "{i18n>btnDownloadTemplate}"
+                    },
+                    "UploadFile": {
+                      "press": "zupdnttrp.ext.controller.ListReportExt.onUploadFile",
+                      "visible": true,
+                      "enabled": true,
+                      "requiresSelection": false,
+                      "text": "{i18n>btnUploadFile}"
+                    },
+                    "CheckDocument": {
+                      "press": "zupdnttrp.ext.controller.ListReportExt.onCheck",
+                      "visible": true,
+                      "enabled": "zupdnttrp.ext.controller.ListReportExt.isCheckEnabled",
+                      "requiresSelection": true,
+                      "text": "{i18n>btnCheck}"
+                    },
+                    "PostDocument": {
+                      "press": "zupdnttrp.ext.controller.ListReportExt.onPost",
+                      "visible": true,
+                      "enabled": "zupdnttrp.ext.controller.ListReportExt.isPostEnabled",
+                      "requiresSelection": true,
+                      "text": "{i18n>btnPost}"
+                    },
+                    "DeleteDocument": {
+                      "press": "zupdnttrp.ext.controller.ListReportExt.onDelete",
+                      "visible": true,
+                      "enabled": "zupdnttrp.ext.controller.ListReportExt.isDeleteEnabled",
+                      "requiresSelection": true,
+                      "text": "{i18n>btnDelete}"
+                    },
+                    "PrintDocument": {
+                      "press": "zupdnttrp.ext.controller.ListReportExt.onPrint",
+                      "visible": true,
+                      "enabled": true,
+                      "requiresSelection": true,
+                      "text": "{i18n>btnPrint}"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "DnttHeadObjectPage": {
+          "type": "Component",
+          "id": "DnttHeadObjectPage",
+          "name": "sap.fe.templates.ObjectPage",
+          "options": {
+            "settings": {
+              "editableHeaderContent": false,
+              "contextPath": "/DnttHead",
+              "content": {
+                "header": {
+                  "actions": {
+                    "CheckDocument": {
+                      "press": "zupdnttrp.ext.controller.ObjectPageExt.onCheck",
+                      "visible": "{= !${ui>/isEditable} }",
+                      "enabled": "{= ${Status} === 'Draft' }",
+                      "text": "{i18n>btnCheck}"
+                    },
+                    "PostDocument": {
+                      "press": "zupdnttrp.ext.controller.ObjectPageExt.onPost",
+                      "visible": "{= !${ui>/isEditable} }",
+                      "enabled": "{= ${Status} === 'Checked' }",
+                      "text": "{i18n>btnPost}"
+                    }
+                  }
+                }
+              },
+              "controlConfiguration": {
+                "_Item/@com.sap.vocabularies.UI.v1.LineItem": {
+                  "tableSettings": {
+                    "type": "GridTable",
+                    "creationMode": {
+                      "name": "InlineCreationRows"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "sap.fiori": {
+    "registrationIds": [],
+    "archeType": "transactional"
+  },
+  "sap.fe": {
+    "app": {
+      "enableLazyLoading": true
+    }
+  }
+}
