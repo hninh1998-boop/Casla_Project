@@ -1,0 +1,27 @@
+@EndUserText.label : 'DB - Cont Text'
+@AbapCatalog.enhancement.category : #NOT_EXTENSIBLE
+@AbapCatalog.tableCategory : #TRANSPARENT
+@AbapCatalog.deliveryClass : #A
+@AbapCatalog.dataMaintenance : #RESTRICTED
+define table ztb_cont_text {
+
+  key client                   : mandt not null;
+  key so                       : vbelv not null;
+  key so_item                  : posnv not null;
+  key so_lenh                  : vbeln not null;
+  key so_lenh_item             : posnr not null;
+  ngay_dong_cont               : abap.dats;
+  dong_dau_thung               : abap.string(0);
+  cont                         : abap.string(0);
+  ke_hoach_dong_cont           : abap.string(0);
+  ghi_chu_khac                 : abap.string(0);
+  ghi_chu_giao_hang            : abap.string(0);
+  ngay_tau_chay                : abap.string(0);
+  thoi_gian_cat_mang           : abap.string(0);
+  sort_order                   : abap.dec(15,3);
+  dia_diem_dong_hang_cont      : werks_d;
+  dia_diem_dong_hang_cont_name : abap.char(30);
+  changed_by                   : syuname;
+  changed_at                   : utcl;
+
+}

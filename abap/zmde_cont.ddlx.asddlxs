@@ -1,0 +1,277 @@
+@Metadata.layer: #CORE
+@UI.headerInfo: {
+    typeName: 'Cont',
+    typeNamePlural: 'Conts'
+}
+annotate entity zce_cont with
+{
+  @UI.facet: [{
+      id: 'GeneralInfo',
+      purpose: #STANDARD,
+      type: #IDENTIFICATION_REFERENCE,
+      label: 'General Information',
+      position: 10
+   }]
+
+  @EndUserText.label: 'Ngày đóng cont'
+  @UI.lineItem: [{ position: 1 }]
+  @UI.identification: [{ position: 1 }]
+  @UI.selectionField: [{ position: 50 }]
+  @Consumption.filter.selectionType: #INTERVAL
+  Ngay;
+
+  @EndUserText.label: 'Giờ gọi cont về NM'
+  @UI.lineItem: [{ position: 10 },
+                 { type: #FOR_ACTION, dataAction: 'updContText', label: 'Cập nhật thông tin Cont' }]
+  @UI.identification: [{ position: 10 },
+                       { type: #FOR_ACTION, dataAction: 'updContText', label: 'Cập nhật thông tin Cont' }]
+  @Consumption.filter.hidden: true
+  GioGoiContVeNM;
+
+  @EndUserText.label: 'Số Cont'
+  @UI.lineItem: [{ position: 20 }]
+  @UI.identification: [{ position: 20 }]
+  @Consumption.filter.hidden: true
+  SoCont;
+
+  @EndUserText.label: 'Số chì'
+  @UI.lineItem: [{ position: 30 }]
+  @UI.identification: [{ position: 30 }]
+  @Consumption.filter.hidden: true
+  SoChi;
+
+  @EndUserText.label: 'Ngày tàu chạy'
+  @UI.lineItem: [{ position: 40 }]
+  @UI.identification: [{ position: 40 }]
+  @Consumption.filter.hidden: true
+  NgayTauChay;
+
+  @EndUserText.label: 'Phương thức đóng hàng & phối thùng'
+  @UI.lineItem: [{ position: 50 }]
+  @UI.identification: [{ position: 50 }]
+  @Consumption.filter.hidden: true
+  GhiChuGiaoHang;
+
+  @EndUserText.label: 'Đóng dấu thùng'
+  @UI.lineItem: [{ position: 60 }]
+  @UI.identification: [{ position: 60 }]
+  @Consumption.filter.hidden: true
+  DongDauThung;
+
+  @EndUserText.label: 'Ngày giao hàng dự kiến'
+  @UI.lineItem: [{ position: 70 }]
+  @UI.identification: [{ position: 70 }]
+  @UI.selectionField: [{ position: 40 }]
+  @Consumption.filter.selectionType: #INTERVAL
+  NgayGiaoHangDuKien;
+
+  @EndUserText.label: 'Số SO'
+  @UI.lineItem: [{ position: 80 }]
+  @UI.identification: [{ position: 80 }]
+  @UI.selectionField: [{ position: 20 }]
+  @Consumption.valueHelpDefinition: [{
+    entity: {
+        name: 'I_SalesOrderStdVH',
+        element: 'SalesOrder'
+    }
+  }]
+  SO;
+
+  @EndUserText.label: 'Số SO Item'
+  @UI.lineItem: [{ position: 90 }]
+  @UI.identification: [{ position: 90 }]
+  @UI.selectionField: [{ position: 21 }]
+  @Consumption.valueHelpDefinition: [{
+    entity: {
+        name: 'zvh_soitem_cont',
+        element: 'SalesOrderItem'
+    },
+    additionalBinding: [{
+        element: 'SalesOrder',
+        localElement: 'SO',
+        usage: #FILTER_AND_DISPLAY
+    }]
+  }]
+  SOItem;
+
+  @EndUserText.label: 'Số KH'
+  @UI.lineItem: [{ position: 100 }]
+  @UI.identification: [{ position: 100 }]
+  @UI.selectionField: [{ position: 22 }]
+  @Consumption.valueHelpDefinition: [{
+    entity: {
+        name: 'zvh_sokh_cont',
+        element: 'SoKH'
+    }
+  }]
+  SoKH;
+
+  @EndUserText.label: 'Mã hàng'
+  @UI.lineItem: [{ position: 110 }]
+  @UI.identification: [{ position: 110 }]
+  @Consumption.filter.hidden: true
+  MaHang;
+
+  @EndUserText.label: 'Tên hàng'
+  @UI.lineItem: [{ position: 120 }]
+  @UI.identification: [{ position: 120 }]
+  @Consumption.filter.hidden: true
+  TenHang;
+
+  @EndUserText.label: 'Kích thước túi'
+  @UI.lineItem: [{ position: 130 }]
+  @UI.identification: [{ position: 130 }]
+  @Consumption.filter.hidden: true
+  KichThhuocTui;
+
+  @EndUserText.label: 'Loại màng'
+  @UI.lineItem: [{ position: 131 }]
+  @UI.identification: [{ position: 131 }]
+  @Consumption.filter.hidden: true
+  LoaiMang;
+  
+  @EndUserText.label: 'Loại manh'
+  @UI.lineItem: [{ position: 132 }]
+  @UI.identification: [{ position: 132 }]
+  @Consumption.filter.hidden: true
+  LoaiManh;
+
+  @EndUserText.label: 'Số lượng theo KHSX'
+  //  @UI.lineItem: [{ position: 140 }]
+  //  @UI.identification: [{ position: 140 }]
+  @Consumption.filter.hidden: true
+  @UI.hidden: true
+  SoLuongTheoKHSX;
+
+  @EndUserText.label: 'Base Unit'
+  @UI.hidden: true
+  @Consumption.filter.hidden: true
+  BaseUnit;
+
+  @EndUserText.label: 'Người phụ trách cont'
+  @UI.lineItem: [{ position: 150 }]
+  @UI.identification: [{ position: 150 }]
+  @Consumption.filter.hidden: true
+  NguoiPhuTrachCont;
+
+  @EndUserText.label: 'Thời gian cắt máng'
+  @UI.lineItem: [{ position: 160 }]
+  @UI.identification: [{ position: 160 }]
+  @Consumption.filter.hidden: true
+  ThoiGianCatMang;
+
+  @EndUserText.label: 'Địa điểm đóng hàng'
+  @UI.lineItem: [{ position: 170 }]
+  @UI.identification: [{ position: 170 }]
+  @UI.selectionField: [{ position: 10 }]
+  @Consumption.valueHelpDefinition: [{
+    entity: {
+        name: 'I_PlantStdVH',
+        element: 'Plant'
+    }
+  }]
+  @Consumption.filter: {
+    mandatory: true,
+    selectionType: #SINGLE
+  }
+  DiaDiemDongHang;
+
+  @EndUserText.label: 'Plant Name'
+  @UI.hidden: true
+  @Consumption.filter.hidden: true
+  PlantName;
+
+  @EndUserText.label: 'Địa điểm đóng hàng Name'
+  @UI.hidden: true
+  @Consumption.filter.hidden: true
+  DiaDiemDongHangContName;
+
+  @EndUserText.label: 'Cont'
+  @UI.lineItem: [{ position: 180 }]
+  @UI.identification: [{ position: 180 }]
+  @Consumption.filter.hidden: true
+  Cont;
+
+  @EndUserText.label: 'Tare Weight'
+  @UI.lineItem: [{ position: 190 }]
+  @UI.identification: [{ position: 190 }]
+  @Consumption.filter.hidden: true
+  TareWeight;
+
+  @EndUserText.label: 'Booking'
+  @UI.lineItem: [{ position: 200 }]
+  @UI.identification: [{ position: 200 }]
+  @Consumption.filter.hidden: true
+  Booking;
+
+  @EndUserText.label: 'Số lệnh xuất hàng (DO)'
+  @UI.lineItem: [{ position: 210 }]
+  @UI.identification: [{ position: 210 }]
+  @UI.selectionField: [{ position: 30 }]
+  @Consumption.valueHelpDefinition: [{
+    entity: {
+        name: 'I_OutboundDelivery',
+        element: 'OutboundDelivery'
+    }
+  }]
+  SoLenhXuatHang;
+
+  @EndUserText.label: 'OD Item'
+  @UI.lineItem: [{ position: 220 }]
+  @UI.identification: [{ position: 220 }]
+  @Consumption.filter.hidden: true
+  SoLenhXuatHangItem;
+
+  @EndUserText.label: 'Số lượng trên lệnh xuất hàng'
+  @UI.lineItem: [{ position: 230 }]
+  @UI.identification: [{ position: 230 }]
+  @Consumption.filter.hidden: true
+  SoLuongTrenLenhXuatHang;
+
+  @EndUserText.label: 'Số lượng chưa lên lệnh xuất hàng'
+  @UI.lineItem: [{ position: 240 }]
+  @UI.identification: [{ position: 240 }]
+  @Consumption.filter.hidden: true
+  SoLuongChuaLenLenhXuatHang;
+
+  @EndUserText.label: 'Delivery Quantity Unit'
+  @UI.hidden: true
+  @Consumption.filter.hidden: true
+  DeliveryQuantityUnit;
+
+  @EndUserText.label: 'Trạng thái OD'
+  @UI.lineItem: [{ position: 250 }]
+  @UI.identification: [{ position: 250 }]
+  @Consumption.filter.hidden: true
+  TrangThaiOD;
+
+  @EndUserText.label: 'Plant'
+  @UI.lineItem: [{ position: 251 }]
+  @UI.identification: [{ position: 251 }]
+  @UI.selectionField: [{ position: 11 }]
+  @Consumption.valueHelpDefinition: [{
+    entity: {
+        name: 'I_PlantStdVH',
+        element: 'Plant'
+    }
+  }]
+  @Consumption.filter: {
+    mandatory: false,
+    selectionType: #SINGLE
+  }
+  Plant;
+
+  @EndUserText.label: 'Kế hoạch đóng cont'
+  @UI.lineItem: [{ position: 260 }]
+  @UI.identification: [{ position: 260 }]
+  @Consumption.filter.hidden: true
+  KeHoachDongCont;
+
+  @EndUserText.label: 'Ghi chú khác'
+  @UI.lineItem: [{ position: 270 }]
+  @UI.identification: [{ position: 270 }]
+  @Consumption.filter.hidden: true
+  GhiChuKhac;
+
+
+}

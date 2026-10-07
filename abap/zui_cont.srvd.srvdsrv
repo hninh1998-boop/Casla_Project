@@ -1,0 +1,4 @@
+@EndUserText.label: 'Serv.Def. - Cont'
+define service Zui_cont {
+  expose zce_cont;
+}
