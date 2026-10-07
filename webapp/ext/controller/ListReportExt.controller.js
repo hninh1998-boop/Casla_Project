@@ -4,145 +4,107 @@ sap.ui.define([
 ], function (MessageToast, MessageBox) {
     'use strict';
 
-    // Static action của zce_sales_report_exp (BDEF) → function import trong service OData V2
-    var EXPORT_ACTION = "ExportExcel";
-    var XLSX_MIME_TYPE = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+    // Các filter mà action ExportExcel nhận (ty_filter trong zbp_ce_sales_report_exp)
+    var FILTER_FIELDS = ["CompanyCode", "PostingDate", "Plant", "Product", "SalesDistrict"];
 
-    // Filter gửi xuống BE trong json_string (xem ty_filter trong zbp_ce_sales_report_exp)
-    var FILTER_FIELDS = ["CompanyCode", "FiscalYear", "Plant", "Product", "SalesDistrict"];
-    // Filter kiểu ngày (date range): gửi xuống dạng YYYYMMDD
-    var DATE_FILTER_FIELD = "PostingDate";
+    // Operation của SmartFilterBar → option của select-option
+    var OPTIONS = {
+        EQ: "EQ", BT: "BT", LT: "LT", LE: "LE", GT: "GT", GE: "GE",
+        Contains: "CP", StartsWith: "CP", EndsWith: "CP"
+    };
 
-    function _rangeFromCondition(oRange) {
-        var sSign = oRange.exclude ? "E" : "I";
-        var sLow = oRange.value1 == null ? "" : String(oRange.value1);
-        var sHigh = oRange.value2 == null ? "" : String(oRange.value2);
-
-        switch (oRange.operation) {
-            case "Contains":
-                return { sign: sSign, option: "CP", low: "*" + sLow + "*", high: "" };
-            case "StartsWith":
-                return { sign: sSign, option: "CP", low: sLow + "*", high: "" };
-            case "EndsWith":
-                return { sign: sSign, option: "CP", low: "*" + sLow, high: "" };
-            default:
-                // EQ, BT, LT, LE, GT, GE dùng chung tên với option của ABAP
-                return { sign: sSign, option: oRange.operation, low: sLow, high: sHigh };
+    // Date → YYYYMMDD, còn lại giữ nguyên dạng chuỗi
+    function _toValue(vValue) {
+        if (vValue instanceof Date) {
+            return String(vValue.getFullYear())
+                + String(vValue.getMonth() + 1).padStart(2, "0")
+                + String(vValue.getDate()).padStart(2, "0");
         }
+        return vValue === null || vValue === undefined ? "" : String(vValue);
     }
 
-    // Đổi giá trị 1 field của SmartFilterBar.getFilterData() thành bảng range sign/option/low/high
-    function _toRanges(vValue) {
-        if (vValue === undefined || vValue === null || vValue === "") {
+    function _toRange(oRange) {
+        var sOption = OPTIONS[oRange.operation];
+        var sLow = _toValue(oRange.value1);
+        if (!sOption || !sLow) {
+            return null;
+        }
+        if (oRange.operation === "Contains") {
+            sLow = "*" + sLow + "*";
+        } else if (oRange.operation === "StartsWith") {
+            sLow = sLow + "*";
+        } else if (oRange.operation === "EndsWith") {
+            sLow = "*" + sLow;
+        }
+        return {
+            sign: oRange.exclude ? "E" : "I",
+            option: sOption,
+            low: sLow,
+            high: sOption === "BT" ? _toValue(oRange.value2) : ""
+        };
+    }
+
+    // Giá trị 1 field trong getFilterData() → bảng range [{ sign, option, low, high }]
+    function _toRanges(vFilter) {
+        if (vFilter === null || vFilter === undefined || vFilter === "") {
             return [];
         }
-
         // Single value
-        if (typeof vValue !== "object") {
-            return [{ sign: "I", option: "EQ", low: String(vValue), high: "" }];
+        if (typeof vFilter !== "object" || vFilter instanceof Date) {
+            return [{ sign: "I", option: "EQ", low: _toValue(vFilter), high: "" }];
         }
-
-        // Interval: { low, high }, hoặc low = "1-3" khi nhập tay
-        if (vValue.low !== undefined) {
-            var sLow = vValue.low == null ? "" : String(vValue.low);
-            var sHigh = vValue.high == null ? "" : String(vValue.high);
-            if (!sHigh && sLow.indexOf("-") > 0) {
-                var aParts = sLow.split("-");
-                sLow = aParts[0].trim();
-                sHigh = aParts[1].trim();
-            }
+        // Interval
+        if (vFilter.low !== undefined && !vFilter.ranges) {
+            var sLow = _toValue(vFilter.low);
+            var sHigh = _toValue(vFilter.high);
             if (!sLow) {
                 return [];
             }
             return [{ sign: "I", option: sHigh ? "BT" : "EQ", low: sLow, high: sHigh }];
         }
-
-        // Multiple values: { items: [{ key }], ranges: [{ exclude, operation, value1, value2 }] }
-        var aRanges = [];
-        (vValue.items || []).forEach(function (oItem) {
-            aRanges.push({ sign: "I", option: "EQ", low: String(oItem.key), high: "" });
+        // Multi value / date range
+        var aRanges = (vFilter.items || []).map(function (oItem) {
+            return { sign: "I", option: "EQ", low: _toValue(oItem.key), high: "" };
         });
-        (vValue.ranges || []).forEach(function (oRange) {
-            aRanges.push(_rangeFromCondition(oRange));
+        (vFilter.ranges || []).forEach(function (oRange) {
+            var oResult = _toRange(oRange);
+            if (oResult) {
+                aRanges.push(oResult);
+            }
         });
         return aRanges;
     }
 
-    function _pad(iValue) {
-        return (iValue < 10 ? "0" : "") + iValue;
-    }
-
-    // Date → "YYYYMMDD"
-    // SmartFilterBar có thể trả ngày theo giờ local hoặc đã quy về UTC (00:00:00 / 23:59:59 UTC)
-    // → nếu giờ UTC rơi đúng đầu / cuối ngày thì lấy ngày theo UTC, ngược lại lấy theo local
-    function _toAbapDate(vDate) {
-        if (!(vDate instanceof Date) || isNaN(vDate.getTime())) {
-            return "";
-        }
-        var iUtcSeconds = vDate.getUTCHours() * 3600 + vDate.getUTCMinutes() * 60 + vDate.getUTCSeconds();
-        if (iUtcSeconds === 0 || iUtcSeconds === 86399) {
-            return vDate.getUTCFullYear() + _pad(vDate.getUTCMonth() + 1) + _pad(vDate.getUTCDate());
-        }
-        return vDate.getFullYear() + _pad(vDate.getMonth() + 1) + _pad(vDate.getDate());
-    }
-
-    // Lấy các filter lá của 1 field từ cây sap.ui.model.Filter
-    function _collectFilters(aFilters, sPath, aResult) {
-        (aFilters || []).forEach(function (oFilter) {
-            if (oFilter.aFilters) {
-                _collectFilters(oFilter.aFilters, sPath, aResult);
-            } else if (oFilter.sPath === sPath) {
-                aResult.push(oFilter);
-            }
-        });
-        return aResult;
-    }
-
-    // Khoảng ngày đang chọn (Year to Date, From / To, Today...) đã được SmartFilterBar đổi ra ngày cụ thể
-    function _dateRanges(oSmartFilterBar, sField) {
-        var aRanges = [];
-        _collectFilters(oSmartFilterBar.getFilters([sField]), sField, []).forEach(function (oFilter) {
-            var sLow = _toAbapDate(oFilter.oValue1);
-            var sHigh = _toAbapDate(oFilter.oValue2);
-            if (!sLow) {
-                return;
-            }
-            // EQ, BT, LT, LE, GT, GE dùng chung tên với option của ABAP
-            aRanges.push({ sign: "I", option: oFilter.sOperator, low: sLow, high: sHigh });
-        });
-        return aRanges;
-    }
-
-    function _buildFilterJson(oSmartFilterBar) {
-        var oFilterData = oSmartFilterBar.getFilterData() || {};
-        var mFilter = {};
+    function _getFilter(oView) {
+        var oSmartFilterBar = oView.byId("listReportFilter");
+        var oFilterData = oSmartFilterBar ? oSmartFilterBar.getFilterData() : {};
+        var oFilter = {};
         FILTER_FIELDS.forEach(function (sField) {
-            mFilter[sField] = _toRanges(oFilterData[sField]);
+            oFilter[sField] = _toRanges(oFilterData[sField]);
         });
-        mFilter[DATE_FILTER_FIELD] = _dateRanges(oSmartFilterBar, DATE_FILTER_FIELD);
-        return JSON.stringify(mFilter);
+        return oFilter;
     }
 
-    function _saveFile(sBase64, sFileName, sMimeType) {
-        // OData V2 trả Edm.Binary dạng base64; đổi luôn base64url nếu có
-        var sBinary = atob(sBase64.replace(/-/g, "+").replace(/_/g, "/"));
+    function _download(oFile) {
+        var sBinary = atob(oFile.fileContent);
         var aBytes = new Uint8Array(sBinary.length);
         for (var i = 0; i < sBinary.length; i++) {
             aBytes[i] = sBinary.charCodeAt(i);
         }
-        var sUrl = URL.createObjectURL(new Blob([aBytes], { type: sMimeType }));
-        var oLink = document.createElement("a");
-        oLink.href = sUrl;
-        oLink.download = sFileName;
-        oLink.click();
-        URL.revokeObjectURL(sUrl);
+        var blob = new Blob([aBytes], { type: oFile.mimeType });
+        var url = URL.createObjectURL(blob);
+        var link = document.createElement("a");
+        link.href = url;
+        link.download = oFile.fileName + "." + oFile.fileExtension;
+        link.click();
+        URL.revokeObjectURL(url);
     }
 
     function _getErrorText(oError) {
         try {
             return JSON.parse(oError.responseText).error.message.value;
         } catch (e) {
-            return (oError && oError.message) || "Export không thành công";
+            return oError.message || "Export thất bại";
         }
     }
 
@@ -154,34 +116,33 @@ sap.ui.define([
             }
         },
 
-        // Nút "Export": BE lấy dữ liệu theo filter và sinh file xlsx, FE chỉ lưu file
         exportExcel: function () {
             var oView = this.getView();
-            var oSmartFilterBar = oView.byId("listReportFilter");
+            var oModel = oView.getModel();
 
-            if (!oSmartFilterBar) {
-                MessageBox.error("Không tìm thấy filter bar");
+            if (!oModel.getMetaModel().getODataFunctionImport("ExportExcel")) {
+                MessageBox.error("Service chưa có action ExportExcel");
+                return;
+            }
+
+            var oFilter = _getFilter(oView);
+            if (!oFilter.CompanyCode.length || !oFilter.PostingDate.length) {
+                MessageBox.error("Vui lòng nhập Company Code và Posting Date");
                 return;
             }
 
             oView.setBusy(true);
-            oView.getModel().callFunction("/" + EXPORT_ACTION, {
+            oModel.callFunction("/ExportExcel", {
                 method: "POST",
-                urlParameters: {
-                    json_string: _buildFilterJson(oSmartFilterBar)
-                },
+                urlParameters: { json_string: JSON.stringify(oFilter) },
                 success: function (oData) {
                     oView.setBusy(false);
-                    var oFile = (oData && oData[EXPORT_ACTION]) || oData;
+                    var oFile = oData && (oData.ExportExcel || oData);
                     if (!oFile || !oFile.fileContent) {
                         MessageBox.error("Không có dữ liệu để export");
                         return;
                     }
-                    _saveFile(
-                        oFile.fileContent,
-                        (oFile.fileName || "BaoCaoBanHang") + "." + (oFile.fileExtension || "xlsx"),
-                        oFile.mimeType || XLSX_MIME_TYPE
-                    );
+                    _download(oFile);
                     MessageToast.show("Export thành công!");
                 },
                 error: function (oError) {
