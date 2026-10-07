@@ -1,0 +1,1781 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="4.0" xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+    <edmx:Reference Uri="/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_AGGREGATION',Version='0001',SAP__Origin='LOCAL')/$value">
+        <edmx:Include Namespace="Org.OData.Aggregation.V1" Alias="SAP__aggregation"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_ANALYTICS',Version='0001',SAP__Origin='LOCAL')/$value">
+        <edmx:Include Namespace="com.sap.vocabularies.Analytics.v1" Alias="SAP__analytics"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_AUTHORIZATION',Version='0001',SAP__Origin='LOCAL')/$value">
+        <edmx:Include Namespace="Org.OData.Authorization.V1" Alias="SAP__authorization"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_CAPABILITIES',Version='0001',SAP__Origin='LOCAL')/$value">
+        <edmx:Include Namespace="Org.OData.Capabilities.V1" Alias="SAP__capabilities"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_CODELIST',Version='0001',SAP__Origin='LOCAL')/$value">
+        <edmx:Include Namespace="com.sap.vocabularies.CodeList.v1" Alias="SAP__CodeList"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_COMMON',Version='0001',SAP__Origin='LOCAL')/$value">
+        <edmx:Include Namespace="com.sap.vocabularies.Common.v1" Alias="SAP__common"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_COMMUNICATION',Version='0001',SAP__Origin='LOCAL')/$value">
+        <edmx:Include Namespace="com.sap.vocabularies.Communication.v1" Alias="SAP__communication"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_CORE',Version='0001',SAP__Origin='LOCAL')/$value">
+        <edmx:Include Namespace="Org.OData.Core.V1" Alias="SAP__core"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_HIERARCHY',Version='0001',SAP__Origin='LOCAL')/$value">
+        <edmx:Include Namespace="com.sap.vocabularies.Hierarchy.v1" Alias="SAP__hierarchy"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_HTML5',Version='0001',SAP__Origin='LOCAL')/$value">
+        <edmx:Include Namespace="com.sap.vocabularies.HTML5.v1" Alias="SAP__HTML5"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_MEASURES',Version='0001',SAP__Origin='LOCAL')/$value">
+        <edmx:Include Namespace="Org.OData.Measures.V1" Alias="SAP__measures"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_ODM',Version='0001',SAP__Origin='LOCAL')/$value">
+        <edmx:Include Namespace="com.sap.vocabularies.ODM.v1" Alias="SAP__ODM"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_PDF',Version='0001',SAP__Origin='LOCAL')/$value">
+        <edmx:Include Namespace="com.sap.vocabularies.PDF.v1" Alias="SAP__PDF"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_PERSONALDATA',Version='0001',SAP__Origin='LOCAL')/$value">
+        <edmx:Include Namespace="com.sap.vocabularies.PersonalData.v1" Alias="SAP__personalData"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_SESSION',Version='0001',SAP__Origin='LOCAL')/$value">
+        <edmx:Include Namespace="com.sap.vocabularies.Session.v1" Alias="SAP__session"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_SUPPORT',Version='0001',SAP__Origin='LOCAL')/$value">
+        <edmx:Include Namespace="com.sap.vocabularies.Support.v1" Alias="SAP__support"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_UI',Version='0001',SAP__Origin='LOCAL')/$value">
+        <edmx:Include Namespace="com.sap.vocabularies.UI.v1" Alias="SAP__UI"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_VALIDATION',Version='0001',SAP__Origin='LOCAL')/$value">
+        <edmx:Include Namespace="Org.OData.Validation.V1" Alias="SAP__validation"/>
+    </edmx:Reference>
+    <edmx:DataServices>
+        <Schema Namespace="com.sap.gateway.srvd.zui_pp_alloc_adm.v0001" Alias="SAP__self">
+            <Annotation Term="SAP__core.SchemaVersion" String="1.0.0"/>
+            <EntityType Name="WorkerHistoryValueHelpType">
+                <Key>
+                    <PropertyRef Name="WorkerUUID"/>
+                </Key>
+                <Property Name="WorkerUUID" Type="Edm.Guid" Nullable="false"/>
+                <Property Name="WorkerID" Type="Edm.String" Nullable="false" MaxLength="8"/>
+                <Property Name="WorkerName" Type="Edm.String" Nullable="false" MaxLength="255"/>
+                <Property Name="Plant" Type="Edm.String" Nullable="false" MaxLength="4"/>
+                <Property Name="WorkCenter" Type="Edm.String" Nullable="false" MaxLength="8"/>
+                <Property Name="ValidFrom" Type="Edm.Date"/>
+                <Property Name="ValidTo" Type="Edm.Date"/>
+            </EntityType>
+            <EntityType Name="OperationValueHelpType">
+                <Key>
+                    <PropertyRef Name="MaCongDoan"/>
+                    <PropertyRef Name="ValidFrom"/>
+                </Key>
+                <Property Name="MaCongDoan" Type="Edm.String" Nullable="false" MaxLength="7"/>
+                <Property Name="ValidFrom" Type="Edm.Date" Nullable="false"/>
+                <Property Name="TenCongDoan" Type="Edm.String" Nullable="false" MaxLength="100"/>
+                <Property Name="BoPhan" Type="Edm.String" Nullable="false" MaxLength="50"/>
+                <Property Name="ValidTo" Type="Edm.Date"/>
+            </EntityType>
+            <EntityType Name="UnitValueHelpType">
+                <Key>
+                    <PropertyRef Name="UnitOfMeasure"/>
+                </Key>
+                <Property Name="UnitOfMeasure" Type="Edm.String" Nullable="false" MaxLength="3"/>
+                <Property Name="UnitOfMeasure_Text" Type="Edm.String" Nullable="false" MaxLength="30"/>
+                <Property Name="UnitOfMeasureSAPCode" Type="Edm.String" Nullable="false" MaxLength="3"/>
+                <Property Name="UnitOfMeasureISOCode" Type="Edm.String" Nullable="false" MaxLength="3"/>
+                <Property Name="IsPrimaryUnitForISOCode" Type="Edm.Boolean" Nullable="false"/>
+                <Property Name="UnitOfMeasureNumberOfDecimals" Type="Edm.Int16" Nullable="false"/>
+                <Property Name="UnitOfMeasureIsCommercial" Type="Edm.Boolean" Nullable="false"/>
+                <Property Name="UnitOfMeasureDimension" Type="Edm.String" Nullable="false" MaxLength="6"/>
+                <Property Name="SIUnitCnvrsnRateNumerator" Type="Edm.Int32" Nullable="false"/>
+                <Property Name="SIUnitCnvrsnRateDenominator" Type="Edm.Int32" Nullable="false"/>
+                <Property Name="SIUnitCnvrsnRateExponent" Type="Edm.Int16" Nullable="false"/>
+                <Property Name="SIUnitCnvrsnAdditiveValue" Type="Edm.Decimal" Nullable="false" Precision="9" Scale="6"/>
+                <Property Name="UnitOfMeasureDspExponent" Type="Edm.Int16" Nullable="false"/>
+                <Property Name="UnitOfMeasureDspNmbrOfDcmls" Type="Edm.Int16" Nullable="false"/>
+                <Property Name="UnitOfMeasureTemperature" Type="Edm.Double" Nullable="false"/>
+                <Property Name="UnitOfMeasureTemperatureUnit" Type="Edm.String" Nullable="false" MaxLength="3"/>
+                <Property Name="UnitOfMeasurePressure" Type="Edm.Double" Nullable="false"/>
+                <Property Name="UnitOfMeasurePressureUnit" Type="Edm.String" Nullable="false" MaxLength="3"/>
+            </EntityType>
+            <EntityType Name="WorkerValueHelpType">
+                <Key>
+                    <PropertyRef Name="WorkerID"/>
+                    <PropertyRef Name="WorkerName"/>
+                    <PropertyRef Name="Plant"/>
+                    <PropertyRef Name="WorkCenter"/>
+                </Key>
+                <Property Name="WorkerID" Type="Edm.String" Nullable="false" MaxLength="8"/>
+                <Property Name="WorkerName" Type="Edm.String" Nullable="false" MaxLength="255"/>
+                <Property Name="Plant" Type="Edm.String" Nullable="false" MaxLength="4"/>
+                <Property Name="WorkCenter" Type="Edm.String" Nullable="false" MaxLength="8"/>
+            </EntityType>
+            <EntityType Name="OperationHistoryValueHelpType">
+                <Key>
+                    <PropertyRef Name="MaCongDoan"/>
+                    <PropertyRef Name="ValidFrom"/>
+                </Key>
+                <Property Name="MaCongDoan" Type="Edm.String" Nullable="false" MaxLength="7"/>
+                <Property Name="ValidFrom" Type="Edm.Date" Nullable="false"/>
+                <Property Name="TenCongDoan" Type="Edm.String" Nullable="false" MaxLength="100"/>
+                <Property Name="BoPhan" Type="Edm.String" Nullable="false" MaxLength="50"/>
+                <Property Name="ValidTo" Type="Edm.Date"/>
+            </EntityType>
+            <EntityType Name="OperationAllocationsType">
+                <Key>
+                    <PropertyRef Name="OperationUUID"/>
+                </Key>
+                <Property Name="OperationUUID" Type="Edm.Guid" Nullable="false"/>
+                <Property Name="ProductionOrder" Type="Edm.String" Nullable="false" MaxLength="12"/>
+                <Property Name="Operation" Type="Edm.String" Nullable="false" MaxLength="4"/>
+                <Property Name="MaCongDoan" Type="Edm.String" Nullable="false" MaxLength="7"/>
+                <Property Name="Plant" Type="Edm.String" Nullable="false" MaxLength="4"/>
+                <Property Name="WorkCenter" Type="Edm.String" Nullable="false" MaxLength="8"/>
+                <Property Name="OperationQuantity" Type="Edm.Decimal" Nullable="false" Precision="15" Scale="3"/>
+                <Property Name="UnitOfMeasure" Type="Edm.String" Nullable="false" MaxLength="3"/>
+                <Property Name="OperationStatus" Type="Edm.String" Nullable="false" MaxLength="12"/>
+                <Property Name="CreatedBy" Type="Edm.String" Nullable="false" MaxLength="12"/>
+                <Property Name="CreatedAt" Type="Edm.DateTimeOffset" Precision="7"/>
+                <Property Name="LastChangedBy" Type="Edm.String" Nullable="false" MaxLength="12"/>
+                <Property Name="LocalLastChangedAt" Type="Edm.DateTimeOffset" Precision="7"/>
+                <Property Name="__OperationControl" Type="com.sap.gateway.srvd.zui_pp_alloc_adm.v0001.OperationAllocationsOperationControl"/>
+                <Property Name="SAP__Messages" Type="Collection(com.sap.gateway.srvd.zui_pp_alloc_adm.v0001.SAP__Message)" Nullable="false"/>
+            </EntityType>
+            <EntityType Name="ShiftValueHelpType">
+                <Key>
+                    <PropertyRef Name="Plant"/>
+                    <PropertyRef Name="ShiftID"/>
+                    <PropertyRef Name="ValidFrom"/>
+                </Key>
+                <Property Name="Plant" Type="Edm.String" Nullable="false" MaxLength="4"/>
+                <Property Name="ShiftID" Type="Edm.String" Nullable="false" MaxLength="10"/>
+                <Property Name="ValidFrom" Type="Edm.Date" Nullable="false"/>
+                <Property Name="ShiftName" Type="Edm.String" Nullable="false" MaxLength="80"/>
+                <Property Name="StartTime" Type="Edm.TimeOfDay" Nullable="false"/>
+                <Property Name="EndTime" Type="Edm.TimeOfDay" Nullable="false"/>
+                <Property Name="EndDayOffset" Type="Edm.Byte" Nullable="false"/>
+                <Property Name="SAPTimeZone" Type="Edm.String" Nullable="false" MaxLength="6"/>
+                <Property Name="ValidTo" Type="Edm.Date"/>
+                <Property Name="IsActive" Type="Edm.String" Nullable="false" MaxLength="1"/>
+            </EntityType>
+            <EntityType Name="WorkCenterValueHelpType">
+                <Key>
+                    <PropertyRef Name="Plant"/>
+                    <PropertyRef Name="WorkCenter"/>
+                </Key>
+                <Property Name="Plant" Type="Edm.String" Nullable="false" MaxLength="4"/>
+                <Property Name="WorkCenter" Type="Edm.String" Nullable="false" MaxLength="8"/>
+            </EntityType>
+            <EntityType Name="AllocationTransactionsType">
+                <Key>
+                    <PropertyRef Name="TransactionUUID"/>
+                </Key>
+                <Property Name="TransactionUUID" Type="Edm.Guid" Nullable="false"/>
+                <Property Name="OperationUUID" Type="Edm.Guid"/>
+                <Property Name="OriginalTransactionUUID" Type="Edm.Guid"/>
+                <Property Name="SyncItemUUID" Type="Edm.Guid"/>
+                <Property Name="ProductionOrder" Type="Edm.String" Nullable="false" MaxLength="12"/>
+                <Property Name="Operation" Type="Edm.String" Nullable="false" MaxLength="4"/>
+                <Property Name="MaCongDoan" Type="Edm.String" Nullable="false" MaxLength="7"/>
+                <Property Name="Plant" Type="Edm.String" Nullable="false" MaxLength="4"/>
+                <Property Name="WorkCenter" Type="Edm.String" Nullable="false" MaxLength="8"/>
+                <Property Name="TransactionType" Type="Edm.String" Nullable="false" MaxLength="20"/>
+                <Property Name="OriginalTransactionType" Type="Edm.String" Nullable="false" MaxLength="20"/>
+                <Property Name="FromWorkerID" Type="Edm.String" Nullable="false" MaxLength="8"/>
+                <Property Name="ToWorkerID" Type="Edm.String" Nullable="false" MaxLength="8"/>
+                <Property Name="WorkerID" Type="Edm.String" Nullable="false" MaxLength="8"/>
+                <Property Name="Quantity" Type="Edm.Decimal" Nullable="false" Precision="15" Scale="3"/>
+                <Property Name="UnitOfMeasure" Type="Edm.String" Nullable="false" MaxLength="3"/>
+                <Property Name="ExecutionDate" Type="Edm.Date"/>
+                <Property Name="ShiftID" Type="Edm.String" Nullable="false" MaxLength="10"/>
+                <Property Name="WorkDate" Type="Edm.Date"/>
+                <Property Name="ExecutedAt" Type="Edm.DateTimeOffset" Precision="7"/>
+                <Property Name="ShiftStartAt" Type="Edm.DateTimeOffset" Precision="7"/>
+                <Property Name="ShiftEndAt" Type="Edm.DateTimeOffset" Precision="7"/>
+                <Property Name="ShiftTimeZone" Type="Edm.String" Nullable="false" MaxLength="6"/>
+                <Property Name="ShiftValidFrom" Type="Edm.Date"/>
+                <Property Name="TransactionStatus" Type="Edm.String" Nullable="false" MaxLength="20"/>
+                <Property Name="ReasonCode" Type="Edm.String" Nullable="false" MaxLength="20"/>
+                <Property Name="ReasonText" Type="Edm.String" Nullable="false" MaxLength="255"/>
+                <Property Name="SourceChannel" Type="Edm.String" Nullable="false" MaxLength="10"/>
+                <Property Name="ActorUserUUID" Type="Edm.Guid"/>
+                <Property Name="InitiatorSessionID" Type="Edm.Guid"/>
+                <Property Name="DeviceID" Type="Edm.String" Nullable="false" MaxLength="120"/>
+                <Property Name="VerificationMethod" Type="Edm.String" Nullable="false" MaxLength="20"/>
+                <Property Name="VerifiedWorkerUserUUID" Type="Edm.Guid"/>
+                <Property Name="WorkerVerifiedAt" Type="Edm.DateTimeOffset" Precision="7"/>
+                <Property Name="CreatedBy" Type="Edm.String" Nullable="false" MaxLength="12"/>
+                <Property Name="CreatedAt" Type="Edm.DateTimeOffset" Precision="7"/>
+            </EntityType>
+            <EntityType Name="PlantValueHelpType">
+                <Key>
+                    <PropertyRef Name="Plant"/>
+                </Key>
+                <Property Name="Plant" Type="Edm.String" Nullable="false" MaxLength="4"/>
+                <Property Name="PlantName" Type="Edm.String" Nullable="false" MaxLength="30"/>
+                <Property Name="PlantName2" Type="Edm.String" Nullable="false" MaxLength="30"/>
+                <Property Name="ValuationArea" Type="Edm.String" Nullable="false" MaxLength="4"/>
+                <Property Name="PlantCustomer" Type="Edm.String" Nullable="false" MaxLength="10"/>
+                <Property Name="PlantSupplier" Type="Edm.String" Nullable="false" MaxLength="10"/>
+                <Property Name="FactoryCalendar" Type="Edm.String" Nullable="false" MaxLength="2"/>
+                <Property Name="DefaultPurchasingOrganization" Type="Edm.String" Nullable="false" MaxLength="4"/>
+                <Property Name="SalesOrganization" Type="Edm.String" Nullable="false" MaxLength="4"/>
+                <Property Name="AddressID" Type="Edm.String" Nullable="false" MaxLength="10"/>
+                <Property Name="PlantCategory" Type="Edm.String" Nullable="false" MaxLength="1"/>
+                <Property Name="DistributionChannel" Type="Edm.String" Nullable="false" MaxLength="2"/>
+                <Property Name="Division" Type="Edm.String" Nullable="false" MaxLength="2"/>
+                <Property Name="Language" Type="Edm.String" Nullable="false" MaxLength="2"/>
+                <Property Name="IsMarkedForArchiving" Type="Edm.Boolean" Nullable="false"/>
+                <Property Name="BusinessPlace" Type="Edm.String" Nullable="false" MaxLength="4"/>
+            </EntityType>
+            <EntityType Name="ConfirmTransactionValueHelpType">
+                <Key>
+                    <PropertyRef Name="TransactionUUID"/>
+                    <PropertyRef Name="OperationUUID"/>
+                </Key>
+                <Property Name="TransactionUUID" Type="Edm.Guid" Nullable="false"/>
+                <Property Name="OperationUUID" Type="Edm.Guid" Nullable="false"/>
+                <Property Name="ProductionOrder" Type="Edm.String" Nullable="false" MaxLength="12"/>
+                <Property Name="Operation" Type="Edm.String" Nullable="false" MaxLength="4"/>
+                <Property Name="WorkerID" Type="Edm.String" Nullable="false" MaxLength="8"/>
+                <Property Name="Quantity" Type="Edm.Decimal" Nullable="false" Precision="15" Scale="3"/>
+                <Property Name="UnitOfMeasure" Type="Edm.String" Nullable="false" MaxLength="3"/>
+                <Property Name="WorkDate" Type="Edm.Date"/>
+                <Property Name="ShiftID" Type="Edm.String" Nullable="false" MaxLength="10"/>
+                <Property Name="TransactionStatus" Type="Edm.String" Nullable="false" MaxLength="20"/>
+            </EntityType>
+            <ComplexType Name="OperationAllocationsOperationControl">
+                <Property Name="correctConfirm" Type="Edm.Boolean" Nullable="false"/>
+            </ComplexType>
+            <ComplexType Name="SAP__Message">
+                <Property Name="code" Type="Edm.String" Nullable="false"/>
+                <Property Name="message" Type="Edm.String" Nullable="false"/>
+                <Property Name="target" Type="Edm.String"/>
+                <Property Name="additionalTargets" Type="Collection(Edm.String)" Nullable="false"/>
+                <Property Name="transition" Type="Edm.Boolean" Nullable="false"/>
+                <Property Name="numericSeverity" Type="Edm.Byte" Nullable="false"/>
+                <Property Name="longtextUrl" Type="Edm.String"/>
+            </ComplexType>
+            <Action Name="correctConfirm" EntitySetPath="_it" IsBound="true">
+                <Parameter Name="_it" Type="com.sap.gateway.srvd.zui_pp_alloc_adm.v0001.OperationAllocationsType" Nullable="false"/>
+                <Parameter Name="TransactionUUID" Type="Edm.Guid" Nullable="true"/>
+                <Parameter Name="NewQuantity" Type="Edm.Decimal" Nullable="false" Precision="15" Scale="3"/>
+                <Parameter Name="UnitOfMeasure" Type="Edm.String" Nullable="false" MaxLength="3"/>
+                <Parameter Name="ReasonCode" Type="Edm.String" Nullable="false" MaxLength="20"/>
+                <Parameter Name="ReasonText" Type="Edm.String" Nullable="false" MaxLength="255"/>
+                <ReturnType Type="com.sap.gateway.srvd.zui_pp_alloc_adm.v0001.OperationAllocationsType" Nullable="false"/>
+            </Action>
+            <EntityContainer Name="Container">
+                <EntitySet Name="AllocationTransactions" EntityType="com.sap.gateway.srvd.zui_pp_alloc_adm.v0001.AllocationTransactionsType"/>
+                <EntitySet Name="ConfirmTransactionValueHelp" EntityType="com.sap.gateway.srvd.zui_pp_alloc_adm.v0001.ConfirmTransactionValueHelpType"/>
+                <EntitySet Name="OperationAllocations" EntityType="com.sap.gateway.srvd.zui_pp_alloc_adm.v0001.OperationAllocationsType"/>
+                <EntitySet Name="OperationHistoryValueHelp" EntityType="com.sap.gateway.srvd.zui_pp_alloc_adm.v0001.OperationHistoryValueHelpType"/>
+                <EntitySet Name="OperationValueHelp" EntityType="com.sap.gateway.srvd.zui_pp_alloc_adm.v0001.OperationValueHelpType"/>
+                <EntitySet Name="PlantValueHelp" EntityType="com.sap.gateway.srvd.zui_pp_alloc_adm.v0001.PlantValueHelpType"/>
+                <EntitySet Name="ShiftValueHelp" EntityType="com.sap.gateway.srvd.zui_pp_alloc_adm.v0001.ShiftValueHelpType"/>
+                <EntitySet Name="UnitValueHelp" EntityType="com.sap.gateway.srvd.zui_pp_alloc_adm.v0001.UnitValueHelpType"/>
+                <EntitySet Name="WorkCenterValueHelp" EntityType="com.sap.gateway.srvd.zui_pp_alloc_adm.v0001.WorkCenterValueHelpType"/>
+                <EntitySet Name="WorkerHistoryValueHelp" EntityType="com.sap.gateway.srvd.zui_pp_alloc_adm.v0001.WorkerHistoryValueHelpType"/>
+                <EntitySet Name="WorkerValueHelp" EntityType="com.sap.gateway.srvd.zui_pp_alloc_adm.v0001.WorkerValueHelpType"/>
+            </EntityContainer>
+            <Annotations Target="SAP__self.WorkerHistoryValueHelpType/WorkerUUID">
+                <Annotation Term="SAP__common.Label" String="Định danh nhân công"/>
+                <Annotation Term="SAP__common.Heading" String="UUID"/>
+                <Annotation Term="SAP__common.QuickInfo" String="16 Byte UUID in 16 Bytes (Raw Format)"/>
+            </Annotations>
+            <Annotations Target="SAP__self.WorkerHistoryValueHelpType/WorkerID">
+                <Annotation Term="SAP__common.Label" String="Mã nhân công"/>
+            </Annotations>
+            <Annotations Target="SAP__self.WorkerHistoryValueHelpType/WorkerName">
+                <Annotation Term="SAP__common.Label" String="Tên nhân công"/>
+            </Annotations>
+            <Annotations Target="SAP__self.WorkerHistoryValueHelpType/Plant">
+                <Annotation Term="SAP__common.Label" String="Nhà máy"/>
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Heading" String="Plnt"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Plant"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=WERKS_D"/>
+            </Annotations>
+            <Annotations Target="SAP__self.WorkerHistoryValueHelpType/WorkCenter">
+                <Annotation Term="SAP__common.Label" String="Trung tâm làm việc"/>
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Heading" String="Work Ctr"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Work Center"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=ARBPL"/>
+            </Annotations>
+            <Annotations Target="SAP__self.WorkerHistoryValueHelpType/ValidFrom">
+                <Annotation Term="SAP__common.Label" String="Hiệu lực từ"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Date"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=DATUM"/>
+            </Annotations>
+            <Annotations Target="SAP__self.WorkerHistoryValueHelpType/ValidTo">
+                <Annotation Term="SAP__common.Label" String="Hiệu lực đến"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Date"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=DATUM"/>
+            </Annotations>
+            <Annotations Target="SAP__self.WorkerHistoryValueHelpType">
+                <Annotation Term="SAP__common.Label" String="Tra cứu nhân công theo lịch sử"/>
+            </Annotations>
+            <Annotations Target="SAP__self.Container/WorkerHistoryValueHelp">
+                <Annotation Term="SAP__capabilities.SearchRestrictions">
+                    <Record>
+                        <PropertyValue Property="Searchable" Bool="true"/>
+                        <PropertyValue Property="UnsupportedExpressions" EnumMember="SAP__capabilities.SearchExpressions/AND SAP__capabilities.SearchExpressions/NOT SAP__capabilities.SearchExpressions/group "/>
+                        <PropertyValue Property="SearchSyntax" String="https://url.sap/odata-search"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.InsertRestrictions">
+                    <Record>
+                        <PropertyValue Property="Insertable" Bool="false"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.DeleteRestrictions">
+                    <Record>
+                        <PropertyValue Property="Deletable" Bool="false"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.UpdateRestrictions">
+                    <Record>
+                        <PropertyValue Property="Updatable" Bool="false"/>
+                        <PropertyValue Property="QueryOptions">
+                            <Record>
+                                <PropertyValue Property="SelectSupported" Bool="true"/>
+                            </Record>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="SAP__self.OperationValueHelpType/MaCongDoan">
+                <Annotation Term="SAP__common.Label" String="Mã công đoạn"/>
+                <Annotation Term="SAP__common.Text" Path="TenCongDoan"/>
+            </Annotations>
+            <Annotations Target="SAP__self.OperationValueHelpType/ValidFrom">
+                <Annotation Term="SAP__common.Label" String="Hiệu lực từ"/>
+            </Annotations>
+            <Annotations Target="SAP__self.OperationValueHelpType/TenCongDoan">
+                <Annotation Term="SAP__common.Label" String="Tên công đoạn"/>
+            </Annotations>
+            <Annotations Target="SAP__self.OperationValueHelpType/BoPhan">
+                <Annotation Term="SAP__common.Label" String="Bộ phận"/>
+            </Annotations>
+            <Annotations Target="SAP__self.OperationValueHelpType/ValidTo">
+                <Annotation Term="SAP__common.Label" String="Hiệu lực đến"/>
+            </Annotations>
+            <Annotations Target="SAP__self.OperationValueHelpType">
+                <Annotation Term="SAP__common.Label" String="Chọn công đoạn"/>
+            </Annotations>
+            <Annotations Target="SAP__self.Container/OperationValueHelp">
+                <Annotation Term="SAP__capabilities.SearchRestrictions">
+                    <Record>
+                        <PropertyValue Property="Searchable" Bool="true"/>
+                        <PropertyValue Property="UnsupportedExpressions" EnumMember="SAP__capabilities.SearchExpressions/AND SAP__capabilities.SearchExpressions/NOT SAP__capabilities.SearchExpressions/group "/>
+                        <PropertyValue Property="SearchSyntax" String="https://url.sap/odata-search"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.InsertRestrictions">
+                    <Record>
+                        <PropertyValue Property="Insertable" Bool="false"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.DeleteRestrictions">
+                    <Record>
+                        <PropertyValue Property="Deletable" Bool="false"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.UpdateRestrictions">
+                    <Record>
+                        <PropertyValue Property="Updatable" Bool="false"/>
+                        <PropertyValue Property="QueryOptions">
+                            <Record>
+                                <PropertyValue Property="SelectSupported" Bool="true"/>
+                            </Record>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="SAP__self.UnitValueHelpType/UnitOfMeasure">
+                <Annotation Term="SAP__common.IsUnit"/>
+                <Annotation Term="SAP__common.Text" Path="UnitOfMeasure_Text"/>
+                <Annotation Term="SAP__common.Label" String="Unit of Measure"/>
+            </Annotations>
+            <Annotations Target="SAP__self.UnitValueHelpType/UnitOfMeasure_Text">
+                <Annotation Term="SAP__core.Computed"/>
+                <Annotation Term="SAP__common.Label" String="Unit Text (Long)"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Unit of Measurement Long Text with a 30-Character Maximum"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=MSEHL"/>
+            </Annotations>
+            <Annotations Target="SAP__self.UnitValueHelpType/UnitOfMeasureISOCode">
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="ISO Code"/>
+                <Annotation Term="SAP__common.Heading" String="ISO"/>
+                <Annotation Term="SAP__common.QuickInfo" String="ISO Code for Unit of Measurement"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=ISOCD_UNIT"/>
+            </Annotations>
+            <Annotations Target="SAP__self.UnitValueHelpType/UnitOfMeasureDimension">
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="Dimension"/>
+                <Annotation Term="SAP__common.Heading" String="Dimen."/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=DIMID"/>
+            </Annotations>
+            <Annotations Target="SAP__self.UnitValueHelpType/UnitOfMeasureTemperature">
+                <Annotation Term="SAP__measures.Unit" Path="UnitOfMeasureTemperatureUnit"/>
+                <Annotation Term="SAP__common.Label" String="Temperature"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=TEMP_VALUE"/>
+            </Annotations>
+            <Annotations Target="SAP__self.UnitValueHelpType/UnitOfMeasureTemperatureUnit">
+                <Annotation Term="SAP__common.IsUnit"/>
+                <Annotation Term="SAP__common.Label" String="Temperature Unit"/>
+                <Annotation Term="SAP__common.Heading" String="Tun"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=TEMP_UNIT"/>
+            </Annotations>
+            <Annotations Target="SAP__self.UnitValueHelpType/UnitOfMeasurePressure">
+                <Annotation Term="SAP__measures.Unit" Path="UnitOfMeasurePressureUnit"/>
+                <Annotation Term="SAP__common.Label" String="Pressure Value"/>
+            </Annotations>
+            <Annotations Target="SAP__self.UnitValueHelpType/UnitOfMeasurePressureUnit">
+                <Annotation Term="SAP__common.IsUnit"/>
+                <Annotation Term="SAP__common.Label" String="Unit of Pressure"/>
+                <Annotation Term="SAP__common.Heading" String="PUn"/>
+            </Annotations>
+            <Annotations Target="SAP__self.UnitValueHelpType">
+                <Annotation Term="SAP__common.Label" String="Unit of Measure"/>
+                <Annotation Term="SAP__common.SAPObjectNodeType">
+                    <Record>
+                        <PropertyValue Property="Name" String="UnitOfMeasure"/>
+                    </Record>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="SAP__self.Container/UnitValueHelp">
+                <Annotation Term="SAP__capabilities.SearchRestrictions">
+                    <Record>
+                        <PropertyValue Property="Searchable" Bool="true"/>
+                        <PropertyValue Property="UnsupportedExpressions" EnumMember="SAP__capabilities.SearchExpressions/AND SAP__capabilities.SearchExpressions/NOT SAP__capabilities.SearchExpressions/group "/>
+                        <PropertyValue Property="SearchSyntax" String="https://url.sap/odata-search"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.InsertRestrictions">
+                    <Record>
+                        <PropertyValue Property="Insertable" Bool="false"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.DeleteRestrictions">
+                    <Record>
+                        <PropertyValue Property="Deletable" Bool="false"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.UpdateRestrictions">
+                    <Record>
+                        <PropertyValue Property="Updatable" Bool="false"/>
+                        <PropertyValue Property="QueryOptions">
+                            <Record>
+                                <PropertyValue Property="SelectSupported" Bool="true"/>
+                            </Record>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.FilterRestrictions">
+                    <Record>
+                        <PropertyValue Property="FilterExpressionRestrictions">
+                            <Collection>
+                                <Record>
+                                    <PropertyValue Property="Property" PropertyPath="UnitOfMeasureTemperature"/>
+                                    <PropertyValue Property="AllowedExpressions" String="MultiValue"/>
+                                </Record>
+                                <Record>
+                                    <PropertyValue Property="Property" PropertyPath="UnitOfMeasurePressure"/>
+                                    <PropertyValue Property="AllowedExpressions" String="MultiValue"/>
+                                </Record>
+                            </Collection>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="SAP__self.Container">
+                <Annotation Term="SAP__CodeList.UnitsOfMeasure">
+                    <Record>
+                        <PropertyValue Property="Url" String="../../../../default/iwbep/common/0001/$metadata"/>
+                        <PropertyValue Property="CollectionPath" String="UnitsOfMeasure"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__common.ApplyMultiUnitBehaviorForSortingAndFiltering" Bool="true"/>
+                <Annotation Term="SAP__capabilities.FilterFunctions">
+                    <Collection>
+                        <String>eq</String>
+                        <String>ne</String>
+                        <String>gt</String>
+                        <String>ge</String>
+                        <String>lt</String>
+                        <String>le</String>
+                        <String>and</String>
+                        <String>or</String>
+                        <String>contains</String>
+                        <String>startswith</String>
+                        <String>endswith</String>
+                        <String>any</String>
+                        <String>all</String>
+                    </Collection>
+                </Annotation>
+                <Annotation Term="SAP__support.TechnicalInfoLinks">
+                    <Record>
+                        <PropertyValue Property="Url" String="../../../../default/iwbep/common/0001/$metadata"/>
+                        <PropertyValue Property="FunctionImport" String="GetTechnicalInfoLinks"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.SupportedFormats">
+                    <Collection>
+                        <String>application/json</String>
+                        <String>application/pdf</String>
+                    </Collection>
+                </Annotation>
+                <Annotation Term="SAP__PDF.Features">
+                    <Record>
+                        <PropertyValue Property="DocumentDescriptionReference" String="../../../../default/iwbep/common/0001/$metadata"/>
+                        <PropertyValue Property="DocumentDescriptionCollection" String="MyDocumentDescriptions"/>
+                        <PropertyValue Property="ArchiveFormat" Bool="true"/>
+                        <PropertyValue Property="Border" Bool="true"/>
+                        <PropertyValue Property="CoverPage" Bool="true"/>
+                        <PropertyValue Property="FitToPage" Bool="true"/>
+                        <PropertyValue Property="FontName" Bool="true"/>
+                        <PropertyValue Property="FontSize" Bool="true"/>
+                        <PropertyValue Property="HeaderFooter" Bool="true"/>
+                        <PropertyValue Property="IANATimezoneFormat" Bool="true"/>
+                        <PropertyValue Property="Margin" Bool="true"/>
+                        <PropertyValue Property="Padding" Bool="true"/>
+                        <PropertyValue Property="ResultSizeDefault" Int="20000"/>
+                        <PropertyValue Property="ResultSizeMaximum" Int="20000"/>
+                        <PropertyValue Property="Signature" Bool="true"/>
+                        <PropertyValue Property="TextDirectionLayout" Bool="true"/>
+                        <PropertyValue Property="Treeview" Bool="true"/>
+                        <PropertyValue Property="UploadToFileShare" Bool="true"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.BatchSupport">
+                    <Record>
+                        <PropertyValue Property="SupportedFormats">
+                            <Collection>
+                                <String>application/json</String>
+                                <String>multipart/mixed</String>
+                            </Collection>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.KeyAsSegmentSupported"/>
+                <Annotation Term="SAP__capabilities.AsynchronousRequestsSupported"/>
+            </Annotations>
+            <Annotations Target="SAP__self.WorkerValueHelpType/WorkerID">
+                <Annotation Term="SAP__common.Label" String="Mã nhân công"/>
+            </Annotations>
+            <Annotations Target="SAP__self.WorkerValueHelpType/WorkerName">
+                <Annotation Term="SAP__common.Label" String="Tên nhân công"/>
+            </Annotations>
+            <Annotations Target="SAP__self.WorkerValueHelpType/Plant">
+                <Annotation Term="SAP__common.Label" String="Nhà máy"/>
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Heading" String="Plnt"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Plant"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=WERKS_D"/>
+            </Annotations>
+            <Annotations Target="SAP__self.WorkerValueHelpType/WorkCenter">
+                <Annotation Term="SAP__common.Label" String="Trung tâm làm việc"/>
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Heading" String="Work Ctr"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Work Center"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=ARBPL"/>
+            </Annotations>
+            <Annotations Target="SAP__self.WorkerValueHelpType">
+                <Annotation Term="SAP__common.Label" String="Chọn nhân công"/>
+            </Annotations>
+            <Annotations Target="SAP__self.Container/WorkerValueHelp">
+                <Annotation Term="SAP__capabilities.SearchRestrictions">
+                    <Record>
+                        <PropertyValue Property="Searchable" Bool="true"/>
+                        <PropertyValue Property="UnsupportedExpressions" EnumMember="SAP__capabilities.SearchExpressions/AND SAP__capabilities.SearchExpressions/NOT SAP__capabilities.SearchExpressions/group "/>
+                        <PropertyValue Property="SearchSyntax" String="https://url.sap/odata-search"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.InsertRestrictions">
+                    <Record>
+                        <PropertyValue Property="Insertable" Bool="false"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.DeleteRestrictions">
+                    <Record>
+                        <PropertyValue Property="Deletable" Bool="false"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.UpdateRestrictions">
+                    <Record>
+                        <PropertyValue Property="Updatable" Bool="false"/>
+                        <PropertyValue Property="QueryOptions">
+                            <Record>
+                                <PropertyValue Property="SelectSupported" Bool="true"/>
+                            </Record>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="SAP__self.OperationHistoryValueHelpType/MaCongDoan">
+                <Annotation Term="SAP__common.Label" String="Mã công đoạn"/>
+                <Annotation Term="SAP__common.Text" Path="TenCongDoan"/>
+            </Annotations>
+            <Annotations Target="SAP__self.OperationHistoryValueHelpType/ValidFrom">
+                <Annotation Term="SAP__common.Label" String="Hiệu lực từ"/>
+            </Annotations>
+            <Annotations Target="SAP__self.OperationHistoryValueHelpType/TenCongDoan">
+                <Annotation Term="SAP__common.Label" String="Tên công đoạn"/>
+            </Annotations>
+            <Annotations Target="SAP__self.OperationHistoryValueHelpType/BoPhan">
+                <Annotation Term="SAP__common.Label" String="Bộ phận"/>
+            </Annotations>
+            <Annotations Target="SAP__self.OperationHistoryValueHelpType/ValidTo">
+                <Annotation Term="SAP__common.Label" String="Hiệu lực đến"/>
+            </Annotations>
+            <Annotations Target="SAP__self.OperationHistoryValueHelpType">
+                <Annotation Term="SAP__common.Label" String="Tra cứu công đoạn theo lịch sử"/>
+            </Annotations>
+            <Annotations Target="SAP__self.Container/OperationHistoryValueHelp">
+                <Annotation Term="SAP__capabilities.SearchRestrictions">
+                    <Record>
+                        <PropertyValue Property="Searchable" Bool="true"/>
+                        <PropertyValue Property="UnsupportedExpressions" EnumMember="SAP__capabilities.SearchExpressions/AND SAP__capabilities.SearchExpressions/NOT SAP__capabilities.SearchExpressions/group "/>
+                        <PropertyValue Property="SearchSyntax" String="https://url.sap/odata-search"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.InsertRestrictions">
+                    <Record>
+                        <PropertyValue Property="Insertable" Bool="false"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.DeleteRestrictions">
+                    <Record>
+                        <PropertyValue Property="Deletable" Bool="false"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.UpdateRestrictions">
+                    <Record>
+                        <PropertyValue Property="Updatable" Bool="false"/>
+                        <PropertyValue Property="QueryOptions">
+                            <Record>
+                                <PropertyValue Property="SelectSupported" Bool="true"/>
+                            </Record>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="SAP__self.OperationAllocationsType/OperationUUID">
+                <Annotation Term="SAP__common.Label" String="Mã định danh công đoạn"/>
+                <Annotation Term="SAP__core.Computed"/>
+                <Annotation Term="SAP__common.Heading" String="UUID"/>
+                <Annotation Term="SAP__common.QuickInfo" String="16 Byte UUID in 16 Bytes (Raw Format)"/>
+            </Annotations>
+            <Annotations Target="SAP__self.OperationAllocationsType/ProductionOrder">
+                <Annotation Term="SAP__common.Label" String="Lệnh sản xuất"/>
+                <Annotation Term="SAP__common.FieldControl" EnumMember="SAP__common.FieldControlType/Mandatory"/>
+            </Annotations>
+            <Annotations Target="SAP__self.OperationAllocationsType/Operation">
+                <Annotation Term="SAP__common.Label" String="Công đoạn lệnh sản xuất"/>
+                <Annotation Term="SAP__common.FieldControl" EnumMember="SAP__common.FieldControlType/Mandatory"/>
+            </Annotations>
+            <Annotations Target="SAP__self.OperationAllocationsType/MaCongDoan">
+                <Annotation Term="SAP__common.Label" String="Mã công đoạn"/>
+                <Annotation Term="SAP__common.FieldControl" EnumMember="SAP__common.FieldControlType/Mandatory"/>
+                <Annotation Term="SAP__common.ValueListReferences">
+                    <Collection>
+                        <String>../../../../srvd_f4/sap/zi_md_congdoan_hist_vh/0001;ps='srvd-zui_pp_alloc_adm-0001';va='com.sap.gateway.srvd.zui_pp_alloc_adm.v0001.et-zc_pp_opalloc_adm.macongdoan'/$metadata</String>
+                    </Collection>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="SAP__self.OperationAllocationsType/Plant">
+                <Annotation Term="SAP__common.Label" String="Nhà máy"/>
+                <Annotation Term="SAP__common.FieldControl" EnumMember="SAP__common.FieldControlType/Mandatory"/>
+                <Annotation Term="SAP__common.ValueListReferences">
+                    <Collection>
+                        <String>../../../../srvd_f4/sap/i_plant/0001;ps='srvd-zui_pp_alloc_adm-0001';va='com.sap.gateway.srvd.zui_pp_alloc_adm.v0001.et-zc_pp_opalloc_adm.plant'/$metadata</String>
+                    </Collection>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="SAP__self.OperationAllocationsType/WorkCenter">
+                <Annotation Term="SAP__common.Label" String="Trung tâm làm việc"/>
+                <Annotation Term="SAP__common.FieldControl" EnumMember="SAP__common.FieldControlType/Mandatory"/>
+                <Annotation Term="SAP__common.ValueListReferences">
+                    <Collection>
+                        <String>../../../../srvd_f4/sap/zi_mob_workcenter_vh/0001;ps='srvd-zui_pp_alloc_adm-0001';va='com.sap.gateway.srvd.zui_pp_alloc_adm.v0001.et-zc_pp_opalloc_adm.workcenter'/$metadata</String>
+                    </Collection>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="SAP__self.OperationAllocationsType/OperationQuantity">
+                <Annotation Term="SAP__common.Label" String="Sản lượng công đoạn"/>
+                <Annotation Term="SAP__common.FieldControl" EnumMember="SAP__common.FieldControlType/Mandatory"/>
+                <Annotation Term="SAP__measures.Unit" Path="UnitOfMeasure"/>
+            </Annotations>
+            <Annotations Target="SAP__self.OperationAllocationsType/UnitOfMeasure">
+                <Annotation Term="SAP__common.IsUnit"/>
+                <Annotation Term="SAP__common.Label" String="Đơn vị tính"/>
+                <Annotation Term="SAP__common.FieldControl" EnumMember="SAP__common.FieldControlType/Mandatory"/>
+                <Annotation Term="SAP__common.ValueListReferences">
+                    <Collection>
+                        <String>../../../../srvd_f4/sap/i_unitofmeasure/0001;ps='srvd-zui_pp_alloc_adm-0001';va='com.sap.gateway.srvd.zui_pp_alloc_adm.v0001.et-zc_pp_opalloc_adm.unitofmeasure'/$metadata</String>
+                    </Collection>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="SAP__self.OperationAllocationsType/OperationStatus">
+                <Annotation Term="SAP__common.Label" String="Trạng thái công đoạn"/>
+            </Annotations>
+            <Annotations Target="SAP__self.OperationAllocationsType/CreatedBy">
+                <Annotation Term="SAP__common.Label" String="Người tạo"/>
+                <Annotation Term="SAP__core.Computed"/>
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Heading" String="Created By"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Created By User"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=ABP_CREATION_USER"/>
+            </Annotations>
+            <Annotations Target="SAP__self.OperationAllocationsType">
+                <Annotation Term="SAP__common.CreatedBy" Path="CreatedBy"/>
+                <Annotation Term="SAP__common.CreatedAt" Path="CreatedAt"/>
+                <Annotation Term="SAP__common.ChangedBy" Path="LastChangedBy"/>
+                <Annotation Term="SAP__common.Label" String="Quản trị điều chỉnh sản lượng"/>
+                <Annotation Term="SAP__UI.Facets">
+                    <Collection>
+                        <Record Type="SAP__UI.ReferenceFacet">
+                            <PropertyValue Property="Label" String="Thông tin công đoạn sản xuất"/>
+                            <PropertyValue Property="ID" String="General"/>
+                            <PropertyValue Property="Target" AnnotationPath="@SAP__UI.Identification"/>
+                        </Record>
+                    </Collection>
+                </Annotation>
+                <Annotation Term="SAP__UI.HeaderInfo">
+                    <Record>
+                        <PropertyValue Property="TypeName" String="Công đoạn sản xuất"/>
+                        <PropertyValue Property="TypeNamePlural" String="Điều chỉnh sản lượng"/>
+                        <PropertyValue Property="Title">
+                            <Record Type="SAP__UI.DataField">
+                                <PropertyValue Property="Value" Path="ProductionOrder"/>
+                            </Record>
+                        </PropertyValue>
+                        <PropertyValue Property="Description">
+                            <Record Type="SAP__UI.DataField">
+                                <PropertyValue Property="Value" Path="Operation"/>
+                            </Record>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__UI.Identification">
+                    <Collection>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Label" String="Lệnh sản xuất"/>
+                            <PropertyValue Property="Value" Path="ProductionOrder"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Label" String="Công đoạn"/>
+                            <PropertyValue Property="Value" Path="Operation"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Label" String="Mã công đoạn"/>
+                            <PropertyValue Property="Value" Path="MaCongDoan"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Value" Path="Plant"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Value" Path="WorkCenter"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Value" Path="OperationQuantity"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Value" Path="UnitOfMeasure"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Value" Path="OperationStatus"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Value" Path="OperationUUID"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Value" Path="CreatedBy"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Value" Path="CreatedAt"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Value" Path="LastChangedBy"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Value" Path="LocalLastChangedAt"/>
+                        </Record>
+                    </Collection>
+                </Annotation>
+                <Annotation Term="SAP__UI.LineItem">
+                    <Collection>
+                        <Record Type="SAP__UI.DataFieldForAction">
+                            <PropertyValue Property="Label" String="Điều chỉnh xác nhận"/>
+                            <PropertyValue Property="Action" String="com.sap.gateway.srvd.zui_pp_alloc_adm.v0001.correctConfirm(com.sap.gateway.srvd.zui_pp_alloc_adm.v0001.OperationAllocationsType)"/>
+                            <PropertyValue Property="InvocationGrouping" EnumMember="SAP__UI.OperationGroupingType/Isolated"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Label" String="Lệnh sản xuất"/>
+                            <PropertyValue Property="Value" Path="ProductionOrder"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Label" String="Công đoạn"/>
+                            <PropertyValue Property="Value" Path="Operation"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Label" String="Mã công đoạn"/>
+                            <PropertyValue Property="Value" Path="MaCongDoan"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Label" String="Nhà máy"/>
+                            <PropertyValue Property="Value" Path="Plant"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Label" String="Tổ/Work Center"/>
+                            <PropertyValue Property="Value" Path="WorkCenter"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Label" String="Sản lượng công đoạn"/>
+                            <PropertyValue Property="Value" Path="OperationQuantity"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Label" String="ĐVT"/>
+                            <PropertyValue Property="Value" Path="UnitOfMeasure"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Label" String="Trạng thái"/>
+                            <PropertyValue Property="Value" Path="OperationStatus"/>
+                        </Record>
+                    </Collection>
+                </Annotation>
+                <Annotation Term="SAP__UI.SelectionFields">
+                    <Collection>
+                        <PropertyPath>ProductionOrder</PropertyPath>
+                        <PropertyPath>MaCongDoan</PropertyPath>
+                        <PropertyPath>Plant</PropertyPath>
+                        <PropertyPath>WorkCenter</PropertyPath>
+                    </Collection>
+                </Annotation>
+                <Annotation Term="SAP__common.Messages" Path="SAP__Messages"/>
+            </Annotations>
+            <Annotations Target="SAP__self.OperationAllocationsType/CreatedAt">
+                <Annotation Term="SAP__common.Label" String="Thời điểm tạo"/>
+                <Annotation Term="SAP__core.Computed"/>
+                <Annotation Term="SAP__common.Heading" String="Created On"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Creation Date Time"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=ABP_CREATION_TSTMPL"/>
+            </Annotations>
+            <Annotations Target="SAP__self.OperationAllocationsType/LastChangedBy">
+                <Annotation Term="SAP__common.Label" String="Người thay đổi cuối"/>
+                <Annotation Term="SAP__core.Computed"/>
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Heading" String="Changed By"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Last Changed By User"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=ABP_LASTCHANGE_USER"/>
+            </Annotations>
+            <Annotations Target="SAP__self.OperationAllocationsType/LocalLastChangedAt">
+                <Annotation Term="SAP__common.Label" String="Thời điểm cập nhật bản ghi"/>
+                <Annotation Term="SAP__core.Computed"/>
+                <Annotation Term="SAP__common.Heading" String="Changed On"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Local Instance Last Change Date Time"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=ABP_LOCINST_LASTCHANGE_TSTMPL"/>
+            </Annotations>
+            <Annotations Target="SAP__self.OperationAllocationsType/__OperationControl">
+                <Annotation Term="SAP__core.Computed"/>
+                <Annotation Term="SAP__UI.HiddenFilter"/>
+                <Annotation Term="SAP__UI.Hidden"/>
+            </Annotations>
+            <Annotations Target="SAP__self.correctConfirm(SAP__self.OperationAllocationsType)/TransactionUUID">
+                <Annotation Term="SAP__common.Label" String="Mã giao dịch xác nhận"/>
+                <Annotation Term="SAP__common.ValueListReferences">
+                    <Collection>
+                        <String>../../../../srvd_f4/sap/zi_pp_confirm_txn_vh/0001;ps='srvd-zui_pp_alloc_adm-0001';va='com.sap.gateway.srvd.zui_pp_alloc_adm.v0001.ae-zc_pp_opalloc_adm.correctconfirm.transactionuuid.OperationAllocationsType'/$metadata</String>
+                    </Collection>
+                </Annotation>
+                <Annotation Term="SAP__common.Heading" String="UUID"/>
+                <Annotation Term="SAP__common.QuickInfo" String="16 Byte UUID in 16 Bytes (Raw Format)"/>
+            </Annotations>
+            <Annotations Target="SAP__self.correctConfirm(SAP__self.OperationAllocationsType)/NewQuantity">
+                <Annotation Term="SAP__common.Label" String="Sản lượng xác nhận mới"/>
+                <Annotation Term="SAP__measures.Unit" Path="UnitOfMeasure"/>
+            </Annotations>
+            <Annotations Target="SAP__self.correctConfirm(SAP__self.OperationAllocationsType)/UnitOfMeasure">
+                <Annotation Term="SAP__common.Label" String="Đơn vị tính"/>
+                <Annotation Term="SAP__common.ValueListReferences">
+                    <Collection>
+                        <String>../../../../srvd_f4/sap/i_unitofmeasure/0001;ps='srvd-zui_pp_alloc_adm-0001';va='com.sap.gateway.srvd.zui_pp_alloc_adm.v0001.ae-zc_pp_opalloc_adm.correctconfirm.unitofmeasure.OperationAllocationsType'/$metadata</String>
+                    </Collection>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="SAP__self.correctConfirm(SAP__self.OperationAllocationsType)/ReasonCode">
+                <Annotation Term="SAP__common.Label" String="Mã lý do"/>
+            </Annotations>
+            <Annotations Target="SAP__self.correctConfirm(SAP__self.OperationAllocationsType)/ReasonText">
+                <Annotation Term="SAP__common.Label" String="Nội dung lý do"/>
+            </Annotations>
+            <Annotations Target="SAP__self.correctConfirm(SAP__self.OperationAllocationsType)">
+                <Annotation Term="SAP__core.OperationAvailable" Path="_it/__OperationControl/correctConfirm"/>
+            </Annotations>
+            <Annotations Target="SAP__self.Container/OperationAllocations">
+                <Annotation Term="SAP__capabilities.SearchRestrictions">
+                    <Record>
+                        <PropertyValue Property="Searchable" Bool="false"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.FilterRestrictions">
+                    <Record>
+                        <PropertyValue Property="NonFilterableProperties">
+                            <Collection>
+                                <PropertyPath>__OperationControl</PropertyPath>
+                            </Collection>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.SortRestrictions">
+                    <Record>
+                        <PropertyValue Property="NonSortableProperties">
+                            <Collection>
+                                <PropertyPath>__OperationControl</PropertyPath>
+                            </Collection>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.InsertRestrictions">
+                    <Record>
+                        <PropertyValue Property="Insertable" Bool="false"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.DeleteRestrictions">
+                    <Record>
+                        <PropertyValue Property="Deletable" Bool="false"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.UpdateRestrictions">
+                    <Record>
+                        <PropertyValue Property="Updatable" Bool="false"/>
+                        <PropertyValue Property="QueryOptions">
+                            <Record>
+                                <PropertyValue Property="SelectSupported" Bool="true"/>
+                            </Record>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="SAP__self.ShiftValueHelpType/Plant">
+                <Annotation Term="SAP__common.Label" String="Nhà máy"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ShiftValueHelpType/ShiftID">
+                <Annotation Term="SAP__common.Label" String="Mã ca"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ShiftValueHelpType/ValidFrom">
+                <Annotation Term="SAP__common.Label" String="Hiệu lực từ"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ShiftValueHelpType/ShiftName">
+                <Annotation Term="SAP__common.Label" String="Tên ca"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ShiftValueHelpType/StartTime">
+                <Annotation Term="SAP__common.Label" String="Giờ bắt đầu"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ShiftValueHelpType/EndTime">
+                <Annotation Term="SAP__common.Label" String="Giờ kết thúc"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ShiftValueHelpType/EndDayOffset">
+                <Annotation Term="SAP__common.Label" String="Ngày kết thúc: 0 cùng ngày, 1 hôm sau"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ShiftValueHelpType/SAPTimeZone">
+                <Annotation Term="SAP__common.Label" String="Múi giờ SAP"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ShiftValueHelpType/ValidTo">
+                <Annotation Term="SAP__common.Label" String="Hiệu lực đến"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ShiftValueHelpType/IsActive">
+                <Annotation Term="SAP__common.Label" String="Trạng thái"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ShiftValueHelpType">
+                <Annotation Term="SAP__common.Label" String="Danh mục ca làm việc"/>
+            </Annotations>
+            <Annotations Target="SAP__self.Container/ShiftValueHelp">
+                <Annotation Term="SAP__capabilities.SearchRestrictions">
+                    <Record>
+                        <PropertyValue Property="Searchable" Bool="true"/>
+                        <PropertyValue Property="UnsupportedExpressions" EnumMember="SAP__capabilities.SearchExpressions/AND SAP__capabilities.SearchExpressions/NOT SAP__capabilities.SearchExpressions/group "/>
+                        <PropertyValue Property="SearchSyntax" String="https://url.sap/odata-search"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.InsertRestrictions">
+                    <Record>
+                        <PropertyValue Property="Insertable" Bool="false"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.DeleteRestrictions">
+                    <Record>
+                        <PropertyValue Property="Deletable" Bool="false"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.UpdateRestrictions">
+                    <Record>
+                        <PropertyValue Property="Updatable" Bool="false"/>
+                        <PropertyValue Property="QueryOptions">
+                            <Record>
+                                <PropertyValue Property="SelectSupported" Bool="true"/>
+                            </Record>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="SAP__self.WorkCenterValueHelpType/Plant">
+                <Annotation Term="SAP__common.Label" String="Nhà máy"/>
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Heading" String="Plnt"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Plant"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=WERKS_D"/>
+            </Annotations>
+            <Annotations Target="SAP__self.WorkCenterValueHelpType/WorkCenter">
+                <Annotation Term="SAP__common.Label" String="Trung tâm làm việc"/>
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.ValueListReferences">
+                    <Collection>
+                        <String>../../../../srvd_f4/sap/i_wrkctrbysemantickeystdvh/0001;ps='srvd-zui_pp_alloc_adm-0001';va='com.sap.gateway.srvd.zui_pp_alloc_adm.v0001.et-zi_mob_workcenter_vh.workcenter'/$metadata</String>
+                    </Collection>
+                </Annotation>
+                <Annotation Term="SAP__common.QuickInfo" String="Work Center"/>
+            </Annotations>
+            <Annotations Target="SAP__self.WorkCenterValueHelpType">
+                <Annotation Term="SAP__common.Label" String="Chọn Work Center"/>
+            </Annotations>
+            <Annotations Target="SAP__self.Container/WorkCenterValueHelp">
+                <Annotation Term="SAP__capabilities.SearchRestrictions">
+                    <Record>
+                        <PropertyValue Property="Searchable" Bool="true"/>
+                        <PropertyValue Property="UnsupportedExpressions" EnumMember="SAP__capabilities.SearchExpressions/AND SAP__capabilities.SearchExpressions/NOT SAP__capabilities.SearchExpressions/group "/>
+                        <PropertyValue Property="SearchSyntax" String="https://url.sap/odata-search"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.InsertRestrictions">
+                    <Record>
+                        <PropertyValue Property="Insertable" Bool="false"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.DeleteRestrictions">
+                    <Record>
+                        <PropertyValue Property="Deletable" Bool="false"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.UpdateRestrictions">
+                    <Record>
+                        <PropertyValue Property="Updatable" Bool="false"/>
+                        <PropertyValue Property="QueryOptions">
+                            <Record>
+                                <PropertyValue Property="SelectSupported" Bool="true"/>
+                            </Record>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="SAP__self.AllocationTransactionsType/TransactionUUID">
+                <Annotation Term="SAP__common.Label" String="Mã giao dịch"/>
+                <Annotation Term="SAP__common.Heading" String="UUID"/>
+                <Annotation Term="SAP__common.QuickInfo" String="16 Byte UUID in 16 Bytes (Raw Format)"/>
+            </Annotations>
+            <Annotations Target="SAP__self.AllocationTransactionsType/OperationUUID">
+                <Annotation Term="SAP__common.Label" String="Mã định danh công đoạn"/>
+                <Annotation Term="SAP__common.Heading" String="UUID"/>
+                <Annotation Term="SAP__common.QuickInfo" String="16 Byte UUID in 16 Bytes (Raw Format)"/>
+            </Annotations>
+            <Annotations Target="SAP__self.AllocationTransactionsType/OriginalTransactionUUID">
+                <Annotation Term="SAP__common.Label" String="Mã giao dịch gốc"/>
+                <Annotation Term="SAP__common.Heading" String="UUID"/>
+                <Annotation Term="SAP__common.QuickInfo" String="16 Byte UUID in 16 Bytes (Raw Format)"/>
+            </Annotations>
+            <Annotations Target="SAP__self.AllocationTransactionsType/SyncItemUUID">
+                <Annotation Term="SAP__common.Label" String="Mã đồng bộ"/>
+                <Annotation Term="SAP__common.Heading" String="UUID"/>
+                <Annotation Term="SAP__common.QuickInfo" String="16 Byte UUID in 16 Bytes (Raw Format)"/>
+            </Annotations>
+            <Annotations Target="SAP__self.AllocationTransactionsType/ProductionOrder">
+                <Annotation Term="SAP__common.Label" String="Lệnh sản xuất"/>
+            </Annotations>
+            <Annotations Target="SAP__self.AllocationTransactionsType/Operation">
+                <Annotation Term="SAP__common.Label" String="Công đoạn lệnh sản xuất"/>
+            </Annotations>
+            <Annotations Target="SAP__self.AllocationTransactionsType/MaCongDoan">
+                <Annotation Term="SAP__common.Label" String="Mã công đoạn"/>
+                <Annotation Term="SAP__common.ValueListReferences">
+                    <Collection>
+                        <String>../../../../srvd_f4/sap/zi_md_congdoan_hist_vh/0001;ps='srvd-zui_pp_alloc_adm-0001';va='com.sap.gateway.srvd.zui_pp_alloc_adm.v0001.et-zc_pp_alloctxn_adm.macongdoan'/$metadata</String>
+                    </Collection>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="SAP__self.AllocationTransactionsType/Plant">
+                <Annotation Term="SAP__common.Label" String="Nhà máy"/>
+                <Annotation Term="SAP__common.ValueListReferences">
+                    <Collection>
+                        <String>../../../../srvd_f4/sap/i_plant/0001;ps='srvd-zui_pp_alloc_adm-0001';va='com.sap.gateway.srvd.zui_pp_alloc_adm.v0001.et-zc_pp_alloctxn_adm.plant'/$metadata</String>
+                    </Collection>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="SAP__self.AllocationTransactionsType/WorkCenter">
+                <Annotation Term="SAP__common.Label" String="Trung tâm làm việc"/>
+                <Annotation Term="SAP__common.ValueListReferences">
+                    <Collection>
+                        <String>../../../../srvd_f4/sap/zi_mob_workcenter_vh/0001;ps='srvd-zui_pp_alloc_adm-0001';va='com.sap.gateway.srvd.zui_pp_alloc_adm.v0001.et-zc_pp_alloctxn_adm.workcenter'/$metadata</String>
+                    </Collection>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="SAP__self.AllocationTransactionsType/TransactionType">
+                <Annotation Term="SAP__common.Label" String="Loại giao dịch"/>
+            </Annotations>
+            <Annotations Target="SAP__self.AllocationTransactionsType/OriginalTransactionType">
+                <Annotation Term="SAP__common.Label" String="Loại giao dịch gốc"/>
+            </Annotations>
+            <Annotations Target="SAP__self.AllocationTransactionsType/FromWorkerID">
+                <Annotation Term="SAP__common.Label" String="Nhân công chuyển"/>
+                <Annotation Term="SAP__common.ValueListReferences">
+                    <Collection>
+                        <String>../../../../srvd_f4/sap/zi_pp_worker_hist_vh/0001;ps='srvd-zui_pp_alloc_adm-0001';va='com.sap.gateway.srvd.zui_pp_alloc_adm.v0001.et-zc_pp_alloctxn_adm.fromworkerid'/$metadata</String>
+                    </Collection>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="SAP__self.AllocationTransactionsType/ToWorkerID">
+                <Annotation Term="SAP__common.Label" String="Nhân công nhận"/>
+                <Annotation Term="SAP__common.ValueListReferences">
+                    <Collection>
+                        <String>../../../../srvd_f4/sap/zi_pp_worker_hist_vh/0001;ps='srvd-zui_pp_alloc_adm-0001';va='com.sap.gateway.srvd.zui_pp_alloc_adm.v0001.et-zc_pp_alloctxn_adm.toworkerid'/$metadata</String>
+                    </Collection>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="SAP__self.AllocationTransactionsType/WorkerID">
+                <Annotation Term="SAP__common.Label" String="Mã nhân công"/>
+                <Annotation Term="SAP__common.ValueListReferences">
+                    <Collection>
+                        <String>../../../../srvd_f4/sap/zi_pp_worker_hist_vh/0001;ps='srvd-zui_pp_alloc_adm-0001';va='com.sap.gateway.srvd.zui_pp_alloc_adm.v0001.et-zc_pp_alloctxn_adm.workerid'/$metadata</String>
+                    </Collection>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="SAP__self.AllocationTransactionsType/Quantity">
+                <Annotation Term="SAP__common.Label" String="Số lượng"/>
+                <Annotation Term="SAP__measures.Unit" Path="UnitOfMeasure"/>
+            </Annotations>
+            <Annotations Target="SAP__self.AllocationTransactionsType/UnitOfMeasure">
+                <Annotation Term="SAP__common.IsUnit"/>
+                <Annotation Term="SAP__common.Label" String="Đơn vị tính"/>
+                <Annotation Term="SAP__common.ValueListReferences">
+                    <Collection>
+                        <String>../../../../srvd_f4/sap/i_unitofmeasure/0001;ps='srvd-zui_pp_alloc_adm-0001';va='com.sap.gateway.srvd.zui_pp_alloc_adm.v0001.et-zc_pp_alloctxn_adm.unitofmeasure'/$metadata</String>
+                    </Collection>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="SAP__self.AllocationTransactionsType/ExecutionDate">
+                <Annotation Term="SAP__common.Label" String="Ngày thực hiện"/>
+            </Annotations>
+            <Annotations Target="SAP__self.AllocationTransactionsType/ShiftID">
+                <Annotation Term="SAP__common.Label" String="Mã ca"/>
+                <Annotation Term="SAP__common.ValueListReferences">
+                    <Collection>
+                        <String>../../../../srvd_f4/sap/zi_pp_shift/0001;ps='srvd-zui_pp_alloc_adm-0001';va='com.sap.gateway.srvd.zui_pp_alloc_adm.v0001.et-zc_pp_alloctxn_adm.shiftid'/$metadata</String>
+                    </Collection>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="SAP__self.AllocationTransactionsType/WorkDate">
+                <Annotation Term="SAP__common.Label" String="Ngày làm việc"/>
+            </Annotations>
+            <Annotations Target="SAP__self.AllocationTransactionsType/ExecutedAt">
+                <Annotation Term="SAP__common.Label" String="Thời điểm thực hiện UTC"/>
+            </Annotations>
+            <Annotations Target="SAP__self.AllocationTransactionsType/ShiftStartAt">
+                <Annotation Term="SAP__common.Label" String="Bắt đầu ca UTC"/>
+            </Annotations>
+            <Annotations Target="SAP__self.AllocationTransactionsType/ShiftEndAt">
+                <Annotation Term="SAP__common.Label" String="Kết thúc ca UTC"/>
+            </Annotations>
+            <Annotations Target="SAP__self.AllocationTransactionsType/ShiftTimeZone">
+                <Annotation Term="SAP__common.Label" String="Múi giờ ca"/>
+            </Annotations>
+            <Annotations Target="SAP__self.AllocationTransactionsType/ShiftValidFrom">
+                <Annotation Term="SAP__common.Label" String="Phiên bản ca hiệu lực từ"/>
+            </Annotations>
+            <Annotations Target="SAP__self.AllocationTransactionsType/TransactionStatus">
+                <Annotation Term="SAP__common.Label" String="Trạng thái giao dịch"/>
+            </Annotations>
+            <Annotations Target="SAP__self.AllocationTransactionsType/ReasonCode">
+                <Annotation Term="SAP__common.Label" String="Mã lý do"/>
+            </Annotations>
+            <Annotations Target="SAP__self.AllocationTransactionsType/ReasonText">
+                <Annotation Term="SAP__common.Label" String="Nội dung lý do"/>
+            </Annotations>
+            <Annotations Target="SAP__self.AllocationTransactionsType/SourceChannel">
+                <Annotation Term="SAP__common.Label" String="Nguồn giao dịch"/>
+            </Annotations>
+            <Annotations Target="SAP__self.AllocationTransactionsType/ActorUserUUID">
+                <Annotation Term="SAP__common.Label" String="Người thực hiện"/>
+                <Annotation Term="SAP__common.Heading" String="UUID"/>
+                <Annotation Term="SAP__common.QuickInfo" String="16 Byte UUID in 16 Bytes (Raw Format)"/>
+            </Annotations>
+            <Annotations Target="SAP__self.AllocationTransactionsType/InitiatorSessionID">
+                <Annotation Term="SAP__common.Label" String="Phiên thực hiện"/>
+                <Annotation Term="SAP__common.Heading" String="UUID"/>
+                <Annotation Term="SAP__common.QuickInfo" String="16 Byte UUID in 16 Bytes (Raw Format)"/>
+            </Annotations>
+            <Annotations Target="SAP__self.AllocationTransactionsType/DeviceID">
+                <Annotation Term="SAP__common.Label" String="Mã thiết bị"/>
+            </Annotations>
+            <Annotations Target="SAP__self.AllocationTransactionsType/VerificationMethod">
+                <Annotation Term="SAP__common.Label" String="Phương thức xác thực"/>
+            </Annotations>
+            <Annotations Target="SAP__self.AllocationTransactionsType/VerifiedWorkerUserUUID">
+                <Annotation Term="SAP__common.Label" String="Tài khoản nhân công xác thực"/>
+                <Annotation Term="SAP__common.Heading" String="UUID"/>
+                <Annotation Term="SAP__common.QuickInfo" String="16 Byte UUID in 16 Bytes (Raw Format)"/>
+            </Annotations>
+            <Annotations Target="SAP__self.AllocationTransactionsType/WorkerVerifiedAt">
+                <Annotation Term="SAP__common.Label" String="Thời điểm xác thực nhân công"/>
+            </Annotations>
+            <Annotations Target="SAP__self.AllocationTransactionsType/CreatedBy">
+                <Annotation Term="SAP__common.Label" String="Người tạo"/>
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Heading" String="Created By"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Created By User"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=ABP_CREATION_USER"/>
+            </Annotations>
+            <Annotations Target="SAP__self.AllocationTransactionsType">
+                <Annotation Term="SAP__common.CreatedBy" Path="CreatedBy"/>
+                <Annotation Term="SAP__common.CreatedAt" Path="CreatedAt"/>
+                <Annotation Term="SAP__common.Label" String="Sổ điều chỉnh sản lượng"/>
+                <Annotation Term="SAP__UI.Facets">
+                    <Collection>
+                        <Record Type="SAP__UI.ReferenceFacet">
+                            <PropertyValue Property="Label" String="Chi tiết giao dịch sản lượng"/>
+                            <PropertyValue Property="ID" String="General"/>
+                            <PropertyValue Property="Target" AnnotationPath="@SAP__UI.Identification"/>
+                        </Record>
+                    </Collection>
+                </Annotation>
+                <Annotation Term="SAP__UI.HeaderInfo">
+                    <Record>
+                        <PropertyValue Property="TypeName" String="Giao dịch sản lượng"/>
+                        <PropertyValue Property="TypeNamePlural" String="Sổ giao dịch sản lượng"/>
+                        <PropertyValue Property="Title">
+                            <Record Type="SAP__UI.DataField">
+                                <PropertyValue Property="Value" Path="ProductionOrder"/>
+                            </Record>
+                        </PropertyValue>
+                        <PropertyValue Property="Description">
+                            <Record Type="SAP__UI.DataField">
+                                <PropertyValue Property="Value" Path="TransactionType"/>
+                            </Record>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__UI.Identification">
+                    <Collection>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Value" Path="ProductionOrder"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Value" Path="Operation"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Value" Path="MaCongDoan"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Value" Path="Plant"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Value" Path="WorkCenter"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Value" Path="TransactionType"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Value" Path="WorkerID"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Value" Path="Quantity"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Value" Path="UnitOfMeasure"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Value" Path="WorkDate"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Value" Path="ShiftID"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Value" Path="ExecutedAt"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Value" Path="TransactionStatus"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Value" Path="SourceChannel"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Value" Path="ReasonText"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Value" Path="FromWorkerID"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Value" Path="ToWorkerID"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Value" Path="ExecutionDate"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Value" Path="ReasonCode"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Value" Path="OriginalTransactionType"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Value" Path="OriginalTransactionUUID"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Value" Path="TransactionUUID"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Value" Path="OperationUUID"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Value" Path="SyncItemUUID"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Value" Path="ShiftStartAt"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Value" Path="ShiftEndAt"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Value" Path="ShiftTimeZone"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Value" Path="ShiftValidFrom"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Value" Path="ActorUserUUID"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Value" Path="InitiatorSessionID"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Value" Path="DeviceID"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Value" Path="VerificationMethod"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Value" Path="VerifiedWorkerUserUUID"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Value" Path="WorkerVerifiedAt"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Value" Path="CreatedBy"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Value" Path="CreatedAt"/>
+                        </Record>
+                    </Collection>
+                </Annotation>
+                <Annotation Term="SAP__UI.LineItem">
+                    <Collection>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Value" Path="ProductionOrder"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Value" Path="Operation"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Value" Path="MaCongDoan"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Value" Path="Plant"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Value" Path="WorkCenter"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Value" Path="TransactionType"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Value" Path="WorkerID"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Value" Path="Quantity"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Value" Path="UnitOfMeasure"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Value" Path="WorkDate"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Value" Path="ShiftID"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Value" Path="ExecutedAt"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Value" Path="TransactionStatus"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Value" Path="SourceChannel"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Value" Path="ReasonText"/>
+                        </Record>
+                    </Collection>
+                </Annotation>
+                <Annotation Term="SAP__UI.SelectionFields">
+                    <Collection>
+                        <PropertyPath>ProductionOrder</PropertyPath>
+                        <PropertyPath>Operation</PropertyPath>
+                        <PropertyPath>MaCongDoan</PropertyPath>
+                        <PropertyPath>Plant</PropertyPath>
+                        <PropertyPath>WorkCenter</PropertyPath>
+                        <PropertyPath>WorkerID</PropertyPath>
+                        <PropertyPath>WorkDate</PropertyPath>
+                        <PropertyPath>ShiftID</PropertyPath>
+                        <PropertyPath>TransactionType</PropertyPath>
+                        <PropertyPath>TransactionStatus</PropertyPath>
+                        <PropertyPath>SourceChannel</PropertyPath>
+                    </Collection>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="SAP__self.AllocationTransactionsType/CreatedAt">
+                <Annotation Term="SAP__common.Label" String="Thời điểm tạo"/>
+                <Annotation Term="SAP__common.Heading" String="Created On"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Creation Date Time"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=ABP_CREATION_TSTMPL"/>
+            </Annotations>
+            <Annotations Target="SAP__self.Container/AllocationTransactions">
+                <Annotation Term="SAP__capabilities.SearchRestrictions">
+                    <Record>
+                        <PropertyValue Property="Searchable" Bool="false"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.InsertRestrictions">
+                    <Record>
+                        <PropertyValue Property="Insertable" Bool="false"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.DeleteRestrictions">
+                    <Record>
+                        <PropertyValue Property="Deletable" Bool="false"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.UpdateRestrictions">
+                    <Record>
+                        <PropertyValue Property="Updatable" Bool="false"/>
+                        <PropertyValue Property="QueryOptions">
+                            <Record>
+                                <PropertyValue Property="SelectSupported" Bool="true"/>
+                            </Record>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.FilterRestrictions">
+                    <Record>
+                        <PropertyValue Property="FilterExpressionRestrictions">
+                            <Collection>
+                                <Record>
+                                    <PropertyValue Property="Property" PropertyPath="Quantity"/>
+                                    <PropertyValue Property="AllowedExpressions" String="MultiValue"/>
+                                </Record>
+                            </Collection>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="SAP__self.PlantValueHelpType/Plant">
+                <Annotation Term="SAP__common.Text" Path="PlantName"/>
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="Plant"/>
+                <Annotation Term="SAP__common.Heading" String="Plnt"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=WERKS_D"/>
+            </Annotations>
+            <Annotations Target="SAP__self.PlantValueHelpType/ValuationArea">
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="Valuation Area"/>
+                <Annotation Term="SAP__common.Heading" String="ValA"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=BWKEY"/>
+            </Annotations>
+            <Annotations Target="SAP__self.PlantValueHelpType/PlantCustomer">
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.ValueListReferences">
+                    <Collection>
+                        <String>../../../../srvd_f4/sap/i_customer_vh/0001;ps='srvd-zui_pp_alloc_adm-0001';va='com.sap.gateway.srvd.zui_pp_alloc_adm.v0001.et-i_plant.plantcustomer'/$metadata</String>
+                    </Collection>
+                </Annotation>
+                <Annotation Term="SAP__common.Label" String="Customer No Plant"/>
+                <Annotation Term="SAP__common.Heading" String="CustNoPlnt"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Customer Number of Plant"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=KUNNR_WK"/>
+            </Annotations>
+            <Annotations Target="SAP__self.PlantValueHelpType/PlantSupplier">
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.ValueListReferences">
+                    <Collection>
+                        <String>../../../../srvd_f4/sap/i_supplier_vh/0001;ps='srvd-zui_pp_alloc_adm-0001';va='com.sap.gateway.srvd.zui_pp_alloc_adm.v0001.et-i_plant.plantsupplier'/$metadata</String>
+                    </Collection>
+                </Annotation>
+                <Annotation Term="SAP__common.Label" String="Sppl. No. Plnt"/>
+                <Annotation Term="SAP__common.Heading" String="Supplier Number Plant"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Supplier Number of Plant"/>
+            </Annotations>
+            <Annotations Target="SAP__self.PlantValueHelpType/FactoryCalendar">
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="Factory Calendar"/>
+                <Annotation Term="SAP__common.Heading" String="Cal"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Factory calendar key"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=FABKL"/>
+            </Annotations>
+            <Annotations Target="SAP__self.PlantValueHelpType/DefaultPurchasingOrganization">
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="Purch. Organization"/>
+                <Annotation Term="SAP__common.Heading" String="POrg"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Purchasing Organization"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=EKORG"/>
+            </Annotations>
+            <Annotations Target="SAP__self.PlantValueHelpType/SalesOrganization">
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="Sls Organization ICB"/>
+                <Annotation Term="SAP__common.Heading" String="SO ICB"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Sales Organization for Intercompany Billing"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=VKOIV"/>
+            </Annotations>
+            <Annotations Target="SAP__self.PlantValueHelpType/AddressID">
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="Address"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=ADRNR"/>
+            </Annotations>
+            <Annotations Target="SAP__self.PlantValueHelpType/PlantCategory">
+                <Annotation Term="SAP__common.SAPObjectNodeTypeReference" String="PlantCategory"/>
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="Plant Cat."/>
+                <Annotation Term="SAP__common.Heading" String="C"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Plant category"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=VLFKZ"/>
+            </Annotations>
+            <Annotations Target="SAP__self.PlantValueHelpType/DistributionChannel">
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="Distrib.Channel"/>
+                <Annotation Term="SAP__common.Heading" String="DstCh"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Distribution Channel for Intercompany billing"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=VTWIV"/>
+            </Annotations>
+            <Annotations Target="SAP__self.PlantValueHelpType/Division">
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="Interco. Billing Div"/>
+                <Annotation Term="SAP__common.Heading" String="Div."/>
+                <Annotation Term="SAP__common.QuickInfo" String="Division for Intercompany Billing"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=SPAIV"/>
+            </Annotations>
+            <Annotations Target="SAP__self.PlantValueHelpType/BusinessPlace">
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="Business Place"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=J_1BBRANC_"/>
+            </Annotations>
+            <Annotations Target="SAP__self.PlantValueHelpType">
+                <Annotation Term="SAP__common.Label" String="Plant"/>
+                <Annotation Term="SAP__common.SAPObjectNodeType">
+                    <Record>
+                        <PropertyValue Property="Name" String="Plant"/>
+                    </Record>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="SAP__self.Container/PlantValueHelp">
+                <Annotation Term="SAP__capabilities.SearchRestrictions">
+                    <Record>
+                        <PropertyValue Property="Searchable" Bool="true"/>
+                        <PropertyValue Property="UnsupportedExpressions" EnumMember="SAP__capabilities.SearchExpressions/AND SAP__capabilities.SearchExpressions/NOT SAP__capabilities.SearchExpressions/group "/>
+                        <PropertyValue Property="SearchSyntax" String="https://url.sap/odata-search"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.InsertRestrictions">
+                    <Record>
+                        <PropertyValue Property="Insertable" Bool="false"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.DeleteRestrictions">
+                    <Record>
+                        <PropertyValue Property="Deletable" Bool="false"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.UpdateRestrictions">
+                    <Record>
+                        <PropertyValue Property="Updatable" Bool="false"/>
+                        <PropertyValue Property="QueryOptions">
+                            <Record>
+                                <PropertyValue Property="SelectSupported" Bool="true"/>
+                            </Record>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="SAP__self.ConfirmTransactionValueHelpType/TransactionUUID">
+                <Annotation Term="SAP__common.Label" String="Mã giao dịch xác nhận"/>
+                <Annotation Term="SAP__common.Heading" String="UUID"/>
+                <Annotation Term="SAP__common.QuickInfo" String="16 Byte UUID in 16 Bytes (Raw Format)"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ConfirmTransactionValueHelpType/OperationUUID">
+                <Annotation Term="SAP__common.Label" String="Mã định danh công đoạn"/>
+                <Annotation Term="SAP__common.Heading" String="UUID"/>
+                <Annotation Term="SAP__common.QuickInfo" String="16 Byte UUID in 16 Bytes (Raw Format)"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ConfirmTransactionValueHelpType/ProductionOrder">
+                <Annotation Term="SAP__common.Label" String="Lệnh sản xuất"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ConfirmTransactionValueHelpType/Operation">
+                <Annotation Term="SAP__common.Label" String="Công đoạn lệnh sản xuất"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ConfirmTransactionValueHelpType/WorkerID">
+                <Annotation Term="SAP__common.Label" String="Mã nhân công"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ConfirmTransactionValueHelpType/Quantity">
+                <Annotation Term="SAP__common.Label" String="Sản lượng xác nhận"/>
+                <Annotation Term="SAP__measures.Unit" Path="UnitOfMeasure"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ConfirmTransactionValueHelpType/UnitOfMeasure">
+                <Annotation Term="SAP__common.IsUnit"/>
+                <Annotation Term="SAP__common.Label" String="Đơn vị tính"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ConfirmTransactionValueHelpType/WorkDate">
+                <Annotation Term="SAP__common.Label" String="Ngày làm việc"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ConfirmTransactionValueHelpType/ShiftID">
+                <Annotation Term="SAP__common.Label" String="Mã ca"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ConfirmTransactionValueHelpType/TransactionStatus">
+                <Annotation Term="SAP__common.Label" String="Trạng thái giao dịch"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ConfirmTransactionValueHelpType">
+                <Annotation Term="SAP__common.Label" String="Tra cứu giao dịch xác nhận"/>
+            </Annotations>
+            <Annotations Target="SAP__self.Container/ConfirmTransactionValueHelp">
+                <Annotation Term="SAP__capabilities.SearchRestrictions">
+                    <Record>
+                        <PropertyValue Property="Searchable" Bool="true"/>
+                        <PropertyValue Property="UnsupportedExpressions" EnumMember="SAP__capabilities.SearchExpressions/AND SAP__capabilities.SearchExpressions/NOT SAP__capabilities.SearchExpressions/group "/>
+                        <PropertyValue Property="SearchSyntax" String="https://url.sap/odata-search"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.InsertRestrictions">
+                    <Record>
+                        <PropertyValue Property="Insertable" Bool="false"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.DeleteRestrictions">
+                    <Record>
+                        <PropertyValue Property="Deletable" Bool="false"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.UpdateRestrictions">
+                    <Record>
+                        <PropertyValue Property="Updatable" Bool="false"/>
+                        <PropertyValue Property="QueryOptions">
+                            <Record>
+                                <PropertyValue Property="SelectSupported" Bool="true"/>
+                            </Record>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.FilterRestrictions">
+                    <Record>
+                        <PropertyValue Property="FilterExpressionRestrictions">
+                            <Collection>
+                                <Record>
+                                    <PropertyValue Property="Property" PropertyPath="Quantity"/>
+                                    <PropertyValue Property="AllowedExpressions" String="MultiValue"/>
+                                </Record>
+                            </Collection>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="SAP__self.UnitValueHelpType/UnitOfMeasureSAPCode">
+                <Annotation Term="SAP__common.Label" String="Internal SAP Code"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Unit of Measurement, Internal SAP Code (No Conversion)"/>
+            </Annotations>
+            <Annotations Target="SAP__self.UnitValueHelpType/IsPrimaryUnitForISOCode">
+                <Annotation Term="SAP__common.Label" String="Primary Code"/>
+                <Annotation Term="SAP__common.Heading" String="P"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Selection Field for Conversion from ISO Code to Int. Code"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=ISOCD_MARK"/>
+            </Annotations>
+            <Annotations Target="SAP__self.UnitValueHelpType/UnitOfMeasureNumberOfDecimals">
+                <Annotation Term="SAP__common.Label" String="Decimal Rounding"/>
+                <Annotation Term="SAP__common.Heading" String="DcR"/>
+                <Annotation Term="SAP__common.QuickInfo" String="No. of Decimal Places for Rounding"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=ANDEC"/>
+            </Annotations>
+            <Annotations Target="SAP__self.UnitValueHelpType/UnitOfMeasureIsCommercial">
+                <Annotation Term="SAP__common.Label" String="Commercial Unit Flag"/>
+                <Annotation Term="SAP__common.Heading" String="C"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Commercial Measurement Unit Flag"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=KZKEH"/>
+            </Annotations>
+            <Annotations Target="SAP__self.UnitValueHelpType/SIUnitCnvrsnRateNumerator">
+                <Annotation Term="SAP__common.Label" String="Numerator"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Numerator for Conversion to SI Unit"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=DZAEHL"/>
+            </Annotations>
+            <Annotations Target="SAP__self.UnitValueHelpType/SIUnitCnvrsnRateDenominator">
+                <Annotation Term="SAP__common.Label" String="Denominator"/>
+                <Annotation Term="SAP__common.Heading" String="Denominat."/>
+                <Annotation Term="SAP__common.QuickInfo" String="Denominator for Conversion into SI Unit"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=NENNR"/>
+            </Annotations>
+            <Annotations Target="SAP__self.UnitValueHelpType/SIUnitCnvrsnRateExponent">
+                <Annotation Term="SAP__common.Label" String="Exponent"/>
+                <Annotation Term="SAP__common.Heading" String="Exp"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Base Ten Exponent for Conversion to SI Unit"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=EXP10"/>
+            </Annotations>
+            <Annotations Target="SAP__self.UnitValueHelpType/SIUnitCnvrsnAdditiveValue">
+                <Annotation Term="SAP__common.Label" String="Additive Constant"/>
+                <Annotation Term="SAP__common.Heading" String="Add.Const."/>
+                <Annotation Term="SAP__common.QuickInfo" String="Additive Constant for Conversion to SI Unit"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=ADDKO"/>
+            </Annotations>
+            <Annotations Target="SAP__self.UnitValueHelpType/UnitOfMeasureDspExponent">
+                <Annotation Term="SAP__common.Label" String="Exp. 10 Floating Pt"/>
+                <Annotation Term="SAP__common.Heading" String="FPE"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Exponent of 10 for Floating Point Format"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=EXPON"/>
+            </Annotations>
+            <Annotations Target="SAP__self.UnitValueHelpType/UnitOfMeasureDspNmbrOfDcmls">
+                <Annotation Term="SAP__common.Label" String="Decimal Places"/>
+                <Annotation Term="SAP__common.Heading" String="Dec"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Number of Decimal Places for Number Display"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=DECAN"/>
+            </Annotations>
+            <Annotations Target="SAP__self.PlantValueHelpType/PlantName">
+                <Annotation Term="SAP__common.Label" String="Plant Name"/>
+            </Annotations>
+            <Annotations Target="SAP__self.PlantValueHelpType/PlantName2">
+                <Annotation Term="SAP__common.Label" String="Name 2"/>
+            </Annotations>
+            <Annotations Target="SAP__self.PlantValueHelpType/Language">
+                <Annotation Term="SAP__common.Label" String="Language Key"/>
+                <Annotation Term="SAP__common.Heading" String="Language"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=SPRAS"/>
+            </Annotations>
+            <Annotations Target="SAP__self.PlantValueHelpType/IsMarkedForArchiving">
+                <Annotation Term="SAP__common.Label" String="Archiving Flag"/>
+                <Annotation Term="SAP__common.Heading" String="ArMk"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Central archiving marker for master record"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=ACHVM_X"/>
+            </Annotations>
+            <Annotations Target="SAP__self.OperationAllocationsOperationControl/correctConfirm">
+                <Annotation Term="SAP__common.Label" String="Dyn. Action Control"/>
+                <Annotation Term="SAP__common.Heading" String="Dynamic Action Control"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Dynamic Action Property"/>
+            </Annotations>
+        </Schema>
+    </edmx:DataServices>
+</edmx:Edmx>
