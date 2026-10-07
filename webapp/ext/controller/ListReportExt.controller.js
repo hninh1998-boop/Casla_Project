@@ -4,184 +4,146 @@ sap.ui.define([
 ], function (MessageToast, MessageBox) {
     'use strict';
 
-    function _getTableData(oView) {
-        var aAllControls = oView.findAggregatedObjects(true);
-        var oSmartTable = aAllControls.filter(function (o) {
-            return o.getMetadata().getName() === "sap.ui.comp.smarttable.SmartTable";
-        })[0];
+    // Static action của zce_sales_report_exp (BDEF) → function import trong service OData V2
+    var EXPORT_ACTION = "ExportExcel";
+    var XLSX_MIME_TYPE = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
 
-        console.log("SmartTable found:", oSmartTable ? oSmartTable.getId() : "NOT FOUND");
+    // Filter gửi xuống BE trong json_string (xem ty_filter trong zbp_ce_sales_report_exp)
+    var FILTER_FIELDS = ["CompanyCode", "FiscalYear", "Plant", "Product", "SalesDistrict"];
+    // Filter kiểu ngày (date range): gửi xuống dạng YYYYMMDD
+    var DATE_FILTER_FIELD = "PostingDate";
 
-        if (!oSmartTable) return [];
+    function _rangeFromCondition(oRange) {
+        var sSign = oRange.exclude ? "E" : "I";
+        var sLow = oRange.value1 == null ? "" : String(oRange.value1);
+        var sHigh = oRange.value2 == null ? "" : String(oRange.value2);
 
-        var oTable = oSmartTable.getTable();
-        console.log("Table:", oTable ? oTable.getId() : "NOT FOUND");
-
-        var oBinding = oTable.getBinding("rows");
-        console.log("Binding length:", oBinding ? oBinding.getLength() : "NO BINDING");
-
-        if (!oBinding) return [];
-
-        var iLength = oBinding.getLength();
-        var aContexts = oBinding.getContexts(0, iLength);
-        console.log("Contexts:", aContexts.length);
-        console.log("Sample:", aContexts[0] ? JSON.stringify(aContexts[0].getObject()) : "empty");
-
-        return aContexts.map(function (oCtx) { return oCtx.getObject(); });
+        switch (oRange.operation) {
+            case "Contains":
+                return { sign: sSign, option: "CP", low: "*" + sLow + "*", high: "" };
+            case "StartsWith":
+                return { sign: sSign, option: "CP", low: sLow + "*", high: "" };
+            case "EndsWith":
+                return { sign: sSign, option: "CP", low: "*" + sLow, high: "" };
+            default:
+                // EQ, BT, LT, LE, GT, GE dùng chung tên với option của ABAP
+                return { sign: sSign, option: oRange.operation, low: sLow, high: sHigh };
+        }
     }
 
-    function _buildExcel(aData, lv_month, lv_year) {
-        var workbook = new ExcelJS.Workbook();
-        var worksheet = workbook.addWorksheet("Báo cáo bán hàng");
+    // Đổi giá trị 1 field của SmartFilterBar.getFilterData() thành bảng range sign/option/low/high
+    function _toRanges(vValue) {
+        if (vValue === undefined || vValue === null || vValue === "") {
+            return [];
+        }
 
-        var YELLOW = { argb: "FFFFFF00" };
-        var BORDER = {
-            top: { style: "thin" },
-            left: { style: "thin" },
-            bottom: { style: "thin" },
-            right: { style: "thin" }
-        };
+        // Single value
+        if (typeof vValue !== "object") {
+            return [{ sign: "I", option: "EQ", low: String(vValue), high: "" }];
+        }
 
-        // ── Row 1: Tiêu đề ──────────────────────────
-        worksheet.mergeCells("A1:J1");
-        var titleCell = worksheet.getCell("A1");
-        titleCell.value = "BÁO CÁO BÁN HÀNG";
-        titleCell.font = { bold: true, size: 13 };
-        titleCell.alignment = { horizontal: "center", vertical: "middle" };
-        worksheet.getRow(1).height = 20;
+        // Interval: { low, high }, hoặc low = "1-3" khi nhập tay
+        if (vValue.low !== undefined) {
+            var sLow = vValue.low == null ? "" : String(vValue.low);
+            var sHigh = vValue.high == null ? "" : String(vValue.high);
+            if (!sHigh && sLow.indexOf("-") > 0) {
+                var aParts = sLow.split("-");
+                sLow = aParts[0].trim();
+                sHigh = aParts[1].trim();
+            }
+            if (!sLow) {
+                return [];
+            }
+            return [{ sign: "I", option: sHigh ? "BT" : "EQ", low: sLow, high: sHigh }];
+        }
 
-        // ── Row 2: Tháng/Năm ────────────────────────
-        worksheet.mergeCells("A2:J2");
-        var subCell = worksheet.getCell("A2");
-        subCell.value = "Tháng " + (lv_month || "...") + " năm " + (lv_year || "...");
-        subCell.alignment = { horizontal: "center" };
-
-        // ── Row 3: Trống ────────────────────────────
-        worksheet.addRow([]);
-
-        // ── Row 4: Header ───────────────────────────
-        var headers = [
-            "STT", "Tên nhà máy", "Mã hàng", "Tên hàng",
-            "Loại hàng", "Số lượng",
-            "Doanh thu USD", "Doanh thu VND",
-            "Giá vốn VND", "Thị trường xuất khẩu"
-        ];
-
-        var headerRow = worksheet.addRow(headers);
-        headerRow.height = 30;
-        headerRow.eachCell(function (cell) {
-            cell.fill = { type: "pattern", pattern: "solid", fgColor: YELLOW };
-            cell.font = { bold: true };
-            cell.border = BORDER;
-            cell.alignment = { horizontal: "center", vertical: "middle", wrapText: true };
+        // Multiple values: { items: [{ key }], ranges: [{ exclude, operation, value1, value2 }] }
+        var aRanges = [];
+        (vValue.items || []).forEach(function (oItem) {
+            aRanges.push({ sign: "I", option: "EQ", low: String(oItem.key), high: "" });
         });
-
-        // ── Data rows ────────────────────────────────
-        var totalQty = 0;
-        var totalRevUSD = 0;
-        var totalRevVND = 0;
-        var totalCOGS = 0;
-
-        aData.forEach(function (item, idx) {
-            var qty = parseFloat(item.Quantity || 0);
-            var revUSD = parseFloat(item.RevenueUSD || 0);
-            var revVND = parseFloat(item.RevenueVND || 0);
-            var cogs = parseFloat(item.COGSVND || 0);
-
-            var row = worksheet.addRow([
-                idx + 1,
-                item.Plant,
-                item.Product,
-                item.ProductName,
-                // item.BaseUnit,
-                item.ProductGroup
-                    ? item.ProductGroup + ' (' + item.ProductGroupName + ')'
-                    : '',
-                qty,
-                revUSD,
-                revVND,
-                cogs,
-                item.SalesDistrict
-                    ? item.SalesDistrict + ' (' + item.SalesDistrictName + ')'
-                    : ''
-            ]);
-
-            row.getCell(6).numFmt = "#,##0.000";
-            row.getCell(7).numFmt = "#,##0.00";
-            row.getCell(8).numFmt = "#,##0";
-            row.getCell(9).numFmt = "#,##0";
-            row.eachCell(function (cell) { cell.border = BORDER; });
-
-            totalQty += qty;
-            totalRevUSD += revUSD;
-            totalRevVND += revVND;
-            totalCOGS += cogs;
+        (vValue.ranges || []).forEach(function (oRange) {
+            aRanges.push(_rangeFromCondition(oRange));
         });
-
-        // ── Total row ────────────────────────────────
-        var totalRow = worksheet.addRow([
-            "", "", "", "", "",
-            totalQty, totalRevUSD, totalRevVND, totalCOGS, ""
-        ]);
-        totalRow.eachCell(function (cell) {
-            cell.fill = { type: "pattern", pattern: "solid", fgColor: YELLOW };
-            cell.font = { bold: true };
-            cell.border = BORDER;
-        });
-        totalRow.getCell(6).numFmt = "#,##0.000";
-        totalRow.getCell(7).numFmt = "#,##0.00";
-        totalRow.getCell(8).numFmt = "#,##0";
-        totalRow.getCell(9).numFmt = "#,##0";
-
-        // ── Column widths ────────────────────────────
-        worksheet.columns = [
-            { width: 6 },
-            { width: 15 },
-            { width: 20 },
-            { width: 30 },
-            // { width: 8 },
-            { width: 12 },
-            { width: 16 },
-            { width: 16 },
-            { width: 16 },
-            { width: 16 },
-            { width: 22 }
-        ];
-
-        // ── Download ─────────────────────────────────
-        workbook.xlsx.writeBuffer().then(function (buffer) {
-            var blob = new Blob([buffer], {
-                type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-            });
-            var url = URL.createObjectURL(blob);
-            var link = document.createElement("a");
-            link.href = url;
-            link.download = "BaoCaoBanHang_"
-                + new Date().toLocaleDateString("vi-VN").replace(/\//g, "-")
-                + ".xlsx";
-            link.click();
-            URL.revokeObjectURL(url);
-            MessageToast.show("Export thành công!");
-        });
+        return aRanges;
     }
 
-    function _doExport(oView) {
-        var aData = _getTableData(oView);
-        if (!aData.length) {
-            MessageBox.error("Không có dữ liệu để export");
-            return;
-        }
+    function _pad(iValue) {
+        return (iValue < 10 ? "0" : "") + iValue;
+    }
 
-        var lv_month = "";
-        var lv_year = "";
-        var oSmartFilterBar = oView.byId("listReportFilter");
-        if (oSmartFilterBar) {
-            var oFilterData = oSmartFilterBar.getFilterData();
-            lv_month = oFilterData.FiscalPeriod || "";
-            lv_year = oFilterData.FiscalYear || "";
+    // Date → "YYYYMMDD"
+    // SmartFilterBar có thể trả ngày theo giờ local hoặc đã quy về UTC (00:00:00 / 23:59:59 UTC)
+    // → nếu giờ UTC rơi đúng đầu / cuối ngày thì lấy ngày theo UTC, ngược lại lấy theo local
+    function _toAbapDate(vDate) {
+        if (!(vDate instanceof Date) || isNaN(vDate.getTime())) {
+            return "";
         }
+        var iUtcSeconds = vDate.getUTCHours() * 3600 + vDate.getUTCMinutes() * 60 + vDate.getUTCSeconds();
+        if (iUtcSeconds === 0 || iUtcSeconds === 86399) {
+            return vDate.getUTCFullYear() + _pad(vDate.getUTCMonth() + 1) + _pad(vDate.getUTCDate());
+        }
+        return vDate.getFullYear() + _pad(vDate.getMonth() + 1) + _pad(vDate.getDate());
+    }
 
-        _buildExcel(aData, lv_month, lv_year);
+    // Lấy các filter lá của 1 field từ cây sap.ui.model.Filter
+    function _collectFilters(aFilters, sPath, aResult) {
+        (aFilters || []).forEach(function (oFilter) {
+            if (oFilter.aFilters) {
+                _collectFilters(oFilter.aFilters, sPath, aResult);
+            } else if (oFilter.sPath === sPath) {
+                aResult.push(oFilter);
+            }
+        });
+        return aResult;
+    }
+
+    // Khoảng ngày đang chọn (Year to Date, From / To, Today...) đã được SmartFilterBar đổi ra ngày cụ thể
+    function _dateRanges(oSmartFilterBar, sField) {
+        var aRanges = [];
+        _collectFilters(oSmartFilterBar.getFilters([sField]), sField, []).forEach(function (oFilter) {
+            var sLow = _toAbapDate(oFilter.oValue1);
+            var sHigh = _toAbapDate(oFilter.oValue2);
+            if (!sLow) {
+                return;
+            }
+            // EQ, BT, LT, LE, GT, GE dùng chung tên với option của ABAP
+            aRanges.push({ sign: "I", option: oFilter.sOperator, low: sLow, high: sHigh });
+        });
+        return aRanges;
+    }
+
+    function _buildFilterJson(oSmartFilterBar) {
+        var oFilterData = oSmartFilterBar.getFilterData() || {};
+        var mFilter = {};
+        FILTER_FIELDS.forEach(function (sField) {
+            mFilter[sField] = _toRanges(oFilterData[sField]);
+        });
+        mFilter[DATE_FILTER_FIELD] = _dateRanges(oSmartFilterBar, DATE_FILTER_FIELD);
+        return JSON.stringify(mFilter);
+    }
+
+    function _saveFile(sBase64, sFileName, sMimeType) {
+        // OData V2 trả Edm.Binary dạng base64; đổi luôn base64url nếu có
+        var sBinary = atob(sBase64.replace(/-/g, "+").replace(/_/g, "/"));
+        var aBytes = new Uint8Array(sBinary.length);
+        for (var i = 0; i < sBinary.length; i++) {
+            aBytes[i] = sBinary.charCodeAt(i);
+        }
+        var sUrl = URL.createObjectURL(new Blob([aBytes], { type: sMimeType }));
+        var oLink = document.createElement("a");
+        oLink.href = sUrl;
+        oLink.download = sFileName;
+        oLink.click();
+        URL.revokeObjectURL(sUrl);
+    }
+
+    function _getErrorText(oError) {
+        try {
+            return JSON.parse(oError.responseText).error.message.value;
+        } catch (e) {
+            return (oError && oError.message) || "Export không thành công";
+        }
     }
 
     return {
@@ -192,21 +154,41 @@ sap.ui.define([
             }
         },
 
+        // Nút "Export": BE lấy dữ liệu theo filter và sinh file xlsx, FE chỉ lưu file
         exportExcel: function () {
             var oView = this.getView();
+            var oSmartFilterBar = oView.byId("listReportFilter");
 
-            if (window.ExcelJS) {
-                _doExport(oView);
+            if (!oSmartFilterBar) {
+                MessageBox.error("Không tìm thấy filter bar");
                 return;
             }
 
-            var script = document.createElement("script");
-            script.src = sap.ui.require.toUrl("zrpsalesv2/libs/exceljs.min.js");
-            script.onload = function () { _doExport(oView); };
-            script.onerror = function () {
-                MessageBox.error("Không load được ExcelJS library");
-            };
-            document.head.appendChild(script);
+            oView.setBusy(true);
+            oView.getModel().callFunction("/" + EXPORT_ACTION, {
+                method: "POST",
+                urlParameters: {
+                    json_string: _buildFilterJson(oSmartFilterBar)
+                },
+                success: function (oData) {
+                    oView.setBusy(false);
+                    var oFile = (oData && oData[EXPORT_ACTION]) || oData;
+                    if (!oFile || !oFile.fileContent) {
+                        MessageBox.error("Không có dữ liệu để export");
+                        return;
+                    }
+                    _saveFile(
+                        oFile.fileContent,
+                        (oFile.fileName || "BaoCaoBanHang") + "." + (oFile.fileExtension || "xlsx"),
+                        oFile.mimeType || XLSX_MIME_TYPE
+                    );
+                    MessageToast.show("Export thành công!");
+                },
+                error: function (oError) {
+                    oView.setBusy(false);
+                    MessageBox.error(_getErrorText(oError));
+                }
+            });
         }
     };
 });
