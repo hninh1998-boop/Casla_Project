@@ -1,0 +1,230 @@
+@Metadata.layer: #CORE
+@UI.headerInfo: {
+    typeName: 'Commercial Invoice',
+    typeNamePlural: 'Commercial Invoices'
+}
+annotate entity zce_ci with
+{
+  @UI.facet: [{
+      id: 'GeneralInfo',
+      purpose: #STANDARD,
+      type: #IDENTIFICATION_REFERENCE,
+      label: 'General Information',
+      position: 10
+   }]
+
+  @EndUserText.label: 'Pro-forma Invoice'
+  @UI.lineItem: [{ position: 10 }]
+  @UI.identification: [{ position: 10 }]
+  @UI.selectionField: [{ position: 30 }]
+  @Consumption.valueHelpDefinition: [{
+    entity: {
+        name: 'I_BillingDocument',
+        element: 'BillingDocument'
+    }
+  }]
+  ProFormaInvoice;
+
+  @EndUserText.label: 'To'
+  @UI.lineItem: [{ position: 20 }]
+  @UI.identification: [{ position: 20 }]
+  @Consumption.filter.hidden: true
+  ToCI;
+
+  @EndUserText.label: 'Invoice'
+  @UI.lineItem: [{ position: 30 }]
+  @UI.identification: [{ position: 30 }]
+  @Consumption.filter.hidden: true
+  Invoice;
+
+  @EndUserText.label: 'Date'
+  @UI.lineItem: [{ position: 40 }]
+  @UI.identification: [{ position: 40 }]
+  @UI.selectionField: [{ position: 20 }]
+  @Consumption.filter.selectionType: #INTERVAL
+  DateCI;
+
+  @EndUserText.label: 'PO'
+  @UI.lineItem: [{ position: 50 }]
+  @UI.identification: [{ position: 50 }]
+  @Consumption.filter.hidden: true
+  PO;
+
+  @EndUserText.label: 'LOT'
+  @UI.lineItem: [{ position: 60 }]
+  @UI.identification: [{ position: 60 }]
+  @Consumption.filter.hidden: true
+  LOT;
+
+  @EndUserText.label: 'Item'
+  @UI.lineItem: [{ position: 70 }]
+  @UI.identification: [{ position: 70 }]
+  @Consumption.filter.hidden: true
+  Item;
+
+  @EndUserText.label: 'Material'
+  @UI.lineItem: [{ position: 80 }]
+  @UI.identification: [{ position: 80 }]
+  @Consumption.filter.hidden: true
+  Material;
+
+  @EndUserText.label: 'AZT ID (Description)'
+  @UI.lineItem: [{ position: 90 }]
+  @UI.identification: [{ position: 90 }]
+  @Consumption.filter.hidden: true
+  AZTID;
+
+  @EndUserText.label: 'Quantity'
+  @UI.lineItem: [{ position: 100 }]
+  @UI.identification: [{ position: 100 }]
+  @Consumption.filter.hidden: true
+  Quantity;
+
+  @EndUserText.label: 'Unit Price'
+  @UI.lineItem: [{ position: 110 }]
+  @UI.identification: [{ position: 110 }]
+  @Consumption.filter.hidden: true
+  UnitPrice;
+
+  @EndUserText.label: 'Amount'
+  @UI.lineItem: [{ position: 120 }]
+  @UI.identification: [{ position: 120 }]
+  @Consumption.filter.hidden: true
+  Amount;
+
+  @EndUserText.label: 'MB/L'
+  @UI.lineItem: [{ position: 130 }]
+  @UI.identification: [{ position: 130 }]
+  @Consumption.filter.hidden: true
+  MBL;
+
+  @EndUserText.label: 'HB/L'
+  @UI.lineItem: [{ position: 140 }]
+  @UI.identification: [{ position: 140 }]
+  @Consumption.filter.hidden: true
+  HBL;
+
+  @EndUserText.label: 'Vessel Name'
+  @UI.lineItem: [{ position: 150 }]
+  @UI.identification: [{ position: 150 }]
+  @Consumption.filter.hidden: true
+  VesselName;
+
+  @EndUserText.label: 'ETD'
+  @UI.lineItem: [{ position: 160 }]
+  @UI.identification: [{ position: 160 }]
+  @Consumption.filter.hidden: true
+  ETD;
+
+  @EndUserText.label: 'ETA'
+  @UI.lineItem: [{ position: 170 }]
+  @UI.identification: [{ position: 170 }]
+  @Consumption.filter.hidden: true
+  ETA;
+
+  @EndUserText.label: 'Container No'
+  @UI.lineItem: [{ position: 180 }]
+  @UI.identification: [{ position: 180 }]
+  @Consumption.filter.hidden: true
+  ContainerNo;
+
+  @EndUserText.label: 'Port Of Loading'
+  @UI.lineItem: [{ position: 190 }]
+  @UI.identification: [{ position: 190 }]
+  @Consumption.filter.hidden: true
+  PortOfLoading;
+
+  @EndUserText.label: 'Port Of Destination'
+  @UI.lineItem: [{ position: 200 }]
+  @UI.identification: [{ position: 200 }]
+  @Consumption.filter.hidden: true
+  PortOfDestination;
+
+  @EndUserText.label: 'Price Term'
+  @UI.lineItem: [{ position: 210 }]
+  @UI.identification: [{ position: 210 }]
+  @Consumption.filter.hidden: true
+  PriceTerm;
+
+  @EndUserText.label: 'HTS Code'
+  @UI.lineItem: [{ position: 220 }]
+  @UI.identification: [{ position: 220 }]
+  @Consumption.filter.hidden: true
+  HTSCode;
+
+  @EndUserText.label: 'Country Of Origin'
+  @UI.lineItem: [{ position: 230 }]
+  @UI.identification: [{ position: 230 }]
+  @Consumption.filter.hidden: true
+  CountryOfOrigin;
+
+  @EndUserText.label: 'Quartz Slabs'
+  @UI.lineItem: [{ position: 240 }]
+  @UI.identification: [{ position: 240 }]
+  @Consumption.filter.hidden: true
+  QuartzSlabs;
+
+  @EndUserText.label: 'Billing Quantity Unit'
+  @UI.hidden: true
+  @Consumption.filter.hidden: true
+  BillingQuantityUnit;
+
+  @EndUserText.label: 'Transaction Currency'
+  @UI.hidden: true
+  @Consumption.filter.hidden: true
+  TransactionCurrency;
+
+  @EndUserText.label: 'Add'
+  @UI.lineItem: [{ position: 250 }]
+  @UI.identification: [{ position: 250 }]
+  @Consumption.filter.hidden: true
+  AddCI;
+
+  @EndUserText.label: 'Tel'
+  @UI.lineItem: [{ position: 260 }]
+  @UI.identification: [{ position: 260 }]
+  @Consumption.filter.hidden: true
+  TelCI;
+
+  @EndUserText.label: 'Size L'
+  @UI.lineItem: [{ position: 270 }]
+  @UI.identification: [{ position: 270 }]
+  @Consumption.filter.hidden: true
+  SizeL;
+
+  @EndUserText.label: 'Size W'
+  @UI.lineItem: [{ position: 280 }]
+  @UI.identification: [{ position: 280 }]
+  @Consumption.filter.hidden: true
+  SizeW;
+
+  @EndUserText.label: 'Size H'
+  @UI.lineItem: [{ position: 290 }]
+  @UI.identification: [{ position: 290 }]
+  @Consumption.filter.hidden: true
+  SizeH;
+
+  @EndUserText.label: 'Sales Organization'
+  @UI.lineItem: [{ hidden: true }]
+  @UI.identification: [{ hidden: true }]
+  @UI.selectionField: [{ position: 10 }]
+  @Consumption.valueHelpDefinition: [{
+    entity: {
+        name: 'I_SalesOrganizationStdVH',
+        element: 'SalesOrganization'
+    }
+  }]
+  SalesOrganization;
+
+  @EndUserText.label: 'Customer'
+  @UI.lineItem: [{ hidden: true }]
+  @UI.identification: [{ hidden: true }]
+  @UI.selectionField: [{ position: 40 }]
+  @Consumption.valueHelpDefinition: [{
+    entity: {
+        name: 'I_Customer_VH',
+        element: 'Customer'
+    }
+  }]
+  Customer;
+}

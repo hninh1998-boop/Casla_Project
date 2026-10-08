@@ -1,0 +1,4 @@
+@EndUserText.label: 'Serv.Def. - Commercial Invoice'
+define service Zui_ci {
+  expose zce_ci;
+}
