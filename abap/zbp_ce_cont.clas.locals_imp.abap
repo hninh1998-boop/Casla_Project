@@ -221,7 +221,7 @@ CLASS lhc_Cont IMPLEMENTATION.
       FIELDS so, so_item, so_lenh, so_lenh_item, ngay_dong_cont,
              dong_dau_thung, cont, ke_hoach_dong_cont, ghi_chu_khac,
              ghi_chu_giao_hang, ngay_tau_chay, thoi_gian_cat_mang,
-             dia_diem_dong_hang_cont, sort_order
+             dia_diem_dong_hang_cont, dia_diem_dong_hang_cont_name, sort_order
       FOR ALL ENTRIES IN @keys
       WHERE so           = @keys-%key-so
         AND so_item      = @keys-%key-SOItem
@@ -272,9 +272,11 @@ CLASS lhc_Cont IMPLEMENTATION.
       ENDIF.
       IF ls_key-%param-DiaDiemDongHangCont IS NOT INITIAL.
         <lfs_cont_text>-dia_diem_dong_hang_cont = COND #( WHEN ls_key-%param-DiaDiemDongHangCont = 'D' THEN '' ELSE ls_key-%param-DiaDiemDongHangCont ).
-        SELECT SINGLE FROM I_Plant
+        "Tên plant: không check quyền của user; clear trước để không giữ tên cũ khi xóa ('D')
+        CLEAR <lfs_cont_text>-dia_diem_dong_hang_cont_name.
+        SELECT SINGLE FROM I_Plant WITH PRIVILEGED ACCESS
         FIELDS PlantName
-        WHERE Plant = @ls_key-%param-DiaDiemDongHangCont
+        WHERE Plant = @<lfs_cont_text>-dia_diem_dong_hang_cont
         INTO @<lfs_cont_text>-dia_diem_dong_hang_cont_name.
       ENDIF.
 

@@ -631,7 +631,7 @@ CLASS ZCL_CE_CONT_F01 IMPLEMENTATION.
         CASE WHEN e~DiaDiemDongHangCont IS NOT INITIAL
              THEN e~DiaDiemDongHangCont
              ELSE b~Plant END AS DiaDiemDongHangCont,
-        CASE WHEN e~DiaDiemDongHangContName IS NOT INITIAL
+        CASE WHEN e~DiaDiemDongHangCont IS NOT INITIAL
              THEN e~DiaDiemDongHangContName
              ELSE c~PlantName END AS DiaDiemDongHangContName,
         d~ActualDeliveryQuantity AS SoLuongTrenLenhXuatHang,
@@ -666,6 +666,29 @@ CLASS ZCL_CE_CONT_F01 IMPLEMENTATION.
         b~Plant,
         c~PlantName
     INTO TABLE @et_bases.
+
+    "Plant Name: I_CnsldtnPlantT phụ thuộc quyền + ngôn ngữ của user
+    "--> fallback lấy từ I_Plant (không check quyền, không phụ thuộc ngôn ngữ)
+    SELECT FROM I_Plant WITH PRIVILEGED ACCESS
+    FIELDS
+        Plant,
+        PlantName
+    INTO TABLE @DATA(lt_plant).
+
+    LOOP AT et_bases ASSIGNING FIELD-SYMBOL(<lfs_base>).
+      IF <lfs_base>-PlantName IS INITIAL AND <lfs_base>-Plant IS NOT INITIAL.
+        READ TABLE lt_plant INTO DATA(ls_plant) WITH KEY Plant = <lfs_base>-Plant.
+        IF sy-subrc = 0.
+          <lfs_base>-PlantName = ls_plant-PlantName.
+        ENDIF.
+      ENDIF.
+      IF <lfs_base>-DiaDiemDongHangContName IS INITIAL AND <lfs_base>-DiaDiemDongHang IS NOT INITIAL.
+        READ TABLE lt_plant INTO ls_plant WITH KEY Plant = <lfs_base>-DiaDiemDongHang.
+        IF sy-subrc = 0.
+          <lfs_base>-DiaDiemDongHangContName = ls_plant-PlantName.
+        ENDIF.
+      ENDIF.
+    ENDLOOP.
   ENDMETHOD.
 
 
