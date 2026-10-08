@@ -1,0 +1,1714 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xfa generator="AdobeLiveCycleDesigner_V11.0.9.20250609.2.65_SAP" APIVersion="3.6.25157.0"?>
+<xdp:xdp xmlns:xdp="http://ns.adobe.com/xdp/" timeStamp="2026-10-08T04:09:50Z" uuid="225a2107-7de4-4e18-94ca-77b8530f6914">
+<template xmlns:xliff="urn:oasis:names:tc:xliff:document:1.1" xmlns="http://www.xfa.org/schema/xfa-template/3.3/">
+   <?formServer defaultPDFRenderFormat acrobat10.0dynamic?>
+   <subform name="form1" layout="tb" locale="en_US" restoreState="auto">
+      <pageSet>
+         <pageArea name="Page1" id="Page1">
+            <contentArea x="12.7mm" y="15.875mm" w="190.5mm" h="254mm"/>
+            <medium stock="default" short="215.9mm" long="279.4mm"/>
+            <occur min="1"/>
+            <?templateDesigner expand 1?></pageArea>
+         <?templateDesigner expand 0?></pageSet>
+      <subform name="Form" w="576pt" layout="tb">
+         <subform w="190.5mm" h="25.4mm" name="Sub1">
+            <subform w="38.1mm" h="19.05mm" name="Sub1Left">
+               <draw w="1.5in" h="19.05mm">
+                  <value>
+                     <image contentType="image/png">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</image>
+                  </value>
+                  <ui>
+                     <imageEdit/>
+                  </ui>
+                  <desc>
+                     <text name="embeddedHref">.\logo.png</text>
+                  </desc>
+               </draw>
+               <?templateDesigner expand 1?></subform>
+            <subform x="38.1mm" w="152.4mm" h="19.05mm" name="Sub1Right">
+               <draw name="Text2" w="152.4mm" h="19.05mm">
+                  <ui>
+                     <textEdit/>
+                  </ui>
+                  <value>
+                     <exData contentType="text/html" xliff:rid="F0014248-B19E-4402-8E7D-782F28EACF13">
+                        <body xmlns="http://www.w3.org/1999/xhtml" xmlns:xfa="http://www.xfa.org/schema/xfa-data/1.0/"><p style="font-weight:bold;letter-spacing:0in">CASABLANCA VIETNAM JSC</p><p style="letter-spacing:0in">Factory: Lot CN-03, Chau Son Industrial Zone, Chau Son Ward, Ninh Binh Province, Vietnam</p><p style="letter-spacing:0in">Head office: Casla Tower, 78 Duy Tan Street, Cau Giay Ward, Hanoi, Vietnam</p><p style="letter-spacing:0in">Tel: +84 24.3634.0377 * Fax: +84 24.3634.0257</p></body>
+                     </exData>
+                  </value>
+                  <font typeface="Times New Roman" baselineShift="0pt"/>
+                  <margin topInset="0.5mm" bottomInset="0.5mm" leftInset="0.5mm" rightInset="0.5mm"/>
+                  <para spaceAbove="1pt" spaceBelow="0pt" textIndent="0pt" marginLeft="0pt" marginRight="0pt" hAlign="center"/>
+               </draw>
+               <?templateDesigner expand 1?></subform>
+            <?templateDesigner expand 0?></subform>
+         <subform w="190.5mm" h="12.7mm" name="Sub2">
+            <draw name="Text3" w="190.5mm" h="9.525mm">
+               <ui>
+                  <textEdit/>
+               </ui>
+               <value>
+                  <text xliff:rid="9B14933B-599A-405C-9E56-7EF7B0B21E59">PACKING LIST</text>
+               </value>
+               <font size="18pt" typeface="Times New Roman" weight="bold" underline="1" baselineShift="0pt"/>
+               <margin topInset="0.5mm" bottomInset="0.5mm" leftInset="0.5mm" rightInset="0.5mm"/>
+               <para hAlign="center" vAlign="middle" spaceAbove="0pt" spaceBelow="0pt" textIndent="0pt" marginLeft="0pt" marginRight="0pt"/>
+               <?renderCache.bounds 537166 24166 0 0 1417 1417 0 0?>
+               <?renderCache.textRun 12 PACKING LIST 0 204737 18615 0 0 0 "Times New Roman" 1 0 18000 ISO-8859-1?>
+               <?renderCache.line 204737 20324 335263 20324 0 0 0 622?></draw>
+            <?templateDesigner expand 0?></subform>
+         <subform w="190.5mm" h="19.05mm" name="Sub3">
+            <field name="DataTo" w="127mm" minH="6.35mm">
+               <ui>
+                  <textEdit multiLine="1">
+                     <border presence="hidden"/>
+                     <margin/>
+                  </textEdit>
+               </ui>
+               <font typeface="Times New Roman" size="9pt" weight="bold"/>
+               <margin topInset="1mm" bottomInset="1mm" leftInset="1mm" rightInset="1mm"/>
+               <border>
+                  <edge presence="hidden"/>
+                  <corner thickness="0.1778mm" presence="hidden"/>
+               </border>
+            </field>
+            <field name="DataAddCI" w="127mm" minH="6.35mm" y="6.35mm">
+               <ui>
+                  <textEdit multiLine="1">
+                     <border presence="hidden"/>
+                     <margin/>
+                  </textEdit>
+               </ui>
+               <font typeface="Times New Roman" size="9pt"/>
+               <margin topInset="1mm" bottomInset="1mm" leftInset="1mm" rightInset="1mm"/>
+               <border>
+                  <edge presence="hidden"/>
+                  <corner thickness="0.1778mm" presence="hidden"/>
+               </border>
+            </field>
+            <field name="DataTelCI" w="127mm" minH="6.35mm" y="12.7mm">
+               <ui>
+                  <textEdit multiLine="1">
+                     <border presence="hidden"/>
+                     <margin/>
+                  </textEdit>
+               </ui>
+               <font typeface="Times New Roman" size="9pt"/>
+               <margin topInset="1mm" bottomInset="1mm" leftInset="1mm" rightInset="1mm"/>
+               <border>
+                  <edge presence="hidden"/>
+                  <corner thickness="0.1778mm" presence="hidden"/>
+               </border>
+            </field>
+            <draw name="InvoiceText" x="127mm" w="25.4mm" h="6.35mm">
+               <ui>
+                  <textEdit/>
+               </ui>
+               <value>
+                  <text xliff:rid="7457A896-B4D9-4310-8444-E5E014FD1C27">INVOICE#:</text>
+               </value>
+               <font typeface="Times New Roman" size="9pt"/>
+               <margin topInset="0.5mm" bottomInset="0.5mm" leftInset="0.5mm" rightInset="0.5mm"/>
+               <?renderCache.bounds 69166 15166 0 0 1417 1417 0 0?>
+               <?renderCache.textRun 9 INVOICE#: 0 1417 8475 0 0 0 "Times New Roman" 0 0 9000 ISO-8859-1?></draw>
+            <draw name="DateCIText" x="127mm" w="25.4mm" h="6.35mm" y="6.35mm">
+               <ui>
+                  <textEdit/>
+               </ui>
+               <value>
+                  <text xliff:rid="C403DEC8-A854-4D7D-B3EC-36DB6A1D2292">DATE:</text>
+               </value>
+               <font typeface="Times New Roman" size="9pt"/>
+               <margin topInset="0.5mm" bottomInset="0.5mm" leftInset="0.5mm" rightInset="0.5mm"/>
+               <?renderCache.bounds 69166 15166 0 0 1417 1417 0 0?>
+               <?renderCache.textRun 5 DATE: 0 1417 8475 0 0 0 "Times New Roman" 0 0 9000 ISO-8859-1?></draw>
+            <draw name="POText" x="127mm" w="25.4mm" h="6.35mm" y="12.7mm">
+               <ui>
+                  <textEdit/>
+               </ui>
+               <value>
+                  <text xliff:rid="0B9FACD2-5375-4F17-9E67-352F4EA8D875">PO#:</text>
+               </value>
+               <font typeface="Times New Roman" size="9pt"/>
+               <margin topInset="0.5mm" bottomInset="0.5mm" leftInset="0.5mm" rightInset="0.5mm"/>
+               <?renderCache.bounds 69166 15166 0 0 1417 1417 0 0?>
+               <?renderCache.textRun 4 PO#: 0 1417 8475 0 0 0 "Times New Roman" 0 0 9000 ISO-8859-1?></draw>
+            <field name="DataInvoice" w="38.1mm" minH="6.35mm" x="152.4mm">
+               <ui>
+                  <textEdit multiLine="1">
+                     <border presence="hidden"/>
+                     <margin/>
+                  </textEdit>
+               </ui>
+               <font typeface="Times New Roman" size="9pt"/>
+               <margin topInset="1mm" bottomInset="1mm" leftInset="1mm" rightInset="1mm"/>
+               <border>
+                  <edge presence="hidden"/>
+                  <corner thickness="0.1778mm" presence="hidden"/>
+               </border>
+            </field>
+            <field name="DataDateCI" w="38.1mm" minH="6.35mm" x="152.4mm" y="6.35mm">
+               <ui>
+                  <textEdit multiLine="1">
+                     <border presence="hidden"/>
+                     <margin/>
+                  </textEdit>
+               </ui>
+               <font typeface="Times New Roman" size="9pt"/>
+               <margin topInset="1mm" bottomInset="1mm" leftInset="1mm" rightInset="1mm"/>
+               <border>
+                  <edge presence="hidden"/>
+                  <corner thickness="0.1778mm" presence="hidden"/>
+               </border>
+            </field>
+            <field name="DataPO" w="38.1mm" minH="6.35mm" x="152.4mm" y="12.7mm">
+               <ui>
+                  <textEdit multiLine="1">
+                     <border presence="hidden"/>
+                     <margin/>
+                  </textEdit>
+               </ui>
+               <font typeface="Times New Roman" size="9pt"/>
+               <margin topInset="1mm" bottomInset="1mm" leftInset="1mm" rightInset="1mm"/>
+               <border>
+                  <edge presence="hidden"/>
+                  <corner thickness="0.1778mm" presence="hidden"/>
+               </border>
+            </field>
+            <?templateDesigner expand 0?></subform>
+         <subform w="190.5mm" name="Sub4" layout="tb">
+            <subform name="Table1" layout="table" columnWidths="127mm 25.4mm 38.1mm">
+               <border>
+                  <edge presence="hidden"/>
+                  <corner presence="hidden"/>
+               </border>
+               <subform layout="row" name="Row1">
+                  <assist role="TR"/>
+                  <draw h="6.35mm" name="Cell1" w="1.181097in">
+                     <border>
+                        <edge presence="hidden"/>
+                        <corner thickness="0.1778mm" presence="hidden"/>
+                     </border>
+                     <ui>
+                        <textEdit/>
+                     </ui>
+                     <font typeface="Arial"/>
+                     <margin topInset="0.5mm" bottomInset="0.5mm" leftInset="0.5mm" rightInset="0.5mm"/>
+                     <para vAlign="middle" hAlign="center"/>
+                     <keep intact="none"/>
+                  </draw>
+                  <draw h="6.35mm" name="LOTText">
+                     <border>
+                        <edge presence="hidden"/>
+                        <corner thickness="0.1778mm" presence="hidden"/>
+                     </border>
+                     <ui>
+                        <textEdit/>
+                     </ui>
+                     <font typeface="Times New Roman" size="9pt"/>
+                     <margin topInset="0.5mm" bottomInset="0.5mm" leftInset="0.5mm" rightInset="0.5mm"/>
+                     <value>
+                        <text xliff:rid="826AEE6E-572B-4CD8-B6EA-79D5011A3266">LOT#:</text>
+                     </value>
+                     <para vAlign="middle"/>
+                     <keep intact="none"/>
+                  </draw>
+                  <border>
+                     <edge presence="hidden"/>
+                  </border>
+                  <field name="DataLOT" minH="6.35mm">
+                     <ui>
+                        <textEdit>
+                           <margin/>
+                        </textEdit>
+                     </ui>
+                     <font typeface="Times New Roman" size="9pt"/>
+                     <margin topInset="0.5mm" bottomInset="0.5mm" leftInset="0.5mm" rightInset="0.5mm"/>
+                     <para vAlign="middle"/>
+                     <border>
+                        <edge presence="hidden"/>
+                        <corner thickness="0.1778mm" presence="hidden"/>
+                     </border>
+                  </field>
+                  <keep intact="none"/>
+                  <?templateDesigner expand 0?></subform>
+               <subform layout="row" name="Row2">
+                  <assist role="TR"/>
+                  <draw h="6.35mm" name="Cell1" colSpan="-1">
+                     <border>
+                        <edge presence="hidden"/>
+                        <corner thickness="0.1778mm" presence="hidden"/>
+                     </border>
+                     <ui>
+                        <textEdit/>
+                     </ui>
+                     <font typeface="Arial"/>
+                     <margin topInset="0.5mm" bottomInset="0.5mm" leftInset="0.5mm" rightInset="0.5mm"/>
+                     <para vAlign="middle" hAlign="center"/>
+                     <value>
+                        <exData contentType="text/html">
+                           <body xmlns="http://www.w3.org/1999/xhtml" xmlns:xfa="http://www.xfa.org/schema/xfa-data/1.0/"><p><span style="xfa-spacerun:yes">     </span><span style="xfa-spacerun:yes"> </span><span style="xfa-spacerun:yes"> </span><span style="xfa-spacerun:yes"> </span></p></body>
+                        </exData>
+                     </value>
+                     <keep intact="none"/>
+                  </draw>
+                  <border>
+                     <edge presence="hidden"/>
+                  </border>
+                  <?templateDesigner expand 0?>
+                  <keep intact="none"/>
+               </subform>
+               <?templateDesigner rowpattern first:1, next:1, firstcolor:f0f0f0, nextcolor:ffffff, apply:0?>
+               <subform layout="row" name="Row3">
+                  <assist role="TR"/>
+                  <subform layout="tb" name="Sub4.1">
+                     <para vAlign="middle" hAlign="center"/>
+                     <subform name="Table2" layout="table" columnWidths="12.7mm 50.8mm 12.7mm 12.7mm 12.7mm 19.05mm 12.7mm 12.7mm 12.7mm 31.75mm">
+                        <border>
+                           <edge/>
+                        </border>
+                        <subform layout="row" name="Row1">
+                           <assist role="TR"/>
+                           <draw h="12.7mm" name="Cell1">
+                              <border>
+                                 <edge/>
+                                 <corner thickness="0.1778mm"/>
+                              </border>
+                              <ui>
+                                 <textEdit/>
+                              </ui>
+                              <font typeface="Times New Roman" size="9pt"/>
+                              <margin topInset="0.5mm" bottomInset="0.5mm" leftInset="0.5mm" rightInset="0.5mm"/>
+                              <para vAlign="middle" hAlign="center"/>
+                              <value>
+                                 <text xliff:rid="997B7551-D16D-45FE-9CCA-482BD400E2C8">Package#</text>
+                              </value>
+                           </draw>
+                           <draw h="12.7mm" name="Cell2">
+                              <ui>
+                                 <textEdit>
+                                    <margin/>
+                                 </textEdit>
+                              </ui>
+                              <font typeface="Times New Roman" size="9pt"/>
+                              <para vAlign="middle" hAlign="center"/>
+                              <margin topInset="0.5mm" bottomInset="0.5mm" leftInset="0.5mm" rightInset="0.5mm"/>
+                              <border>
+                                 <edge/>
+                                 <corner thickness="0.1778mm"/>
+                              </border>
+                              <value>
+                                 <text xliff:rid="9B3EAD77-CD58-452D-8731-D84FB5E293EB">AZT ID</text>
+                              </value>
+                           </draw>
+                           <subform layout="tb" name="Sub4.1.1">
+                              <para vAlign="middle" hAlign="center"/>
+                              <subform name="Table5" layout="table" columnWidths="12.7mm 12.7mm 12.7mm">
+                                 <border>
+                                    <edge/>
+                                 </border>
+                                 <subform layout="row" name="HdrSize1">
+                                    <assist role="TR"/>
+                                    <draw h="6.35mm" name="Cell1" colSpan="-1">
+                                       <border>
+                                          <edge/>
+                                          <corner thickness="0.1778mm"/>
+                                       </border>
+                                       <ui>
+                                          <textEdit/>
+                                       </ui>
+                                       <font typeface="Times New Roman" size="9pt"/>
+                                       <margin topInset="0.5mm" bottomInset="0.5mm" leftInset="0.5mm" rightInset="0.5mm"/>
+                                       <para vAlign="middle" hAlign="center"/>
+                                       <value>
+                                          <text xliff:rid="66A3E77E-571F-4D89-A5B2-C1A9A53B03D6">SIZE (MM)</text>
+                                       </value>
+                                    </draw>
+                                    <border>
+                                       <edge presence="hidden"/>
+                                    </border>
+                                    <?templateDesigner expand 1?>
+                                    <bind match="none"/>
+                                 </subform>
+                                 <subform layout="row" name="HdsSize2">
+                                    <assist role="TR"/>
+                                    <draw h="6.35mm" name="Cell1">
+                                       <border>
+                                          <edge/>
+                                          <corner thickness="0.1778mm"/>
+                                       </border>
+                                       <ui>
+                                          <textEdit/>
+                                       </ui>
+                                       <font typeface="Times New Roman" size="9pt"/>
+                                       <margin topInset="0.5mm" bottomInset="0.5mm" leftInset="0.5mm" rightInset="0.5mm"/>
+                                       <para vAlign="middle" hAlign="center"/>
+                                       <value>
+                                          <text xliff:rid="462F4991-F460-4143-AE06-ED0256B90ADA">L</text>
+                                       </value>
+                                    </draw>
+                                    <draw h="5.08mm" name="Cell2">
+                                       <border>
+                                          <edge/>
+                                          <corner thickness="0.1778mm"/>
+                                       </border>
+                                       <ui>
+                                          <textEdit/>
+                                       </ui>
+                                       <font typeface="Times New Roman" size="9pt"/>
+                                       <margin topInset="0.5mm" bottomInset="0.5mm" leftInset="0.5mm" rightInset="0.5mm"/>
+                                       <para vAlign="middle" hAlign="center"/>
+                                       <value>
+                                          <text xliff:rid="913CB71C-247E-4010-8623-4F816CDA2CA3">W</text>
+                                       </value>
+                                    </draw>
+                                    <draw h="5.08mm" name="Cell3">
+                                       <border>
+                                          <edge/>
+                                          <corner thickness="0.1778mm"/>
+                                       </border>
+                                       <ui>
+                                          <textEdit/>
+                                       </ui>
+                                       <font typeface="Times New Roman" size="9pt"/>
+                                       <margin topInset="0.5mm" bottomInset="0.5mm" leftInset="0.5mm" rightInset="0.5mm"/>
+                                       <para vAlign="middle" hAlign="center"/>
+                                       <value>
+                                          <text xliff:rid="9219CDE6-A0E6-4371-A917-F320DC062A8F">H</text>
+                                       </value>
+                                    </draw>
+                                    <border>
+                                       <edge presence="hidden"/>
+                                    </border>
+                                    <?templateDesigner expand 1?>
+                                    <bind match="none"/>
+                                 </subform>
+                                 <?templateDesigner rowpattern first:1, next:1, firstcolor:f0f0f0, nextcolor:ffffff, apply:0?>
+                                 <?templateDesigner expand 1?>
+                                 <bind match="none"/>
+                              </subform>
+                              <bind match="none"/>
+                              <?templateDesigner expand 0?></subform>
+                           <border>
+                              <edge presence="hidden"/>
+                           </border>
+                           <draw name="Cell3">
+                              <ui>
+                                 <textEdit>
+                                    <margin/>
+                                 </textEdit>
+                              </ui>
+                              <font typeface="Arial"/>
+                              <para vAlign="middle"/>
+                              <margin topInset="0.5mm" bottomInset="0.5mm" leftInset="0.5mm" rightInset="0.5mm"/>
+                           </draw>
+                           <draw name="Cell4">
+                              <ui>
+                                 <textEdit>
+                                    <margin/>
+                                 </textEdit>
+                              </ui>
+                              <font typeface="Arial"/>
+                              <para vAlign="middle"/>
+                              <margin topInset="0.5mm" bottomInset="0.5mm" leftInset="0.5mm" rightInset="0.5mm"/>
+                           </draw>
+                           <draw name="Cell5">
+                              <ui>
+                                 <textEdit>
+                                    <margin/>
+                                 </textEdit>
+                              </ui>
+                              <font typeface="Times New Roman" size="9pt"/>
+                              <para vAlign="middle" hAlign="center"/>
+                              <margin topInset="0.5mm" bottomInset="0.5mm" leftInset="0.5mm" rightInset="0.5mm"/>
+                              <value>
+                                 <text xliff:rid="E8AC3976-3094-4BC6-8167-B5B352EE90AE">SQM</text>
+                              </value>
+                              <border>
+                                 <edge/>
+                                 <corner thickness="0.175mm"/>
+                              </border>
+                           </draw>
+                           <draw name="Cell6">
+                              <ui>
+                                 <textEdit>
+                                    <margin/>
+                                 </textEdit>
+                              </ui>
+                              <font typeface="Times New Roman" size="9pt"/>
+                              <para vAlign="middle" hAlign="center"/>
+                              <margin topInset="0.5mm" bottomInset="0.5mm" leftInset="0.5mm" rightInset="0.5mm"/>
+                              <value>
+                                 <text xliff:rid="280C8DAF-6262-4255-90F7-2800799FE76C">PCS</text>
+                              </value>
+                              <border>
+                                 <edge/>
+                                 <corner thickness="0.175mm"/>
+                              </border>
+                           </draw>
+                           <draw name="Cell7">
+                              <ui>
+                                 <textEdit>
+                                    <margin/>
+                                 </textEdit>
+                              </ui>
+                              <font typeface="Times New Roman" size="9pt"/>
+                              <para vAlign="middle" hAlign="center"/>
+                              <margin topInset="0.5mm" bottomInset="0.5mm" leftInset="0.5mm" rightInset="0.5mm"/>
+                              <value>
+                                 <text xliff:rid="D093447A-5F70-4D7F-B954-EC069D176DEB">N.W.
+(KGS)</text>
+                              </value>
+                              <border>
+                                 <edge/>
+                                 <corner thickness="0.175mm"/>
+                              </border>
+                           </draw>
+                           <draw name="Cell8">
+                              <ui>
+                                 <textEdit>
+                                    <margin/>
+                                 </textEdit>
+                              </ui>
+                              <font typeface="Times New Roman" size="9pt"/>
+                              <para vAlign="middle" hAlign="center"/>
+                              <margin topInset="0.5mm" bottomInset="0.5mm" leftInset="0.5mm" rightInset="0.5mm"/>
+                              <value>
+                                 <text xliff:rid="A96D114A-8B2F-4D0B-8798-0B13BB404640">G.W. (KGS)</text>
+                              </value>
+                              <border>
+                                 <edge/>
+                                 <corner thickness="0.175mm"/>
+                              </border>
+                           </draw>
+                           <draw name="Cell9">
+                              <ui>
+                                 <textEdit>
+                                    <margin/>
+                                 </textEdit>
+                              </ui>
+                              <font typeface="Times New Roman" size="9pt"/>
+                              <para vAlign="middle" hAlign="center"/>
+                              <margin topInset="0.5mm" bottomInset="0.5mm" leftInset="0.5mm" rightInset="0.5mm"/>
+                              <value>
+                                 <text xliff:rid="E075BE8C-BB22-4C24-852C-2E7D1FF9FADE">LOT#</text>
+                              </value>
+                              <border>
+                                 <edge/>
+                                 <corner thickness="0.175mm"/>
+                              </border>
+                           </draw>
+                           <bind match="none"/>
+                           <?templateDesigner expand 0?></subform>
+                        <subform layout="row" name="Row2">
+                           <assist role="TR"/>
+                           <field name="Cell1" h="6.35mm">
+                              <ui>
+                                 <textEdit multiLine="1"/>
+                              </ui>
+                              <font typeface="Times New Roman" size="9pt"/>
+                              <margin topInset="0.5mm" bottomInset="0.5mm" leftInset="0.5mm" rightInset="0.5mm"/>
+                              <para vAlign="middle" hAlign="center"/>
+                              <border>
+                                 <edge/>
+                                 <corner thickness="0.1778mm"/>
+                              </border>
+                           </field>
+                           <field h="6.35mm" name="Cell2">
+                              <ui>
+                                 <textEdit>
+                                    <margin/>
+                                 </textEdit>
+                              </ui>
+                              <font typeface="Times New Roman" size="9pt"/>
+                              <margin topInset="0.5mm" bottomInset="0.5mm" leftInset="0.5mm" rightInset="0.5mm"/>
+                              <para vAlign="middle" hAlign="center"/>
+                              <border>
+                                 <edge/>
+                                 <corner thickness="0.1778mm"/>
+                              </border>
+                           </field>
+                           <field h="6.35mm" name="Cell3">
+                              <ui>
+                                 <textEdit>
+                                    <margin/>
+                                 </textEdit>
+                              </ui>
+                              <font typeface="Times New Roman" size="9pt"/>
+                              <margin topInset="0.5mm" bottomInset="0.5mm" leftInset="0.5mm" rightInset="0.5mm"/>
+                              <para vAlign="middle" hAlign="center"/>
+                              <border>
+                                 <edge/>
+                                 <corner thickness="0.1778mm"/>
+                              </border>
+                           </field>
+                           <border>
+                              <edge presence="hidden"/>
+                           </border>
+                           <occur max="-1"/>
+                           <field h="6.35mm" name="Cell4">
+                              <ui>
+                                 <textEdit>
+                                    <margin/>
+                                 </textEdit>
+                              </ui>
+                              <font typeface="Times New Roman" size="9pt"/>
+                              <margin topInset="0.5mm" bottomInset="0.5mm" leftInset="0.5mm" rightInset="0.5mm"/>
+                              <para vAlign="middle" hAlign="center"/>
+                              <border>
+                                 <edge/>
+                                 <corner thickness="0.1778mm"/>
+                              </border>
+                           </field>
+                           <field h="6.35mm" name="Cell5">
+                              <ui>
+                                 <textEdit>
+                                    <margin/>
+                                 </textEdit>
+                              </ui>
+                              <font typeface="Times New Roman" size="9pt"/>
+                              <margin topInset="0.5mm" bottomInset="0.5mm" leftInset="0.5mm" rightInset="0.5mm"/>
+                              <para vAlign="middle" hAlign="center"/>
+                              <border>
+                                 <edge/>
+                                 <corner thickness="0.1778mm"/>
+                              </border>
+                           </field>
+                           <field h="6.35mm" name="Cell6">
+                              <ui>
+                                 <textEdit>
+                                    <margin/>
+                                 </textEdit>
+                              </ui>
+                              <font typeface="Times New Roman" size="9pt"/>
+                              <margin topInset="0.5mm" bottomInset="0.5mm" leftInset="0.5mm" rightInset="0.5mm"/>
+                              <para vAlign="middle" hAlign="center"/>
+                              <border>
+                                 <edge/>
+                                 <corner thickness="0.1778mm"/>
+                              </border>
+                           </field>
+                           <field h="6.35mm" name="Cell7">
+                              <ui>
+                                 <textEdit>
+                                    <margin/>
+                                 </textEdit>
+                              </ui>
+                              <font typeface="Times New Roman" size="9pt"/>
+                              <margin topInset="0.5mm" bottomInset="0.5mm" leftInset="0.5mm" rightInset="0.5mm"/>
+                              <para vAlign="middle" hAlign="center"/>
+                              <border>
+                                 <edge/>
+                                 <corner thickness="0.1778mm"/>
+                              </border>
+                           </field>
+                           <field h="6.35mm" name="Cell8">
+                              <ui>
+                                 <textEdit>
+                                    <margin/>
+                                 </textEdit>
+                              </ui>
+                              <font typeface="Times New Roman" size="9pt"/>
+                              <margin topInset="0.5mm" bottomInset="0.5mm" leftInset="0.5mm" rightInset="0.5mm"/>
+                              <para vAlign="middle" hAlign="center"/>
+                              <border>
+                                 <edge/>
+                                 <corner thickness="0.1778mm"/>
+                              </border>
+                           </field>
+                           <field h="6.35mm" name="Cell9">
+                              <ui>
+                                 <textEdit>
+                                    <margin/>
+                                 </textEdit>
+                              </ui>
+                              <font typeface="Times New Roman" size="9pt"/>
+                              <margin topInset="0.5mm" bottomInset="0.5mm" leftInset="0.5mm" rightInset="0.5mm"/>
+                              <para vAlign="middle" hAlign="center"/>
+                              <border>
+                                 <edge/>
+                                 <corner thickness="0.1778mm"/>
+                              </border>
+                           </field>
+                           <field h="6.35mm" name="Cell10">
+                              <ui>
+                                 <textEdit>
+                                    <margin/>
+                                 </textEdit>
+                              </ui>
+                              <font typeface="Times New Roman" size="9pt"/>
+                              <margin topInset="0.5mm" bottomInset="0.5mm" leftInset="0.5mm" rightInset="0.5mm"/>
+                              <para vAlign="middle" hAlign="center"/>
+                              <border>
+                                 <edge/>
+                                 <corner thickness="0.1778mm"/>
+                              </border>
+                           </field>
+                           <?templateDesigner expand 1?></subform>
+                        <?templateDesigner rowpattern first:1, next:1, firstcolor:f0f0f0, nextcolor:ffffff, apply:0?>
+                        <subform layout="row" name="Row3">
+                           <assist role="TR"/>
+                           <draw name="Cell0" h="6.35mm">
+                              <ui>
+                                 <textEdit/>
+                              </ui>
+                              <value>
+                                 <text xliff:rid="539935C6-2176-4029-ABCE-04F62B53BC0B"/>
+                              </value>
+                              <font typeface="Times New Roman" size="9pt" weight="bold"/>
+                              <margin topInset="0.5mm" bottomInset="0.5mm" leftInset="0.5mm" rightInset="0.5mm"/>
+                              <para vAlign="middle" hAlign="center"/>
+                              <border>
+                                 <edge/>
+                                 <corner thickness="0.1778mm"/>
+                              </border>
+                           </draw>
+                           <field name="Cell1">
+                              <ui>
+                                 <textEdit>
+                                    <margin/>
+                                 </textEdit>
+                              </ui>
+                              <font typeface="Times New Roman" size="9pt" weight="bold"/>
+                              <margin topInset="0.5mm" bottomInset="0.5mm" leftInset="0.5mm" rightInset="0.5mm"/>
+                              <para vAlign="middle" hAlign="center"/>
+                           </field>
+                           <draw h="6.35mm" name="Cell2">
+                              <ui>
+                                 <textEdit>
+                                    <margin/>
+                                 </textEdit>
+                              </ui>
+                              <font typeface="Times New Roman" size="9pt" weight="bold"/>
+                              <para vAlign="middle" hAlign="center"/>
+                              <margin topInset="0.5mm" bottomInset="0.5mm" leftInset="0.5mm" rightInset="0.5mm"/>
+                              <border>
+                                 <edge/>
+                                 <corner thickness="0.1778mm"/>
+                              </border>
+                           </draw>
+                           <draw h="6.35mm" name="Cell3">
+                              <ui>
+                                 <textEdit>
+                                    <margin/>
+                                 </textEdit>
+                              </ui>
+                              <font typeface="Times New Roman" size="9pt" weight="bold"/>
+                              <para vAlign="middle"/>
+                              <margin topInset="0.5mm" bottomInset="0.5mm" leftInset="0.5mm" rightInset="0.5mm"/>
+                              <border>
+                                 <edge/>
+                                 <corner thickness="0.1778mm"/>
+                              </border>
+                           </draw>
+                           <draw h="6.35mm" name="Cell4">
+                              <ui>
+                                 <textEdit>
+                                    <margin/>
+                                 </textEdit>
+                              </ui>
+                              <font typeface="Times New Roman" size="9pt" weight="bold"/>
+                              <para vAlign="middle"/>
+                              <margin topInset="0.5mm" bottomInset="0.5mm" leftInset="0.5mm" rightInset="0.5mm"/>
+                              <border>
+                                 <edge/>
+                                 <corner thickness="0.1778mm"/>
+                              </border>
+                           </draw>
+                           <field h="6.35mm" name="Cell5">
+                              <ui>
+                                 <textEdit>
+                                    <margin/>
+                                 </textEdit>
+                              </ui>
+                              <font typeface="Times New Roman" size="9pt" weight="bold"/>
+                              <margin topInset="0.5mm" bottomInset="0.5mm" leftInset="0.5mm" rightInset="0.5mm"/>
+                              <para vAlign="middle" hAlign="center"/>
+                              <border>
+                                 <edge/>
+                                 <corner thickness="0.1778mm"/>
+                              </border>
+                           </field>
+                           <field h="6.35mm" name="Cell6">
+                              <ui>
+                                 <textEdit>
+                                    <margin/>
+                                 </textEdit>
+                              </ui>
+                              <font typeface="Times New Roman" size="9pt" weight="bold"/>
+                              <margin topInset="0.5mm" bottomInset="0.5mm" leftInset="0.5mm" rightInset="0.5mm"/>
+                              <para vAlign="middle" hAlign="center"/>
+                              <border>
+                                 <edge/>
+                                 <corner thickness="0.1778mm"/>
+                              </border>
+                           </field>
+                           <field h="6.35mm" name="Cell7">
+                              <ui>
+                                 <textEdit>
+                                    <margin/>
+                                 </textEdit>
+                              </ui>
+                              <font typeface="Times New Roman" size="9pt" weight="bold"/>
+                              <margin topInset="0.5mm" bottomInset="0.5mm" leftInset="0.5mm" rightInset="0.5mm"/>
+                              <para vAlign="middle" hAlign="center"/>
+                              <border>
+                                 <edge/>
+                                 <corner thickness="0.1778mm"/>
+                              </border>
+                           </field>
+                           <field h="6.35mm" name="Cell8">
+                              <ui>
+                                 <textEdit>
+                                    <margin/>
+                                 </textEdit>
+                              </ui>
+                              <font typeface="Times New Roman" size="9pt" weight="bold"/>
+                              <margin topInset="0.5mm" bottomInset="0.5mm" leftInset="0.5mm" rightInset="0.5mm"/>
+                              <para vAlign="middle" hAlign="center"/>
+                              <border>
+                                 <edge/>
+                                 <corner thickness="0.1778mm"/>
+                              </border>
+                           </field>
+                           <draw h="6.35mm" name="Cell9">
+                              <ui>
+                                 <textEdit>
+                                    <margin/>
+                                 </textEdit>
+                              </ui>
+                              <font typeface="Times New Roman" size="9pt" weight="bold"/>
+                              <para vAlign="middle" hAlign="center"/>
+                              <margin topInset="0.5mm" bottomInset="0.5mm" leftInset="0.5mm" rightInset="0.5mm"/>
+                              <border>
+                                 <edge/>
+                                 <corner thickness="0.1778mm"/>
+                              </border>
+                           </draw>
+                           <?templateDesigner expand 1?></subform>
+                        <?templateDesigner expand 1?></subform>
+                     <?templateDesigner expand 1?></subform>
+                  <keep intact="none"/>
+                  <?templateDesigner expand 1?></subform>
+               <subform layout="row" name="Row4">
+                  <assist role="TR"/>
+                  <subform layout="tb" name="Sub4.2">
+                     <para vAlign="middle" hAlign="center"/>
+                     <subform name="Table3" layout="table" columnWidths="50.8mm 139.7mm">
+                        <border>
+                           <edge presence="hidden"/>
+                           <corner presence="hidden"/>
+                        </border>
+                        <subform layout="row" name="Row1">
+                           <assist role="TR"/>
+                           <draw h="5.08mm" name="Cell1">
+                              <border>
+                                 <edge presence="hidden"/>
+                                 <corner thickness="0.1778mm" presence="hidden"/>
+                              </border>
+                              <ui>
+                                 <textEdit/>
+                              </ui>
+                              <font typeface="Times New Roman" size="9pt"/>
+                              <margin topInset="0.5mm" bottomInset="0.5mm" leftInset="0.5mm" rightInset="0.5mm"/>
+                           </draw>
+                           <draw h="5.08mm" name="Cell2">
+                              <border>
+                                 <edge presence="hidden"/>
+                                 <corner thickness="0.1778mm" presence="hidden"/>
+                              </border>
+                              <ui>
+                                 <textEdit/>
+                              </ui>
+                              <font typeface="Arial" size="9pt"/>
+                              <margin topInset="0.5mm" bottomInset="0.5mm" leftInset="0.5mm" rightInset="0.5mm"/>
+                              <para vAlign="middle" hAlign="center"/>
+                           </draw>
+                           <border>
+                              <edge presence="hidden"/>
+                           </border>
+                           <?templateDesigner expand 0?></subform>
+                        <subform layout="row" name="Row3">
+                           <assist role="TR"/>
+                           <draw h="6.35mm" name="Cell1">
+                              <font typeface="Times New Roman" size="9pt"/>
+                              <border>
+                                 <edge presence="hidden"/>
+                                 <corner thickness="0.1778mm" presence="hidden"/>
+                              </border>
+                              <para vAlign="middle"/>
+                              <value>
+                                 <text xliff:rid="8EBDC425-E765-4582-8FED-D9239139E597">REMARKS:</text>
+                              </value>
+                           </draw>
+                           <draw h="6.35mm" name="Cell2">
+                              <font typeface="Arial" size="9pt"/>
+                              <border>
+                                 <edge presence="hidden"/>
+                                 <corner thickness="0.1778mm" presence="hidden"/>
+                              </border>
+                              <para vAlign="middle"/>
+                           </draw>
+                           <border>
+                              <edge presence="hidden"/>
+                           </border>
+                           <?templateDesigner expand 0?></subform>
+                        <?templateDesigner rowpattern first:1, next:1, firstcolor:f0f0f0, nextcolor:ffffff, apply:0?>
+                        <subform layout="row" name="Row4">
+                           <assist role="TR"/>
+                           <draw h="6.35mm" name="Cell1">
+                              <ui>
+                                 <textEdit>
+                                    <margin/>
+                                 </textEdit>
+                              </ui>
+                              <font typeface="Times New Roman" size="9pt"/>
+                              <para vAlign="middle"/>
+                              <margin topInset="0.5mm" bottomInset="0.5mm" leftInset="0.5mm" rightInset="0.5mm"/>
+                              <border>
+                                 <edge presence="hidden"/>
+                                 <corner thickness="0.1778mm" presence="hidden"/>
+                              </border>
+                              <value>
+                                 <text xliff:rid="A61046D2-0E36-40AD-BED7-43EA65D4B3BA">1. MB/L#:</text>
+                              </value>
+                           </draw>
+                           <draw h="6.35mm" name="Cell2">
+                              <ui>
+                                 <textEdit>
+                                    <margin/>
+                                 </textEdit>
+                              </ui>
+                              <font typeface="Arial" size="9pt"/>
+                              <para vAlign="middle"/>
+                              <margin topInset="0.5mm" bottomInset="0.5mm" leftInset="0.5mm" rightInset="0.5mm"/>
+                              <border>
+                                 <edge presence="hidden"/>
+                                 <corner thickness="0.1778mm" presence="hidden"/>
+                              </border>
+                           </draw>
+                           <?templateDesigner expand 0?></subform>
+                        <subform layout="row" name="Row5">
+                           <assist role="TR"/>
+                           <draw h="6.35mm" name="Cell1">
+                              <ui>
+                                 <textEdit>
+                                    <margin/>
+                                 </textEdit>
+                              </ui>
+                              <value>
+                                 <text xliff:rid="B06D7196-D295-4677-AB13-A2E55C4C2945">2. HB/L#:</text>
+                              </value>
+                              <font typeface="Times New Roman" size="9pt"/>
+                              <para vAlign="middle"/>
+                              <margin topInset="0.5mm" bottomInset="0.5mm" leftInset="0.5mm" rightInset="0.5mm"/>
+                              <border>
+                                 <edge presence="hidden"/>
+                                 <corner thickness="0.1778mm" presence="hidden"/>
+                              </border>
+                           </draw>
+                           <draw h="6.35mm" name="Cell2">
+                              <ui>
+                                 <textEdit>
+                                    <margin/>
+                                 </textEdit>
+                              </ui>
+                              <font typeface="Arial" size="9pt"/>
+                              <para vAlign="middle"/>
+                              <margin topInset="0.5mm" bottomInset="0.5mm" leftInset="0.5mm" rightInset="0.5mm"/>
+                              <border>
+                                 <edge presence="hidden"/>
+                                 <corner thickness="0.1778mm" presence="hidden"/>
+                              </border>
+                           </draw>
+                           <?templateDesigner expand 0?></subform>
+                        <subform layout="row" name="Row6">
+                           <assist role="TR"/>
+                           <draw h="6.35mm" name="Cell1">
+                              <ui>
+                                 <textEdit>
+                                    <margin/>
+                                 </textEdit>
+                              </ui>
+                              <font typeface="Times New Roman" size="9pt"/>
+                              <para vAlign="middle"/>
+                              <margin topInset="0.5mm" bottomInset="0.5mm" leftInset="0.5mm" rightInset="0.5mm"/>
+                              <border>
+                                 <edge presence="hidden"/>
+                                 <corner thickness="0.1778mm" presence="hidden"/>
+                              </border>
+                              <value>
+                                 <text xliff:rid="72906748-F4CD-441A-B087-F4259D28008A">3. VESSEL NAME:</text>
+                              </value>
+                           </draw>
+                           <field name="Cell2" h="6.35mm">
+                              <ui>
+                                 <textEdit>
+                                    <margin/>
+                                 </textEdit>
+                              </ui>
+                              <font typeface="Times New Roman" size="9pt"/>
+                              <margin topInset="0.5mm" bottomInset="0.5mm" leftInset="0.5mm" rightInset="0.5mm"/>
+                              <para vAlign="middle"/>
+                              <border>
+                                 <edge presence="hidden"/>
+                                 <corner thickness="0.1778mm" presence="hidden"/>
+                              </border>
+                           </field>
+                           <?templateDesigner expand 0?></subform>
+                        <subform layout="row" name="Row7">
+                           <assist role="TR"/>
+                           <draw h="6.35mm" name="Cell1">
+                              <ui>
+                                 <textEdit>
+                                    <margin/>
+                                 </textEdit>
+                              </ui>
+                              <value>
+                                 <text xliff:rid="0B75A022-FDA1-490E-876F-8DD53BCB4BE5">4. ETD:</text>
+                              </value>
+                              <font typeface="Times New Roman" size="9pt"/>
+                              <para vAlign="middle"/>
+                              <margin topInset="0.5mm" bottomInset="0.5mm" leftInset="0.5mm" rightInset="0.5mm"/>
+                              <border>
+                                 <edge presence="hidden"/>
+                                 <corner thickness="0.1778mm" presence="hidden"/>
+                              </border>
+                           </draw>
+                           <field h="6.35mm" name="Cell2">
+                              <ui>
+                                 <textEdit>
+                                    <margin/>
+                                 </textEdit>
+                              </ui>
+                              <font typeface="Times New Roman" size="9pt"/>
+                              <margin topInset="0.5mm" bottomInset="0.5mm" leftInset="0.5mm" rightInset="0.5mm"/>
+                              <para vAlign="middle"/>
+                              <border>
+                                 <edge presence="hidden"/>
+                                 <corner thickness="0.1778mm" presence="hidden"/>
+                              </border>
+                           </field>
+                           <?templateDesigner expand 0?></subform>
+                        <subform layout="row" name="Row8">
+                           <assist role="TR"/>
+                           <draw h="6.35mm" name="Cell1">
+                              <ui>
+                                 <textEdit>
+                                    <margin/>
+                                 </textEdit>
+                              </ui>
+                              <font typeface="Times New Roman" size="9pt"/>
+                              <para vAlign="middle"/>
+                              <margin topInset="0.5mm" bottomInset="0.5mm" leftInset="0.5mm" rightInset="0.5mm"/>
+                              <border>
+                                 <edge presence="hidden"/>
+                                 <corner thickness="0.1778mm" presence="hidden"/>
+                              </border>
+                              <value>
+                                 <text xliff:rid="D3813A70-D6AF-4365-A101-DE569B73A79A">5. ETA:</text>
+                              </value>
+                           </draw>
+                           <field name="Cell2" h="6.35mm">
+                              <ui>
+                                 <textEdit>
+                                    <margin/>
+                                 </textEdit>
+                              </ui>
+                              <font typeface="Times New Roman" size="9pt"/>
+                              <margin topInset="0.5mm" bottomInset="0.5mm" leftInset="0.5mm" rightInset="0.5mm"/>
+                              <para vAlign="middle"/>
+                              <border>
+                                 <edge presence="hidden"/>
+                                 <corner thickness="0.1778mm" presence="hidden"/>
+                              </border>
+                           </field>
+                           <?templateDesigner expand 0?></subform>
+                        <subform layout="row" name="Row9">
+                           <assist role="TR"/>
+                           <draw h="6.35mm" name="Cell1">
+                              <ui>
+                                 <textEdit>
+                                    <margin/>
+                                 </textEdit>
+                              </ui>
+                              <value>
+                                 <text xliff:rid="578E95E0-0575-4A2A-85F8-63012FF69358">6. CONTAINER No:</text>
+                              </value>
+                              <font typeface="Times New Roman" size="9pt"/>
+                              <para vAlign="middle"/>
+                              <margin topInset="0.5mm" bottomInset="0.5mm" leftInset="0.5mm" rightInset="0.5mm"/>
+                              <border>
+                                 <edge presence="hidden"/>
+                                 <corner thickness="0.1778mm" presence="hidden"/>
+                              </border>
+                           </draw>
+                           <field h="6.35mm" name="Cell2">
+                              <ui>
+                                 <textEdit>
+                                    <margin/>
+                                 </textEdit>
+                              </ui>
+                              <font typeface="Times New Roman" size="9pt"/>
+                              <margin topInset="0.5mm" bottomInset="0.5mm" leftInset="0.5mm" rightInset="0.5mm"/>
+                              <para vAlign="middle"/>
+                              <border>
+                                 <edge presence="hidden"/>
+                                 <corner thickness="0.1778mm" presence="hidden"/>
+                              </border>
+                           </field>
+                           <?templateDesigner expand 0?></subform>
+                        <subform layout="row" name="Row10">
+                           <assist role="TR"/>
+                           <draw h="6.35mm" name="Cell1">
+                              <ui>
+                                 <textEdit>
+                                    <margin/>
+                                 </textEdit>
+                              </ui>
+                              <value>
+                                 <text xliff:rid="5F078B8F-FF44-4C76-961A-8DD24B73CBCA">7. PORT OF LOADING:</text>
+                              </value>
+                              <font typeface="Times New Roman" size="9pt"/>
+                              <para vAlign="middle"/>
+                              <margin topInset="0.5mm" bottomInset="0.5mm" leftInset="0.5mm" rightInset="0.5mm"/>
+                              <border>
+                                 <edge presence="hidden"/>
+                                 <corner thickness="0.1778mm" presence="hidden"/>
+                              </border>
+                           </draw>
+                           <field h="6.35mm" name="Cell2">
+                              <ui>
+                                 <textEdit>
+                                    <margin/>
+                                 </textEdit>
+                              </ui>
+                              <font typeface="Times New Roman" size="9pt"/>
+                              <margin topInset="0.5mm" bottomInset="0.5mm" leftInset="0.5mm" rightInset="0.5mm"/>
+                              <para vAlign="middle"/>
+                              <border>
+                                 <edge presence="hidden"/>
+                                 <corner thickness="0.1778mm" presence="hidden"/>
+                              </border>
+                           </field>
+                           <?templateDesigner expand 0?></subform>
+                        <subform layout="row" name="Row11">
+                           <assist role="TR"/>
+                           <draw h="6.35mm" name="Cell1">
+                              <ui>
+                                 <textEdit>
+                                    <margin/>
+                                 </textEdit>
+                              </ui>
+                              <font typeface="Times New Roman" size="9pt"/>
+                              <para vAlign="middle"/>
+                              <margin topInset="0.5mm" bottomInset="0.5mm" leftInset="0.5mm" rightInset="0.5mm"/>
+                              <border>
+                                 <edge presence="hidden"/>
+                                 <corner thickness="0.1778mm" presence="hidden"/>
+                              </border>
+                              <value>
+                                 <text xliff:rid="0D3F2A42-B2DE-4C0E-95E7-BD45F5C29729">8. PORT OF DESTINATION:</text>
+                              </value>
+                           </draw>
+                           <field h="6.35mm" name="Cell2">
+                              <ui>
+                                 <textEdit>
+                                    <margin/>
+                                 </textEdit>
+                              </ui>
+                              <font typeface="Times New Roman" size="9pt"/>
+                              <margin topInset="0.5mm" bottomInset="0.5mm" leftInset="0.5mm" rightInset="0.5mm"/>
+                              <para vAlign="middle"/>
+                              <border>
+                                 <edge presence="hidden"/>
+                                 <corner thickness="0.1778mm" presence="hidden"/>
+                              </border>
+                           </field>
+                           <?templateDesigner expand 0?></subform>
+                        <subform layout="row" name="Row12">
+                           <assist role="TR"/>
+                           <draw h="6.35mm" name="Cell1">
+                              <ui>
+                                 <textEdit>
+                                    <margin/>
+                                 </textEdit>
+                              </ui>
+                              <value>
+                                 <text xliff:rid="855C1ABD-5647-49A5-950C-9F938495981D">9. PRICE TERM:</text>
+                              </value>
+                              <font typeface="Times New Roman" size="9pt"/>
+                              <para vAlign="middle"/>
+                              <margin topInset="0.5mm" bottomInset="0.5mm" leftInset="0.5mm" rightInset="0.5mm"/>
+                              <border>
+                                 <edge presence="hidden"/>
+                                 <corner thickness="0.1778mm" presence="hidden"/>
+                              </border>
+                           </draw>
+                           <field h="6.35mm" name="Cell2">
+                              <ui>
+                                 <textEdit>
+                                    <margin/>
+                                 </textEdit>
+                              </ui>
+                              <font typeface="Times New Roman" size="9pt"/>
+                              <margin topInset="0.5mm" bottomInset="0.5mm" leftInset="0.5mm" rightInset="0.5mm"/>
+                              <para vAlign="middle"/>
+                              <border>
+                                 <edge presence="hidden"/>
+                                 <corner thickness="0.1778mm" presence="hidden"/>
+                              </border>
+                           </field>
+                           <?templateDesigner expand 0?></subform>
+                        <subform layout="row" name="Row13">
+                           <assist role="TR"/>
+                           <draw h="6.442mm" name="Cell1">
+                              <ui>
+                                 <textEdit>
+                                    <margin/>
+                                 </textEdit>
+                              </ui>
+                              <font typeface="Times New Roman" size="9pt"/>
+                              <para vAlign="middle"/>
+                              <margin topInset="0.5mm" bottomInset="0.5mm" leftInset="0.5mm" rightInset="0.5mm"/>
+                              <border>
+                                 <edge presence="hidden"/>
+                                 <corner thickness="0.1778mm" presence="hidden"/>
+                              </border>
+                              <value>
+                                 <text xliff:rid="5D30680C-968F-4DF2-8E9D-C78B7D761E10">10. HTS CODE:</text>
+                              </value>
+                           </draw>
+                           <field name="Cell2" h="6.442mm">
+                              <ui>
+                                 <textEdit>
+                                    <margin/>
+                                 </textEdit>
+                              </ui>
+                              <font typeface="Times New Roman" size="9pt"/>
+                              <margin topInset="0.5mm" bottomInset="0.5mm" leftInset="0.5mm" rightInset="0.5mm"/>
+                              <para vAlign="middle"/>
+                              <border>
+                                 <edge presence="hidden"/>
+                                 <corner thickness="0.1778mm" presence="hidden"/>
+                              </border>
+                           </field>
+                           <?templateDesigner expand 0?></subform>
+                        <subform layout="row" name="Row14">
+                           <assist role="TR"/>
+                           <draw h="6.35mm" name="Cell1">
+                              <ui>
+                                 <textEdit>
+                                    <margin/>
+                                 </textEdit>
+                              </ui>
+                              <value>
+                                 <text xliff:rid="3ED7A2CF-0005-4591-A061-AD317F4F6B4E">11. COUNTRY OF ORIGIN:</text>
+                              </value>
+                              <font typeface="Times New Roman" size="9pt"/>
+                              <para vAlign="middle"/>
+                              <margin topInset="0.5mm" bottomInset="0.5mm" leftInset="0.5mm" rightInset="0.5mm"/>
+                              <border>
+                                 <edge presence="hidden"/>
+                                 <corner thickness="0.1778mm" presence="hidden"/>
+                              </border>
+                           </draw>
+                           <field h="6.35mm" name="Cell2">
+                              <ui>
+                                 <textEdit>
+                                    <margin/>
+                                 </textEdit>
+                              </ui>
+                              <font typeface="Times New Roman" size="9pt"/>
+                              <margin topInset="0.5mm" bottomInset="0.5mm" leftInset="0.5mm" rightInset="0.5mm"/>
+                              <para vAlign="middle"/>
+                              <border>
+                                 <edge presence="hidden"/>
+                                 <corner thickness="0.1778mm" presence="hidden"/>
+                              </border>
+                           </field>
+                           <?templateDesigner expand 1?></subform>
+                        <subform layout="row" name="Row15">
+                           <assist role="TR"/>
+                           <draw h="6.35mm" name="Cell1">
+                              <ui>
+                                 <textEdit>
+                                    <margin/>
+                                 </textEdit>
+                              </ui>
+                              <value>
+                                 <text xliff:rid="060C950D-0A1B-4E27-BF5D-408461F84DBE">12. QUARTZ SLABS:</text>
+                              </value>
+                              <font typeface="Times New Roman" size="9pt"/>
+                              <para vAlign="middle"/>
+                              <margin topInset="0.5mm" bottomInset="0.5mm" leftInset="0.5mm" rightInset="0.5mm"/>
+                              <border>
+                                 <edge presence="hidden"/>
+                                 <corner thickness="0.1778mm" presence="hidden"/>
+                              </border>
+                           </draw>
+                           <field h="6.35mm" name="Cell2">
+                              <ui>
+                                 <textEdit>
+                                    <margin/>
+                                 </textEdit>
+                              </ui>
+                              <font typeface="Times New Roman" size="9pt"/>
+                              <margin topInset="0.5mm" bottomInset="0.5mm" leftInset="0.5mm" rightInset="0.5mm"/>
+                              <para vAlign="middle"/>
+                              <border>
+                                 <edge presence="hidden"/>
+                                 <corner thickness="0.1778mm" presence="hidden"/>
+                              </border>
+                           </field>
+                           <?templateDesigner expand 1?></subform>
+                        <?templateDesigner expand 1?></subform>
+                     <?templateDesigner expand 0?></subform>
+                  <keep intact="none"/>
+                  <?templateDesigner expand 0?></subform>
+               <subform layout="row" name="Row5">
+                  <assist role="TR"/>
+                  <subform layout="tb" name="Sub4.3">
+                     <para vAlign="middle" hAlign="center"/>
+                     <?templateDesigner expand 1?></subform>
+                  <?templateDesigner expand 0?></subform>
+               <subform layout="row" name="Row6">
+                  <assist role="TR"/>
+                  <subform layout="tb" name="Sub4.4">
+                     <para vAlign="middle" hAlign="center"/>
+                     <?templateDesigner expand 1?>
+                     <subform name="Table4" layout="table" columnWidths="127mm 63.5mm">
+                        <border>
+                           <edge presence="hidden"/>
+                           <corner presence="hidden"/>
+                        </border>
+                        <subform layout="row" name="Row1">
+                           <assist role="TR"/>
+                           <draw h="6.35mm" name="Cell1">
+                              <border>
+                                 <edge presence="hidden"/>
+                                 <corner thickness="0.1778mm" presence="hidden"/>
+                              </border>
+                              <ui>
+                                 <textEdit/>
+                              </ui>
+                              <font typeface="Arial"/>
+                              <margin topInset="0.5mm" bottomInset="0.5mm" leftInset="0.5mm" rightInset="0.5mm"/>
+                              <para vAlign="middle" hAlign="center"/>
+                           </draw>
+                           <draw h="6.35mm" name="Cell2">
+                              <border>
+                                 <edge presence="hidden"/>
+                                 <corner thickness="0.1778mm" presence="hidden"/>
+                              </border>
+                              <ui>
+                                 <textEdit/>
+                              </ui>
+                              <font typeface="Times New Roman" size="9pt" weight="bold"/>
+                              <margin topInset="0.5mm" bottomInset="0.5mm" leftInset="0.5mm" rightInset="0.5mm"/>
+                              <para hAlign="center" spaceAbove="0.2pt" vAlign="middle"/>
+                              <value>
+                                 <text xliff:rid="3FB9AAD6-09FD-4145-B796-5ABF31C09568">CASABLANCA VIET NAM JSC</text>
+                              </value>
+                           </draw>
+                           <border>
+                              <edge presence="hidden"/>
+                           </border>
+                           <?templateDesigner expand 1?></subform>
+                        <?templateDesigner rowpattern first:1, next:1, firstcolor:f0f0f0, nextcolor:ffffff, apply:0?>
+                        <?templateDesigner expand 1?></subform>
+                  </subform>
+                  <?templateDesigner expand 0?></subform>
+               <?templateDesigner expand 1?></subform>
+            <?templateDesigner expand 1?></subform>
+         <?templateDesigner expand 1?></subform>
+      <proto/>
+      <desc>
+         <text name="version">11.0.9.20250609.2.65.2</text>
+      </desc>
+      <proto>
+         <subform name="designer__stylesheet">
+            <field name="TextFieldStyle1">
+               <ui>
+                  <textEdit>
+                     <border>
+                        <edge stroke="lowered"/>
+                     </border>
+                     <margin/>
+                  </textEdit>
+               </ui>
+               <font typeface="Arial"/>
+               <margin topInset="1mm" bottomInset="1mm" leftInset="1mm" rightInset="1mm"/>
+               <para vAlign="middle"/>
+               <caption reserve="25mm">
+                  <para vAlign="middle"/>
+               </caption>
+               <border>
+                  <edge/>
+                  <corner thickness="0.1778mm"/>
+               </border>
+            </field>
+            <field name="TextFieldStyle2">
+               <ui>
+                  <textEdit>
+                     <border>
+                        <edge stroke="lowered"/>
+                     </border>
+                     <margin/>
+                  </textEdit>
+               </ui>
+               <font typeface="Arial"/>
+               <margin topInset="1mm" bottomInset="1mm" leftInset="1mm" rightInset="1mm"/>
+               <para vAlign="middle"/>
+               <caption reserve="25mm">
+                  <para vAlign="middle"/>
+               </caption>
+               <border>
+                  <edge/>
+                  <corner thickness="0.1778mm"/>
+               </border>
+            </field>
+            <field name="TextFieldStyle3">
+               <ui>
+                  <textEdit>
+                     <border>
+                        <edge stroke="lowered"/>
+                     </border>
+                     <margin/>
+                  </textEdit>
+               </ui>
+               <font typeface="Arial"/>
+               <margin topInset="1mm" bottomInset="1mm" leftInset="1mm" rightInset="1mm"/>
+               <para vAlign="middle"/>
+               <caption reserve="25mm">
+                  <para vAlign="middle"/>
+               </caption>
+               <border>
+                  <edge/>
+                  <corner thickness="0.1778mm"/>
+               </border>
+            </field>
+         </subform>
+      </proto>
+      <?templateDesigner HyphenationExtra allowHow:2?>
+      <?templateDesigner Hyphenation excludeInitialCap:1, excludeAllCaps:1, wordCharCnt:7, remainCharCnt:3, pushCharCnt:3?>
+      <?templateDesigner expand 1?>
+      <?renderCache.subset "Arial" 0 0 ISO-8859-1 4 4 1 0003 ?>
+      <?renderCache.subset "Times New Roman" 0 0 ISO-8859-1 4 264 66 00030006000B000C000D000E000F0010001100120013001400150016001700180019001A001B001C001D002400250026002700280029002A002B002C002E002F0030003100320033003400350036003700380039003A003C003D00440046004700480049004A004B004C004E004F00500051005200550056005700580059005A005B005C #()*+,-./0123456789:ABCDEFGHIKLMNOPQRSTUVWYZacdefghiklmnorstuvwxy?>
+      <?renderCache.subset "Times New Roman" 1 0 ISO-8859-1 4 68 17 00030024002500260028002A002C002D002E002F0030003100330035003600370039 ABCEGIJKLMNPRSTV?></subform>
+   <?templateDesigner DefaultPreviewDynamic 1?>
+   <?templateDesigner DefaultRunAt client?>
+   <?templateDesigner Grid show:1, snap:1, units:0, color:ff8080, origin:(0,0), interval:(125000,125000)?>
+   <?templateDesigner DefaultCaptionFontSettings face:Arial;size:10;weight:normal;style:normal?>
+   <?templateDesigner DefaultValueFontSettings face:Arial;size:10;weight:normal;style:normal?>
+   <?templateDesigner DefaultLanguage JavaScript?>
+   <?acrobat JavaScript strictScoping?>
+   <?templateDesigner WidowOrphanControl 0?>
+   <?templateDesigner SaveTaggedPDF 0?>
+   <?templateDesigner SavePDFWithEmbeddedFonts 0?>
+   <?templateDesigner SavePDFWithLog 0?>
+   <?templateDesigner FormTargetVersion 33?>
+   <?templateDesigner Zoom 139?>
+   <?templateDesigner Rulers horizontal:1, vertical:1, guidelines:1, crosshairs:0?></template>
+<config xmlns="http://www.xfa.org/schema/xci/3.0/">
+   <agent name="designer">
+      <!--  [0..n]  -->
+      <destination>pdf</destination>
+      <pdf>
+         <!--  [0..n]  -->
+         <fontInfo/>
+      </pdf>
+   </agent>
+   <present>
+      <!--  [0..n]  -->
+      <pdf>
+         <!--  [0..n]  -->
+         <version>1.7</version>
+         <adobeExtensionLevel>8</adobeExtensionLevel>
+      </pdf>
+      <xdp>
+         <packets>*</packets>
+      </xdp>
+   </present>
+   <psMap>
+      <font typeface="Angiang" psName="Angiang-Heavy" weight="bold" posture="italic"/>
+   </psMap>
+</config>
+<localeSet xmlns="http://www.xfa.org/schema/xfa-locale-set/2.7/">
+   <locale name="en_US" desc="English (United States)">
+      <calendarSymbols name="gregorian">
+         <monthNames>
+            <month>January</month>
+            <month>February</month>
+            <month>March</month>
+            <month>April</month>
+            <month>May</month>
+            <month>June</month>
+            <month>July</month>
+            <month>August</month>
+            <month>September</month>
+            <month>October</month>
+            <month>November</month>
+            <month>December</month>
+         </monthNames>
+         <monthNames abbr="1">
+            <month>Jan</month>
+            <month>Feb</month>
+            <month>Mar</month>
+            <month>Apr</month>
+            <month>May</month>
+            <month>Jun</month>
+            <month>Jul</month>
+            <month>Aug</month>
+            <month>Sep</month>
+            <month>Oct</month>
+            <month>Nov</month>
+            <month>Dec</month>
+         </monthNames>
+         <dayNames>
+            <day>Sunday</day>
+            <day>Monday</day>
+            <day>Tuesday</day>
+            <day>Wednesday</day>
+            <day>Thursday</day>
+            <day>Friday</day>
+            <day>Saturday</day>
+         </dayNames>
+         <dayNames abbr="1">
+            <day>Sun</day>
+            <day>Mon</day>
+            <day>Tue</day>
+            <day>Wed</day>
+            <day>Thu</day>
+            <day>Fri</day>
+            <day>Sat</day>
+         </dayNames>
+         <meridiemNames>
+            <meridiem>AM</meridiem>
+            <meridiem>PM</meridiem>
+         </meridiemNames>
+         <eraNames>
+            <era>BC</era>
+            <era>AD</era>
+         </eraNames>
+      </calendarSymbols>
+      <datePatterns>
+         <datePattern name="full">EEEE, MMMM D, YYYY</datePattern>
+         <datePattern name="long">MMMM D, YYYY</datePattern>
+         <datePattern name="med">MMM D, YYYY</datePattern>
+         <datePattern name="short">M/D/YY</datePattern>
+      </datePatterns>
+      <timePatterns>
+         <timePattern name="full">h:MM:SS A Z</timePattern>
+         <timePattern name="long">h:MM:SS A Z</timePattern>
+         <timePattern name="med">h:MM:SS A</timePattern>
+         <timePattern name="short">h:MM A</timePattern>
+      </timePatterns>
+      <dateTimeSymbols>GyMdkHmsSEDFwWahKzZ</dateTimeSymbols>
+      <numberPatterns>
+         <numberPattern name="numeric">z,zz9.zzz</numberPattern>
+         <numberPattern name="currency">$z,zz9.99|($z,zz9.99)</numberPattern>
+         <numberPattern name="percent">z,zz9%</numberPattern>
+      </numberPatterns>
+      <numberSymbols>
+         <numberSymbol name="decimal">.</numberSymbol>
+         <numberSymbol name="grouping">,</numberSymbol>
+         <numberSymbol name="percent">%</numberSymbol>
+         <numberSymbol name="minus">-</numberSymbol>
+         <numberSymbol name="zero">0</numberSymbol>
+      </numberSymbols>
+      <currencySymbols>
+         <currencySymbol name="symbol">$</currencySymbol>
+         <currencySymbol name="isoname">USD</currencySymbol>
+         <currencySymbol name="decimal">.</currencySymbol>
+      </currencySymbols>
+      <typefaces>
+         <typeface name="Myriad Pro"/>
+         <typeface name="Minion Pro"/>
+         <typeface name="Courier Std"/>
+         <typeface name="Adobe Pi Std"/>
+         <typeface name="Adobe Hebrew"/>
+         <typeface name="Adobe Arabic"/>
+         <typeface name="Adobe Thai"/>
+         <typeface name="Kozuka Gothic Pro-VI M"/>
+         <typeface name="Kozuka Mincho Pro-VI R"/>
+         <typeface name="Adobe Ming Std L"/>
+         <typeface name="Adobe Song Std L"/>
+         <typeface name="Adobe Myungjo Std M"/>
+         <typeface name="Adobe Devanagari"/>
+      </typefaces>
+   </locale>
+</localeSet>
+<x:xmpmeta xmlns:x="adobe:ns:meta/" x:xmptk="Adobe XMP Core 9.1-c002 79.fd02715, 2024/05/22-04:12:37        ">
+   <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+      <rdf:Description xmlns:xmp="http://ns.adobe.com/xap/1.0/" xmlns:pdfuaid="http://www.aiim.org/pdfua/ns/id/" xmlns:pdf="http://ns.adobe.com/pdf/1.3/" xmlns:xmpMM="http://ns.adobe.com/xap/1.0/mm/" xmlns:desc="http://ns.adobe.com/xfa/promoted-desc/" rdf:about="">
+         <xmp:MetadataDate>2026-10-08T04:09:50Z</xmp:MetadataDate>
+         <xmp:CreatorTool>Adobe LiveCycle Designer 11.0</xmp:CreatorTool>
+         <pdfuaid:part>1</pdfuaid:part>
+         <pdf:Producer>Adobe LiveCycle Designer 11.0</pdf:Producer>
+         <xmpMM:DocumentID>uuid:225a2107-7de4-4e18-94ca-77b8530f6914</xmpMM:DocumentID>
+         <desc:version rdf:parseType="Resource">
+            <rdf:value>11.0.9.20250609.2.65.2</rdf:value>
+            <desc:ref>/template/subform[1]</desc:ref>
+         </desc:version>
+      </rdf:Description>
+   </rdf:RDF>
+</x:xmpmeta></xdp:xdp>

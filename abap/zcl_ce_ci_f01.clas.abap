@@ -23,6 +23,13 @@ CLASS zcl_ce_ci_f01 DEFINITION
         it_keys_pdf TYPE zcl_ce_ci_top=>tt_key_pdf OPTIONAL
       EXPORTING
         et_result   TYPE zcl_ce_ci_top=>tt_result.
+
+    CLASS-METHODS amount_to_words
+      IMPORTING
+        iv_amount       TYPE zce_ci-Amount
+        iv_currency     TYPE zce_ci-TransactionCurrency
+      RETURNING
+        VALUE(rv_words) TYPE string.
   PROTECTED SECTION.
   PRIVATE SECTION.
     CLASS-METHODS get_longtext_result_billing
@@ -40,6 +47,12 @@ CLASS zcl_ce_ci_f01 DEFINITION
         iv_do          TYPE I_OutboundDelivery-OutboundDelivery
       RETURNING
         VALUE(rv_data) TYPE string.
+
+    CLASS-METHODS three_digits_to_words
+      IMPORTING
+        iv_number       TYPE i
+      RETURNING
+        VALUE(rv_words) TYPE string.
 ENDCLASS.
 
 
@@ -128,7 +141,21 @@ CLASS ZCL_CE_CI_F01 IMPLEMENTATION.
 
       DATA(lt_keys) = lt_keys_raw.
     ELSE.
-      lt_keys = it_keys_pdf.
+      "In PDF (CI + Packing List): chỉ lấy item có item category = TAN
+      SELECT FROM I_BillingDocumentItem AS a
+      FIELDS
+          a~BillingDocument     AS ProFormaInvoice,
+          a~BillingDocumentItem AS Item
+      FOR ALL ENTRIES IN @it_keys_pdf
+      WHERE
+          a~BillingDocument               = @it_keys_pdf-proformainvoice
+          AND a~BillingDocumentItem       = @it_keys_pdf-item
+          AND a~SalesDocumentItemCategory = 'TAN'
+      INTO TABLE @lt_keys.
+      IF sy-subrc <> 0.
+        RETURN.
+      ENDIF.
+      SORT lt_keys BY ProFormaInvoice Item.
     ENDIF.
 
     "2.3. Get bases
@@ -572,5 +599,101 @@ CLASS ZCL_CE_CI_F01 IMPLEMENTATION.
     IF sy-subrc = 0.
       rv_data = ls_longtext-LongText.
     ENDIF.
+  ENDMETHOD.
+
+  METHOD amount_to_words.
+    "VD: 1234.50 USD => ONE THOUSAND TWO HUNDRED THIRTY-FOUR DOLLARS AND FIFTY CENTS
+    DATA: lt_scale       TYPE STANDARD TABLE OF string WITH EMPTY KEY,
+          lv_abs         TYPE p LENGTH 16 DECIMALS 2,
+          lv_integer     TYPE p LENGTH 16 DECIMALS 0,
+          lv_cents       TYPE i,
+          lv_group       TYPE i,
+          lv_index       TYPE i,
+          lv_group_words TYPE string.
+
+    lt_scale = VALUE #( ( `` ) ( `THOUSAND` ) ( `MILLION` ) ( `BILLION` ) ( `TRILLION` ) ).
+
+    lv_abs     = abs( iv_amount ).
+    lv_integer = trunc( lv_abs ).
+    lv_cents   = ( lv_abs - lv_integer ) * 100.
+
+    "Form hiện chỉ dùng USD, tiền tệ khác tạm in mã tiền tệ
+    DATA(lv_unit) = COND string( WHEN iv_currency <> 'USD' THEN iv_currency
+                                 WHEN lv_integer = 1       THEN `DOLLAR`
+                                 ELSE `DOLLARS` ).
+
+    IF lv_integer = 0.
+      rv_words = `ZERO`.
+    ENDIF.
+
+    "Tách từng nhóm 3 chữ số từ phải sang trái
+    WHILE lv_integer > 0.
+      lv_index   = lv_index + 1.
+      lv_group   = lv_integer MOD 1000.
+      lv_integer = lv_integer DIV 1000.
+      IF lv_group = 0.
+        CONTINUE.
+      ENDIF.
+
+      lv_group_words = three_digits_to_words( lv_group ).
+      DATA(lv_scale) = lt_scale[ lv_index ].
+      IF lv_scale IS NOT INITIAL.
+        lv_group_words = |{ lv_group_words } { lv_scale }|.
+      ENDIF.
+      rv_words = COND #( WHEN rv_words IS INITIAL
+                         THEN lv_group_words
+                         ELSE |{ lv_group_words } { rv_words }| ).
+    ENDWHILE.
+
+    IF iv_amount < 0.
+      rv_words = |MINUS { rv_words }|.
+    ENDIF.
+
+    rv_words = |{ rv_words } { lv_unit }|.
+
+    IF lv_cents > 0.
+      rv_words = |{ rv_words } AND { three_digits_to_words( lv_cents ) } |
+              && COND string( WHEN lv_cents = 1 THEN `CENT` ELSE `CENTS` ).
+    ENDIF.
+  ENDMETHOD.
+
+
+  METHOD three_digits_to_words.
+    DATA: lt_ones       TYPE STANDARD TABLE OF string WITH EMPTY KEY,
+          lt_tens       TYPE STANDARD TABLE OF string WITH EMPTY KEY,
+          lv_rest_words TYPE string.
+
+    lt_ones = VALUE #( ( `ONE` ) ( `TWO` ) ( `THREE` ) ( `FOUR` ) ( `FIVE` )
+                       ( `SIX` ) ( `SEVEN` ) ( `EIGHT` ) ( `NINE` ) ( `TEN` )
+                       ( `ELEVEN` ) ( `TWELVE` ) ( `THIRTEEN` ) ( `FOURTEEN` ) ( `FIFTEEN` )
+                       ( `SIXTEEN` ) ( `SEVENTEEN` ) ( `EIGHTEEN` ) ( `NINETEEN` ) ).
+    lt_tens = VALUE #( ( `TEN` ) ( `TWENTY` ) ( `THIRTY` ) ( `FORTY` ) ( `FIFTY` )
+                       ( `SIXTY` ) ( `SEVENTY` ) ( `EIGHTY` ) ( `NINETY` ) ).
+
+    DATA(lv_hundreds) = iv_number DIV 100.
+    DATA(lv_rest)     = iv_number MOD 100.
+
+    IF lv_hundreds > 0.
+      rv_words = |{ lt_ones[ lv_hundreds ] } HUNDRED|.
+    ENDIF.
+
+    IF lv_rest = 0.
+      RETURN.
+    ENDIF.
+
+    IF lv_rest < 20.
+      lv_rest_words = lt_ones[ lv_rest ].
+    ELSE.
+      DATA(lv_ten) = lv_rest DIV 10.
+      DATA(lv_one) = lv_rest MOD 10.
+      lv_rest_words = lt_tens[ lv_ten ].
+      IF lv_one > 0.
+        lv_rest_words = |{ lv_rest_words }-{ lt_ones[ lv_one ] }|.
+      ENDIF.
+    ENDIF.
+
+    rv_words = COND #( WHEN rv_words IS INITIAL
+                       THEN lv_rest_words
+                       ELSE |{ rv_words } { lv_rest_words }| ).
   ENDMETHOD.
 ENDCLASS.

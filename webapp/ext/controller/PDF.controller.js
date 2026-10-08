@@ -101,6 +101,79 @@ sap.ui.define([
         },
 
         /* ================================================================
+         *  EXPORT EXCEL - menu Export > Commercial Invoice / Packing List
+         *  File xlsx sinh hoàn toàn ở backend (zcl_ce_ci_xlsx), FE chỉ nhận base64 rồi tải về
+         * ================================================================ */
+        btnExportExcelCI: function () {
+            this._exportExcel("ExportExcelCI", "Commercial_Invoice");
+        },
+
+        btnExportExcelPL: function () {
+            this._exportExcel("ExportExcelPL", "Packing_List");
+        },
+
+        _exportExcel: function (sActionName, sDefaultName) {
+            var that = this;
+            var aContexts = this._getSelectedContexts();
+            if (!aContexts.length) {
+                MessageToast.show("Vui lòng chọn ít nhất 1 dòng.");
+                return;
+            }
+
+            var oModel = this.base.getExtensionAPI().getModel();
+            var oBusy = new BusyDialog({ text: "Đang export " + aContexts.length + " dòng..." });
+            oBusy.open();
+
+            // Gửi tất cả dòng đã chọn trong 1 $batch → backend gom thành 1 file
+            var sGroupId = "ExportExcelBatchGroup";
+            var aPromises = aContexts.map(function (oContext) {
+                var oOperation = oModel.bindContext(
+                    "com.sap.gateway.srvd.zui_ci.v0001." + sActionName + "(...)",
+                    oContext,
+                    { $$groupId: sGroupId }
+                );
+                return oOperation.execute().then(function () {
+                    return oOperation.getBoundContext().getObject();
+                });
+            });
+
+            oModel.submitBatch(sGroupId);
+
+            Promise.all(aPromises).then(function (aResults) {
+                oBusy.close();
+
+                // Backend trả cùng 1 file cho mọi dòng, nội dung chỉ nằm ở 1 dòng
+                var oFile = aResults.filter(function (oResult) {
+                    return oResult && oResult.FileContent;
+                })[0];
+
+                if (!oFile) {
+                    MessageBox.warning("Không có dữ liệu để export (chỉ export item có item category TAN).");
+                    return;
+                }
+
+                that._downloadFile(oFile, sDefaultName);
+                MessageToast.show("Export thành công!");
+            }).catch(function (oError) {
+                oBusy.close();
+                console.error("[" + sActionName + "]", oError);
+                MessageBox.error(oError && oError.message ? oError.message : "Đã xảy ra lỗi khi export Excel.");
+            });
+        },
+
+        _downloadFile: function (oFile, sDefaultName) {
+            var sMimeType = oFile.MimeType || "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+            var conv = this._b64ToSources(oFile.FileContent, sMimeType);
+            var oLink = document.createElement("a");
+            oLink.href = conv.url;
+            oLink.download = (oFile.FileName || sDefaultName) + "." + (oFile.FileExtension || "xlsx");
+            document.body.appendChild(oLink);
+            oLink.click();
+            document.body.removeChild(oLink);
+            setTimeout(function () { URL.revokeObjectURL(conv.url); }, 1000);
+        },
+
+        /* ================================================================
          *  GỌI ACTION - OData V4 (Dùng $batch gửi full dữ liệu & lọc trùng file ở Frontend)
          * ================================================================ */
         _callPrintPdfAction: function (aContexts, sActionName, sDefaultPrefix) {

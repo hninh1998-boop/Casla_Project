@@ -143,6 +143,13 @@
                     "type": "GridTable"
                   },
                   "actions": {
+                    "ExportPDF": {
+                      "text": "Export PDF",
+                      "menu": [
+                        "PDF",
+                        "PackingList"
+                      ]
+                    },
                     "PDF": {
                       "press": ".extension.zciov4.ext.controller.PDF.btnPrintPDF",
                       "visible": true,
@@ -152,6 +159,27 @@
                     },
                     "PackingList": {
                       "press": ".extension.zciov4.ext.controller.PDF.btnPrintPackingList",
+                      "visible": true,
+                      "enabled": true,
+                      "requiresSelection": true,
+                      "text": "Packing List"
+                    },
+                    "ExportExcel": {
+                      "text": "Export Excel",
+                      "menu": [
+                        "ExportExcelCI",
+                        "ExportExcelPL"
+                      ]
+                    },
+                    "ExportExcelCI": {
+                      "press": ".extension.zciov4.ext.controller.PDF.btnExportExcelCI",
+                      "visible": true,
+                      "enabled": true,
+                      "requiresSelection": true,
+                      "text": "Commercial Invoice"
+                    },
+                    "ExportExcelPL": {
+                      "press": ".extension.zciov4.ext.controller.PDF.btnExportExcelPL",
                       "visible": true,
                       "enabled": true,
                       "requiresSelection": true,

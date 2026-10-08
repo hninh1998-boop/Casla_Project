@@ -14,6 +14,18 @@ CLASS lhc_zce_ci DEFINITION INHERITING FROM cl_abap_behavior_handler.
     METHODS PDFPackingList FOR MODIFY
        keys FOR ACTION zce_ci~PDFPackingList RESULT result.
 
+    METHODS ExportExcelCI FOR MODIFY
+       keys FOR ACTION zce_ci~ExportExcelCI RESULT result.
+    METHODS ExportExcelPL FOR MODIFY
+       keys FOR ACTION zce_ci~ExportExcelPL RESULT result.
+
+    "Dùng chung cho 2 action export excel - iv_form = `CI` / `PL`
+    METHODS export_excel
+      IMPORTING it_keys_pdf TYPE zcl_ce_ci_top=>tt_key_pdf
+                iv_form     TYPE string
+      EXPORTING ev_content  TYPE string
+                ev_filename TYPE string.
+
 ENDCLASS.
 
 CLASS lhc_zce_ci IMPLEMENTATION.
@@ -158,6 +170,10 @@ CLASS lhc_zce_ci IMPLEMENTATION.
                 && |</Cell6>|
             && |</Row2>|.
       ENDLOOP.
+      "In words - phải lấy trước khi format lv_total_amount
+      DATA(lv_inwords) = zcl_ce_ci_f01=>amount_to_words(
+        iv_amount   = lv_total_amount
+        iv_currency = ls_member_table2-TransactionCurrency ).
       lv_total_quantity = zcl_utility_ninhnh=>format_number_trim( iv_value = lv_total_quantity ).
       lv_total_amount   = zcl_utility_ninhnh=>format_number_trim( iv_value = lv_total_amount ).
 
@@ -176,7 +192,12 @@ CLASS lhc_zce_ci IMPLEMENTATION.
         DATA(lv_QuartzSlabs) = zcl_utility_ninhnh=>escape_xml( iv_text = ls_data_table3-QuartzSlabs ).
       ENDIF.
       lv_table3 =
-        |<Row6>|
+        |<Row2>|
+            && |<Cell2>|
+                && |{ lv_inwords }|
+            && |</Cell2>|
+        && |</Row2>|
+        && |<Row6>|
             && |<Cell2>|
                 && |{ lv_vesselname }|
             && |</Cell2>|
@@ -633,6 +654,109 @@ CLASS lhc_zce_ci IMPLEMENTATION.
       <lfs_result>-%param-FileExtension = 'pdf'.
       <lfs_result>-%param-MimeType = 'application/pdf'.
     ENDLOOP.
+  ENDMETHOD.
+
+  METHOD ExportExcelCI.
+    DATA lt_keys_pdf TYPE zcl_ce_ci_top=>tt_key_pdf.
+
+    LOOP AT keys INTO DATA(ls_key_d).
+      APPEND INITIAL LINE TO lt_keys_pdf ASSIGNING FIELD-SYMBOL(<lfs_keys_pdf>).
+      <lfs_keys_pdf>-proformainvoice = ls_key_d-%key-ProFormaInvoice.
+      <lfs_keys_pdf>-Item            = ls_key_d-%key-Item.
+    ENDLOOP.
+
+    export_excel( EXPORTING it_keys_pdf = lt_keys_pdf
+                            iv_form     = `CI`
+                  IMPORTING ev_content  = DATA(lv_content)
+                            ev_filename = DATA(lv_filename) ).
+
+    "Mọi dòng được chọn dùng chung 1 file → chỉ trả nội dung ở dòng đầu để response không bị lặp
+    "Không có dữ liệu (không có item TAN) → FileContent rỗng, FE tự báo
+    DATA(lv_first) = abap_true.
+    LOOP AT keys INTO DATA(ls_key_r).
+      APPEND INITIAL LINE TO result ASSIGNING FIELD-SYMBOL(<lfs_result>).
+      <lfs_result>-%tky = ls_key_r-%tky.
+      IF lv_first = abap_true.
+        <lfs_result>-%param-FileContent = lv_content.
+        lv_first = abap_false.
+      ENDIF.
+      <lfs_result>-%param-FileName      = lv_filename.
+      <lfs_result>-%param-FileExtension = 'xlsx'.
+      <lfs_result>-%param-MimeType      = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'.
+    ENDLOOP.
+  ENDMETHOD.
+
+  METHOD ExportExcelPL.
+    DATA lt_keys_pdf TYPE zcl_ce_ci_top=>tt_key_pdf.
+
+    LOOP AT keys INTO DATA(ls_key_d).
+      APPEND INITIAL LINE TO lt_keys_pdf ASSIGNING FIELD-SYMBOL(<lfs_keys_pdf>).
+      <lfs_keys_pdf>-proformainvoice = ls_key_d-%key-ProFormaInvoice.
+      <lfs_keys_pdf>-Item            = ls_key_d-%key-Item.
+    ENDLOOP.
+
+    export_excel( EXPORTING it_keys_pdf = lt_keys_pdf
+                            iv_form     = `PL`
+                  IMPORTING ev_content  = DATA(lv_content)
+                            ev_filename = DATA(lv_filename) ).
+
+    "Mọi dòng được chọn dùng chung 1 file → chỉ trả nội dung ở dòng đầu để response không bị lặp
+    "Không có dữ liệu (không có item TAN) → FileContent rỗng, FE tự báo
+    DATA(lv_first) = abap_true.
+    LOOP AT keys INTO DATA(ls_key_r).
+      APPEND INITIAL LINE TO result ASSIGNING FIELD-SYMBOL(<lfs_result>).
+      <lfs_result>-%tky = ls_key_r-%tky.
+      IF lv_first = abap_true.
+        <lfs_result>-%param-FileContent = lv_content.
+        lv_first = abap_false.
+      ENDIF.
+      <lfs_result>-%param-FileName      = lv_filename.
+      <lfs_result>-%param-FileExtension = 'xlsx'.
+      <lfs_result>-%param-MimeType      = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'.
+    ENDLOOP.
+  ENDMETHOD.
+
+  METHOD export_excel.
+    DATA lt_filters TYPE if_rap_query_filter=>tt_name_range_pairs.
+
+    CLEAR: ev_content, ev_filename.
+
+    """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+    "1. Get data - dùng chung logic với in PDF (chỉ lấy item TAN)
+    zcl_ce_ci_f01=>main(
+      EXPORTING
+        it_filters  = lt_filters
+        it_keys_pdf = it_keys_pdf
+      IMPORTING
+        et_result   = DATA(lt_data)
+    ).
+    IF lt_data IS INITIAL.
+      RETURN.
+    ENDIF.
+
+    """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+    "2. Gen file xlsx - mỗi Pro-forma Invoice 1 sheet
+    DATA(lv_xlsx) = COND xstring( WHEN iv_form = `PL`
+                                  THEN zcl_ce_ci_xlsx=>build_pl( lt_data )
+                                  ELSE zcl_ce_ci_xlsx=>build_ci( lt_data ) ).
+    IF lv_xlsx IS INITIAL.
+      RETURN.
+    ENDIF.
+
+    ev_content = cl_web_http_utility=>encode_x_base64( lv_xlsx ).
+
+    """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+    "3. File name - 1 invoice thì đặt theo số invoice
+    DATA(lt_invoice) = lt_data.
+    SORT lt_invoice BY ProFormaInvoice.
+    DELETE ADJACENT DUPLICATES FROM lt_invoice COMPARING ProFormaInvoice.
+
+    DATA(lv_date) = cl_abap_context_info=>get_system_date( ).
+    DATA(lv_time) = cl_abap_context_info=>get_system_time( ).
+
+    ev_filename = COND #( WHEN lines( lt_invoice ) = 1
+                          THEN |{ iv_form }_{ lt_invoice[ 1 ]-ProFormaInvoice ALPHA = OUT }_{ lv_date }_{ lv_time }|
+                          ELSE |{ iv_form }_{ lv_date }_{ lv_time }| ).
   ENDMETHOD.
 
 ENDCLASS.

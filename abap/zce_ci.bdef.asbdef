@@ -14,4 +14,8 @@ authorization master ( instance )
 
   action btnPrintPDF result [1] zabs_ci_result;
   action PDFPackingList result [1] zabs_ci_result;
+
+  // Export Excel: file sinh hoàn toàn ở backend (zcl_ce_ci_xlsx), FE chỉ nhận file
+  action ExportExcelCI result [1] zabs_ci_result;
+  action ExportExcelPL result [1] zabs_ci_result;
 }
