@@ -211,6 +211,34 @@ CLASS ZCL_CE_CONT_F01 IMPLEMENTATION.
       IMPORTING
         et_result   = et_result
     ).
+
+    """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+    "4. Filter lại theo DO / DO Item trên kết quả cuối
+    "   (dòng sinh thêm ở add_new_line_result không có DO --> không được lọt qua filter DO)
+    IF lr_solenhxuathang IS NOT INITIAL.
+      IF lines( lr_solenhxuathang ) = 1
+          AND lr_solenhxuathang[ 1 ]-sign = 'I'
+          AND lr_solenhxuathang[ 1 ]-option = 'EQ'
+          AND lr_solenhxuathang[ 1 ]-low IS INITIAL
+          AND lr_solenhxuathang[ 1 ]-high IS INITIAL.
+        "Filter DO = rỗng (vào detail của dòng chưa có DO) --> chỉ giữ dòng chưa có DO
+        DELETE et_result WHERE SoLenhXuatHang IS NOT INITIAL.
+      ELSE.
+        DELETE et_result WHERE SoLenhXuatHang NOT IN lr_solenhxuathang.
+      ENDIF.
+    ENDIF.
+
+    IF lr_solenhxuathangitem IS NOT INITIAL.
+      IF lines( lr_solenhxuathangitem ) = 1
+          AND lr_solenhxuathangitem[ 1 ]-sign = 'I'
+          AND lr_solenhxuathangitem[ 1 ]-option = 'EQ'
+          AND ( lr_solenhxuathangitem[ 1 ]-low IS INITIAL OR lr_solenhxuathangitem[ 1 ]-low = '000000' )
+          AND ( lr_solenhxuathangitem[ 1 ]-high IS INITIAL OR lr_solenhxuathangitem[ 1 ]-high = '000000' ).
+        DELETE et_result WHERE SoLenhXuatHangItem IS NOT INITIAL.
+      ELSE.
+        DELETE et_result WHERE SoLenhXuatHangItem NOT IN lr_solenhxuathangitem.
+      ENDIF.
+    ENDIF.
   ENDMETHOD.
 
 
