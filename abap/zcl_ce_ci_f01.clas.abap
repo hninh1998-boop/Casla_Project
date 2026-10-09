@@ -197,6 +197,7 @@ CLASS ZCL_CE_CI_F01 IMPLEMENTATION.
         a~BillingDocument     AS ProFormaInvoice,
         a~BillingDocumentItem AS Item,
         a~Product             AS Material,
+        a~SalesDocumentItemCategory AS ItemCategory,
         b~ProductLongText     AS aztid,
         a~BillingQuantityUnit,
         a~BillingQuantity     AS Quantity,
@@ -210,18 +211,22 @@ CLASS ZCL_CE_CI_F01 IMPLEMENTATION.
 
     "2.6. Get LOT
     IF lt_material IS NOT INITIAL.
-      "(2) - Tìm Batch
+      "(2) - Tìm Batch: tất cả batch của invoice (không phụ thuộc dòng đang chọn / đang hiển thị)
+      "      Khi gán LOT: dòng TAN gom batch của TAN + CB99 cùng material, dòng khác chỉ lấy batch của chính nó
       SELECT FROM I_BillingDocumentItem AS a
       FIELDS
         a~BillingDocument     AS ProformaInvoice,
         a~BillingDocumentItem AS Item,
         a~Product             AS Material,
+        a~SalesDocumentItemCategory AS ItemCategory,
         a~Batch
       FOR ALL ENTRIES IN @lt_keys
       WHERE
-        a~BillingDocument         = @lt_keys-proformainvoice
-        AND a~BillingDocumentItem = @lt_keys-item
+        a~BillingDocument               = @lt_keys-proformainvoice
+        AND a~SalesDocumentItemCategory IN ( 'TAN', 'CB99', 'CBLN' )
+        AND a~Batch                     <> ''
       INTO TABLE @DATA(lt_batch).
+      SORT lt_batch BY ProformaInvoice Item.
 
       DATA: lr_mch1 TYPE RANGE OF I_ClfnObjectCharcValue-CharcValue,
             lr_mara TYPE RANGE OF I_ClfnObjectCharcValue-CharcValue.
@@ -240,6 +245,8 @@ CLASS ZCL_CE_CI_F01 IMPLEMENTATION.
         <lfs_mara>-low    = ls_batch-material.
       ENDLOOP.
 
+      "Không có batch nào thì bỏ qua, tránh select với range rỗng (lấy toàn bộ dữ liệu)
+      IF lr_mch1 IS NOT INITIAL.
       "(1) Tìm charc Value - MCH1
       SELECT FROM I_ClfnObjectCharcValue AS a
       INNER JOIN I_ClfnCharacteristic AS b
@@ -269,6 +276,7 @@ CLASS ZCL_CE_CI_F01 IMPLEMENTATION.
           AND a~ClfnObjectID IN @lr_mara
           AND a~ClfnObjectTable = 'MARA'
       INTO TABLE @DATA(lt_mara).
+      ENDIF.
     ENDIF.
 
     "2.7. Long text Billing - I_BillingDocumentTP
@@ -455,43 +463,63 @@ CLASS ZCL_CE_CI_F01 IMPLEMENTATION.
         ENDIF.
       ENDIF.
 
-      "LOT field: D_(1)_(2)(3)
-      READ TABLE lt_batch INTO ls_batch WITH KEY proformainvoice = ls_key-proformainvoice
-                                                 item            = ls_key-item.
-      IF sy-subrc = 0.
-        IF ls_batch-batch IS NOT INITIAL.
-          "(2) - Batch (cắt 6 ký tự đầu của batch: đang là định dạng yymmdd --> chuyển sang định dạng mmddyyyy)
-          DATA(lv_batch_raw) = ls_batch-Batch+0(6). "định dạng yymmdd
-          IF lv_batch_raw <> '000000' AND lv_batch_raw CO '0123456789'.
-            "Chuyển sang định dạng mmddyyyy
-            DATA(lv_batch_date) = |{ lv_batch_raw+2(2) }{ lv_batch_raw+4(2) }20{ lv_batch_raw+0(2) }|.
-          ENDIF.
+      "LOT field - mỗi lot = D_(1)_(2)(3), mỗi lot 1 dòng, không lặp
+      "- Dòng TAN     : gom lot của các item TAN + CB99 cùng invoice, cùng material (các dòng tách batch)
+      "- Dòng khác TAN: chỉ lấy lot theo batch của chính dòng đó
+      DATA(lv_is_tan) = xsdbool( line_exists( lt_material[ proformainvoice = ls_key-proformainvoice
+                                                           item            = ls_key-item
+                                                           ItemCategory    = 'TAN' ] ) ).
+      DATA lt_lot TYPE STANDARD TABLE OF string WITH EMPTY KEY.
+      CLEAR lt_lot.
 
-          "(1) - MCH1 - CharcValue
-          DATA(lv_batch_value) = |{ ls_batch-material WIDTH = 40 ALIGN = LEFT }{ ls_batch-batch }|.
-
-          READ TABLE lt_mch1 INTO DATA(ls_mch1) WITH KEY ClfnObjectID = lv_batch_value.
-          IF sy-subrc = 0.
-            DATA(lv_mch1) = ls_mch1-CharcValue.
+      LOOP AT lt_batch INTO ls_batch WHERE proformainvoice = ls_key-proformainvoice
+                                       AND material        = <lfs_result>-Material.
+        IF lv_is_tan = abap_true.
+          IF ls_batch-ItemCategory <> 'TAN' AND ls_batch-ItemCategory <> 'CB99'.
+            CONTINUE.
           ENDIF.
+        ELSEIF ls_batch-item <> ls_key-item.
+          CONTINUE.
         ENDIF.
 
-        "(3) - MARA - CharcValue
+        "(2) - Batch (cắt 6 ký tự đầu của batch: đang là định dạng yymmdd --> chuyển sang định dạng mmddyyyy)
+        DATA(lv_batch_raw) = ls_batch-Batch+0(6). "định dạng yymmdd
+        IF lv_batch_raw <> '000000' AND lv_batch_raw CO '0123456789'.
+          "Chuyển sang định dạng mmddyyyy
+          DATA(lv_batch_date) = |{ lv_batch_raw+2(2) }{ lv_batch_raw+4(2) }20{ lv_batch_raw+0(2) }|.
+        ENDIF.
+
+        "(1) - MCH1 - CharcValue (Z_SHADE_1 theo Material + Batch)
+        DATA(lv_batch_value) = |{ ls_batch-material WIDTH = 40 ALIGN = LEFT }{ ls_batch-batch }|.
+
+        READ TABLE lt_mch1 INTO DATA(ls_mch1) WITH KEY ClfnObjectID = lv_batch_value.
+        IF sy-subrc = 0.
+          DATA(lv_mch1) = ls_mch1-CharcValue.
+        ENDIF.
+
+        "(3) - MARA - CharcValue (Z_CHE_DO_MAI theo Material)
         READ TABLE lt_mara INTO DATA(ls_mara) WITH KEY ClfnObjectID = ls_batch-material.
         IF sy-subrc = 0.
           DATA(lv_mara) = ls_mara-CharcValue.
         ENDIF.
-      ENDIF.
 
-      IF lv_batch_date IS NOT INITIAL AND lv_mch1 IS NOT INITIAL AND lv_mara IS NOT INITIAL.
-        <lfs_result>-lot = |D_{ lv_mch1 }_{ lv_batch_date }{ lv_mara }|.
-      ENDIF.
+        IF lv_batch_date IS NOT INITIAL AND lv_mch1 IS NOT INITIAL AND lv_mara IS NOT INITIAL.
+          DATA(lv_lot) = |D_{ lv_mch1 }_{ lv_batch_date }{ lv_mara }|.
+          IF NOT line_exists( lt_lot[ table_line = lv_lot ] ).
+            APPEND lv_lot TO lt_lot.
+          ENDIF.
+        ENDIF.
 
-      CLEAR: lv_batch_raw,
-             lv_batch_date,
-             lv_batch_value,
-             lv_mch1,
-             lv_mara.
+        CLEAR: lv_batch_raw,
+               lv_batch_date,
+               lv_batch_value,
+               lv_mch1,
+               lv_mara,
+               lv_lot.
+      ENDLOOP.
+
+      <lfs_result>-lot = concat_lines_of( table = lt_lot
+                                          sep   = cl_abap_char_utilities=>newline ).
 
       "Long text Billing field
       "Vessel's Name - Z038

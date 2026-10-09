@@ -909,12 +909,16 @@ CLASS zcl_ce_ci_xlsx IMPLEMENTATION.
 
   METHOD get_lots.
 
+    " Gộp lot của các dòng, không lặp (1 dòng có thể có nhiều lot, cách nhau bằng xuống dòng)
     DATA lt_lots TYPE tt_string.
 
     LOOP AT it_items INTO DATA(ls_item) WHERE LOT IS NOT INITIAL.
-      IF NOT line_exists( lt_lots[ table_line = ls_item-LOT ] ).
-        APPEND ls_item-LOT TO lt_lots.
-      ENDIF.
+      SPLIT ls_item-LOT AT cl_abap_char_utilities=>newline INTO TABLE DATA(lt_lot_row).
+      LOOP AT lt_lot_row INTO DATA(lv_lot) WHERE table_line IS NOT INITIAL.
+        IF NOT line_exists( lt_lots[ table_line = lv_lot ] ).
+          APPEND lv_lot TO lt_lots.
+        ENDIF.
+      ENDLOOP.
     ENDLOOP.
 
     ev_count = lines( lt_lots ).

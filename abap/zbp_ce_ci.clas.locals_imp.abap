@@ -127,11 +127,19 @@ CLASS lhc_zce_ci IMPLEMENTATION.
 
       "Sub4
       CLEAR: lv_lot.
+      "LOT header: gộp lot của các dòng được in, không lặp (1 dòng có thể có nhiều lot, cách nhau bằng xuống dòng)
+      DATA lt_lot_head TYPE STANDARD TABLE OF string WITH EMPTY KEY.
+      CLEAR lt_lot_head.
       LOOP AT GROUP ls_data_grp INTO DATA(ls_member_lot).
-        IF ls_member_lot-lot IS INITIAL.
-          CONTINUE.
-        ENDIF.
-        DATA(lv_lot_esc) = zcl_utility_ninhnh=>escape_xml( iv_text = ls_member_lot-lot ).
+        SPLIT ls_member_lot-lot AT cl_abap_char_utilities=>newline INTO TABLE DATA(lt_lot_row).
+        LOOP AT lt_lot_row INTO DATA(lv_lot_row) WHERE table_line IS NOT INITIAL.
+          IF NOT line_exists( lt_lot_head[ table_line = lv_lot_row ] ).
+            APPEND lv_lot_row TO lt_lot_head.
+          ENDIF.
+        ENDLOOP.
+      ENDLOOP.
+      LOOP AT lt_lot_head INTO DATA(lv_lot_head).
+        DATA(lv_lot_esc) = zcl_utility_ninhnh=>escape_xml( iv_text = lv_lot_head ).
         lv_lot = COND #( WHEN lv_lot IS INITIAL
                          THEN lv_lot_esc
                          ELSE |{ lv_lot }&#10;{ lv_lot_esc }| ).
@@ -433,11 +441,19 @@ CLASS lhc_zce_ci IMPLEMENTATION.
 
       "Sub4
       CLEAR: lv_lot.
+      "LOT header: gộp lot của các dòng được in, không lặp (1 dòng có thể có nhiều lot, cách nhau bằng xuống dòng)
+      DATA lt_lot_head TYPE STANDARD TABLE OF string WITH EMPTY KEY.
+      CLEAR lt_lot_head.
       LOOP AT GROUP ls_data_grp INTO DATA(ls_member_lot).
-        IF ls_member_lot-lot IS INITIAL.
-          CONTINUE.
-        ENDIF.
-        DATA(lv_lot_esc) = zcl_utility_ninhnh=>escape_xml( iv_text = ls_member_lot-lot ).
+        SPLIT ls_member_lot-lot AT cl_abap_char_utilities=>newline INTO TABLE DATA(lt_lot_row).
+        LOOP AT lt_lot_row INTO DATA(lv_lot_row) WHERE table_line IS NOT INITIAL.
+          IF NOT line_exists( lt_lot_head[ table_line = lv_lot_row ] ).
+            APPEND lv_lot_row TO lt_lot_head.
+          ENDIF.
+        ENDLOOP.
+      ENDLOOP.
+      LOOP AT lt_lot_head INTO DATA(lv_lot_head).
+        DATA(lv_lot_esc) = zcl_utility_ninhnh=>escape_xml( iv_text = lv_lot_head ).
         lv_lot = COND #( WHEN lv_lot IS INITIAL
                          THEN lv_lot_esc
                          ELSE |{ lv_lot }&#10;{ lv_lot_esc }| ).
