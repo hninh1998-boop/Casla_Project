@@ -1,0 +1,4 @@
+@EndUserText.label: 'Serv.Def. - Sales Đá'
+define service Zui_sales_da {
+  expose zce_sales_da;
+}

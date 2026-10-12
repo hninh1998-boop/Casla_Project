@@ -1,0 +1,613 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="4.0" xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+    <edmx:Reference Uri="/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_AGGREGATION',Version='0001',SAP__Origin='LOCAL')/$value">
+        <edmx:Include Namespace="Org.OData.Aggregation.V1" Alias="SAP__aggregation"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_ANALYTICS',Version='0001',SAP__Origin='LOCAL')/$value">
+        <edmx:Include Namespace="com.sap.vocabularies.Analytics.v1" Alias="SAP__analytics"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_AUTHORIZATION',Version='0001',SAP__Origin='LOCAL')/$value">
+        <edmx:Include Namespace="Org.OData.Authorization.V1" Alias="SAP__authorization"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_CAPABILITIES',Version='0001',SAP__Origin='LOCAL')/$value">
+        <edmx:Include Namespace="Org.OData.Capabilities.V1" Alias="SAP__capabilities"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_CODELIST',Version='0001',SAP__Origin='LOCAL')/$value">
+        <edmx:Include Namespace="com.sap.vocabularies.CodeList.v1" Alias="SAP__CodeList"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_COMMON',Version='0001',SAP__Origin='LOCAL')/$value">
+        <edmx:Include Namespace="com.sap.vocabularies.Common.v1" Alias="SAP__common"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_COMMUNICATION',Version='0001',SAP__Origin='LOCAL')/$value">
+        <edmx:Include Namespace="com.sap.vocabularies.Communication.v1" Alias="SAP__communication"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_CORE',Version='0001',SAP__Origin='LOCAL')/$value">
+        <edmx:Include Namespace="Org.OData.Core.V1" Alias="SAP__core"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_HIERARCHY',Version='0001',SAP__Origin='LOCAL')/$value">
+        <edmx:Include Namespace="com.sap.vocabularies.Hierarchy.v1" Alias="SAP__hierarchy"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_HTML5',Version='0001',SAP__Origin='LOCAL')/$value">
+        <edmx:Include Namespace="com.sap.vocabularies.HTML5.v1" Alias="SAP__HTML5"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_MEASURES',Version='0001',SAP__Origin='LOCAL')/$value">
+        <edmx:Include Namespace="Org.OData.Measures.V1" Alias="SAP__measures"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_ODM',Version='0001',SAP__Origin='LOCAL')/$value">
+        <edmx:Include Namespace="com.sap.vocabularies.ODM.v1" Alias="SAP__ODM"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_PDF',Version='0001',SAP__Origin='LOCAL')/$value">
+        <edmx:Include Namespace="com.sap.vocabularies.PDF.v1" Alias="SAP__PDF"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_PERSONALDATA',Version='0001',SAP__Origin='LOCAL')/$value">
+        <edmx:Include Namespace="com.sap.vocabularies.PersonalData.v1" Alias="SAP__personalData"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_SESSION',Version='0001',SAP__Origin='LOCAL')/$value">
+        <edmx:Include Namespace="com.sap.vocabularies.Session.v1" Alias="SAP__session"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_SUPPORT',Version='0001',SAP__Origin='LOCAL')/$value">
+        <edmx:Include Namespace="com.sap.vocabularies.Support.v1" Alias="SAP__support"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_UI',Version='0001',SAP__Origin='LOCAL')/$value">
+        <edmx:Include Namespace="com.sap.vocabularies.UI.v1" Alias="SAP__UI"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_VALIDATION',Version='0001',SAP__Origin='LOCAL')/$value">
+        <edmx:Include Namespace="Org.OData.Validation.V1" Alias="SAP__validation"/>
+    </edmx:Reference>
+    <edmx:DataServices>
+        <Schema Namespace="com.sap.gateway.srvd.zui_sales_da.v0001" Alias="SAP__self">
+            <Annotation Term="SAP__core.SchemaVersion" String="1.0.0"/>
+            <EntityType Name="zce_sales_daType">
+                <Key>
+                    <PropertyRef Name="BillingDocument"/>
+                    <PropertyRef Name="BillingDocumentItem"/>
+                </Key>
+                <Property Name="BillingDocument" Type="Edm.String" Nullable="false" MaxLength="10"/>
+                <Property Name="BillingDocumentItem" Type="Edm.String" Nullable="false" MaxLength="6"/>
+                <Property Name="NgayChungTu" Type="Edm.Date"/>
+                <Property Name="DoiTuongCongNo" Type="Edm.String" Nullable="false" MaxLength="10"/>
+                <Property Name="TyGia" Type="Edm.Decimal" Nullable="false" Precision="9" Scale="5"/>
+                <Property Name="QuocGiaDen" Type="Edm.String" Nullable="false" MaxLength="3"/>
+                <Property Name="MaVatTu" Type="Edm.String" Nullable="false" MaxLength="40"/>
+                <Property Name="SoLuong" Type="Edm.Decimal" Nullable="false" Precision="13" Scale="3"/>
+                <Property Name="SoToKhai" Type="Edm.String" Nullable="false"/>
+                <Property Name="SoInv" Type="Edm.String" Nullable="false"/>
+                <Property Name="SoHoaDon" Type="Edm.String" Nullable="false" MaxLength="16"/>
+                <Property Name="TenVatTu" Type="Edm.String" Nullable="false" MaxLength="40"/>
+                <Property Name="DonViTinh" Type="Edm.String" Nullable="false" MaxLength="3"/>
+                <Property Name="GiaCongThuc" Type="Edm.Decimal" Nullable="false" Precision="24" Scale="9"/>
+                <Property Name="ConditionCurrency" Type="Edm.String" Nullable="false" MaxLength="5"/>
+                <Property Name="GiaBan" Type="Edm.Decimal" Nullable="false" Precision="24" Scale="9"/>
+                <Property Name="ChenhLech" Type="Edm.Decimal" Nullable="false" Precision="24" Scale="9"/>
+                <Property Name="GiaInvHaiQuan" Type="Edm.Decimal" Nullable="false" Precision="24" Scale="9"/>
+                <Property Name="GiaInvKhachHang" Type="Edm.Decimal" Nullable="false" Precision="24" Scale="9"/>
+                <Property Name="NgoaiTe" Type="Edm.Decimal" Nullable="false" Precision="24" Scale="9"/>
+                <Property Name="ThanhTien" Type="Edm.Decimal" Nullable="false" Precision="24" Scale="9"/>
+                <Property Name="LoaiDaSlabE62" Type="Edm.String" Nullable="false"/>
+                <Property Name="LoaiDaCutToSizeE62" Type="Edm.String" Nullable="false"/>
+                <Property Name="LoaiDaMauBanE62" Type="Edm.String" Nullable="false"/>
+                <Property Name="LoaiDaMauTangE62" Type="Edm.String" Nullable="false"/>
+                <Property Name="LoaiDaMauTangH21" Type="Edm.String" Nullable="false"/>
+                <Property Name="LoaiDaGiaCongE52" Type="Edm.String" Nullable="false"/>
+                <Property Name="ToChucBanHang" Type="Edm.String" Nullable="false" MaxLength="4"/>
+            </EntityType>
+            <EntityContainer Name="Container">
+                <EntitySet Name="zce_sales_da" EntityType="com.sap.gateway.srvd.zui_sales_da.v0001.zce_sales_daType"/>
+            </EntityContainer>
+            <Annotations Target="SAP__self.zce_sales_daType/BillingDocument">
+                <Annotation Term="SAP__common.Label" String="Billing Document"/>
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Heading" String="Document"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Sales and Distribution Document Number"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=VBELN"/>
+            </Annotations>
+            <Annotations Target="SAP__self.zce_sales_daType/BillingDocumentItem">
+                <Annotation Term="SAP__common.Label" String="Billing Item"/>
+                <Annotation Term="SAP__common.IsDigitSequence"/>
+                <Annotation Term="SAP__common.Heading" String="Item"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Item number of the SD document"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=POSNR"/>
+            </Annotations>
+            <Annotations Target="SAP__self.zce_sales_daType/NgayChungTu">
+                <Annotation Term="SAP__common.Label" String="Ngày Chứng Từ"/>
+            </Annotations>
+            <Annotations Target="SAP__self.zce_sales_daType/DoiTuongCongNo">
+                <Annotation Term="SAP__common.Label" String="Đối Tượng Công Nợ"/>
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.ValueListReferences">
+                    <Collection>
+                        <String>../../../../srvd_f4/sap/i_customer_vh/0001;ps='srvd-zui_sales_da-0001';va='com.sap.gateway.srvd.zui_sales_da.v0001.et-zce_sales_da.doituongcongno'/$metadata</String>
+                    </Collection>
+                </Annotation>
+                <Annotation Term="SAP__common.Heading" String="Payer"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Payer"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=KUNRG"/>
+            </Annotations>
+            <Annotations Target="SAP__self.zce_sales_daType/TyGia">
+                <Annotation Term="SAP__common.Label" String="Tỷ Giá"/>
+            </Annotations>
+            <Annotations Target="SAP__self.zce_sales_daType/QuocGiaDen">
+                <Annotation Term="SAP__common.Label" String="Quốc Gia Đến"/>
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Heading" String="C/R"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Country/Region Key"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=LAND1"/>
+            </Annotations>
+            <Annotations Target="SAP__self.zce_sales_daType/MaVatTu">
+                <Annotation Term="SAP__common.Label" String="Mã Vật Tư"/>
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.ValueListReferences">
+                    <Collection>
+                        <String>../../../../srvd_f4/sap/i_productstdvh/0001;ps='srvd-zui_sales_da-0001';va='com.sap.gateway.srvd.zui_sales_da.v0001.et-zce_sales_da.mavattu'/$metadata</String>
+                    </Collection>
+                </Annotation>
+                <Annotation Term="SAP__common.Heading" String="Material"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Material Number"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=MATNR"/>
+            </Annotations>
+            <Annotations Target="SAP__self.zce_sales_daType/SoLuong">
+                <Annotation Term="SAP__common.Label" String="Số Lượng"/>
+                <Annotation Term="SAP__measures.Unit" Path="DonViTinh"/>
+            </Annotations>
+            <Annotations Target="SAP__self.zce_sales_daType/SoToKhai">
+                <Annotation Term="SAP__common.Label" String="Số Tờ Khai"/>
+            </Annotations>
+            <Annotations Target="SAP__self.zce_sales_daType/SoInv">
+                <Annotation Term="SAP__common.Label" String="Số INV"/>
+            </Annotations>
+            <Annotations Target="SAP__self.zce_sales_daType/SoHoaDon">
+                <Annotation Term="SAP__common.Label" String="Số Hoá Đơn"/>
+            </Annotations>
+            <Annotations Target="SAP__self.zce_sales_daType/TenVatTu">
+                <Annotation Term="SAP__common.Label" String="Tên Vật Tư"/>
+            </Annotations>
+            <Annotations Target="SAP__self.zce_sales_daType/DonViTinh">
+                <Annotation Term="SAP__common.IsUnit"/>
+                <Annotation Term="SAP__common.Label" String="Đơn Vị Tính"/>
+                <Annotation Term="SAP__common.Heading" String="BUn"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Base Unit of Measure"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=MEINS"/>
+            </Annotations>
+            <Annotations Target="SAP__self.zce_sales_daType/GiaCongThuc">
+                <Annotation Term="SAP__common.Label" String="Giá Công Thức"/>
+                <Annotation Term="SAP__measures.ISOCurrency" Path="ConditionCurrency"/>
+            </Annotations>
+            <Annotations Target="SAP__self.zce_sales_daType/ConditionCurrency">
+                <Annotation Term="SAP__common.IsCurrency"/>
+                <Annotation Term="SAP__common.Label" String="Currency"/>
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__UI.Hidden"/>
+                <Annotation Term="SAP__common.Heading" String="Crcy"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Currency Key"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=WAERS"/>
+            </Annotations>
+            <Annotations Target="SAP__self.zce_sales_daType/GiaBan">
+                <Annotation Term="SAP__common.Label" String="Giá Bán"/>
+                <Annotation Term="SAP__measures.ISOCurrency" Path="ConditionCurrency"/>
+            </Annotations>
+            <Annotations Target="SAP__self.zce_sales_daType/ChenhLech">
+                <Annotation Term="SAP__common.Label" String="Chênh Lệch"/>
+                <Annotation Term="SAP__measures.ISOCurrency" Path="ConditionCurrency"/>
+            </Annotations>
+            <Annotations Target="SAP__self.zce_sales_daType/GiaInvHaiQuan">
+                <Annotation Term="SAP__common.Label" String="Giá Inv Hải Quan"/>
+                <Annotation Term="SAP__measures.ISOCurrency" Path="ConditionCurrency"/>
+            </Annotations>
+            <Annotations Target="SAP__self.zce_sales_daType/GiaInvKhachHang">
+                <Annotation Term="SAP__common.Label" String="Giá Inv Khách Hàng"/>
+                <Annotation Term="SAP__measures.ISOCurrency" Path="ConditionCurrency"/>
+            </Annotations>
+            <Annotations Target="SAP__self.zce_sales_daType/NgoaiTe">
+                <Annotation Term="SAP__common.Label" String="Ngoại Tệ"/>
+                <Annotation Term="SAP__measures.ISOCurrency" Path="ConditionCurrency"/>
+            </Annotations>
+            <Annotations Target="SAP__self.zce_sales_daType/ThanhTien">
+                <Annotation Term="SAP__common.Label" String="Thành Tiền"/>
+                <Annotation Term="SAP__measures.ISOCurrency" Path="ConditionCurrency"/>
+            </Annotations>
+            <Annotations Target="SAP__self.zce_sales_daType/LoaiDaSlabE62">
+                <Annotation Term="SAP__common.Label" String="Slab (E62)"/>
+            </Annotations>
+            <Annotations Target="SAP__self.zce_sales_daType/LoaiDaCutToSizeE62">
+                <Annotation Term="SAP__common.Label" String="Cut To Size (E62)"/>
+            </Annotations>
+            <Annotations Target="SAP__self.zce_sales_daType/LoaiDaMauBanE62">
+                <Annotation Term="SAP__common.Label" String="Mẫu Bán (E62)"/>
+            </Annotations>
+            <Annotations Target="SAP__self.zce_sales_daType/LoaiDaMauTangE62">
+                <Annotation Term="SAP__common.Label" String="Mẫu Tặng (E62)"/>
+            </Annotations>
+            <Annotations Target="SAP__self.zce_sales_daType/LoaiDaMauTangH21">
+                <Annotation Term="SAP__common.Label" String="Mẫu Tặng (H21)"/>
+            </Annotations>
+            <Annotations Target="SAP__self.zce_sales_daType/LoaiDaGiaCongE52">
+                <Annotation Term="SAP__common.Label" String="Gia Công (E52)"/>
+            </Annotations>
+            <Annotations Target="SAP__self.zce_sales_daType/ToChucBanHang">
+                <Annotation Term="SAP__common.Label" String="Tổ Chức Bán Hàng"/>
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.ValueListReferences">
+                    <Collection>
+                        <String>../../../../srvd_f4/sap/zi_companycode_vh/0001;ps='srvd-zui_sales_da-0001';va='com.sap.gateway.srvd.zui_sales_da.v0001.et-zce_sales_da.tochucbanhang'/$metadata</String>
+                    </Collection>
+                </Annotation>
+                <Annotation Term="SAP__common.FilterDefaultValue" String="6730"/>
+                <Annotation Term="SAP__common.Heading" String="CoCd"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Company Code"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=BUKRS"/>
+            </Annotations>
+            <Annotations Target="SAP__self.zce_sales_daType">
+                <Annotation Term="SAP__common.Label" String="Custom Entity - Sales Đá"/>
+                <Annotation Term="SAP__UI.Facets">
+                    <Collection>
+                        <Record Type="SAP__UI.ReferenceFacet">
+                            <PropertyValue Property="Label" String="General Information"/>
+                            <PropertyValue Property="ID" String="GeneralInfo"/>
+                            <PropertyValue Property="Target" AnnotationPath="@SAP__UI.Identification"/>
+                        </Record>
+                    </Collection>
+                </Annotation>
+                <Annotation Term="SAP__UI.HeaderInfo">
+                    <Record>
+                        <PropertyValue Property="TypeName" String="Data"/>
+                        <PropertyValue Property="TypeNamePlural" String="Datas"/>
+                        <PropertyValue Property="Title">
+                            <Record Type="SAP__UI.DataField">
+                                <PropertyValue Property="Label" String="Báo cáo doanh thu bán hàng tháng Đá"/>
+                            </Record>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__UI.Identification">
+                    <Collection>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Value" Path="BillingDocument"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Value" Path="BillingDocumentItem"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Value" Path="NgayChungTu"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Value" Path="SoToKhai"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Value" Path="SoHoaDon"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Value" Path="DoiTuongCongNo"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Value" Path="SoInv"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Value" Path="MaVatTu"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Value" Path="TenVatTu"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Value" Path="DonViTinh"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Value" Path="SoLuong"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Value" Path="GiaCongThuc"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Value" Path="GiaBan"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Value" Path="ChenhLech"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Value" Path="GiaInvHaiQuan"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Value" Path="GiaInvKhachHang"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Value" Path="NgoaiTe"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Value" Path="TyGia"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Value" Path="ThanhTien"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Value" Path="LoaiDaSlabE62"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Value" Path="LoaiDaCutToSizeE62"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Value" Path="LoaiDaMauBanE62"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Value" Path="LoaiDaMauTangE62"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Value" Path="LoaiDaMauTangH21"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Value" Path="LoaiDaGiaCongE52"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Value" Path="QuocGiaDen"/>
+                        </Record>
+                    </Collection>
+                </Annotation>
+                <Annotation Term="SAP__UI.LineItem">
+                    <Collection>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Value" Path="BillingDocument"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Value" Path="BillingDocumentItem"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Value" Path="NgayChungTu"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Value" Path="SoToKhai"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Value" Path="SoHoaDon"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Value" Path="DoiTuongCongNo"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Value" Path="SoInv"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Value" Path="MaVatTu"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Value" Path="TenVatTu"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Value" Path="DonViTinh"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Value" Path="SoLuong"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Value" Path="GiaCongThuc"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Value" Path="GiaBan"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Value" Path="ChenhLech"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Value" Path="GiaInvHaiQuan"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Value" Path="GiaInvKhachHang"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Value" Path="NgoaiTe"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Value" Path="TyGia"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Value" Path="ThanhTien"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Value" Path="LoaiDaSlabE62"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Value" Path="LoaiDaCutToSizeE62"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Value" Path="LoaiDaMauBanE62"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Value" Path="LoaiDaMauTangE62"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Value" Path="LoaiDaMauTangH21"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Value" Path="LoaiDaGiaCongE52"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Value" Path="QuocGiaDen"/>
+                        </Record>
+                    </Collection>
+                </Annotation>
+                <Annotation Term="SAP__UI.SelectionFields">
+                    <Collection>
+                        <PropertyPath>ToChucBanHang</PropertyPath>
+                        <PropertyPath>NgayChungTu</PropertyPath>
+                        <PropertyPath>SoToKhai</PropertyPath>
+                        <PropertyPath>DoiTuongCongNo</PropertyPath>
+                        <PropertyPath>MaVatTu</PropertyPath>
+                    </Collection>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="SAP__self.Container/zce_sales_da">
+                <Annotation Term="SAP__capabilities.SearchRestrictions">
+                    <Record>
+                        <PropertyValue Property="Searchable" Bool="false"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.FilterRestrictions">
+                    <Record>
+                        <PropertyValue Property="Filterable" Bool="true"/>
+                        <PropertyValue Property="FilterExpressionRestrictions">
+                            <Collection>
+                                <Record>
+                                    <PropertyValue Property="Property" PropertyPath="NgayChungTu"/>
+                                    <PropertyValue Property="AllowedExpressions" String="SingleValue"/>
+                                </Record>
+                                <Record>
+                                    <PropertyValue Property="Property" PropertyPath="SoToKhai"/>
+                                    <PropertyValue Property="AllowedExpressions" String="SearchExpression"/>
+                                </Record>
+                                <Record>
+                                    <PropertyValue Property="Property" PropertyPath="SoInv"/>
+                                    <PropertyValue Property="AllowedExpressions" String="SearchExpression"/>
+                                </Record>
+                                <Record>
+                                    <PropertyValue Property="Property" PropertyPath="LoaiDaSlabE62"/>
+                                    <PropertyValue Property="AllowedExpressions" String="SearchExpression"/>
+                                </Record>
+                                <Record>
+                                    <PropertyValue Property="Property" PropertyPath="LoaiDaCutToSizeE62"/>
+                                    <PropertyValue Property="AllowedExpressions" String="SearchExpression"/>
+                                </Record>
+                                <Record>
+                                    <PropertyValue Property="Property" PropertyPath="LoaiDaMauBanE62"/>
+                                    <PropertyValue Property="AllowedExpressions" String="SearchExpression"/>
+                                </Record>
+                                <Record>
+                                    <PropertyValue Property="Property" PropertyPath="LoaiDaMauTangE62"/>
+                                    <PropertyValue Property="AllowedExpressions" String="SearchExpression"/>
+                                </Record>
+                                <Record>
+                                    <PropertyValue Property="Property" PropertyPath="LoaiDaMauTangH21"/>
+                                    <PropertyValue Property="AllowedExpressions" String="SearchExpression"/>
+                                </Record>
+                                <Record>
+                                    <PropertyValue Property="Property" PropertyPath="LoaiDaGiaCongE52"/>
+                                    <PropertyValue Property="AllowedExpressions" String="SearchExpression"/>
+                                </Record>
+                                <Record>
+                                    <PropertyValue Property="Property" PropertyPath="ToChucBanHang"/>
+                                    <PropertyValue Property="AllowedExpressions" String="SingleValue"/>
+                                </Record>
+                            </Collection>
+                        </PropertyValue>
+                        <PropertyValue Property="RequiredProperties">
+                            <Collection>
+                                <PropertyPath>NgayChungTu</PropertyPath>
+                                <PropertyPath>ToChucBanHang</PropertyPath>
+                            </Collection>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.SortRestrictions">
+                    <Record>
+                        <PropertyValue Property="NonSortableProperties">
+                            <Collection>
+                                <PropertyPath>SoToKhai</PropertyPath>
+                                <PropertyPath>SoInv</PropertyPath>
+                                <PropertyPath>LoaiDaSlabE62</PropertyPath>
+                                <PropertyPath>LoaiDaCutToSizeE62</PropertyPath>
+                                <PropertyPath>LoaiDaMauBanE62</PropertyPath>
+                                <PropertyPath>LoaiDaMauTangE62</PropertyPath>
+                                <PropertyPath>LoaiDaMauTangH21</PropertyPath>
+                                <PropertyPath>LoaiDaGiaCongE52</PropertyPath>
+                            </Collection>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.InsertRestrictions">
+                    <Record>
+                        <PropertyValue Property="Insertable" Bool="false"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.DeleteRestrictions">
+                    <Record>
+                        <PropertyValue Property="Deletable" Bool="false"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.UpdateRestrictions">
+                    <Record>
+                        <PropertyValue Property="Updatable" Bool="false"/>
+                        <PropertyValue Property="QueryOptions">
+                            <Record>
+                                <PropertyValue Property="SelectSupported" Bool="true"/>
+                            </Record>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="SAP__self.Container">
+                <Annotation Term="SAP__CodeList.CurrencyCodes">
+                    <Record>
+                        <PropertyValue Property="Url" String="../../../../default/iwbep/common/0001/$metadata"/>
+                        <PropertyValue Property="CollectionPath" String="Currencies"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__CodeList.UnitsOfMeasure">
+                    <Record>
+                        <PropertyValue Property="Url" String="../../../../default/iwbep/common/0001/$metadata"/>
+                        <PropertyValue Property="CollectionPath" String="UnitsOfMeasure"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__common.ApplyMultiUnitBehaviorForSortingAndFiltering" Bool="true"/>
+                <Annotation Term="SAP__capabilities.FilterFunctions">
+                    <Collection>
+                        <String>eq</String>
+                        <String>ne</String>
+                        <String>gt</String>
+                        <String>ge</String>
+                        <String>lt</String>
+                        <String>le</String>
+                        <String>and</String>
+                        <String>or</String>
+                        <String>contains</String>
+                        <String>startswith</String>
+                        <String>endswith</String>
+                        <String>any</String>
+                        <String>all</String>
+                    </Collection>
+                </Annotation>
+                <Annotation Term="SAP__support.TechnicalInfoLinks">
+                    <Record>
+                        <PropertyValue Property="Url" String="../../../../default/iwbep/common/0001/$metadata"/>
+                        <PropertyValue Property="FunctionImport" String="GetTechnicalInfoLinks"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.SupportedFormats">
+                    <Collection>
+                        <String>application/json</String>
+                        <String>application/pdf</String>
+                    </Collection>
+                </Annotation>
+                <Annotation Term="SAP__PDF.Features">
+                    <Record>
+                        <PropertyValue Property="DocumentDescriptionReference" String="../../../../default/iwbep/common/0001/$metadata"/>
+                        <PropertyValue Property="DocumentDescriptionCollection" String="MyDocumentDescriptions"/>
+                        <PropertyValue Property="ArchiveFormat" Bool="true"/>
+                        <PropertyValue Property="Border" Bool="true"/>
+                        <PropertyValue Property="CoverPage" Bool="true"/>
+                        <PropertyValue Property="FitToPage" Bool="true"/>
+                        <PropertyValue Property="FontName" Bool="true"/>
+                        <PropertyValue Property="FontSize" Bool="true"/>
+                        <PropertyValue Property="HeaderFooter" Bool="true"/>
+                        <PropertyValue Property="IANATimezoneFormat" Bool="true"/>
+                        <PropertyValue Property="Margin" Bool="true"/>
+                        <PropertyValue Property="Padding" Bool="true"/>
+                        <PropertyValue Property="ResultSizeDefault" Int="20000"/>
+                        <PropertyValue Property="ResultSizeMaximum" Int="20000"/>
+                        <PropertyValue Property="Signature" Bool="true"/>
+                        <PropertyValue Property="TextDirectionLayout" Bool="true"/>
+                        <PropertyValue Property="Treeview" Bool="true"/>
+                        <PropertyValue Property="UploadToFileShare" Bool="true"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.BatchSupport">
+                    <Record>
+                        <PropertyValue Property="SupportedFormats">
+                            <Collection>
+                                <String>application/json</String>
+                                <String>multipart/mixed</String>
+                            </Collection>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.KeyAsSegmentSupported"/>
+                <Annotation Term="SAP__capabilities.AsynchronousRequestsSupported"/>
+            </Annotations>
+        </Schema>
+    </edmx:DataServices>
+</edmx:Edmx>

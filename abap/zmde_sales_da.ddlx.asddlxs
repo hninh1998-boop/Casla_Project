@@ -1,0 +1,216 @@
+@Metadata.layer: #CORE
+@UI.headerInfo: {
+  typeName: 'Báo cáo doanh thu bán hàng tháng đá',
+  typeNamePlural: 'Datas',
+  title: { type: #STANDARD,
+           value: 'BillingDocumentTitle' }
+}
+annotate entity zce_sales_da with
+{
+  @UI.facet: [{
+    id: 'GeneralInfo',
+    purpose: #STANDARD,
+    type: #IDENTIFICATION_REFERENCE,
+    label: 'General Information',
+    position: 10 }]
+
+  @EndUserText.label: 'Billing Document'
+  @UI.lineItem: [{ position: 10 }]
+  @UI.identification: [{ position: 10 }]
+  BillingDocument;
+
+  // Tiêu đề màn hình detail: Billing Document/Billing Item
+  @EndUserText.label: 'Billing Document/Item'
+  BillingDocumentTitle;
+
+  @EndUserText.label: 'Billing Item'
+  @UI.lineItem: [{ position: 20 }]
+  @UI.identification: [{ position: 20 }]
+  BillingDocumentItem;
+
+  // 1
+  @EndUserText.label: 'Ngày Chứng Từ'
+  @UI.lineItem: [{ position: 30 }]
+  @UI.identification: [{ position: 30 }]
+  @UI.selectionField: [{ position: 20 }]
+  @Consumption.filter.selectionType: #INTERVAL
+  @Consumption.filter.mandatory: true
+  NgayChungTu;
+
+  // 2
+  @EndUserText.label: 'Số Tờ Khai'
+  @UI.lineItem: [{ position: 40 }]
+  @UI.identification: [{ position: 40 }]
+  @UI.selectionField: [{ position: 30 }]
+  @Consumption.filter.multipleSelections: true
+  SoToKhai;
+
+  // 3
+  @EndUserText.label: 'Số Hoá Đơn'
+  @UI.lineItem: [{ position: 50 }]
+  @UI.identification: [{ position: 50 }]
+  SoHoaDon;
+
+  // 4
+  @EndUserText.label: 'Đối Tượng Công Nợ'
+  @UI.lineItem: [{ position: 60 }]
+  @UI.identification: [{ position: 60 }]
+  @UI.selectionField: [{ position: 40 }]
+  @Consumption.filter.multipleSelections: true
+  @Consumption.valueHelpDefinition: [{ entity: { name: 'I_Customer_VH', element: 'Customer' } }]
+  DoiTuongCongNo;
+
+  @EndUserText.label: 'Tên Đối Tượng Công Nợ'
+  @UI.lineItem: [{ position: 65 }]
+  @UI.identification: [{ position: 65 }]
+  TenDoiTuongCongNo;
+
+  // 5
+  @EndUserText.label: 'Số INV'
+  @UI.lineItem: [{ position: 70 }]
+  @UI.identification: [{ position: 70 }]
+  SoInv;
+
+  // 6
+  @EndUserText.label: 'Mã Vật Tư'
+  @UI.lineItem: [{ position: 80 }]
+  @UI.identification: [{ position: 80 }]
+  @UI.selectionField: [{ position: 50 }]
+  @Consumption.filter.multipleSelections: true
+  @Consumption.valueHelpDefinition: [{ entity: { name: 'I_ProductStdVH', element: 'Product' } }]
+  MaVatTu;
+
+  // 7
+  @EndUserText.label: 'Tên Vật Tư'
+  @UI.lineItem: [{ position: 90 }]
+  @UI.identification: [{ position: 90 }]
+  TenVatTu;
+
+  // 8
+  @EndUserText.label: 'Đơn Vị Tính'
+  @UI.lineItem: [{ position: 100 }]
+  @UI.identification: [{ position: 100 }]
+  DonViTinh;
+
+  // 9
+  @EndUserText.label: 'Số Lượng'
+  @UI.lineItem: [{ position: 110 }]
+  @UI.identification: [{ position: 110 }]
+  SoLuong;
+
+  // 10
+  @EndUserText.label: 'Giá Công Thức'
+  @UI.lineItem: [{ position: 120 }]
+  @UI.identification: [{ position: 120 }]
+  GiaCongThuc;
+
+  // 11
+  @EndUserText.label: 'Giá Bán'
+  @UI.lineItem: [{ position: 130 }]
+  @UI.identification: [{ position: 130 }]
+  GiaBan;
+
+  // 11 (FS đánh số trùng)
+  @EndUserText.label: 'Chênh Lệch'
+  @UI.lineItem: [{ position: 140 }]
+  @UI.identification: [{ position: 140 }]
+  ChenhLech;
+
+  // 12
+  @EndUserText.label: 'Giá Inv Hải Quan'
+  @UI.lineItem: [{ position: 150 }]
+  @UI.identification: [{ position: 150 }]
+  GiaInvHaiQuan;
+
+  // 13
+  @EndUserText.label: 'Giá Inv Khách Hàng'
+  @UI.lineItem: [{ position: 160 }]
+  @UI.identification: [{ position: 160 }]
+  GiaInvKhachHang;
+
+  // 14
+  @EndUserText.label: 'Ngoại Tệ'
+  @UI.lineItem: [{ position: 170 }]
+  @UI.identification: [{ position: 170 }]
+  NgoaiTe;
+
+  // 15
+  // Hiển thị bản dạng chữ (không có số 0 thừa); TyGia dạng số chỉ dùng để tính và export
+  @EndUserText.label: 'Tỷ Giá'
+  @UI.lineItem: [{ position: 180 }]
+  @UI.identification: [{ position: 180 }]
+  TyGiaText;
+
+  @EndUserText.label: 'Tỷ Giá (số)'
+  TyGia;
+
+  // 16
+  @EndUserText.label: 'Thành Tiền'
+  @UI.lineItem: [{ position: 190 }]
+  @UI.identification: [{ position: 190 }]
+  ThanhTien;
+
+  // 17
+  @EndUserText.label: 'Slab (E62)'
+  @UI.lineItem: [{ position: 200 }]
+  @UI.identification: [{ position: 200 }]
+  LoaiDaSlabE62;
+
+  // 18
+  @EndUserText.label: 'Cut To Size (E62)'
+  @UI.lineItem: [{ position: 210 }]
+  @UI.identification: [{ position: 210 }]
+  LoaiDaCutToSizeE62;
+
+  // 19
+  @EndUserText.label: 'Mẫu Bán (E62)'
+  @UI.lineItem: [{ position: 220 }]
+  @UI.identification: [{ position: 220 }]
+  LoaiDaMauBanE62;
+
+  // 20
+  @EndUserText.label: 'Mẫu Tặng (E62)'
+  @UI.lineItem: [{ position: 230 }]
+  @UI.identification: [{ position: 230 }]
+  LoaiDaMauTangE62;
+
+  // 21
+  @EndUserText.label: 'Mẫu Tặng (H21)'
+  @UI.lineItem: [{ position: 240 }]
+  @UI.identification: [{ position: 240 }]
+  LoaiDaMauTangH21;
+
+  // 22
+  @EndUserText.label: 'Gia Công (E52)'
+  @UI.lineItem: [{ position: 250 }]
+  @UI.identification: [{ position: 250 }]
+  LoaiDaGiaCongE52;
+
+  // 23
+  @EndUserText.label: 'Quốc Gia Đến'
+  @UI.lineItem: [{ position: 260 }]
+  @UI.identification: [{ position: 260 }]
+  QuocGiaDen;
+
+  @EndUserText.label: 'Tên Quốc Gia Đến'
+  @UI.lineItem: [{ position: 270 }]
+  @UI.identification: [{ position: 270 }]
+  TenQuocGiaDen;
+
+  @EndUserText.label: 'Currency'
+  @UI.hidden: true
+  ConditionCurrency;
+
+  @EndUserText.label: 'Company Code Currency'
+  @UI.hidden: true
+  CompanyCodeCurrency;
+
+  // Parameter only
+  @EndUserText.label: 'Tổ Chức Bán Hàng'
+  @UI.selectionField: [{ position: 10 }]
+  @Consumption.filter.selectionType: #SINGLE
+  @Consumption.filter.mandatory: true
+  @Consumption.filter.defaultValue: '6730'
+  @Consumption.valueHelpDefinition: [{ entity: { name: 'ZI_COMPANYCODE_VH', element: 'CompanyCode' } }]
+  ToChucBanHang;
+}
