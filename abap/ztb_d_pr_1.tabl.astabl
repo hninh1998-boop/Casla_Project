@@ -1,0 +1,40 @@
+@EndUserText.label : 'Data upload PR 1'
+@AbapCatalog.enhancement.category : #NOT_EXTENSIBLE
+@AbapCatalog.tableCategory : #TRANSPARENT
+@AbapCatalog.deliveryClass : #A
+@AbapCatalog.dataMaintenance : #RESTRICTED
+define table ztb_d_pr_1 {
+
+  key client                 : abap.clnt not null;
+  key uuid                   : sysuuid_x16 not null;
+  key uuidfile               : sysuuid_x16 not null;
+  status                     : abap.char(1);
+  type                       : abap.char(1);
+  purchase_requisition       : abap.char(10);
+  purchase_requisition_type  : bbsrt;
+  pur_reqn_description       : abap.char(40);
+  pur_reqn_header_note       : abap.string(0);
+  purchase_requisition_item  : abap.numc(5);
+  material                   : matnr;
+  @Semantics.quantity.unitOfMeasure : 'ztb_d_pr_1.base_unit'
+  requested_quantity         : bamng;
+  base_unit                  : bamei;
+  plant                      : ewerk;
+  storage_location           : lgort_d;
+  @Semantics.amount.currencyCode : 'ztb_d_pr_1.pur_reqn_item_currency'
+  purchase_requisition_price : abap.curr(11,2);
+  pur_reqn_price_quantity    : epein;
+  pur_reqn_item_currency     : waers;
+  purchasing_group           : ekgrp;
+  delivery_date              : abap.string(0);
+  requirement_tracking       : bednr;
+  requested_by               : afnam;
+  messagetype                : abap.char(1);
+  message                    : abap.char(255);
+  created_by                 : abp_creation_user;
+  created_at                 : abp_creation_tstmpl;
+  last_changed_by            : abp_locinst_lastchange_user;
+  local_last_changed_at      : abp_locinst_lastchange_tstmpl;
+  last_changed_at            : abp_lastchange_tstmpl;
+
+}

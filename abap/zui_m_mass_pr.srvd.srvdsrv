@@ -1,0 +1,8 @@
+@EndUserText.label: 'Serv.Def. - Mass PR'
+define service Zui_m_mass_pr {
+  expose ZC_M_PR_1             as ManageFilePR1;
+  expose zc_d_pr_1             as DataFilePR1;
+  expose ZC_M_PR_2             as ManageFilePR2;
+  expose zc_d_pr_2             as DataFilePR2;
+  expose zi_req_sta_mass_pr_vh as StatusVH;
+}

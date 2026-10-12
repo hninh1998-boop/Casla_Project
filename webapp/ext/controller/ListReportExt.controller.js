@@ -233,7 +233,8 @@ sap.ui.define([
 				{ header: "PurReqnItemCurrency", key: "PurReqnItemCurrency", width: 22 },
 				{ header: "PurchasingGroup", key: "PurchasingGroup", width: 20 },
 				{ header: "DeliveryDate", key: "DeliveryDate", width: 22 },
-				{ header: "RequirementTracking", key: "RequirementTracking", width: 20 }
+				{ header: "RequirementTracking", key: "RequirementTracking", width: 20 },
+				{ header: "RequisitionerName", key: "RequisitionerName", width: 22 }
 			];
 
 			const hintRow = {
@@ -250,7 +251,8 @@ sap.ui.define([
 				PurReqnItemCurrency: "Loại tiền tệ ( VND, usd..)",
 				PurchasingGroup: "Nhóm mua hàng",
 				DeliveryDate: "Ngày giao hàng\nĐiền dạng dd.mm.yyyy",
-				RequirementTracking: "Tracking Number\nĐiền tối đa 10 ký tự"
+				RequirementTracking: "Tracking Number\nĐiền tối đa 10 ký tự",
+				RequisitionerName: "Requisitioner Name\nĐiền tối đa 12 ký tự"
 			};
 
 			// Field thuộc Header API

@@ -1,0 +1,23 @@
+@EndUserText.label : 'Draft table for entity ZI_M_PR_1'
+@AbapCatalog.enhancement.category : #EXTENSIBLE_ANY
+@AbapCatalog.tableCategory : #TRANSPARENT
+@AbapCatalog.deliveryClass : #A
+@AbapCatalog.dataMaintenance : #RESTRICTED
+define table ztb_m_pr_1d {
+
+  key mandt     : mandt not null;
+  key uuid      : sysuuid_x16 not null;
+  zcount        : abap.int4;
+  status        : abap.char(1);
+  criticality   : abap.int1;
+  attachment    : zde_attachment;
+  mimetype      : zde_mime_type;
+  filename      : zde_filename;
+  countline     : abap.int4;
+  createdbyuser : abp_creation_user;
+  createddate   : abp_creation_tstmpl;
+  changedbyuser : abp_lastchange_user;
+  changeddate   : abp_lastchange_tstmpl;
+  "%admin"      : include sych_bdl_draft_admin_inc;
+
+}

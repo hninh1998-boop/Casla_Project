@@ -1,0 +1,33 @@
+projection;
+strict ( 2 );
+use draft;
+
+define behavior for ZC_M_PR_1 alias ManageFilePR1
+{
+  //  use create;
+  use update;
+  use delete;
+
+  use action uploadExcelPR1;
+  use action downloadFilePR1;
+  use action downloadTemplatePR1;
+
+  use action Activate;
+  use action Discard;
+  use action Edit;
+  use action Resume;
+  use action Prepare;
+
+  use association _DataFile { create; with draft; }
+}
+
+define behavior for zc_d_pr_1 alias DataFilePR1
+{
+  use update;
+  use delete;
+
+  use action PostConfirm;
+  use action setJob;
+
+  use association _ManageFile { with draft; }
+}

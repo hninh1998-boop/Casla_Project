@@ -1,0 +1,41 @@
+@EndUserText.label : 'Draft table for entity ZI_D_PR_1'
+@AbapCatalog.enhancement.category : #EXTENSIBLE_ANY
+@AbapCatalog.tableCategory : #TRANSPARENT
+@AbapCatalog.deliveryClass : #A
+@AbapCatalog.dataMaintenance : #RESTRICTED
+define table ztb_d_pr_1d {
+
+  key mandt                : mandt not null;
+  key uuid                 : sysuuid_x16 not null;
+  key uuidfile             : sysuuid_x16 not null;
+  messagetype              : abap.char(1);
+  criticality              : abap.int1;
+  message                  : abap.char(255);
+  type                     : abap.char(1);
+  purchaserequisition      : abap.char(10);
+  purchaserequisitiontype  : bbsrt;
+  purreqndescription       : abap.char(40);
+  purreqnheadernote        : abap.string(0);
+  purchaserequisitionitem  : abap.numc(5);
+  material                 : matnr;
+  @Semantics.quantity.unitOfMeasure : 'ztb_d_pr_1d.baseunit'
+  requestedquantity        : bamng;
+  baseunit                 : bamei;
+  plant                    : ewerk;
+  storagelocation          : lgort_d;
+  @Semantics.amount.currencyCode : 'ztb_d_pr_1d.purreqnitemcurrency'
+  purchaserequisitionprice : abap.curr(11,2);
+  purreqnpricequantity     : epein;
+  purreqnitemcurrency      : waers;
+  purchasinggroup          : ekgrp;
+  deliverydate             : abap.string(0);
+  requirementtracking      : bednr;
+  requestedby              : afnam;
+  createdby                : abp_creation_user;
+  createdat                : abp_creation_tstmpl;
+  lastchangedby            : abp_locinst_lastchange_user;
+  locallastchangedat       : abp_locinst_lastchange_tstmpl;
+  lastchangedat            : abp_lastchange_tstmpl;
+  "%admin"                 : include sych_bdl_draft_admin_inc;
+
+}

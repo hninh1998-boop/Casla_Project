@@ -1,0 +1,101 @@
+managed implementation in class zbp_i_m_pr_1 unique;
+strict ( 2 );
+
+with draft;
+
+define behavior for zi_m_pr_1 alias ManageFilePR1
+persistent table ztb_m_pr_1
+draft table ztb_m_pr_1d
+etag master Changedbyuser
+lock master total etag Changedbyuser
+authorization master ( global )
+early numbering
+{
+  create ( authorization : global );
+  update;
+  delete;
+  field ( readonly ) Uuid, ZCount, Countline, Createdbyuser, Createddate, Changedbyuser, Changeddate;
+  association _DataFile { with draft; create; }
+  draft action Activate optimized;
+  draft action Discard;
+  draft action Edit;
+  draft action Resume;
+  draft determine action Prepare;
+
+  static action uploadExcelPR1 parameter zabs_file_mass_pr;
+
+  determination getExcelDataPR1 on save { field Filename; }
+  determination setStatusToOpenPR1 on modify { create; }
+
+  static action downloadFilePR1 result [1] zabs_file_mass_pr;
+
+  static action downloadTemplatePR1;
+
+  mapping for ztb_m_pr_1
+    {
+      Uuid          = uuid;
+      Zcount        = zcount;
+      Status        = status;
+      Attachment    = attachment;
+      Mimetype      = mimetype;
+      Filename      = filename;
+      Countline     = countline;
+      Createdbyuser = createdbyuser;
+      Createddate   = createddate;
+      Changedbyuser = changedbyuser;
+      Changeddate   = changeddate;
+    }
+}
+
+define behavior for zi_d_pr_1 alias DataFilePR1
+persistent table ztb_d_pr_1
+draft table ztb_d_pr_1d
+lock dependent by _ManageFile
+authorization dependent by _ManageFile
+//etag master <field_name>
+with additional save
+{
+  update;
+  delete;
+  field ( numbering : managed, readonly ) Uuid;
+  field ( readonly ) Uuidfile, CreatedBy, CreatedAt, LocalLastChangedAt, LastChangedAt, LastChangedBy;
+  association _ManageFile { with draft; }
+
+  action ( features : instance ) PostConfirm result [1] $self;
+  action ( features : instance ) setJob result [1] $self;
+
+  side effects { action setJob affects entity _ManageFile; }
+
+  determination setStatusToUpdate on modify { field MessageType; }
+
+  mapping for ztb_d_pr_1
+    {
+      Uuid                     = uuid;
+      Uuidfile                 = uuidfile;
+      MessageType              = messagetype;
+      Message                  = message;
+      Type                     = type;
+      PurchaseRequisition      = purchase_requisition;
+      PurchaseRequisitionType  = purchase_requisition_type;
+      PurReqnDescription       = pur_reqn_description;
+      PurReqnHeaderNote        = pur_reqn_header_note;
+      PurchaseRequisitionItem  = purchase_requisition_item;
+      Material                 = material;
+      RequestedQuantity        = requested_quantity;
+      BaseUnit                 = base_unit;
+      Plant                    = plant;
+      StorageLocation          = storage_location;
+      PurchaseRequisitionPrice = purchase_requisition_price;
+      PurReqnPriceQuantity     = pur_reqn_price_quantity;
+      PurReqnItemCurrency      = pur_reqn_item_currency;
+      PurchasingGroup          = purchasing_group;
+      DeliveryDate             = delivery_date;
+      RequirementTracking      = requirement_tracking;
+      RequestedBy              = requested_by;
+      CreatedBy                = created_by;
+      CreatedAt                = created_at;
+      LastChangedBy            = last_changed_by;
+      LocalLastChangedAt       = local_last_changed_at;
+      LastChangedAt            = last_changed_at;
+    }
+}

@@ -1,0 +1,21 @@
+CLASS zcl_del_ztb_d_pr_1 DEFINITION
+  PUBLIC
+  FINAL
+  CREATE PUBLIC .
+
+  PUBLIC SECTION.
+
+    INTERFACES if_oo_adt_classrun .
+  PROTECTED SECTION.
+  PRIVATE SECTION.
+ENDCLASS.
+
+
+
+CLASS ZCL_DEL_ZTB_D_PR_1 IMPLEMENTATION.
+
+
+  METHOD if_oo_adt_classrun~main.
+    DELETE FROM ztb_d_pr_1.
+  ENDMETHOD.
+ENDCLASS.

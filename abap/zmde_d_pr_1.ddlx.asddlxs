@@ -1,0 +1,150 @@
+@Metadata.layer: #CORE
+@UI:{
+    headerInfo: { typeName: 'General',
+                  typeNamePlural: 'Upload Data',
+                  title: { value: 'PurchaseRequisition' }
+    }
+}
+
+@UI.lineItem: [{criticality: 'Criticality'}]
+annotate entity zc_d_pr_1 with
+{
+  @UI.facet          : [
+   {
+   id                 : 'General',
+   purpose            : #STANDARD,
+   position           : 10,
+   isPartOfPreview    : true,
+   label              : 'General',
+   type               : #IDENTIFICATION_REFERENCE,
+   targetQualifier    : 'General'
+   }]
+
+  @UI.lineItem: [{ position: 10 }]
+  @UI.identification: [{ position: 10 }]
+  Uuid;
+  //  Uuidfile;
+
+  @UI.lineItem: [{ position: 20, label: 'Message Type' , criticality: 'Criticality'  },
+                 { label: 'Post Document',
+                   dataAction: 'PostConfirm',
+                   type: #FOR_ACTION,
+                   invocationGrouping: #CHANGE_SET
+                 },
+                 { label: 'Set Job',
+                   dataAction: 'setJob',
+                   type: #FOR_ACTION,
+                   invocationGrouping: #CHANGE_SET
+                 }]
+  @UI.identification: [{ position: 20 }]
+  @UI.selectionField: [{ position: 10 }]
+  @EndUserText.label: 'Message Type'
+  @UI.dataPoint : { title: 'Message Type', criticality: 'Criticality' }
+  Messagetype;
+
+  @Consumption.filter.hidden: true
+  Criticality;
+
+  @UI.adaptationHidden: true
+  OverallStatusText;
+
+
+  @UI.lineItem: [{ position: 30 }]
+  @UI.identification: [{ position: 30 }]
+  @EndUserText.label: 'Type'
+  Type;
+  @UI.lineItem: [{ position: 40 }]
+  @UI.identification: [{ position: 40 }]
+  @EndUserText.label: 'PR'
+  PurchaseRequisition;
+  @UI.lineItem: [{ position: 50 }]
+  @UI.identification: [{ position: 50 }]
+  @EndUserText.label: 'PR Type'
+  PurchaseRequisitionType;
+  @UI.lineItem: [{ position: 60 }]
+  @UI.identification: [{ position: 60 }]
+  @EndUserText.label: 'Diễn giải PR'
+  PurReqnDescription;
+  @UI.lineItem: [{ position: 70 }]
+  @UI.identification: [{ position: 70 }]
+  @EndUserText.label: 'Note Text PR'
+  PurReqnHeaderNote;
+  @UI.lineItem: [{ position: 80 }]
+  @UI.identification: [{ position: 80 }]
+  @EndUserText.label: 'PR Item'
+  PurchaseRequisitionItem;
+  @UI.lineItem: [{ position: 90 }]
+  @UI.identification: [{ position: 90 }]
+  @EndUserText.label: 'Material'
+  Material;
+  @UI.lineItem: [{ position: 100 }]
+  @UI.identification: [{ position: 100 }]
+  @EndUserText.label: 'Số lượng'
+  RequestedQuantity;
+  @UI.lineItem: [{ position: 110 }]
+  @UI.identification: [{ position: 110 }]
+  @EndUserText.label: 'Đơn vị'
+  BaseUnit;
+  @UI.lineItem: [{ position: 120 }]
+  @UI.identification: [{ position: 120 }]
+  @EndUserText.label: 'Plant xuất hàng'
+  Plant;
+  @UI.lineItem: [{ position: 130 }]
+  @UI.identification: [{ position: 130 }]
+  @EndUserText.label: 'Kho xuất'
+  StorageLocation;
+  @UI.lineItem: [{ position: 140 }]
+  @UI.identification: [{ position: 140 }]
+  @EndUserText.label: 'Đơn giá'
+  PurchaseRequisitionPrice;
+  @UI.lineItem: [{ position: 150 }]
+  @UI.identification: [{ position: 150 }]
+  @EndUserText.label: 'Per'
+  PurReqnPriceQuantity;
+  @UI.lineItem: [{ position: 160 }]
+  @UI.identification: [{ position: 160 }]
+  @EndUserText.label: 'Loại tiền tệ'
+  PurReqnItemCurrency;
+  @UI.lineItem: [{ position: 170 }]
+  @UI.identification: [{ position: 170 }]
+  @EndUserText.label: 'Nhóm mua hàng'
+  PurchasingGroup;
+  @UI.lineItem: [{ position: 180 }]
+  @UI.identification: [{ position: 180 }]
+  @EndUserText.label: 'Ngày giao hàng'
+  DeliveryDate;
+  @UI.lineItem: [{ position: 190 }]
+  @UI.identification: [{ position: 190 }]
+  @EndUserText.label: 'Tracking Number'
+  RequirementTracking;
+  @UI.lineItem: [{ position: 200 }]
+  @UI.identification: [{ position: 200 }]
+  @EndUserText.label: 'Requisitioner Name'
+  RequestedBy;
+
+
+  @UI.lineItem: [{ position: 190 }]
+  @UI.identification: [{ position: 190 }]
+  @UI.selectionField: [{ position: 30 }]
+  CreatedBy;
+
+  @UI.lineItem: [{ position: 200 }]
+  @UI.identification: [{ position: 200 }]
+  CreatedAt;
+
+  @UI.lineItem: [{ position: 210 }]
+  @UI.identification: [{ position: 210 }]
+  @EndUserText.label: 'Message Text'
+  Message;
+
+  @UI.hidden: true
+  LastChangedBy;
+  @UI.hidden: true
+  LocalLastChangedAt;
+  @UI.hidden: true
+  LastChangedAt;
+
+  /* Associations */
+  //  _ManageFile;
+  //  _OverallStatus;
+}
