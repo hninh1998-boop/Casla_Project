@@ -84,7 +84,7 @@ CLASS zcl_pr_2_implement DEFINITION
       CHANGING
         cs_data TYPE ztb_d_pr_2.
 
-    CLASS-METHODS get_body_update
+    CLASS-METHODS get_body_item
       IMPORTING
         is_data TYPE ztb_d_pr_2
       EXPORTING
@@ -250,6 +250,12 @@ CLASS ZCL_PR_2_IMPLEMENT IMPLEMENTATION.
       <lfs_data_file>-DeliveryDate             = ls_file-DeliveryDate.
       <lfs_data_file>-RequirementTracking      = ls_file-RequirementTracking.
       <lfs_data_file>-RequisitionerName        = ls_file-RequisitionerName.
+
+      "Validate: Type I bắt buộc phải có Requisitioner Name
+      IF <lfs_data_file>-Type = 'I' AND <lfs_data_file>-RequisitionerName IS INITIAL.
+        <lfs_data_file>-message     = 'Requisitioner Name là bắt buộc khi Type = I'.
+        <lfs_data_file>-messagetype = 'E'.
+      ENDIF.
     ENDLOOP.
   ENDMETHOD.
 
@@ -410,27 +416,8 @@ CLASS ZCL_PR_2_IMPLEMENT IMPLEMENTATION.
         && '/_PurchaseRequisitionItem'.
 
     "2. Get Body
-    zcl_utility_ninhnh=>get_uom_isocode( EXPORTING iv_uom         = cs_data-base_unit
-                                         IMPORTING ev_uom_isocode = DATA(lv_uom_isocode) ).
-    lv_body =
-        |\{|
-        && |"PurchaseRequisition": "{ cs_data-purchase_requisition }",|
-        && |"Material": "{ cs_data-material }",|
-        && |"RequestedQuantity": { cs_data-requested_quantity },|
-        && |"BaseUnit": "{ cs_data-base_unit }",|
-        && |"BaseUnitISOCode": "{ lv_uom_isocode }",|
-        && |"Plant": "{ cs_data-plant }",|
-        && |"StorageLocation": "{ cs_data-storage_location }",|
-        && |"PurchaseRequisitionPrice": { cs_data-purchase_requisition_price },|
-        && |"PurReqnPriceQuantity": { cs_data-pur_reqn_price_quantity },|
-        && |"PurReqnItemCurrency": "{ cs_data-pur_reqn_item_currency }",|
-        && |"PurchasingGroup": "{ cs_data-purchasing_group }",|
-        && |"DeliveryDate": "{ cs_data-delivery_date+6(4) }|
-                             && |-{ cs_data-delivery_date+3(2) }|
-                             && |-{ cs_data-delivery_date+0(2) }",|
-        && |"RequirementTracking": "{ cs_data-requirement_tracking }",|
-        && |"RequisitionerName": "{ cs_data-requisitioner_name }"|
-        && |\}|.
+    get_body_item( EXPORTING is_data = cs_data
+                   IMPORTING ev_body = lv_body ).
 
     "3. Call API POST
     DATA(lv_result) = zcl_call_api_pr_2=>main( iv_body     = lv_body
@@ -471,6 +458,13 @@ CLASS ZCL_PR_2_IMPLEMENT IMPLEMENTATION.
 
 
   METHOD processing_insert.
+    "Validate: Type I bắt buộc phải có Requisitioner Name
+    IF cs_data-requisitioner_name IS INITIAL.
+      cs_data-messagetype = 'E'.
+      cs_data-message     = 'Requisitioner Name là bắt buộc khi Type = I'.
+      RETURN.
+    ENDIF.
+
     "Validate date
     validate_date( IMPORTING ev_error = DATA(lv_error)
                    CHANGING  cs_data  = cs_data ).
@@ -506,7 +500,7 @@ CLASS ZCL_PR_2_IMPLEMENT IMPLEMENTATION.
         && |/{ cs_data-purchase_requisition_item }|.
 
     "2. Get body
-    get_body_update(
+    get_body_item(
       EXPORTING
         is_data = cs_data
       IMPORTING
@@ -530,9 +524,8 @@ CLASS ZCL_PR_2_IMPLEMENT IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD get_body_update.
-    zcl_utility_ninhnh=>get_uom_isocode( EXPORTING iv_uom         = is_data-base_unit
-                                         IMPORTING ev_uom_isocode = DATA(lv_uom_isocode) ).
+  METHOD get_body_item.
+    "Chỉ đưa vào body những field user có điền trong file
     ev_body =
         |\{|
         && |"PurchaseRequisition": "{ is_data-purchase_requisition }",|.
@@ -543,6 +536,8 @@ CLASS ZCL_PR_2_IMPLEMENT IMPLEMENTATION.
       ev_body = ev_body && |"RequestedQuantity": { is_data-requested_quantity },|.
     ENDIF.
     IF is_data-base_unit IS NOT INITIAL.
+      zcl_utility_ninhnh=>get_uom_isocode( EXPORTING iv_uom         = is_data-base_unit
+                                           IMPORTING ev_uom_isocode = DATA(lv_uom_isocode) ).
       ev_body = ev_body && |"BaseUnit": "{ is_data-base_unit }",|.
       ev_body = ev_body && |"BaseUnitISOCode": "{ lv_uom_isocode }",|.
     ENDIF.

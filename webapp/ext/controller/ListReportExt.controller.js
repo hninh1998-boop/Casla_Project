@@ -252,7 +252,7 @@ sap.ui.define([
 				PurchasingGroup: "Nhóm mua hàng",
 				DeliveryDate: "Ngày giao hàng\nĐiền dạng dd.mm.yyyy",
 				RequirementTracking: "Tracking Number\nĐiền tối đa 10 ký tự",
-				RequisitionerName: "Requisitioner Name\nĐiền tối đa 12 ký tự"
+				RequisitionerName: "Requisitioner Name\nBắt buộc điền với type I\nĐiền tối đa 12 ký tự"
 			};
 
 			// Field thuộc Header API

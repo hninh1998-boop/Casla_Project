@@ -87,6 +87,13 @@ CLASS ZCL_PR_1_IMPLEMENT IMPLEMENTATION.
 
         CHECK <lfs_data>-type = 'I'.
 
+        "Validate: Type I bắt buộc phải có Requisitioner Name
+        IF <lfs_data>-requested_by IS INITIAL.
+          <lfs_data>-messagetype = 'E'.
+          <lfs_data>-message     = 'Requisitioner Name là bắt buộc khi Type = I'.
+          CONTINUE.
+        ENDIF.
+
         lv_index += 1.
 
         validate_date( IMPORTING ev_error = DATA(lv_error)
@@ -151,11 +158,17 @@ CLASS ZCL_PR_1_IMPLEMENT IMPLEMENTATION.
   METHOD insert_header.
     ev_endpoint = '/sap/opu/odata4/sap/api_purchaserequisition_2/srvd_a2x/sap/purchaserequisition/0001/PurchaseReqn'.
 
-    ev_body =
-      |\{|
-      && |"PurchaseRequisitionType": "{ is_data_grp-PurchaseRequisitionType }",|
-      && |"PurReqnDescription": "{ is_data_grp-PurReqnDescription }",|
-      && |"PurReqnHeaderNote": "{ is_data_grp-PurReqnHeaderNote }",|.
+    "Chỉ đưa vào body những field user có điền trong file
+    ev_body = |\{|.
+    IF is_data_grp-PurchaseRequisitionType IS NOT INITIAL.
+      ev_body = ev_body && |"PurchaseRequisitionType": "{ is_data_grp-PurchaseRequisitionType }",|.
+    ENDIF.
+    IF is_data_grp-PurReqnDescription IS NOT INITIAL.
+      ev_body = ev_body && |"PurReqnDescription": "{ is_data_grp-PurReqnDescription }",|.
+    ENDIF.
+    IF is_data_grp-PurReqnHeaderNote IS NOT INITIAL.
+      ev_body = ev_body && |"PurReqnHeaderNote": "{ is_data_grp-PurReqnHeaderNote }",|.
+    ENDIF.
   ENDMETHOD.
 
 
@@ -184,34 +197,67 @@ CLASS ZCL_PR_1_IMPLEMENT IMPLEMENTATION.
       ev_body_item = ev_body_item && ','.
     ENDIF.
 
-    zcl_utility_ninhnh=>get_uom_isocode( EXPORTING iv_uom         = is_data-base_unit
-                                         IMPORTING ev_uom_isocode = DATA(lv_uom_isocode) ).
+    "Chỉ đưa vào body những field user có điền trong file
+    DATA(lv_item) = |\{|.
+    IF is_data-purchase_requisition_item IS NOT INITIAL.
+      lv_item = lv_item && |"PurchaseRequisitionItem": "{ is_data-purchase_requisition_item }",|.
+    ENDIF.
+    IF is_data-material IS NOT INITIAL.
+      lv_item = lv_item && |"Material": "{ is_data-material }",|.
+    ENDIF.
+    IF is_data-requested_quantity IS NOT INITIAL.
+      lv_item = lv_item && |"RequestedQuantity": { is_data-requested_quantity },|.
+    ENDIF.
+    IF is_data-base_unit IS NOT INITIAL.
+      zcl_utility_ninhnh=>get_uom_isocode( EXPORTING iv_uom         = is_data-base_unit
+                                           IMPORTING ev_uom_isocode = DATA(lv_uom_isocode) ).
+      lv_item = lv_item && |"BaseUnit": "{ is_data-base_unit }",|.
+      lv_item = lv_item && |"BaseUnitISOCode": "{ lv_uom_isocode }",|.
+    ENDIF.
+    IF is_data-plant IS NOT INITIAL.
+      lv_item = lv_item && |"Plant": "{ is_data-plant }",|.
+    ENDIF.
+    IF is_data-storage_location IS NOT INITIAL.
+      lv_item = lv_item && |"StorageLocation": "{ is_data-storage_location }",|.
+    ENDIF.
+    IF is_data-purchase_requisition_price IS NOT INITIAL.
+      lv_item = lv_item && |"PurchaseRequisitionPrice": { is_data-purchase_requisition_price },|.
+    ENDIF.
+    IF is_data-pur_reqn_price_quantity IS NOT INITIAL.
+      lv_item = lv_item && |"PurReqnPriceQuantity": { is_data-pur_reqn_price_quantity },|.
+    ENDIF.
+    IF is_data-pur_reqn_item_currency IS NOT INITIAL.
+      lv_item = lv_item && |"PurReqnItemCurrency": "{ is_data-pur_reqn_item_currency }",|.
+    ENDIF.
+    IF is_data-purchasing_group IS NOT INITIAL.
+      lv_item = lv_item && |"PurchasingGroup": "{ is_data-purchasing_group }",|.
+    ENDIF.
+    IF is_data-delivery_date IS NOT INITIAL.
+      lv_item = lv_item && |"DeliveryDate": "{ is_data-delivery_date+6(4) }|
+                                             && |-{ is_data-delivery_date+3(2) }|
+                                             && |-{ is_data-delivery_date+0(2) }",|.
+    ENDIF.
+    IF is_data-requirement_tracking IS NOT INITIAL.
+      lv_item = lv_item && |"RequirementTracking": "{ is_data-requirement_tracking }",|.
+    ENDIF.
+    IF is_data-requested_by IS NOT INITIAL.
+      lv_item = lv_item && |"RequisitionerName": "{ is_data-requested_by }",|.
+    ENDIF.
+    IF lv_item CS ','.
+      lv_item = substring( val = lv_item len = strlen( lv_item ) - 1 ).
+    ENDIF.
 
-    ev_body_item = ev_body_item
-        && |\{|
-        && |"PurchaseRequisitionItem": "{ is_data-purchase_requisition_item }",|
-        && |"Material": "{ is_data-material }",|
-        && |"RequestedQuantity": { is_data-requested_quantity },|
-        && |"BaseUnit": "{ is_data-base_unit }",|
-        && |"BaseUnitISOCode": "{ lv_uom_isocode }",|
-        && |"Plant": "{ is_data-plant }",|
-        && |"StorageLocation": "{ is_data-storage_location }",|
-        && |"PurchaseRequisitionPrice": { is_data-purchase_requisition_price },|
-        && |"PurReqnPriceQuantity": { is_data-pur_reqn_price_quantity },|
-        && |"PurReqnItemCurrency": "{ is_data-pur_reqn_item_currency }",|
-        && |"PurchasingGroup": "{ is_data-purchasing_group }",|
-        && |"DeliveryDate": "{ is_data-delivery_date+6(4) }|
-                             && |-{ is_data-delivery_date+3(2) }|
-                             && |-{ is_data-delivery_date+0(2) }",|
-        && |"RequirementTracking": "{ is_data-requirement_tracking }",|
-        && |"RequisitionerName": "{ is_data-requested_by }"|
-        && |\}|.
+    ev_body_item = ev_body_item && lv_item && |\}|.
   ENDMETHOD.
 
 
   METHOD validate_date.
-    IF cs_data-delivery_date IS NOT INITIAL
-       AND strlen( cs_data-delivery_date ) = 10
+    "Để trống thì bỏ qua, chỉ check định dạng khi user có điền
+    IF cs_data-delivery_date IS INITIAL.
+      RETURN.
+    ENDIF.
+
+    IF strlen( cs_data-delivery_date ) = 10
        AND cs_data-delivery_date+2(1) = '.'
        AND cs_data-delivery_date+5(1) = '.'
        AND cs_data-delivery_date+0(2) CO '0123456789'
