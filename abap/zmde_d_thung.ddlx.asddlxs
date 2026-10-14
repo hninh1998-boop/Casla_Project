@@ -1,0 +1,103 @@
+@Metadata.layer: #CORE
+@UI:{
+    headerInfo: { typeName: 'General',
+                  typeNamePlural: 'Upload Data',
+                  title: { value: 'SoThung' }
+    }
+}
+
+@UI.lineItem: [{criticality: 'Criticality'}]
+annotate entity zc_d_thung with
+{
+  @UI.facet          : [
+   {
+   id                 : 'General',
+   purpose            : #STANDARD,
+   position           : 10,
+   isPartOfPreview    : true,
+   label              : 'General',
+   type               : #IDENTIFICATION_REFERENCE
+   }]
+
+  @UI.hidden: true
+  Uuid;
+
+  @UI.lineItem: [{ position: 20, label: 'Message Type' , criticality: 'Criticality'  },
+                 { label: 'Post',
+                   dataAction: 'PostConfirm',
+                   type: #FOR_ACTION,
+                   invocationGrouping: #CHANGE_SET
+                 }]
+  @UI.identification: [{ position: 20 }]
+  @UI.selectionField: [{ position: 10 }]
+  @EndUserText.label: 'Message Type'
+  @UI.dataPoint : { title: 'Message Type', criticality: 'Criticality' }
+  Messagetype;
+
+  @Consumption.filter.hidden: true
+  Criticality;
+
+  @UI.adaptationHidden: true
+  OverallStatusText;
+
+  @UI.lineItem: [{ position: 30 }]
+  @UI.identification: [{ position: 30 }]
+  @EndUserText.label: 'Message Text'
+  Message;
+
+  @UI.lineItem: [{ position: 40 }]
+  @UI.identification: [{ position: 40 }]
+  @EndUserText.label: 'Type'
+  Type;
+  @UI.lineItem: [{ position: 50 }]
+  @UI.identification: [{ position: 50 }]
+  @EndUserText.label: 'Số KHSX'
+  SoKhsx;
+  @UI.lineItem: [{ position: 70 }]
+  @UI.identification: [{ position: 70 }]
+  @EndUserText.label: 'Số thùng/Pallet'
+  SoThung;
+  @UI.lineItem: [{ position: 80 }]
+  @UI.identification: [{ position: 80 }]
+  @EndUserText.label: 'Mã hàng'
+  Material;
+  @UI.lineItem: [{ position: 90 }]
+  @UI.identification: [{ position: 90 }]
+  @EndUserText.label: 'Batch'
+  Batch;
+  @UI.lineItem: [{ position: 110 }]
+  @UI.identification: [{ position: 110 }]
+  @EndUserText.label: 'Số lượng (Viên)'
+  Quantity;
+  @UI.lineItem: [{ position: 120 }]
+  @UI.identification: [{ position: 120 }]
+  @EndUserText.label: 'Vị trí (Storage Location)'
+  StorageLocation;
+  @UI.lineItem: [{ position: 130 }]
+  @UI.identification: [{ position: 130 }]
+  @EndUserText.label: 'Khách hàng'
+  Customer;
+  @UI.lineItem: [{ position: 140 }]
+  @UI.identification: [{ position: 140 }]
+  @EndUserText.label: 'Ngày nhập kho'
+  NgayNhapKho;
+  @UI.lineItem: [{ position: 150 }]
+  @UI.identification: [{ position: 150 }]
+  @EndUserText.label: 'Tem'
+  Tem;
+
+  @UI.lineItem: [{ position: 190 }]
+  @UI.identification: [{ position: 190 }]
+  CreatedBy;
+
+  @UI.lineItem: [{ position: 200 }]
+  @UI.identification: [{ position: 200 }]
+  CreatedAt;
+
+  @UI.hidden: true
+  LastChangedBy;
+  @UI.hidden: true
+  LocalLastChangedAt;
+  @UI.hidden: true
+  LastChangedAt;
+}

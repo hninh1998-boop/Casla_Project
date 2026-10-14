@@ -1,0 +1,87 @@
+managed implementation in class zbp_i_m_thung unique;
+strict ( 2 );
+
+with draft;
+
+define behavior for zi_m_thung alias ManageFile
+persistent table ztb_m_thung
+draft table ztb_m_thungd
+etag master Changeddate
+lock master total etag Changeddate
+authorization master ( global )
+early numbering
+{
+  create ( authorization : global );
+  update;
+  delete;
+  field ( readonly ) Uuid, Zcount, Countline, Createdbyuser, Createddate, Changedbyuser, Changeddate;
+  association _DataFile { with draft; create; }
+  draft action Activate optimized;
+  draft action Discard;
+  draft action Edit;
+  draft action Resume;
+  draft determine action Prepare;
+
+  static action uploadExcel parameter zabs_file_thung;
+
+  determination getExcelData on save { field Filename; }
+  determination setStatusToOpen on modify { create; }
+
+  static action downloadTemplate;
+
+  mapping for ztb_m_thung
+    {
+      Uuid          = uuid;
+      Zcount        = zcount;
+      Status        = status;
+      Attachment    = attachment;
+      Mimetype      = mimetype;
+      Filename      = filename;
+      Countline     = countline;
+      Createdbyuser = createdbyuser;
+      Createddate   = createddate;
+      Changedbyuser = changedbyuser;
+      Changeddate   = changeddate;
+    }
+}
+
+define behavior for zi_d_thung alias DataFile
+persistent table ztb_d_thung
+draft table ztb_d_thungd
+lock dependent by _ManageFile
+authorization dependent by _ManageFile
+{
+  update;
+  delete;
+  field ( numbering : managed, readonly ) Uuid;
+  field ( readonly ) Uuidfile, CreatedBy, CreatedAt, LocalLastChangedAt, LastChangedAt, LastChangedBy;
+  association _ManageFile { with draft; }
+
+  action PostConfirm result [1] $self;
+
+  side effects { action PostConfirm affects entity _ManageFile; }
+
+  mapping for ztb_d_thung
+    {
+      Uuid               = uuid;
+      Uuidfile           = uuidfile;
+      MessageType        = messagetype;
+      Message            = message;
+      Type               = type;
+      SoKhsx             = so_khsx;
+      SoThung            = so_thung;
+      Material           = material;
+      Batch              = batch;
+      Quantity           = quantity;
+      BaseUnit           = base_unit;
+      StorageLocation    = storage_location;
+      Customer           = customer;
+      NgayNhapKho        = ngay_nhap_kho;
+      Tem                = tem;
+      CreatedBy          = created_by;
+      CreatedAt          = created_at;
+      LastChangedBy      = last_changed_by;
+      LocalLastChangedAt = local_last_changed_at;
+      LastChangedAt      = last_changed_at;
+    }
+}

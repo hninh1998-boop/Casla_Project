@@ -1,0 +1,43 @@
+managed implementation in class zbp_i_thung_mau unique;
+strict ( 2 );
+
+define behavior for zi_thung_mau alias ThungMau
+persistent table ztb_custom_hu
+etag master LocalLastChangedAt
+lock master
+authorization master ( global )
+{
+  // create/update chỉ dùng nội bộ qua EML (upload file) - không expose ở projection
+  create ( authorization : global );
+  update;
+
+  field ( readonly : update ) SoKhsx, SoThung, Material, Batch;
+  field ( readonly ) CreatedBy, CreatedAt, LastChangedBy, LocalLastChangedAt, LastChangedAt;
+
+  action ( features : instance ) deleteThung result [1] $self;
+  action ( features : instance ) doThung result [1] $self;
+  action ( features : instance ) chuyenViTri parameter zabs_thung_chuyen_vt result [1] $self;
+  action ( features : instance ) daXuat result [1] $self;
+
+  mapping for ztb_custom_hu
+    {
+      SoKhsx             = so_khsx;
+      SoThung            = so_thung;
+      Material           = material;
+      Batch              = batch;
+      Quantity           = quantity;
+      BaseUnit           = base_unit;
+      StorageLocation    = storage_location;
+      Customer           = customer;
+      NgayNhapKho        = ngay_nhap_kho;
+      Tem                = tem;
+      TrangThai             = status;
+      DelFlag            = del_flag;
+      Uuidfile           = uuidfile;
+      CreatedBy          = created_by;
+      CreatedAt          = created_at;
+      LastChangedBy      = last_changed_by;
+      LocalLastChangedAt = local_last_changed_at;
+      LastChangedAt      = last_changed_at;
+    }
+}

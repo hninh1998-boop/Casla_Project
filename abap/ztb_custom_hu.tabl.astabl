@@ -1,0 +1,29 @@
+@EndUserText.label : 'Quản lý thùng mẫu'
+@AbapCatalog.enhancement.category : #NOT_EXTENSIBLE
+@AbapCatalog.tableCategory : #TRANSPARENT
+@AbapCatalog.deliveryClass : #A
+@AbapCatalog.dataMaintenance : #RESTRICTED
+define table ztb_custom_hu {
+
+  key client            : abap.clnt not null;
+  key so_khsx           : abap.char(17) not null;
+  key so_thung          : abap.char(8) not null;
+  key material          : matnr not null;
+  key batch             : charg_d not null;
+  @Semantics.quantity.unitOfMeasure : 'ztb_custom_hu.base_unit'
+  quantity              : abap.quan(13,3);
+  base_unit             : abap.unit(3);
+  storage_location      : lgort_d;
+  customer              : abap.char(2);
+  ngay_nhap_kho         : abap.dats;
+  tem                   : abap.char(1);
+  status                : abap.char(1);
+  del_flag              : abap.char(1);
+  uuidfile              : sysuuid_x16;
+  created_by            : abp_creation_user;
+  created_at            : abp_creation_tstmpl;
+  last_changed_by       : abp_locinst_lastchange_user;
+  local_last_changed_at : abp_locinst_lastchange_tstmpl;
+  last_changed_at       : abp_lastchange_tstmpl;
+
+}

@@ -1,0 +1,11 @@
+projection;
+strict ( 2 );
+
+define behavior for zc_thung_mau alias ThungMau
+use etag
+{
+  use action deleteThung;
+  use action doThung;
+  use action chuyenViTri;
+  use action daXuat;
+}

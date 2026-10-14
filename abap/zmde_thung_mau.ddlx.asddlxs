@@ -1,0 +1,146 @@
+@Metadata.layer: #CORE
+
+@UI: {
+  headerInfo: {
+    typeName: 'Thùng mẫu',
+    typeNamePlural: 'Thùng mẫu',
+    title: { value: 'SoThung' },
+    description: { value: 'Material' }
+  }
+}
+
+@UI.selectionVariant: [{
+  qualifier: 'ThungMau'
+}]
+
+@UI.presentationVariant: [{
+  qualifier: 'ThungMau',
+  visualizations: [{ type: #AS_LINEITEM }]
+}]
+
+@UI.selectionPresentationVariant: [{
+  qualifier: 'ThungMau',
+  selectionVariantQualifier: 'ThungMau',
+  presentationVariantQualifier: 'ThungMau',
+  text: 'Quản lý thùng mẫu'
+}]
+
+@UI.lineItem: [{ criticality: 'DelCriticality' }]
+annotate entity zc_thung_mau with
+{
+  @UI.selectionField : [{ position: 10 }]
+  @UI.lineItem       : [{ position: 10 },
+                        { type: #FOR_ACTION, dataAction: 'deleteThung', label: 'Delete' },
+                        { type: #FOR_ACTION, dataAction: 'chuyenViTri', label: 'Chuyển vị trí', invocationGrouping: #CHANGE_SET },
+                        { type: #FOR_ACTION, dataAction: 'doThung',     label: 'Dỡ thùng',      invocationGrouping: #CHANGE_SET },
+                        { type: #FOR_ACTION, dataAction: 'daXuat',      label: 'Đã xuất',       invocationGrouping: #CHANGE_SET }]
+  @EndUserText.label: 'Mã hàng'
+  Material;
+
+  @UI.selectionField : [{ position: 20 }]
+  @UI.lineItem       : [{ position: 20 }]
+  ProductName;
+
+  @UI.selectionField : [{ position: 30 }]
+  @UI.lineItem       : [{ position: 30 }]
+  @EndUserText.label: 'Số KHSX'
+  SoKhsx;
+
+  @UI.selectionField : [{ position: 40 }]
+  @UI.lineItem       : [{ position: 40 }]
+  @EndUserText.label: 'Số thùng/Pallet'
+  SoThung;
+
+  @UI.selectionField : [{ position: 50 }]
+  @UI.lineItem       : [{ position: 50 }]
+  @EndUserText.label: 'Batch'
+  Batch;
+
+  @UI.selectionField : [{ position: 60 }]
+  @UI.lineItem       : [{ position: 60 }]
+  @EndUserText.label: 'Số lượng (Viên)'
+  Quantity;
+
+  @UI.selectionField : [{ position: 70 }]
+  @UI.lineItem       : [{ position: 70 }]
+  @EndUserText.label: 'Vị trí (Storage Location)'
+  StorageLocation;
+
+  @UI.selectionField : [{ position: 80 }]
+  @UI.lineItem       : [{ position: 80 }]
+  @EndUserText.label: 'Khách hàng'
+  Customer;
+
+  @UI.selectionField : [{ position: 90 }]
+  @UI.lineItem       : [{ position: 90, criticality: 'Criticality' }]
+  @UI.textArrangement: #TEXT_ONLY
+  @EndUserText.label: 'Trạng thái'
+  TrangThai;
+
+  @UI.selectionField : [{ position: 100 }]
+  @UI.lineItem       : [{ position: 100 }]
+  @EndUserText.label: 'Ngày nhập kho'
+  NgayNhapKho;
+
+  @UI.lineItem       : [{ position: 110 }]
+  @UI.textArrangement: #TEXT_ONLY
+  @EndUserText.label: 'Tem'
+  Tem;
+
+  @UI.selectionField : [{ position: 120 }]
+  @EndUserText.label: 'Tình trạng xóa'
+  DelStatus;
+
+  @UI.lineItem       : [{ position: 95, criticality: 'DelCriticality' }]
+  @UI.textArrangement: #TEXT_ONLY
+  @EndUserText.label: 'Đánh dấu xóa'
+  @Consumption.filter.hidden: true
+  DelFlag;
+
+  @UI.lineItem       : [{ position: 130 }]
+  @EndUserText.label: 'Mã hàng (đặc tính)'
+  MaHang2;
+
+  @UI.lineItem       : [{ position: 140 }]
+  @EndUserText.label: 'Chế độ mài'
+  CheDoMai;
+
+  @UI.lineItem       : [{ position: 150 }]
+  @EndUserText.label: 'Chiều dài'
+  ChieuDai;
+
+  @UI.lineItem       : [{ position: 160 }]
+  @EndUserText.label: 'Chiều rộng'
+  ChieuRong;
+
+  @UI.lineItem       : [{ position: 170 }]
+  @EndUserText.label: 'Độ dày'
+  DoDay;
+
+  @UI.lineItem       : [{ position: 180 }]
+  CreatedBy;
+
+  @UI.lineItem       : [{ position: 190 }]
+  CreatedAt;
+
+  @UI.lineItem       : [{ position: 200 }]
+  LastChangedBy;
+
+  @UI.lineItem       : [{ position: 210 }]
+  LastChangedAt;
+
+  @UI.hidden: true
+  TrangThaiText;
+  @UI.hidden: true
+  TemText;
+  @UI.hidden: true
+  DelFlagText;
+  @UI.hidden: true
+  Criticality;
+  @UI.hidden: true
+  DelCriticality;
+  @UI.hidden: true
+  Uuidfile;
+  @UI.hidden: true
+  LocalLastChangedAt;
+}

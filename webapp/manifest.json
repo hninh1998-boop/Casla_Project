@@ -1,0 +1,237 @@
+{
+  "_version": "1.80.0",
+  "sap.app": {
+    "id": "zthungov4",
+    "type": "application",
+    "i18n": "i18n/i18n.properties",
+    "applicationVersion": {
+      "version": "0.0.1"
+    },
+    "title": "{{appTitle}}",
+    "description": "{{appDescription}}",
+    "resources": "resources.json",
+    "sourceTemplate": {
+      "id": "@sap/generator-fiori:lrop",
+      "version": "1.29.0",
+      "toolsId": "5c0e7a52-9a3b-4f0e-8a51-6d1c7e2b4f90"
+    },
+    "dataSources": {
+      "annotation": {
+        "type": "ODataAnnotation",
+        "uri": "annotations/annotation.xml",
+        "settings": {
+          "localUri": "annotations/annotation.xml"
+        }
+      },
+      "mainService": {
+        "uri": "/sap/opu/odata4/sap/zui_thung_mau_ov4/srvd/sap/zui_thung_mau/0001/",
+        "type": "OData",
+        "settings": {
+          "annotations": [
+            "annotation"
+          ],
+          "localUri": "localService/mainService/metadata.xml",
+          "odataVersion": "4.0"
+        }
+      }
+    },
+    "crossNavigation": {
+      "inbounds": {
+        "zthung_ov4-display": {
+          "semanticObject": "zthung_ov4",
+          "action": "display",
+          "title": "{{zthung_ov4-display.flpTitle}}",
+          "signature": {
+            "parameters": {},
+            "additionalParameters": "allowed"
+          }
+        }
+      }
+    }
+  },
+  "sap.ui": {
+    "technology": "UI5",
+    "icons": {
+      "icon": "",
+      "favIcon": "",
+      "phone": "",
+      "phone@2": "",
+      "tablet": "",
+      "tablet@2": ""
+    },
+    "deviceTypes": {
+      "desktop": true,
+      "tablet": true,
+      "phone": true
+    }
+  },
+  "sap.ui5": {
+    "flexEnabled": true,
+    "dependencies": {
+      "minUI5Version": "1.142.12",
+      "libs": {
+        "sap.m": {},
+        "sap.ui.core": {},
+        "sap.fe.templates": {}
+      }
+    },
+    "contentDensities": {
+      "compact": true,
+      "cozy": true
+    },
+    "models": {
+      "i18n": {
+        "type": "sap.ui.model.resource.ResourceModel",
+        "settings": {
+          "bundleName": "zthungov4.i18n.i18n"
+        }
+      },
+      "": {
+        "dataSource": "mainService",
+        "preload": true,
+        "settings": {
+          "operationMode": "Server",
+          "autoExpandSelect": true,
+          "earlyRequests": true
+        }
+      },
+      "@i18n": {
+        "type": "sap.ui.model.resource.ResourceModel",
+        "uri": "i18n/i18n.properties"
+      }
+    },
+    "resources": {
+      "css": []
+    },
+    "routing": {
+      "config": {},
+      "routes": [
+        {
+          "pattern": ":?query:",
+          "name": "ThungMauList",
+          "target": "ThungMauList"
+        },
+        {
+          "pattern": "ManageFile({key}):?query:",
+          "name": "ManageFileObjectPage",
+          "target": "ManageFileObjectPage"
+        },
+        {
+          "pattern": "ManageFile({key})/_DataFile({key2}):?query:",
+          "name": "DataFileObjectPage",
+          "target": "DataFileObjectPage"
+        }
+      ],
+      "targets": {
+        "ThungMauList": {
+          "type": "Component",
+          "id": "ThungMauList",
+          "name": "sap.fe.templates.ListReport",
+          "options": {
+            "settings": {
+              "contextPath": "/ThungMau",
+              "variantManagement": "Page",
+              "navigation": {
+                "ManageFile": {
+                  "detail": {
+                    "route": "ManageFileObjectPage"
+                  }
+                }
+              },
+              "controlConfiguration": {
+                "@com.sap.vocabularies.UI.v1.LineItem": {
+                  "tableSettings": {
+                    "type": "GridTable",
+                    "selectionMode": "Multi"
+                  }
+                },
+                "/ManageFile/@com.sap.vocabularies.UI.v1.LineItem": {
+                  "tableSettings": {
+                    "type": "GridTable"
+                  },
+                  "actions": {
+                    "idUploadExcel": {
+                      "press": ".extension.zthungov4.ext.controller.ListReportExt.uploadExcelDialog",
+                      "visible": true,
+                      "enabled": true,
+                      "requiresSelection": false,
+                      "text": "Upload Excel"
+                    }
+                  }
+                }
+              },
+              "views": {
+                "paths": [
+                  {
+                    "key": "ThungMau",
+                    "annotationPath": "com.sap.vocabularies.UI.v1.SelectionPresentationVariant#ThungMau"
+                  },
+                  {
+                    "key": "Upload",
+                    "annotationPath": "com.sap.vocabularies.UI.v1.SelectionPresentationVariant#Upload",
+                    "entitySet": "ManageFile"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "ManageFileObjectPage": {
+          "type": "Component",
+          "id": "ManageFileObjectPage",
+          "name": "sap.fe.templates.ObjectPage",
+          "options": {
+            "settings": {
+              "editableHeaderContent": false,
+              "contextPath": "/ManageFile",
+              "navigation": {
+                "_DataFile": {
+                  "detail": {
+                    "route": "DataFileObjectPage"
+                  }
+                }
+              },
+              "controlConfiguration": {
+                "_DataFile/@com.sap.vocabularies.UI.v1.LineItem": {
+                  "tableSettings": {
+                    "type": "GridTable",
+                    "selectionMode": "Multi"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "DataFileObjectPage": {
+          "type": "Component",
+          "id": "DataFileObjectPage",
+          "name": "sap.fe.templates.ObjectPage",
+          "options": {
+            "settings": {
+              "editableHeaderContent": false,
+              "contextPath": "/ManageFile/_DataFile"
+            }
+          }
+        }
+      }
+    },
+    "extends": {
+      "extensions": {
+        "sap.ui.controllerExtensions": {
+          "sap.fe.templates.ListReport.ListReportController": {
+            "controllerName": "zthungov4.ext.controller.ListReportExt"
+          }
+        }
+      }
+    }
+  },
+  "sap.fiori": {
+    "registrationIds": [],
+    "archeType": "transactional"
+  },
+  "sap.fe": {
+    "app": {
+      "enableLazyLoading": true
+    }
+  }
+}
