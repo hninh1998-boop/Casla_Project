@@ -1,0 +1,35 @@
+unmanaged implementation in class zbp_ce_zbom_header unique;
+strict ( 2 ); //Uncomment this line in order to enable strict mode 2. The strict mode has two variants (strict(1), strict(2)) and is prerequisite to be future proof regarding syntax and to be able to release your BO.
+
+define behavior for zce_zbom_header alias ZBOMHeader
+//late numbering
+lock master
+authorization master ( global, instance )
+//etag master <field_name>
+{
+  //  create ( authorization : global );
+  //  update;
+  //  delete;
+  field ( readonly ) BillOfMaterial, BillOfMaterialCategory, Material, Plant, BillOfMaterialVariantUsage, SalesOrder, SalesOrderItem;
+  association _Item { create; }
+
+  //  action explodezbom
+  //    parameter zabs_zbom_p result [1] $self;
+
+  action detailViewList result [1] $self;
+  static action ( authorization : global ) scheduleExcelExport parameter zabs_zbom_export_p;
+
+}
+
+define behavior for zce_zbom_item alias ZBOMItem
+//late numbering
+lock dependent by _Header
+authorization dependent by _Header
+//etag master <field_name>
+{
+  //  update;
+  //  delete;
+  field ( readonly ) ItemIndex, ItemIndexString, BillOfMaterial, BillOfMaterialCategory, Material, Plant, BillOfMaterialVariantUsage, SalesOrder, SalesOrderItem;
+
+  association _Header;
+}

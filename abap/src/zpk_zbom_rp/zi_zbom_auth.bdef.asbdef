@@ -1,0 +1,21 @@
+managed implementation in class zbp_i_zbom_auth unique;
+strict ( 2 );
+
+define behavior for ZI_ZBOM_AUTH //alias <alias_name>
+persistent table ztb_zbom_auth
+lock master
+authorization master ( instance )
+//etag master <field_name>
+{
+  create ( authorization : global );
+  update;
+  delete;
+//  field ( readonly ) Uname;
+
+  static action CheckAuth result [1] zabs_zbom_auth;
+
+  mapping for ztb_zbom_auth
+    {
+      Uname         = uname;
+    }
+}

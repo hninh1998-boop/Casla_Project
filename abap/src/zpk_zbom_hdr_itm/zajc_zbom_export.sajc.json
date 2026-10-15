@@ -1,0 +1,16 @@
+{
+  "formatVersion": "1",
+  "header": {
+    "description": "ZAJC_ZBOM_EXPORT",
+    "originalLanguage": "en",
+    "abapLanguageVersion": "cloudDevelopment"
+  },
+  "generalInformation": {
+    "className": "ZCL_ZBOM_EXPORT_JOB"
+  },
+  "parameters": [
+    {
+      "name": "BATCH_ID"
+    }
+  ]
+}

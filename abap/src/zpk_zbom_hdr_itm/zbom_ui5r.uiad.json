@@ -1,0 +1,34 @@
+{
+  "formatVersion": "2",
+  "header": {
+    "description": "Báo cáo chi tiết BOM đa cấp",
+    "originalLanguage": "en",
+    "abapLanguageVersion": "cloudDevelopment"
+  },
+  "generalInformation": {
+    "appType": "ui5",
+    "catalogId": "SAP_TC_UI5_REPO_UIAD",
+    "targetMappingTitle": "Báo cáo chi tiết BOM đa cấp"
+  },
+  "ui5AppDetails": {
+    "appId": "zbom.zbom"
+  },
+  "navigation": {
+    "targetMappingId": "UI5R_CDF0BFAC55F907F87134A08C06F006A3520BC21E_TM",
+    "semanticObject": "zbom",
+    "action": "display",
+    "desktop": true,
+    "tablet": true,
+    "phone": true
+  },
+  "tiles": [
+    {
+      "id": "UI5R_CDF0BFAC55F907F87134A08C06F006A3520BC21E_AL",
+      "tileType": "static",
+      "isDefault": true,
+      "standard": {
+        "title": "Báo cáo chi tiết BOM đa cấp"
+      }
+    }
+  ]
+}

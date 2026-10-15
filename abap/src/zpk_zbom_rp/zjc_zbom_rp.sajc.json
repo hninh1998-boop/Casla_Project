@@ -1,0 +1,16 @@
+{
+  "formatVersion": "1",
+  "header": {
+    "description": "ZJC_ZBOM_RP",
+    "originalLanguage": "en",
+    "abapLanguageVersion": "cloudDevelopment"
+  },
+  "generalInformation": {
+    "className": "ZCL_JOB_ZBOM_RP"
+  },
+  "parameters": [
+    {
+      "name": "HDR_ID"
+    }
+  ]
+}

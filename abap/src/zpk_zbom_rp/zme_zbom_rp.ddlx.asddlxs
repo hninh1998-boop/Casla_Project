@@ -1,0 +1,134 @@
+@Metadata.layer: #CUSTOMER
+@UI.headerInfo: {
+  typeName: 'BOM Item',
+  typeNamePlural: 'BOM Items'
+}
+
+annotate entity ZC_ZBOM_RP with
+{
+  // ── Selection Fields + Line Items ─────────────────────────────
+
+  @UI.lineItem: [{ position: 5 }]
+  @EndUserText.label: 'Số thứ tự'
+  LineItem;
+
+  @Consumption.filter: { selectionType: #RANGE, mandatory: false }
+  @UI.selectionField: [{ position: 10 }]
+  @UI.lineItem: [{ position: 10 }]
+  @EndUserText.label: 'Material'
+  Material;
+
+  @Consumption.filter: { selectionType: #RANGE, mandatory: false }
+  @UI.selectionField: [{ position: 20 }]
+  @UI.lineItem: [{ position: 30 }]
+  @EndUserText.label: 'Plant'
+  Plant;
+
+  @Consumption.filter: { selectionType: #SINGLE, mandatory: false, defaultValue: '1' }
+  @UI.selectionField: [{ position: 30 }]
+  @UI.lineItem: [{ position: 40 }]
+  @EndUserText.label: 'BOM Usage'
+  BillOfMaterialVariantUsage;
+
+  @Consumption.filter: { selectionType: #RANGE, mandatory: false }
+  @UI.selectionField: [{ position: 40 }]
+  @UI.lineItem: [{ position: 50 }]
+  @EndUserText.label: 'Alternative BOM'
+  BillOfMaterialVariant;
+
+  @Consumption.filter: { selectionType: #RANGE, mandatory: false }
+  @UI.selectionField: [{ position: 50 }]
+  @UI.lineItem: [{ position: 250 }]
+  @EndUserText.label: 'BOM Category'
+
+  @Consumption.valueHelpDefinition: [{
+    entity: {
+        name: 'zi_bomcategory_vh',
+        element: 'BomCatCode' }
+    }]
+  BillOfMaterialCategory;
+
+  @Consumption.filter: { selectionType: #RANGE, mandatory: false }
+  @UI.selectionField: [{ position: 60 }]
+  @UI.lineItem: [{ position: 130 }]
+  @EndUserText.label: 'Component'
+  BillOfMaterialComponent;
+
+  // ── Line Items Only ───────────────────────────────────────────
+
+  @UI.lineItem: [{ position: 20 }]
+  @EndUserText.label: 'Material Description'
+  MaterialDescription;
+
+  @UI.lineItem: [{ position: 60 }]
+  @EndUserText.label: 'Sales Order'
+  SalesOrder;
+
+  @UI.lineItem: [{ position: 70 }]
+  @EndUserText.label: 'Sales Order Item'
+  SalesOrderItem;
+
+  @UI.lineItem: [{ position: 80 }]
+  @EndUserText.label: 'Valid-From Date'
+  HeaderValidityStartDate;
+
+  @UI.lineItem: [{ position: 90 }]
+  @EndUserText.label: 'BOM Status'
+  BillOfMaterialStatus;
+
+  @UI.lineItem: [{ position: 100 }]
+  @EndUserText.label: 'Base Quantity'
+  BOMHeaderQuantityInBaseUnit;
+
+  //  @UI.lineItem: [{ position: 110 }]
+  //  @EndUserText.label: 'Base Unit of Measure'
+  //  BOMHeaderBaseUnit;
+
+  @UI.lineItem: [{ position: 120 }]
+  @EndUserText.label: 'BOM Item Number'
+  BillOfMaterialItemNumber;
+
+  @UI.lineItem: [{ position: 140 }]
+  @EndUserText.label: 'BOM Item Category'
+  BillOfMaterialItemCategory;
+
+  @UI.lineItem: [{ position: 150 }]
+  @EndUserText.label: 'Component Quantity'
+  BillOfMaterialItemQuantity;
+
+  @UI.lineItem: [{ position: 160 }]
+  @EndUserText.label: 'Component Description'
+  ComponentDescription;
+
+  //  @UI.lineItem: [{ position: 170 }]
+  //  @EndUserText.label: 'Component Unit of Measure'
+  //  BillOfMaterialItemUnit;
+
+  @UI.lineItem: [{ position: 180 }]
+  @EndUserText.label: 'Component Scrap in Percent'
+  ComponentScrapInPercent;
+
+  @UI.lineItem: [{ position: 190 }]
+  @EndUserText.label: 'Special Procurement'
+  SpecialProcurementType;
+
+  @UI.lineItem: [{ position: 200 }]
+  @EndUserText.label: 'BOM Item Text (Line 1)'
+  BOMItemText1;
+
+  @UI.lineItem: [{ position: 210 }]
+  @EndUserText.label: 'BOM Item Text (Line 2)'
+  BOMItemText2;
+
+  @UI.lineItem: [{ position: 220 }]
+  @EndUserText.label: 'Relevancy to Costing'
+  BOMItemIsCostingRelevant;
+
+  @UI.lineItem: [{ position: 230 }]
+  @EndUserText.label: 'Issue Location'
+  ProdOrderIssueLocation;
+
+  @UI.lineItem: [{ position: 240 }]
+  @EndUserText.label: 'Bill of Material'
+  BillOfMaterial;
+}

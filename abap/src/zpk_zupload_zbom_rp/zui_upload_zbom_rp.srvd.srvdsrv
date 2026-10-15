@@ -1,0 +1,6 @@
+@EndUserText.label: 'Ser.Def. - Add BOM Item'
+define service Zui_upload_zbom_rp {
+  expose ZC_M_ZBOM_RP          as ManageFile;
+  expose ZC_D_ZBOM_RP          as DataFile;
+  expose zi_req_sta_zbom_rp_vh as StatusVH;
+}

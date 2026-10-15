@@ -1,0 +1,4 @@
+@EndUserText.label: 'Ser.Bind. - Phân quyền CRUD ZBOM'
+define service ZUI_ZBOM_AUTH {
+  expose ZC_ZBOM_AUTH;
+}
