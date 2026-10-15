@@ -1,0 +1,4 @@
+@EndUserText.label: 'ZUI_ZBOM_FUNC'
+define service ZUI_ZBOM_FUNC {
+  expose ZI_ZBOM_FUNC;
+}

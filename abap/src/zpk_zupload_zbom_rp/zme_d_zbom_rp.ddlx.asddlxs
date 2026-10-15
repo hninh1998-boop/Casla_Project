@@ -1,0 +1,141 @@
+@Metadata.layer: #CORE
+@UI:{
+    headerInfo: { typeName: 'General',
+                  typeNamePlural: 'Upload Data',
+                  title: { value: 'Material' }
+    }
+}
+
+@UI.lineItem: [{criticality: 'Criticality'}]
+annotate entity ZC_D_ZBOM_RP with
+{
+  @UI.facet          : [
+   {
+   id                 : 'General',
+   purpose            : #STANDARD,
+   position           : 10,
+   isPartOfPreview    : true,
+   label              : 'General',
+   type               : #IDENTIFICATION_REFERENCE,
+   targetQualifier    : 'General'
+   }]
+
+  @UI.lineItem: [{ position: 10 }]
+  @UI.identification: [{ position: 10 }]
+  Uuid;
+  //  Uuidfile;
+
+  @UI.lineItem: [{ position: 20, label: 'Message Type' , criticality: 'Criticality'  },
+                 { label: 'Post Document',
+                   dataAction: 'PostConfirm',
+                   type: #FOR_ACTION,
+                   invocationGrouping: #CHANGE_SET
+                 },
+                 { label: 'Set Job',
+                   dataAction: 'setJob',
+                   type: #FOR_ACTION,
+                   invocationGrouping: #CHANGE_SET
+                 }]
+  @UI.identification: [{ position: 20 }]
+  @UI.selectionField: [{ position: 10 }]
+  @EndUserText.label: 'Message Type'
+  @UI.dataPoint : { title: 'Message Type', criticality: 'Criticality' }
+  Messagetype;
+
+  @Consumption.filter.hidden: true
+  Criticality;
+
+  @UI.adaptationHidden: true
+  OverallStatusText;
+
+  @UI.lineItem: [{ position: 30 }]
+  @UI.identification: [{ position: 30 }]
+  @EndUserText.label: 'Sales Order'
+  SalesOrder;
+  @UI.lineItem: [{ position: 40 }]
+  @UI.identification: [{ position: 40 }]
+  @EndUserText.label: 'Sales Order Item'
+  SalesOrderItem;
+  @UI.lineItem: [{ position: 50 }]
+  @UI.identification: [{ position: 50 }]
+  @EndUserText.label: 'Material'
+  Material;
+  @UI.lineItem: [{ position: 60 }]
+  @UI.identification: [{ position: 60 }]
+  @EndUserText.label: 'Plant'
+  Plant;
+  @UI.lineItem: [{ position: 70 }]
+  @UI.identification: [{ position: 70 }]
+  @EndUserText.label: 'Alternative BOM'
+  BillOfMaterialVariant;
+  @UI.lineItem: [{ position: 80 }]
+  @UI.identification: [{ position: 80 }]
+  @EndUserText.label: 'BOM Usage'
+  BillOfMaterialVariantUsage;
+  @UI.lineItem: [{ position: 90 }]
+  @UI.identification: [{ position: 90 }]
+  @EndUserText.label: 'BOM Item Number'
+  BillOfMaterialItemNumber;
+  @UI.lineItem: [{ position: 100 }]
+  @UI.identification: [{ position: 100 }]
+  @EndUserText.label: 'Item Category'
+  BillOfMaterialItemCategory;
+  @UI.lineItem: [{ position: 110 }]
+  @UI.identification: [{ position: 110 }]
+  @EndUserText.label: 'BOM Component'
+  Component;
+  @UI.lineItem: [{ position: 120 }]
+  @UI.identification: [{ position: 120 }]
+  @EndUserText.label: 'Component Quantity'
+  ComponentQuantity;
+  @UI.lineItem: [{ position: 120 }]
+  @UI.identification: [{ position: 120 }]
+  @EndUserText.label: 'Component UoM'
+  ComponentUnit;
+  @UI.lineItem: [{ position: 130 }]
+  @UI.identification: [{ position: 130 }]
+  @EndUserText.label: 'Indicator: Net Scrap'
+  IsNetScrap;
+  @UI.lineItem: [{ position: 140 }]
+  @UI.identification: [{ position: 140 }]
+  @EndUserText.label: 'Component Scrap in Percent'
+  ComponentScrapInPercent;
+  @UI.lineItem: [{ position: 150 }]
+  @UI.identification: [{ position: 150 }]
+  @EndUserText.label: 'Indicator: Relevancy to Costing'
+  BomItemIsCostingRelevant;
+  @UI.lineItem: [{ position: 160 }]
+  @UI.identification: [{ position: 160 }]
+  @EndUserText.label: 'Special Procurement'
+  SpecialProcurementType;
+  @UI.lineItem: [{ position: 170 }]
+  @UI.identification: [{ position: 170 }]
+  @EndUserText.label: 'Issue Location for Production Order'
+  ProdOrderIssueLocation;
+
+  @UI.lineItem: [{ position: 180 }]
+  @UI.identification: [{ position: 180 }]
+  @UI.selectionField: [{ position: 30 }]
+  CreatedBy;
+
+  @UI.lineItem: [{ position: 190 }]
+  @UI.identification: [{ position: 190 }]
+  CreatedAt;
+
+  @UI.lineItem: [{ position: 200 }]
+  @UI.identification: [{ position: 200 }]
+  @EndUserText.label: 'Message Text'
+  Message;
+
+  @UI.hidden: true
+  LastChangedBy;
+  @UI.hidden: true
+  LocalLastChangedAt;
+  @UI.hidden: true
+  LastChangedAt;
+
+  /* Associations */
+  //  _ManageFile;
+  //  _OverallStatus;
+
+}

@@ -1,0 +1,19 @@
+unmanaged implementation in class zbp_i_zbom_rp unique;
+strict ( 2 );
+
+define behavior for ZI_ZBOM_RP alias ZbomMassChange
+//late numbering
+lock master
+authorization master ( instance )
+//etag master <field_name>
+{
+  create ( authorization : global );
+  update;
+  delete;
+  field ( readonly ) Material, Plant, BillOfMaterialVariantUsage, BillOfMaterialVariant, SalesOrder, SalesOrderItem, BillOfMaterialItemNumber, BillOfMaterialItemNodeNumber, BOMItemInternalChangeCount, BillOfMaterial, BillOfMaterialCategory;
+
+  action MassChange parameter zabs_massChange;
+  action ( authorization : global ) EditMassChange parameter zabs_edit_massChange;
+  action ( authorization : global ) DeleteMassChange parameter zabs_delete_massChange;
+  action ( authorization : global ) AddMassChange;
+}

@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_SIA3" serializer_version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <SIA3>
+    <NAME>ZBOM_EXP</NAME>
+    <DESCRIPTION>ZBOM_EXP</DESCRIPTION>
+    <ABAP_LANGU_VERSION>5</ABAP_LANGU_VERSION>
+    <AUTH_OBJECT_ID>ZBOM_EXP</AUTH_OBJECT_ID>
+    <AUTH_OBJECT>ZBOM_EXP</AUTH_OBJECT>
+    <ABAP_LANGUAGE_VERSION>5</ABAP_LANGUAGE_VERSION>
+    <ACTIVITY_MAPPING>
+     <item>
+      <ACTIVITY>16</ACTIVITY>
+      <ACCESS_CATEGORY>W</ACCESS_CATEGORY>
+      <ACTIVITY_TEXT>Execute</ACTIVITY_TEXT>
+     </item>
+    </ACTIVITY_MAPPING>
+    <RESTRICTION_TYPE>
+     <item>
+      <RTYPE_ID>ZBOM_EXP</RTYPE_ID>
+      <TEXT>ZBOM_EXP</TEXT>
+     </item>
+    </RESTRICTION_TYPE>
+   </SIA3>
+  </asx:values>
+ </asx:abap>
+</abapGit>

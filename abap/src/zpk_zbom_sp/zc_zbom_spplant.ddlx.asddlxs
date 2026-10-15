@@ -1,0 +1,71 @@
+@Metadata.layer: #CUSTOMER
+@UI: {
+  headerInfo: {
+    typeName:       'Issuing Plant',
+    typeNamePlural: 'Issuing Plants',
+    title:          { type: #STANDARD, value: 'SpType' },
+    description:    { type: #STANDARD, value: 'Plant' }
+  },
+  presentationVariant: [{
+    sortOrder: [ { by: 'Plant',  direction: #ASC },
+                 { by: 'SpType', direction: #ASC } ],
+    visualizations: [{ type: #AS_LINEITEM }]
+  }]
+}
+annotate entity ZC_ZBOM_SPPLANT with
+{
+  @UI.facet: [{
+    id:       'General',
+    purpose:  #STANDARD,
+    type:     #IDENTIFICATION_REFERENCE,
+    label:    'Thông tin chung',
+    position: 10
+  }]
+
+  @UI: {
+    lineItem:       [{ position: 10, importance: #HIGH }],
+    identification: [{ position: 10 }],
+    selectionField: [{ position: 10 }]
+  }
+  Plant;
+
+  @UI: {
+    lineItem:       [{ position: 20, importance: #HIGH }],
+    identification: [{ position: 20 }],
+    selectionField: [{ position: 20 }]
+  }
+  @UI.textArrangement: #TEXT_SEPARATE
+  SpType;
+
+  @UI: {
+    lineItem:       [{ position: 30, importance: #HIGH }],
+    identification: [{ position: 30 }]
+  }
+  Description;
+
+  @UI: {
+    lineItem:       [{ position: 40, importance: #MEDIUM }],
+    identification: [{ position: 40 }]
+  }
+  ProcurementType;
+
+  @UI: {
+    lineItem:       [{ position: 50, importance: #MEDIUM }],
+    identification: [{ position: 50 }]
+  }
+  SpecialProcurement;
+
+  @EndUserText.label: 'Issuing Plant'
+  @UI: {
+    lineItem:       [{ position: 60, importance: #HIGH }],
+    identification: [{ position: 60 }],
+    selectionField: [{ position: 30 }]
+  }
+  IssuingPlant;
+
+  @UI.hidden: true
+  LocalLastChangedAt;
+
+  @UI.hidden: true
+  LastChangedAt;
+}
