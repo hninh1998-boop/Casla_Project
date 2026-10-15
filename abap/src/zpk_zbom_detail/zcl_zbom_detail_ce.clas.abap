@@ -820,13 +820,13 @@ CLASS zcl_zbom_detail_ce IMPLEMENTATION.
 
   METHOD apply_supplying_plant.
     " Component lấy từ plant khác (mã mua đặc biệt, config ZTB_ZBOM_SPPLANT):
-    " đổi plant của dòng sang plant cung ứng và lấy BOM ở plant cung ứng.
-    " - API đã tự xổ ở plant cung ứng (dòng con mang plant đó): giữ nguyên, xổ
-    "   thêm lần nữa sẽ ra 2 bộ con trùng nhau.
-    " - Còn lại: bỏ nhánh API đã xổ ở plant hiện tại, chỉ lấy BOM của plant
-    "   cung ứng (vd 200009020 ở 6712 lấy từ 6711 thì phải ra BOM 6711, không
-    "   phải BOM 6712). Plant cung ứng không có BOM active thì dòng không có
-    "   cấp con.
+    " đổi plant của dòng sang plant cung ứng, bỏ nhánh API đã xổ dưới dòng và
+    " chỉ lấy BOM của plant cung ứng (vd 200009020 ở 6712 lấy từ 6711 thì phải
+    " ra BOM 6711, không phải BOM 6712). Plant cung ứng không có BOM active thì
+    " dòng không có cấp con.
+    " Không dựa vào Plant của dòng con để đoán API đã xổ ở plant nào: API trả
+    " Plant theo từng item, vd BOM 6712 của 200009020 có item 200009022 mang
+    " Plant 6711 còn các item 100000702 mang 6712.
     " it_sp_type: mã mua đặc biệt của từng dòng, cùng thứ tự với it_rows.
     TYPES: BEGIN OF ty_order,
              level TYPE i,
@@ -870,18 +870,7 @@ CLASS zcl_zbom_detail_ce IMPLEMENTATION.
       INSERT VALUE #( index = lv_idx issuing = lv_issuing ) INTO TABLE lt_supply
         ASSIGNING FIELD-SYMBOL(<ls_supply>).
 
-      DATA(lv_api_at_issuing) = abap_false.
-      LOOP AT lt_parent TRANSPORTING NO FIELDS WHERE table_line = lv_idx.
-        IF it_rows[ sy-tabix ]-Plant = lv_issuing.
-          lv_api_at_issuing = abap_true.
-          EXIT.
-        ENDIF.
-      ENDLOOP.
-      IF lv_api_at_issuing = abap_true.
-        CONTINUE.
-      ENDIF.
-
-      " Mã số giữ nguyên, mã toàn số đệm '0' đủ 18 ký tự như dạng nội bộ.
+      " Mã có chữ giữ nguyên, mã toàn số đệm '0' đủ 18 ký tự như dạng nội bộ.
       DATA(lv_comp) = CONV matnr( ls_row-BillOfMaterialComponent ).
       IF lv_comp CO '0123456789 '.
         lv_comp = |{ lv_comp WIDTH = 18 ALIGN = RIGHT PAD = '0' }|.
