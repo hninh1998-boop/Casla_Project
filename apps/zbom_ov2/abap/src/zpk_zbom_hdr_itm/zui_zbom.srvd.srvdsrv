@@ -1,0 +1,5 @@
+@EndUserText.label: 'zui_zbom'
+define service Zui_zbom {
+  expose zce_zbom_header;
+  expose zce_zbom_item;
+}

@@ -1,0 +1,34 @@
+{
+  "formatVersion": "2",
+  "header": {
+    "description": "Báo cáo ZBOM - Detail",
+    "originalLanguage": "en",
+    "abapLanguageVersion": "cloudDevelopment"
+  },
+  "generalInformation": {
+    "appType": "ui5",
+    "catalogId": "SAP_TC_UI5_REPO_UIAD",
+    "targetMappingTitle": "Báo cáo ZBOM - Detail"
+  },
+  "ui5AppDetails": {
+    "appId": "zbomdetail.zbomdetail"
+  },
+  "navigation": {
+    "targetMappingId": "UI5R_B73352B788F86F2EAA29F4AFC2AE6BC58737F05F_TM",
+    "semanticObject": "DetailListZBOM",
+    "action": "display",
+    "desktop": true,
+    "tablet": true,
+    "phone": true
+  },
+  "tiles": [
+    {
+      "id": "UI5R_B73352B788F86F2EAA29F4AFC2AE6BC58737F05F_AL",
+      "tileType": "static",
+      "isDefault": true,
+      "standard": {
+        "title": "Báo cáo ZBOM - Detail"
+      }
+    }
+  ]
+}

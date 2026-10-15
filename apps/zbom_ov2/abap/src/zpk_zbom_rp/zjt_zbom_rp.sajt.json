@@ -1,0 +1,19 @@
+{
+  "formatVersion": "1",
+  "header": {
+    "description": "ZJT_ZBOM_RP",
+    "originalLanguage": "en",
+    "abapLanguageVersion": "cloudDevelopment"
+  },
+  "generalInformation": {
+    "catalogName": "ZJC_ZBOM_RP"
+  },
+  "parameters": {
+    "valueRangesParameters": [
+      {
+        "name": "HDR_ID",
+        "valueRanges": []
+      }
+    ]
+  }
+}

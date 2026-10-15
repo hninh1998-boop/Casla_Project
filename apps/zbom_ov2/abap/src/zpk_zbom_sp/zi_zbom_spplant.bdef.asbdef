@@ -1,0 +1,28 @@
+managed implementation in class zbp_i_zbom_spplant unique;
+strict ( 2 );
+
+define behavior for ZI_ZBOM_SPPLANT alias Spplant
+persistent table ztb_zbom_spplant
+lock master
+authorization master ( instance )
+etag master LocalLastChangedAt
+{
+  create ( authorization : global );
+  update;
+  delete;
+
+  field ( mandatory : create, readonly : update ) Plant, SpType;
+  field ( readonly ) LocalLastChangedAt, LastChangedAt;
+
+  mapping for ztb_zbom_spplant
+    {
+      Plant              = plant;
+      SpType             = sp_type;
+      ProcurementType    = procurement_type;
+      SpecialProcurement = special_procurement;
+      IssuingPlant       = issuing_plant;
+      Description        = description;
+      LocalLastChangedAt = local_last_changed_at;
+      LastChangedAt      = last_changed_at;
+    }
+}

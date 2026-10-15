@@ -1,0 +1,7 @@
+@EndUserText.label: 'ZBOM function anchor'
+@MappingRole: true
+define role ZI_ZBOM_FUNC
+{
+  grant select on ZI_ZBOM_FUNC
+    where (Func) = aspect pfcg_auth(ZBOM_EXP, ZBOMFUNC, ACTVT = '16');
+}

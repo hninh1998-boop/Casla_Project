@@ -1,0 +1,34 @@
+{
+  "formatVersion": "2",
+  "header": {
+    "description": "An SAP Fiori application.",
+    "originalLanguage": "en",
+    "abapLanguageVersion": "cloudDevelopment"
+  },
+  "generalInformation": {
+    "appType": "ui5",
+    "catalogId": "SAP_TC_UI5_REPO_UIAD",
+    "targetMappingTitle": "Báo cáo BOM chi tiết"
+  },
+  "ui5AppDetails": {
+    "appId": "zbomrp"
+  },
+  "navigation": {
+    "targetMappingId": "UI5R_B596328BCB14B2CA35921DECC5512277CF5A1ED3_TM",
+    "semanticObject": "zbomrp",
+    "action": "display",
+    "desktop": true,
+    "tablet": true,
+    "phone": true
+  },
+  "tiles": [
+    {
+      "id": "UI5R_B596328BCB14B2CA35921DECC5512277CF5A1ED3_AL",
+      "tileType": "static",
+      "isDefault": true,
+      "standard": {
+        "title": "Báo cáo BOM chi tiết"
+      }
+    }
+  ]
+}

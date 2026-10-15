@@ -1,0 +1,41 @@
+@Metadata.layer: #CUSTOMER
+@UI.headerInfo: {
+  typeName: 'Check quyền thêm/sửa/xóa BOM',
+  typeNamePlural: 'Check quyền thêm/sửa/xóa BOM'
+}
+
+annotate entity ZC_ZBOM_AUTH with
+{
+  @UI.facet: [{
+    id: 'GeneralInfo',
+    purpose: #STANDARD,
+    type: #IDENTIFICATION_REFERENCE,
+    label: 'Thông tin quyền',
+    position: 10
+  }]
+
+  @UI.selectionField: [{ position: 10 }]
+  @UI.lineItem: [{ position: 10 }]
+  @UI.identification: [{ position: 10 }]
+  @EndUserText.label: 'Account name'
+  Uname;
+
+  @UI.selectionField: [{ position: 20 }]
+  @UI.lineItem: [{ position: 20 }]
+  @UI.identification: [{ position: 20 }]
+  @EndUserText.label: 'Quyền thêm'
+  AddAllowed;
+
+  @UI.selectionField: [{ position: 30 }]
+  @UI.lineItem: [{ position: 30 }]
+  @UI.identification: [{ position: 30 }]
+  @EndUserText.label: 'Quyền sửa'
+  EditAllowed;
+
+  @UI.selectionField: [{ position: 40 }]
+  @UI.lineItem: [{ position: 40 }]
+  @UI.identification: [{ position: 40 }]
+  @EndUserText.label: 'Quyền xóa'
+  DeleteAllowed;
+
+}

@@ -1,0 +1,100 @@
+managed implementation in class zbp_i_m_zbom_rp unique;
+strict ( 2 );
+
+with draft;
+
+define behavior for zi_m_zbom_rp alias ManageFile
+persistent table ztb_m_zbom_rp
+draft table ztb_m_zbom_rpd
+etag master Changedbyuser
+lock master total etag Changedbyuser
+authorization master ( global )
+early numbering
+{
+  create ( authorization : global );
+  update;
+  delete;
+  field ( readonly ) Uuid, ZCount, Countline, Createdbyuser, Createddate, Changedbyuser, Changeddate;
+  association _DataFile { with draft; create; }
+
+  draft action Activate optimized;
+  draft action Discard;
+  draft action Edit;
+  draft action Resume;
+  draft determine action Prepare;
+
+  static action uploadExcel parameter ZI_FILE_ABS;
+
+  determination getExcelData on save { field Filename; }
+  determination setStatusToOpen on modify { create; }
+
+  static action downloadFile result [1] ZI_FILE_ABS;
+
+  static action downloadTemplate;
+
+  mapping for ztb_m_zbom_rp
+    {
+      Uuid          = uuid;
+      Zcount        = zcount;
+      Status        = status;
+      Attachment    = attachment;
+      Mimetype      = mimetype;
+      Filename      = filename;
+      Countline     = countline;
+      Createdbyuser = createdbyuser;
+      Createddate   = createddate;
+      Changedbyuser = changedbyuser;
+      Changeddate   = changeddate;
+    }
+}
+
+define behavior for zi_d_zbom_rp alias DataFile
+persistent table ztb_d_zbom_rp
+draft table ztb_d_zbom_rpd
+lock dependent by _ManageFile
+authorization dependent by _ManageFile
+//etag master <field_name>
+with additional save
+{
+  update;
+  delete;
+  field ( numbering : managed, readonly ) Uuid;
+  field ( readonly ) Uuidfile, CreatedBy, CreatedAt, LocalLastChangedAt, LastChangedAt, LastChangedBy;
+  association _ManageFile { with draft; }
+
+  action ( features : instance ) PostConfirm result [1] $self;
+  action ( features : instance ) setJob result [1] $self;
+
+  side effects { action setJob affects entity _ManageFile; }
+
+  determination setStatusToUpdate on modify { field MessageType; }
+
+  mapping for ztb_d_zbom_rp
+    {
+      Uuid                       = uuid;
+      Uuidfile                   = uuidfile;
+      MessageType                = messagetype;
+      Message                    = message;
+      SalesOrder                 = sales_order;
+      SalesOrderItem             = sales_order_item;
+      Material                   = material;
+      Plant                      = plant;
+      BillOfMaterialVariant      = bill_of_material_variant;
+      BillOfMaterialVariantUsage = bill_of_material_variant_usage;
+      BillOfMaterialItemNumber   = bill_of_material_item_number;
+      BillOfMaterialItemCategory = bill_of_material_item_category;
+      Component                  = component;
+      ComponentQuantity          = component_quantity;
+      ComponentUnit              = component_unit;
+      IsNetScrap                 = is_net_scrap;
+      ComponentScrapInPercent    = component_scrap_in_percent;
+      BomItemIsCostingRelevant   = bom_item_is_costing_relevant;
+      SpecialProcurementType     = special_procurement_type;
+      ProdOrderIssueLocation     = prod_order_issue_location;
+      CreatedBy                  = created_by;
+      CreatedAt                  = created_at;
+      LastChangedBy              = last_changed_by;
+      LocalLastChangedAt         = local_last_changed_at;
+      LastChangedAt              = last_changed_at;
+    }
+}

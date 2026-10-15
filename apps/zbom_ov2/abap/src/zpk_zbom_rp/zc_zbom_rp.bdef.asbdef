@@ -1,0 +1,15 @@
+projection;
+strict ( 2 );
+
+define behavior for ZC_ZBOM_RP alias zbomMassChange
+{
+  //  use create;
+  //  use update;
+  //  use delete;
+
+  use action MassChange;
+
+  use action EditMassChange;
+  use action DeleteMassChange;
+  use action AddMassChange;
+}

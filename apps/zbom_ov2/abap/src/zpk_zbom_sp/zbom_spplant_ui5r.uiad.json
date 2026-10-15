@@ -1,0 +1,34 @@
+{
+  "formatVersion": "2",
+  "header": {
+    "description": "An SAP Fiori application.",
+    "originalLanguage": "en",
+    "abapLanguageVersion": "cloudDevelopment"
+  },
+  "generalInformation": {
+    "appType": "ui5",
+    "catalogId": "SAP_TC_UI5_REPO_UIAD",
+    "targetMappingTitle": "ZBOM - Config Special Procurement"
+  },
+  "ui5AppDetails": {
+    "appId": "zbomspplant"
+  },
+  "navigation": {
+    "targetMappingId": "ZBOM_SPPLANT_UI5R_TM",
+    "semanticObject": "zbom_spplant",
+    "action": "display",
+    "desktop": true,
+    "tablet": true,
+    "phone": true
+  },
+  "tiles": [
+    {
+      "id": "ZBOM_SPPLANT_UI5R_AL",
+      "tileType": "static",
+      "isDefault": true,
+      "standard": {
+        "title": "ZBOM - Config Special Procurement"
+      }
+    }
+  ]
+}

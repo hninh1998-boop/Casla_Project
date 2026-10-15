@@ -1,0 +1,194 @@
+@Metadata.layer: #PARTNER
+@Search.searchable: true
+@Consumption.semanticObject: 'ExplodeZBOM'
+@UI.headerInfo: {
+    typeName: 'Explode Bills of Material',
+    typeNamePlural: 'Bills of Materials',
+    title: {
+        label: 'Bill Of Material',
+        valueQualifier: 'Material',
+        value: 'Material'
+    },
+    description: {
+        label: 'Bill Of Material',
+        valueQualifier: 'Material',
+        value: 'ProductDescription'
+    }
+}
+annotate entity zce_zbom_header with
+{
+
+  @UI.facet: [{
+      id: 'idProduct',
+      purpose: #HEADER,
+      position: 10,
+      type: #FIELDGROUP_REFERENCE,
+      targetQualifier: 'Material'
+  },
+    {
+
+      id: 'idRawMat',
+      purpose: #STANDARD,
+      type: #LINEITEM_REFERENCE,
+      label: 'Explode Product Details',
+      position: 20,
+      targetElement: '_Item'
+    }
+  ]
+
+  //  @UI.hidden: true
+  @Consumption.semanticObject: 'DetailList'
+  @UI.selectionField: [{ position:1 }]
+  @Consumption.filter.hidden: true
+  BillOfMaterial;
+
+  @Search.fuzzinessThreshold: 1
+  @Search.defaultSearchElement: true
+  @UI.selectionField: [{ position: 60 }]
+  @UI.lineItem: [
+    {
+        position:50,
+        importance:#HIGH
+    },
+    {
+        type: #FOR_ACTION,
+        label: 'Explode ZBOM',
+        dataAction: 'explodezbom',
+        requiresContext: true,
+        navigationAvailable: true
+    },
+    {
+        type: #FOR_INTENT_BASED_NAVIGATION,
+        semanticObject: 'DetailListZBOM',
+        semanticObjectAction: 'display',
+        label: 'Detail List Item',
+        requiresContext: true
+    }
+    ]
+  @Consumption: {
+      filter: {
+          defaultValue: 'M',
+          mandatory: true,
+          multipleSelections: false,
+          selectionType: #SINGLE
+      }
+  }
+  @Consumption.valueHelpDefinition: [{
+  entity: {
+      name: 'zi_bomcategory_vh',
+      element: 'BomCatCode' }
+  }]
+  BillOfMaterialCategory;
+
+  @Search.fuzzinessThreshold: 1
+  @Search.defaultSearchElement: true
+  @UI.lineItem: [
+    {
+        position:20,
+        importance:#HIGH
+    }
+    ]
+  @UI.selectionField: [{ position:10 }]
+  @UI.connectedFields: [{ qualifier: 'Material' }]
+  Material;
+
+  //  @Consumption.valueHelpDefinition: [{
+  //        entity: {
+  //            name: 'I_PlantStdVH',
+  //            element : 'Plant'
+  //            }
+  //  }]
+  @Search.defaultSearchElement: true
+  @UI.lineItem: [{
+    position:30,
+    importance:#HIGH
+    }]
+  @UI.selectionField: [{ position:20 }]
+  Plant;
+
+  @Consumption.valueHelpDefinition: [{
+    entity: {
+        name: 'I_BillOfMaterialUsageStdVH',
+        element: 'BillOfMaterialVariantUsage' }
+  }]
+  @UI.selectionField: [{ position:30 }]
+  //  @UI.lineItem: [{
+  //    position:40,
+  //    importance:#HIGH
+  //    }]
+  @Search.defaultSearchElement: true
+  @EndUserText.quickInfo: 'Bill Of Material Usage'
+  //  @UI.hidden: true
+  @UI.fieldGroup: [{ position: 20, label: 'BOM Usage', qualifier: 'Material' }]
+  @Consumption.filter.hidden: true
+  BillOfMaterialVariantUsage;
+
+  @UI.selectionField: [{ position: 40 }]
+  @UI.lineItem: [{
+    position:60,
+    importance:#HIGH }]
+  @EndUserText.label: 'Sales Order'
+  SalesOrder;
+
+  @UI.selectionField: [{ position: 50 }]
+  @UI.lineItem: [{
+    position:70,
+    importance:#HIGH
+    }]
+  @EndUserText.label: 'Sales Order Item'
+  SalesOrderItem;
+
+  //NinhNH added - 24.03.2026
+  @UI.selectionField: [{ position: 65 }]
+  @EndUserText.label: 'Ngày dự kiến giao hàng'
+  @UI.lineItem: [{
+  position:90,
+  importance:#HIGH
+  }]
+  DeliveryDate;
+
+  @UI.selectionField: [{ position: 75 }]
+  @EndUserText.label: 'Material Type'
+  @Consumption.valueHelpDefinition: [{
+    entity: {
+        name: 'I_ProductTypeVH',
+        element: 'ProductType' }
+  }]
+  @UI.lineItem: [{
+  position:85,
+  importance:#HIGH
+  }]
+  ProductType;
+  //End of NinhNH added - 24.03.2026
+
+  @UI.fieldGroup: [{ position: 10, label: 'Plant', qualifier: 'Material' }]
+  PlantName;
+
+  @UI.lineItem: [{
+    position:10,
+    importance:#HIGH
+    }]
+  ProductDescription;
+
+  @UI.selectionField: [{ position:60 }]
+  @EndUserText.label: 'Usage Text'
+  @UI.hidden: true
+  BillOfMaterialVariantUsageDesc;
+
+  @UI.hidden: true
+  BaseUnit;
+  @UI.hidden: true
+  IsVersionBillOfMaterial;
+
+
+  @EndUserText.label: 'Required Quantity'
+  @UI.lineItem: [{
+    position:80,
+    importance:#HIGH
+    }]
+
+  @UI.fieldGroup: [{ position: 30, label: 'Required Quantity', qualifier: 'Material' }]
+  RequiredQuantityHeader;
+  //  BOMExplosionApplication;
+
+}

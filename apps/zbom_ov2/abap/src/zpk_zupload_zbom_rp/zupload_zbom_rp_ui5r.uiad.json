@@ -1,0 +1,34 @@
+{
+  "formatVersion": "2",
+  "header": {
+    "description": "An SAP Fiori application.",
+    "originalLanguage": "en",
+    "abapLanguageVersion": "cloudDevelopment"
+  },
+  "generalInformation": {
+    "appType": "ui5",
+    "catalogId": "SAP_TC_UI5_REPO_UIAD",
+    "targetMappingTitle": "ZUPLOAD - Add BOM Item"
+  },
+  "ui5AppDetails": {
+    "appId": "zuploadzbomrp"
+  },
+  "navigation": {
+    "targetMappingId": "UI5R_D1D69666DCCA4B530B841A0C7885EDC19EBE1A8B_TM",
+    "semanticObject": "zupload_zbom_rp",
+    "action": "display",
+    "desktop": true,
+    "tablet": true,
+    "phone": true
+  },
+  "tiles": [
+    {
+      "id": "UI5R_D1D69666DCCA4B530B841A0C7885EDC19EBE1A8B_AL",
+      "tileType": "static",
+      "isDefault": true,
+      "standard": {
+        "title": "ZUPLOAD - Add BOM Item"
+      }
+    }
+  ]
+}

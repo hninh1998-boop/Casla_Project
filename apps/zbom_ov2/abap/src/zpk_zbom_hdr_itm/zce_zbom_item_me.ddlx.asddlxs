@@ -1,0 +1,127 @@
+@Metadata.layer: #PARTNER
+@Consumption.semanticObject: 'ExplodeZBOM'
+@UI.headerInfo: {
+    typeName: 'Explode Bills of Material',
+    typeNamePlural: 'Bills of Materials',
+    title: {
+        label: 'Bill Of Material Component',
+        valueQualifier: 'Component',
+        value: 'BillOfMaterialComponent'
+    },
+    description: {
+        label: 'Bill Of Materi    al Component',
+        valueQualifier: 'Component',
+        value: 'ComponentDescription'
+    }
+}
+annotate entity zce_zbom_item with
+{
+  //  @UI.facet: [{
+  //      id: 'idBomItemDetails',
+  //      purpose: #STANDARD,
+  //      position: 10,
+  //      label: 'Bom Item Details',
+  //      type: #IDENTIFICATION_REFERENCE
+  //  }]
+
+  @UI.hidden: true
+  BillOfMaterial;
+  @UI.hidden: true
+  BillOfMaterialCategory;
+  @UI.hidden: true
+  Material;
+
+  @UI.hidden: true
+  BillOfMaterialVariantUsage;
+  @UI.hidden: true
+  SalesOrder;
+  @UI.hidden: true
+  SalesOrderItem;
+  @UI.hidden: true
+  BillOfMaterialVariant;
+  @UI.hidden: true
+  BillOfMaterialVersion;
+  @UI.hidden: true
+  BillOfMaterialItemNodeNumber;
+  @UI.hidden: true
+  HeaderChangeDocument;
+
+  @UI.hidden: true
+  ItemIndex;
+
+  @UI.lineItem:       [{ position: 1, label: 'BOM Level' }]
+  //  @UI.identification: [{ position: 1, label: 'BOM Level' }]
+  BomExplosionLevel;
+
+  @UI.lineItem:       [{ position: 5, label: 'Tree View' }]
+  //  @UI.identification: [{ position: 5, label: 'Tree View' }]
+  TreeView;
+
+  @UI.lineItem:       [{ position: 10, label: 'Component' }]
+  //  @UI.identification: [{ position: 10, label: 'Component' }]
+  BillOfMaterialComponent;
+
+  @UI.lineItem:       [{ position: 20, label: 'Component Description' }]
+  //  @UI.identification: [{ position: 20, label: 'Component Description' }]
+  ComponentDescription;
+
+  @UI.lineItem:       [{ position: 30, label: 'Component Quantity (Component UoM)' }]
+  //  @UI.identification: [{ position: 30, label: 'Component Quantity (Component UoM)' }]
+  BomCompQuant;
+
+  @UI.lineItem:       [{ position: 40, label: 'Item Category' }]
+  //  @UI.identification: [{ position: 40, label: 'Item Category' }]
+  BillOfMaterialItemCategory;
+
+  @UI.lineItem:       [{ position: 50, label: 'Item Number' }]
+  //  @UI.identification: [{ position: 50, label: 'Item Number' }]
+  BillOfMaterialItemNumber;
+
+  @UI.lineItem:       [{ position: 60, label: 'Assembly Indicator' }]
+  //  @UI.identification: [{ position: 60, label: 'Assembly Indicator' }]
+  IsAssembly;
+
+  @UI.lineItem:       [{ position: 70, label: 'Material Type' }]
+  //  @UI.identification: [{ position: 70, label: 'Material Type' }]
+  MaterialType;
+
+  @UI.lineItem:       [{ position: 80, label: 'Plant' }]
+  //  @UI.identification: [{ position: 80, label: 'Plant' }]
+  Plant;
+
+  @UI.lineItem:       [{ position: 90, label: 'Base Unit of Measure' }]
+  //  @UI.identification: [{ position: 90, label: 'Base Unit of Measure' }]
+  BillOfMaterialItemUnit;
+
+  @UI.lineItem:       [{ position: 100, label: 'Maintenance Status' }]
+  //  @UI.identification: [{ position: 100, label: 'Maintenance Status' }]
+  MaintenanceStatus;
+
+  @UI.lineItem:       [{ position: 110, label: 'Valid From' }]
+  //  @UI.identification: [{ position: 110, label: 'Valid From' }]
+  ValidityStartDate;
+
+  @UI.lineItem:       [{ position: 120, label: 'Change Number' }]
+  //  @UI.identification: [{ position: 120, label: 'Change Number' }]
+  ChangeNumber;
+
+  @UI.lineItem:       [{ position: 130, label: 'Created On' }]
+  //  @UI.identification: [{ position: 130, label: 'Created On' }]
+  CreatedOn;
+
+  @UI.lineItem:       [{ position: 140, label: 'Created By' }]
+  //  @UI.identification: [{ position: 140, label: 'Created By' }]
+  CreatedBy;
+
+  @UI.lineItem:       [{ position: 150, label: 'Changed On' }]
+  //  @UI.identification: [{ position: 150, label: 'Changed On' }]
+  ChangedOn;
+
+  @UI.lineItem:       [{ position: 160, label: 'Changed By' }]
+  //  @UI.identification: [{ position: 160, label: 'Changed By' }]
+  ChangedBy;
+
+  @UI.lineItem:       [{ position: 170, label: 'Item Spare Part Indicator' }]
+  //  @UI.identification: [{ position: 170, label: 'Item Spare Part Indicator' }]
+  IsBomItemSparePart;
+}
