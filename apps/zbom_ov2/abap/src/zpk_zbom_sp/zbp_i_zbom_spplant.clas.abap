@@ -1,5 +1,0 @@
-CLASS zbp_i_zbom_spplant DEFINITION PUBLIC ABSTRACT FINAL FOR BEHAVIOR OF zi_zbom_spplant.
-ENDCLASS.
-
-CLASS zbp_i_zbom_spplant IMPLEMENTATION.
-ENDCLASS.
