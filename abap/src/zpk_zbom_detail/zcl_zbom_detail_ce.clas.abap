@@ -38,7 +38,8 @@ CLASS zcl_zbom_detail_ce DEFINITION
     TYPES: tt_res               TYPE STANDARD TABLE OF zce_zbom_detail WITH DEFAULT KEY,
            ry_plant             TYPE RANGE OF werks_d,
            ry_component         TYPE RANGE OF zce_zbom_detail-BillOfMaterialComponent,
-           ry_bomexplosionlevel TYPE RANGE OF zce_zbom_detail-BomExplosionLevel.
+           ry_bomexplosionlevel TYPE RANGE OF zce_zbom_detail-BomExplosionLevel,
+           tt_index             TYPE STANDARD TABLE OF i WITH EMPTY KEY.
 
     TYPES: BEGIN OF ty_sp_cfg,
              plant               TYPE werks_d,
@@ -121,6 +122,18 @@ CLASS zcl_zbom_detail_ce DEFINITION
                 iv_depth           TYPE i
                 it_path            TYPE string_table
       RETURNING VALUE(rt_result)   TYPE tt_res.
+
+    METHODS apply_supplying_plant
+      IMPORTING it_rows            TYPE tt_res
+                it_sp_type         TYPE string_table
+                iv_itemindexstring TYPE string
+                iv_depth           TYPE i
+                it_path            TYPE string_table
+      RETURNING VALUE(rt_result)   TYPE tt_res.
+
+    METHODS get_parent_index
+      IMPORTING it_rows          TYPE tt_res
+      RETURNING VALUE(rt_parent) TYPE tt_index.
 
     METHODS get_tree_view
       IMPORTING iv_tabix  TYPE sy-tabix
@@ -594,55 +607,20 @@ CLASS zcl_zbom_detail_ce IMPLEMENTATION.
         AND Plant   = @lt_pp-plant
       INTO TABLE @DATA(lt_sp).
 
-    " Component lấy từ plant khác: đổi plant theo config; chưa có BOM thì
-    " xổ tiếp ở plant đó, chèn ngay dưới dòng cha và đánh dấu Assembly.
-    DATA(lt_flat) = rt_result.
-    CLEAR rt_result.
-    LOOP AT lt_flat INTO DATA(ls_flat).
-      APPEND ls_flat TO rt_result.
-
-      DATA(lv_comp) = CONV matnr( |{ ls_flat-BillOfMaterialComponent WIDTH = 18 ALIGN = RIGHT PAD = '0' }| ).
-      READ TABLE lt_sp INTO DATA(ls_sp) WITH KEY Product = lv_comp Plant = ls_flat-Plant.
-      IF sy-subrc <> 0 OR ls_sp-ProcurementSubType IS INITIAL.
-        CONTINUE.
-      ENDIF.
-
-      DATA(lv_issuing) = get_issuing_plant( iv_plant   = CONV #( ls_flat-Plant )
-                                            iv_sp_type = ls_sp-ProcurementSubType ).
-      IF lv_issuing IS INITIAL.
-        CONTINUE.
-      ENDIF.
-
-      rt_result[ lines( rt_result ) ]-Plant = lv_issuing.
-
-      " API đã xổ component này nếu nó là header của dòng con ở level kế tiếp.
-      " Dòng con mang plant hiện tại, hoặc plant cung ứng khi API tự xổ theo mã
-      " mua đặc biệt (vd 6712 -> 6711); chỉ xét plant hiện tại thì component bị
-      " xổ thêm lần nữa ở plant cung ứng, ra 2 bộ con trùng nhau.
-      DATA(lv_child_level) = CONV zce_zbom_detail-bomexplosionlevel( ls_flat-BomExplosionLevel + 1 ).
-      IF line_exists( lt_flat[ BomHhdrMatlHierNode = ls_flat-BillOfMaterialComponent
-                               BomExplosionLevel   = lv_child_level
-                               Plant               = ls_flat-Plant ] )
-         OR line_exists( lt_flat[ BomHhdrMatlHierNode = ls_flat-BillOfMaterialComponent
-                                  BomExplosionLevel   = lv_child_level
-                                  Plant               = lv_issuing ] ).
-        CONTINUE.
-      ENDIF.
-
-
-      DATA(lt_sub) = explode_in_supplying_plant(
-        iv_component       = lv_comp
-        iv_plant           = lv_issuing
-        iv_quantity        = ls_flat-BomCompQuant
-        iv_level           = ls_flat-BomExplosionLevel
-        iv_itemindexstring = iv_itemindexstring
-        iv_depth           = iv_depth
-        it_path            = it_path ).
-      IF lt_sub IS NOT INITIAL.
-        rt_result[ lines( rt_result ) ]-IsAssembly = abap_true.
-        APPEND LINES OF lt_sub TO rt_result.
-      ENDIF.
+    " Mã mua đặc biệt của từng dòng, cùng thứ tự với các dòng API trả về.
+    DATA lt_sp_type TYPE string_table.
+    LOOP AT rt_result INTO DATA(ls_res).
+      DATA(lv_comp) = CONV matnr( |{ ls_res-BillOfMaterialComponent WIDTH = 18 ALIGN = RIGHT PAD = '0' }| ).
+      READ TABLE lt_sp INTO DATA(ls_sp) WITH KEY Product = lv_comp Plant = ls_res-Plant.
+      APPEND COND #( WHEN sy-subrc = 0 THEN ls_sp-ProcurementSubType ) TO lt_sp_type.
     ENDLOOP.
+
+    DATA(lt_flat) = rt_result.
+    rt_result = apply_supplying_plant( it_rows            = lt_flat
+                                       it_sp_type         = lt_sp_type
+                                       iv_itemindexstring = iv_itemindexstring
+                                       iv_depth           = iv_depth
+                                       it_path            = it_path ).
   ENDMETHOD.
 
 
@@ -654,6 +632,8 @@ CLASS zcl_zbom_detail_ce IMPLEMENTATION.
     DATA lv_so               TYPE vbeln.
     DATA lv_so_item          TYPE n LENGTH 6.
     DATA lv_requiredquantity TYPE i.
+    DATA lt_rows             TYPE tt_res.
+    DATA lt_sp_type          TYPE string_table.
 
     lv_product          = |{ iv_material WIDTH = 18 ALIGN = RIGHT PAD = '0' }|.
     lv_plant            = iv_plant.
@@ -739,7 +719,8 @@ CLASS zcl_zbom_detail_ce IMPLEMENTATION.
 
     LOOP AT lt_result INTO DATA(ls_result).
       DATA(lv_tabix) = sy-tabix.
-      APPEND INITIAL LINE TO rt_result ASSIGNING FIELD-SYMBOL(<lfs_result>).
+      APPEND INITIAL LINE TO lt_rows ASSIGNING FIELD-SYMBOL(<lfs_result>).
+      APPEND CONV string( ls_result-%param-SpecialProcurementType ) TO lt_sp_type.
       <lfs_result> = CORRESPONDING #( ls_result-%param ).
       <lfs_result>-BillOfMaterialComponent = |{ ls_result-%param-BillOfMaterialComponent ALPHA = OUT }|.
       <lfs_result>-ItemIndex              = lv_tabix.
@@ -778,40 +759,13 @@ CLASS zcl_zbom_detail_ce IMPLEMENTATION.
           <lfs_result>-ComponentScrapInPercent = ls_bom_item_m-ComponentScrapInPercent.
         ENDIF.
       ENDIF.
-
-      " Component lấy từ plant khác (mã mua đặc biệt MRP 2): đổi plant theo
-      " config; chưa có BOM thì xổ tiếp ở plant đó và đánh dấu Assembly.
-      IF ls_result-%param-SpecialProcurementType IS INITIAL.
-        CONTINUE.
-      ENDIF.
-
-      DATA(lv_issuing) = get_issuing_plant( iv_plant   = ls_result-%param-Plant
-                                            iv_sp_type = ls_result-%param-SpecialProcurementType ).
-      IF lv_issuing IS INITIAL.
-        CONTINUE.
-      ENDIF.
-
-      <lfs_result>-Plant = lv_issuing.
-
-      " Cờ IsAssembly của BOM item có thể bật dù plant hiện tại không có BOM,
-      " nên xem API đã xổ chưa qua NextLevelBillOfMaterial.
-      IF ls_result-%param-NextLevelBillOfMaterial IS NOT INITIAL.
-        CONTINUE.
-      ENDIF.
-
-      DATA(lt_sub) = explode_in_supplying_plant(
-        iv_component       = ls_result-%param-BillOfMaterialComponent
-        iv_plant           = lv_issuing
-        iv_quantity        = CONV #( ls_result-%param-ComponentQuantityInCompUoM )
-        iv_level           = CONV #( ls_result-%param-ExplodeBOMLevelValue )
-        iv_itemindexstring = iv_itemindexstring
-        iv_depth           = 0
-        it_path            = VALUE #( ( |{ lv_product }@{ lv_plant }| ) ) ).
-      IF lt_sub IS NOT INITIAL.
-        <lfs_result>-IsAssembly = abap_true.
-        APPEND LINES OF lt_sub TO rt_result.
-      ENDIF.
     ENDLOOP.
+
+    rt_result = apply_supplying_plant( it_rows            = lt_rows
+                                       it_sp_type         = lt_sp_type
+                                       iv_itemindexstring = iv_itemindexstring
+                                       iv_depth           = 0
+                                       it_path            = VALUE #( ( |{ lv_product }@{ lv_plant }| ) ) ).
   ENDMETHOD.
 
 
@@ -860,6 +814,156 @@ CLASS zcl_zbom_detail_ce IMPLEMENTATION.
 
     LOOP AT rt_result ASSIGNING FIELD-SYMBOL(<ls_row>).
       <ls_row>-BomExplosionLevel = <ls_row>-BomExplosionLevel + iv_level.
+    ENDLOOP.
+  ENDMETHOD.
+
+
+  METHOD apply_supplying_plant.
+    " Component lấy từ plant khác (mã mua đặc biệt, config ZTB_ZBOM_SPPLANT):
+    " đổi plant của dòng sang plant cung ứng và lấy BOM ở plant cung ứng.
+    " - API đã tự xổ ở plant cung ứng (dòng con mang plant đó): giữ nguyên, xổ
+    "   thêm lần nữa sẽ ra 2 bộ con trùng nhau.
+    " - Còn lại: bỏ nhánh API đã xổ ở plant hiện tại, chỉ lấy BOM của plant
+    "   cung ứng (vd 200009020 ở 6712 lấy từ 6711 thì phải ra BOM 6711, không
+    "   phải BOM 6712). Plant cung ứng không có BOM active thì dòng không có
+    "   cấp con.
+    " it_sp_type: mã mua đặc biệt của từng dòng, cùng thứ tự với it_rows.
+    TYPES: BEGIN OF ty_order,
+             level TYPE i,
+             index TYPE i,
+           END OF ty_order,
+           BEGIN OF ty_supply,
+             index   TYPE i,
+             issuing TYPE werks_d,
+             sub     TYPE tt_res,
+           END OF ty_supply.
+
+    DATA lt_order  TYPE SORTED TABLE OF ty_order WITH UNIQUE KEY level index.
+    DATA lt_supply TYPE HASHED TABLE OF ty_supply WITH UNIQUE KEY index.
+    DATA lt_skip   TYPE HASHED TABLE OF i WITH UNIQUE KEY table_line.
+    DATA lt_stack  TYPE tt_index.
+
+    DATA(lt_parent) = get_parent_index( it_rows ).
+
+    lt_order = VALUE #( FOR ls_r IN it_rows INDEX INTO lv_i
+                        ( level = CONV #( ls_r-BomExplosionLevel ) index = lv_i ) ).
+
+    " Xét từ level thấp lên, để nhánh của dòng cha được thay trước dòng con.
+    LOOP AT lt_order INTO DATA(ls_order).
+      DATA(lv_idx) = ls_order-index.
+      IF line_exists( lt_skip[ table_line = lv_idx ] ).
+        CONTINUE.
+      ENDIF.
+
+      DATA(ls_row)     = it_rows[ lv_idx ].
+      DATA(lv_sp_type) = VALUE string( it_sp_type[ lv_idx ] OPTIONAL ).
+      IF lv_sp_type IS INITIAL.
+        CONTINUE.
+      ENDIF.
+
+      DATA(lv_issuing) = get_issuing_plant( iv_plant   = ls_row-Plant
+                                            iv_sp_type = lv_sp_type ).
+      IF lv_issuing IS INITIAL.
+        CONTINUE.
+      ENDIF.
+
+      INSERT VALUE #( index = lv_idx issuing = lv_issuing ) INTO TABLE lt_supply
+        ASSIGNING FIELD-SYMBOL(<ls_supply>).
+
+      DATA(lv_api_at_issuing) = abap_false.
+      LOOP AT lt_parent TRANSPORTING NO FIELDS WHERE table_line = lv_idx.
+        IF it_rows[ sy-tabix ]-Plant = lv_issuing.
+          lv_api_at_issuing = abap_true.
+          EXIT.
+        ENDIF.
+      ENDLOOP.
+      IF lv_api_at_issuing = abap_true.
+        CONTINUE.
+      ENDIF.
+
+      " Mã số giữ nguyên, mã toàn số đệm '0' đủ 18 ký tự như dạng nội bộ.
+      DATA(lv_comp) = CONV matnr( ls_row-BillOfMaterialComponent ).
+      IF lv_comp CO '0123456789 '.
+        lv_comp = |{ lv_comp WIDTH = 18 ALIGN = RIGHT PAD = '0' }|.
+      ENDIF.
+
+      <ls_supply>-sub = explode_in_supplying_plant(
+        iv_component       = lv_comp
+        iv_plant           = lv_issuing
+        iv_quantity        = ls_row-BomCompQuant
+        iv_level           = ls_row-BomExplosionLevel
+        iv_itemindexstring = iv_itemindexstring
+        iv_depth           = iv_depth
+        it_path            = it_path ).
+
+      " Bỏ mọi dòng con cháu API đã xổ dưới dòng này.
+      lt_stack = VALUE #( ( lv_idx ) ).
+      WHILE lt_stack IS NOT INITIAL.
+        DATA(lv_node) = lt_stack[ 1 ].
+        DELETE lt_stack INDEX 1.
+        LOOP AT lt_parent TRANSPORTING NO FIELDS WHERE table_line = lv_node.
+          DATA(lv_child) = sy-tabix.
+          INSERT lv_child INTO TABLE lt_skip.
+          APPEND lv_child TO lt_stack.
+        ENDLOOP.
+      ENDWHILE.
+    ENDLOOP.
+
+    " Ghép kết quả: nhánh xổ ở plant cung ứng chèn ngay dưới dòng cha.
+    LOOP AT it_rows INTO ls_row.
+      lv_idx = sy-tabix.
+      IF line_exists( lt_skip[ table_line = lv_idx ] ).
+        CONTINUE.
+      ENDIF.
+
+      APPEND ls_row TO rt_result ASSIGNING FIELD-SYMBOL(<ls_result>).
+
+      READ TABLE lt_supply ASSIGNING <ls_supply> WITH TABLE KEY index = lv_idx.
+      IF sy-subrc <> 0.
+        CONTINUE.
+      ENDIF.
+
+      <ls_result>-Plant = <ls_supply>-issuing.
+      IF <ls_supply>-sub IS NOT INITIAL.
+        <ls_result>-IsAssembly = abap_true.
+        APPEND LINES OF <ls_supply>-sub TO rt_result.
+      ENDIF.
+    ENDLOOP.
+  ENDMETHOD.
+
+
+  METHOD get_parent_index.
+    " Cha của một dòng: dòng ở level ngay trên có BillOfMaterialComponent bằng
+    " BomHhdrMatlHierNode của dòng đó (so ở dạng ALPHA nội bộ như get_tree_view).
+    " Lấy dòng gần nhất phía trên; không có thì tìm phía dưới, vì dòng gốc có
+    " thể nằm cuối bảng. 0 = cha không nằm trong bảng.
+    DATA lv_header TYPE matnr.
+    DATA lv_comp   TYPE matnr.
+
+    LOOP AT it_rows INTO DATA(ls_row).
+      DATA(lv_idx)          = sy-tabix.
+      DATA(lv_parent)       = 0.
+      DATA(lv_parent_level) = CONV i( ls_row-BomExplosionLevel ) - 1.
+      lv_header = |{ ls_row-BomHhdrMatlHierNode ALPHA = IN }|.
+
+      " Lượt 1 tìm lên trên, lượt 2 tìm xuống dưới.
+      DO 2 TIMES.
+        DATA(lv_step)   = COND i( WHEN sy-index = 1 THEN -1 ELSE 1 ).
+        DATA(lv_search) = lv_idx + lv_step.
+        WHILE lv_parent = 0 AND lv_search >= 1 AND lv_search <= lines( it_rows ).
+          DATA(ls_cand) = it_rows[ lv_search ].
+          lv_comp = |{ ls_cand-BillOfMaterialComponent ALPHA = IN }|.
+          IF lv_comp = lv_header AND CONV i( ls_cand-BomExplosionLevel ) = lv_parent_level.
+            lv_parent = lv_search.
+          ENDIF.
+          lv_search += lv_step.
+        ENDWHILE.
+        IF lv_parent <> 0.
+          EXIT.
+        ENDIF.
+      ENDDO.
+
+      APPEND lv_parent TO rt_parent.
     ENDLOOP.
   ENDMETHOD.
 
