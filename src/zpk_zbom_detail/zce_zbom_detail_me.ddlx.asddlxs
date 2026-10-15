@@ -54,6 +54,10 @@ annotate entity zce_zbom_detail with
   @UI.lineItem:       [{ position: 3, label: 'Material' }]
   MaterialHeader;
 
+  @EndUserText.label: 'Material Description'
+  @UI.lineItem:       [{ position: 4, label: 'Material Description' }]
+  MaterialDescription;
+
   @UI.lineItem:       [{ position: 4, label: 'Plant' }]
   @UI.identification: [{ position: 80, label: 'Plant' }]
   @UI.selectionField: [{ position: 40 }]

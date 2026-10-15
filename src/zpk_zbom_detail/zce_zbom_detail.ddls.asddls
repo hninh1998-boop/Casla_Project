@@ -24,6 +24,7 @@ define root custom entity zce_zbom_detail
   key SalesOrderItem               : abap.numc(6);
 
   key MaterialHeader               : matnr;
+      MaterialDescription          : maktx; -- Mô tả của MaterialHeader (cột Material)
 
       @Semantics.unitOfMeasure     : true
       UomHeader                    : meins;

@@ -164,7 +164,13 @@ CLASS zcl_zbom_detail_ce IMPLEMENTATION.
       WHERE Product = @iv_material
       INTO @DATA(lv_unitheader).
 
+    SELECT SINGLE ProductDescription FROM I_ProductDescription
+      WHERE Product  = @iv_material
+        AND Language = @sy-langu
+      INTO @DATA(lv_matdesc).
+
     LOOP AT lt_result_tmp ASSIGNING FIELD-SYMBOL(<lfs_result_tmp>).
+      <lfs_result_tmp>-MaterialDescription    = lv_matdesc.
       <lfs_result_tmp>-BillOfMaterialCategory = iv_billofmaterialcategory.
       <lfs_result_tmp>-MaterialHeader         = iv_material.
       <lfs_result_tmp>-SalesOrder             = iv_salesorder.
@@ -178,6 +184,7 @@ CLASS zcl_zbom_detail_ce IMPLEMENTATION.
 
 
   METHOD if_rap_query_provider~select.
+    DATA lv_matdesc TYPE maktx.
     DATA lt_result     TYPE tt_res.
     DATA lv_unitheader TYPE msehi.
     DATA lr_material   TYPE RANGE OF matnr.
@@ -193,11 +200,17 @@ CLASS zcl_zbom_detail_ce IMPLEMENTATION.
         FROM i_product
         WHERE Product IN @lr_material
         INTO TABLE @DATA(lt_unitheader).
+
+      SELECT Product, ProductDescription
+        FROM I_ProductDescription
+        WHERE Product  IN @lr_material
+          AND Language = @sy-langu
+        INTO TABLE @DATA(lt_matdesc).
     ENDIF.
 
     LOOP AT lt_key_field INTO DATA(ls_key_field).
       DATA(lv_tabix) = sy-tabix.
-      CLEAR lv_unitheader.
+      CLEAR: lv_unitheader, lv_matdesc.
 
       DATA(lt_result_tmp) = processing_api(
         iv_billofmaterial         = ls_key_field-billofmaterial
@@ -218,7 +231,14 @@ CLASS zcl_zbom_detail_ce IMPLEMENTATION.
         lv_unitheader = ls_unitheader-BaseUnit.
       ENDIF.
 
+      READ TABLE lt_matdesc INTO DATA(ls_matdesc)
+        WITH KEY Product = ls_key_field-material.
+      IF sy-subrc = 0.
+        lv_matdesc = ls_matdesc-ProductDescription.
+      ENDIF.
+
       LOOP AT lt_result_tmp ASSIGNING FIELD-SYMBOL(<lfs_result_tmp>).
+        <lfs_result_tmp>-MaterialDescription    = lv_matdesc.
         <lfs_result_tmp>-BillOfMaterialCategory = ls_key_field-billofmaterialcategory.
         <lfs_result_tmp>-MaterialHeader         = ls_key_field-material.
         <lfs_result_tmp>-SalesOrder             = ls_key_field-salesorder.
@@ -595,11 +615,20 @@ CLASS zcl_zbom_detail_ce IMPLEMENTATION.
 
       rt_result[ lines( rt_result ) ]-Plant = lv_issuing.
 
-      " API đã xổ component này ở plant hiện tại nếu nó là header của dòng con nào đó.
+      " API đã xổ component này nếu nó là header của dòng con ở level kế tiếp.
+      " Dòng con mang plant hiện tại, hoặc plant cung ứng khi API tự xổ theo mã
+      " mua đặc biệt (vd 6712 -> 6711); chỉ xét plant hiện tại thì component bị
+      " xổ thêm lần nữa ở plant cung ứng, ra 2 bộ con trùng nhau.
+      DATA(lv_child_level) = CONV zce_zbom_detail-bomexplosionlevel( ls_flat-BomExplosionLevel + 1 ).
       IF line_exists( lt_flat[ BomHhdrMatlHierNode = ls_flat-BillOfMaterialComponent
-                               Plant               = ls_flat-Plant ] ).
+                               BomExplosionLevel   = lv_child_level
+                               Plant               = ls_flat-Plant ] )
+         OR line_exists( lt_flat[ BomHhdrMatlHierNode = ls_flat-BillOfMaterialComponent
+                                  BomExplosionLevel   = lv_child_level
+                                  Plant               = lv_issuing ] ).
         CONTINUE.
       ENDIF.
+
 
       DATA(lt_sub) = explode_in_supplying_plant(
         iv_component       = lv_comp
@@ -919,6 +948,12 @@ CLASS zcl_zbom_detail_ce IMPLEMENTATION.
       ENDIF.
 
       APPEND ls_node TO lt_nodes.
+    ENDLOOP.
+
+    " Dòng có cấp con hiển thị bên dưới là assembly, kể cả khi cờ Assembly của
+    " BOM item không bật (vd cấp con do SAP xổ theo mã mua đặc biệt).
+    LOOP AT lt_nodes INTO ls_node WHERE parent > 0.
+      ct_result[ ls_node-parent ]-IsAssembly = abap_true.
     ENDLOOP.
 
     " Đánh số TreeView: cấp đầu là "<iv_tabix>.<n>", cấp con là "<cha>.<n>".

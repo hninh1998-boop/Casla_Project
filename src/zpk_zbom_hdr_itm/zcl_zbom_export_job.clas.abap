@@ -367,7 +367,7 @@ CLASS zcl_zbom_export_job IMPLEMENTATION.
     " Dòng đầu ép Excel dùng đúng dấu ';' làm delimiter, không phụ thuộc
     " cấu hình vùng miền của Excel người nhận mail
     APPEND |sep=;| TO lt_lines.
-    APPEND |BOM Level;Tree View;Material;Plant;BOM Category;Sales Order;Sales Order Item;| &&
+    APPEND |BOM Level;Tree View;Material;Material Description;Plant;BOM Category;Sales Order;Sales Order Item;| &&
            |Required Quantity;Component;Component Description;Component Quantity;| &&
            |Item Category;Item Number;Assembly Indicator;Material Type;Base Unit;| &&
            |Maintenance Status;Valid From;Change Number;Created On;Created By;| &&
@@ -377,6 +377,7 @@ CLASS zcl_zbom_export_job IMPLEMENTATION.
     " lặp có thể phải sao chép lại toàn bộ chuỗi mỗi lần, rất chậm khi file lớn.
     LOOP AT it_items INTO DATA(ls_item).
       APPEND |{ ls_item-BomExplosionLevel };{ ls_item-TreeView };{ ls_item-MaterialHeader };| &&
+             |{ ls_item-MaterialDescription };| &&
              |{ ls_item-Plant };{ ls_item-BillOfMaterialCategory };{ ls_item-SalesOrder };| &&
              |{ ls_item-SalesOrderItem };{ ls_item-RequiredQuantityHeader };| &&
              |{ ls_item-BillOfMaterialComponent };{ ls_item-ComponentDescription };| &&
