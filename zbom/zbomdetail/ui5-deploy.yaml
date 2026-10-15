@@ -1,0 +1,27 @@
+# yaml-language-server: $schema=https://sap.github.io/ui5-tooling/schema/ui5.yaml.json
+
+specVersion: "4.0"
+metadata:
+  name: zbomdetail.zbomdetail
+type: application
+builder:
+  resources:
+    excludes:
+      - /test/**
+      - /localService/**
+  customTasks:
+    - name: deploy-to-abap
+      afterTask: generateCachebusterInfo
+      configuration:
+        target:
+          destination: CASLA
+          url: https://my426517.s4hana.cloud.sap
+          authenticationType: reentranceTicket # SAML support for vscode
+        app:
+          name: ZBOMDETAIL
+          description: Báo cáo ZBOM - Detail
+          package: ZPK_ZBOM_DETAIL
+          transport: REPLACE_WITH_TRANSPORT
+        exclude:
+          - /test/
+          - /localService/

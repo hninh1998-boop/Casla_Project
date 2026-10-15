@@ -18,7 +18,7 @@ zbom (branch)
 | `zbom/zbom_crud_auth` | Phân quyền thêm/sửa/xóa BOM | `ZPK_ZBOM_RP` | `ZUI_ZBOM_AUTH_V2` |
 | `zbom/zbom_spplant` | ZBOM - Config Special Procurement | `ZPK_ZBOM_SP` | `ZUI_ZBOM_SPPLANT_OV2` |
 | `zbom/zupload_zbom_rp` | ZUPLOAD - Add BOM Item | `ZPK_ZUPLOAD_ZBOM_RP` | `ZUI_UPLOAD_ZBOM_RP_V4` |
-| `zbom/zbomdetail` *(chưa có source)* | Báo cáo ZBOM - Detail | `ZPK_ZBOM_DETAIL` | `ZUI_ZBOM_DETAIL_V2` |
+| `zbom/zbomdetail` | Báo cáo ZBOM - Detail | `ZPK_ZBOM_DETAIL` | `ZUI_ZBOM_DETAIL_V2` |
 
 ## Làm việc với một app
 
