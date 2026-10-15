@@ -1,0 +1,53 @@
+<core:FragmentDefinition
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core">
+
+    <Dialog
+        id="editDialog"
+        title="Edit BOM Items"
+        contentWidth="850px"
+        resizable="true"
+        draggable="true">
+
+        <content>
+            <VBox class="sapUiSmallMargin">
+
+                <MessageStrip
+                    id="infoStrip"
+                    text="0 BOM item will be edited."
+                    type="Information"
+                    showCloseButton="true"
+                    class="sapUiSmallMarginBottom"/>
+
+                <Title text="Select Mode of Processing" class="sapUiSmallMarginBottom"/>
+                <RadioButtonGroup id="modeGroup" columns="2" class="sapUiSmallMarginBottom">
+                    <RadioButton id="rbBackground" text="Run Job in Background"/>
+                    <RadioButton id="rbRunNow" text="Run Now" selected="true"/>
+                </RadioButtonGroup>
+
+                <Title text="Select Attributes to Edit" class="sapUiSmallMarginBottom"/>
+
+                <!-- Dynamic attribute rows -->
+                <VBox id="attrRowsContainer"/>
+
+                <!-- Validation error strip — ẩn mặc định, hiện khi có lỗi -->
+                <MessageStrip
+                    id="validationErrorStrip"
+                    text=""
+                    type="Error"
+                    showIcon="true"
+                    visible="false"
+                    class="sapUiSmallMarginTop"/>
+
+            </VBox>
+        </content>
+
+        <buttons>
+            <!-- <Button text="Simulate" type="Emphasized" press=".onSimulateEdit"/> -->
+            <Button text="Execute"  press=".onConfirmEdit"/>
+            <Button text="Close"    press=".onCancelEdit"/>
+        </buttons>
+
+    </Dialog>
+
+</core:FragmentDefinition>
