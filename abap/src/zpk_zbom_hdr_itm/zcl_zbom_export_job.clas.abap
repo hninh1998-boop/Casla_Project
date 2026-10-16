@@ -25,7 +25,29 @@ CLASS zcl_zbom_export_job DEFINITION PUBLIC FINAL CREATE PUBLIC.
     " background job có thể là vô hạn, khi đó 1 task treo làm cả job chờ mãi.
     CONSTANTS task_timeout TYPE i VALUE 1800.
 
+    " File CSV của từng chunk lưu vào OneDrive qua Microsoft Graph, không gửi
+    " đính kèm qua mail (file > 25 MB bị mail server chặn). Kết nối qua
+    " communication arrangement của scenario ZCS_ZBOM_GRAPH (OAuth 2.0 client
+    " credentials, app Entra "SAP S4 ZBOM Export", path prefix /v1.0).
+    CONSTANTS graph_scenario TYPE if_com_management=>ty_cscn_id VALUE 'ZCS_ZBOM_GRAPH'.
+    CONSTANTS graph_service  TYPE if_com_management=>ty_cscn_outb_srv_id VALUE 'ZOS_ZBOM_GRAPH_REST'.
+
+    " OneDrive của anh Đoàn Văn Bách (app chỉ được cấp quyền ghi vào site này)
+    " và folder "EXPLODE BOM-PUBLIC" trong đó. Mỗi lần export tạo 1 folder con.
+    CONSTANTS graph_site_id   TYPE string
+      VALUE 'ctcpcasablanca-my.sharepoint.com,640c6d67-f532-47f3-bc6f-e06c22422cca,8170d8d3-4fd4-45ca-8548-f39bf145fbfc'.
+    CONSTANTS graph_parent_id TYPE string VALUE '01FMB4WI5RYKZJK52C5ZDLMTKYATAKD4M3'.
+
+    " Giờ đặt tên folder: created_at lưu theo UTC, người dùng ở Việt Nam.
+    CONSTANTS folder_time_zone TYPE c LENGTH 6 VALUE 'UTC+7'.
+
     TYPES tt_zce_zbom_detail TYPE STANDARD TABLE OF zce_zbom_detail WITH DEFAULT KEY.
+
+    TYPES: BEGIN OF ty_drive_item,
+             id      TYPE string,
+             name    TYPE string,
+             web_url TYPE string,
+           END OF ty_drive_item.
 
     METHODS process
       IMPORTING iv_batch_id TYPE ztb_zbom_exp_bat-batch_id
@@ -37,12 +59,43 @@ CLASS zcl_zbom_export_job DEFINITION PUBLIC FINAL CREATE PUBLIC.
                 ev_fallback      TYPE i
                 ev_fallback_info TYPE string.
 
-    METHODS write_excel_file
-      IMPORTING it_items       TYPE tt_zce_zbom_detail
-                iv_uname       TYPE syuname
-                iv_chunk_no    TYPE i
-                iv_chunk_total TYPE i
-                iv_stats       TYPE string.
+    METHODS build_csv
+      IMPORTING it_items      TYPE tt_zce_zbom_detail
+      RETURNING VALUE(rv_csv) TYPE xstring.
+
+    METHODS build_folder_name
+      IMPORTING iv_uname       TYPE syuname
+                iv_created_at  TYPE timestampl
+      RETURNING VALUE(rv_name) TYPE string.
+
+    METHODS graph_request
+      IMPORTING iv_method       TYPE if_web_http_client=>method
+                iv_path         TYPE string
+                iv_json         TYPE string OPTIONAL
+                iv_binary       TYPE xstring OPTIONAL
+                iv_content_type TYPE string OPTIONAL
+      EXPORTING ev_status       TYPE i
+                ev_body         TYPE string.
+
+    METHODS create_folder
+      IMPORTING iv_name        TYPE string
+      EXPORTING es_folder      TYPE ty_drive_item
+                ev_error       TYPE string.
+
+    METHODS upload_file
+      IMPORTING iv_folder_id    TYPE string
+                iv_file_name    TYPE string
+                iv_content      TYPE xstring
+      RETURNING VALUE(rv_error) TYPE string.
+
+    METHODS create_view_link
+      IMPORTING iv_folder_id  TYPE string
+      RETURNING VALUE(rv_url) TYPE string.
+
+    METHODS send_mail
+      IMPORTING iv_uname   TYPE syuname
+                iv_subject TYPE string
+                iv_body    TYPE string.
 
     METHODS schedule_next_chunk
       IMPORTING iv_batch_id     TYPE ztb_zbom_exp_bat-batch_id
@@ -221,6 +274,38 @@ CLASS zcl_zbom_export_job IMPLEMENTATION.
       ) TO lt_headers.
     ENDLOOP.
 
+    " ===== Folder OneDrive của batch: chunk đầu tạo, các chunk sau dùng lại =====
+    " Tạo trước khi explode: không kết nối được OneDrive thì dừng ngay, khỏi
+    " explode vô ích.
+    IF ls_batch-folder_id IS INITIAL.
+      create_folder( EXPORTING iv_name   = build_folder_name( iv_uname      = ls_batch-uname
+                                                              iv_created_at = ls_batch-created_at )
+                     IMPORTING es_folder = DATA(ls_folder)
+                               ev_error  = DATA(lv_folder_error) ).
+      IF lv_folder_error IS NOT INITIAL.
+        APPEND |Không tạo được folder OneDrive: { lv_folder_error }| TO et_log.
+        send_mail( iv_uname   = ls_batch-uname
+                   iv_subject = |ZBOM Excel Export - LOI|
+                   iv_body    = |Khong tao duoc folder tren OneDrive, export bi dung.| &&
+                                |{ cl_abap_char_utilities=>cr_lf }{ lv_folder_error }| ).
+        UPDATE ztb_zbom_exp_bat SET status = 'E' WHERE batch_id = @iv_batch_id.
+        DELETE FROM ztb_zbom_exp_hdr WHERE batch_id = @iv_batch_id.
+        COMMIT WORK.
+        RETURN.
+      ENDIF.
+
+      ls_batch-folder_id   = ls_folder-id.
+      ls_batch-folder_name = ls_folder-name.
+      ls_batch-folder_url  = ls_folder-web_url.
+      UPDATE ztb_zbom_exp_bat
+        SET folder_id   = @ls_batch-folder_id,
+            folder_name = @ls_batch-folder_name,
+            folder_url  = @ls_batch-folder_url
+        WHERE batch_id = @iv_batch_id.
+      COMMIT WORK.
+      APPEND |Folder OneDrive: { ls_batch-folder_name }| TO et_log.
+    ENDIF.
+
     DATA(lv_t0) = utclong_current( ).
 
     explode_and_get_items(
@@ -234,13 +319,36 @@ CLASS zcl_zbom_export_job IMPLEMENTATION.
                      |task chay lai tuan tu: { lv_fallback }{ lv_fallback_info }|.
     APPEND lv_stats TO et_log.
 
-    IF lt_items IS NOT INITIAL.
-      write_excel_file( it_items       = lt_items
-                        iv_uname       = ls_batch-uname
-                        iv_chunk_no    = ls_batch-chunk_no
-                        iv_chunk_total = lv_chunk_total
-                        iv_stats       = lv_stats ).
+    " ===== Upload file của chunk, ghi kết quả vào upload_log cho mail cuối =====
+    DATA(lv_file_name) = |ZBOM_Explode_{ ls_batch-chunk_no WIDTH = 2 ALIGN = RIGHT PAD = '0' }.csv|.
+    DATA lv_result TYPE string.
+
+    IF lt_items IS INITIAL.
+      lv_result = |{ lv_file_name }: khong co dong nao, khong tao file|.
+    ELSE.
+      DATA(lv_csv)          = build_csv( lt_items ).
+      DATA(lv_upload_error) = upload_file( iv_folder_id = CONV #( ls_batch-folder_id )
+                                           iv_file_name = lv_file_name
+                                           iv_content   = lv_csv ).
+      DATA(lv_size_mb) = xstrlen( lv_csv ) / CONV decfloat34( 1048576 ).
+      lv_result = COND #(
+        WHEN lv_upload_error IS INITIAL
+        THEN |{ lv_file_name }: OK, { lines( lt_items ) } dong, { lv_size_mb DECIMALS = 1 } MB|
+        ELSE |{ lv_file_name }: LOI upload - { lv_upload_error }| ).
     ENDIF.
+    APPEND lv_result TO et_log.
+
+    " Log của các chunk trước + chunk này. Cột giới hạn 1333 ký tự, quá thì
+    " cắt phần cuối (mail vẫn có link folder để xem đủ file).
+    DATA(lv_upload_log) = CONV string( ls_batch-upload_log ).
+    lv_upload_log = COND #( WHEN lv_upload_log IS INITIAL THEN lv_result
+                            ELSE |{ lv_upload_log }{ cl_abap_char_utilities=>newline }{ lv_result }| ).
+    IF strlen( lv_upload_log ) > 1333.
+      lv_upload_log = substring( val = lv_upload_log len = 1333 ).
+    ENDIF.
+    ls_batch-upload_log = lv_upload_log.
+    UPDATE ztb_zbom_exp_bat SET upload_log = @ls_batch-upload_log WHERE batch_id = @iv_batch_id.
+    COMMIT WORK.
 
     " ===== Nối chunk kế tiếp =====
     IF ls_batch-chunk_no < lv_chunk_total.
@@ -254,17 +362,37 @@ CLASS zcl_zbom_export_job IMPLEMENTATION.
       DATA(lv_err) = schedule_next_chunk( iv_batch_id ).
       IF lv_err IS INITIAL.
         APPEND |Đã schedule chunk { ls_batch-chunk_no + 1 }| TO et_log.
-      ELSE.
-        APPEND |Không schedule được chunk sau: { lv_err }| TO et_log.
-        UPDATE ztb_zbom_exp_bat SET status = 'E' WHERE batch_id = @iv_batch_id.
-        COMMIT WORK.
+        RETURN.
       ENDIF.
+
+      APPEND |Không schedule được chunk sau: { lv_err }| TO et_log.
+      UPDATE ztb_zbom_exp_bat SET status = 'E' WHERE batch_id = @iv_batch_id.
+      COMMIT WORK.
+      " Vẫn báo cho user những file đã lên OneDrive.
+      lv_upload_log = |{ lv_upload_log }{ cl_abap_char_utilities=>newline }| &&
+                      |Khong chay duoc phan { ls_batch-chunk_no + 1 }/{ lv_chunk_total }: { lv_err }|.
     ELSE.
       UPDATE ztb_zbom_exp_bat SET status = 'D' WHERE batch_id = @iv_batch_id.
       DELETE FROM ztb_zbom_exp_hdr WHERE batch_id = @iv_batch_id.
       COMMIT WORK.
       APPEND 'Xong toàn bộ batch.' TO et_log.
     ENDIF.
+
+    " ===== Job cuối (hoặc bị dừng giữa chừng): mail link folder cho user =====
+    DATA(lv_link) = create_view_link( CONV #( ls_batch-folder_id ) ).
+    IF lv_link IS INITIAL.
+      lv_link = ls_batch-folder_url.
+    ENDIF.
+
+    DATA(lv_nl) = cl_abap_char_utilities=>cr_lf.
+    REPLACE ALL OCCURRENCES OF cl_abap_char_utilities=>newline IN lv_upload_log WITH lv_nl.
+    send_mail(
+      iv_uname   = ls_batch-uname
+      iv_subject = |ZBOM Excel Export - { ls_batch-folder_name }|
+      iv_body    = |ZBOM Excel export da xong { ls_batch-chunk_no }/{ lv_chunk_total } phan.{ lv_nl }{ lv_nl }| &&
+                   |Folder OneDrive: { ls_batch-folder_name }{ lv_nl }| &&
+                   |Link: { lv_link }{ lv_nl }{ lv_nl }| &&
+                   |Ket qua tung file:{ lv_nl }{ lv_upload_log }| ).
   ENDMETHOD.
 
 
@@ -361,11 +489,11 @@ CLASS zcl_zbom_export_job IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD write_excel_file.
+  METHOD build_csv.
     DATA lt_lines TYPE string_table.
 
     " Dòng đầu ép Excel dùng đúng dấu ';' làm delimiter, không phụ thuộc
-    " cấu hình vùng miền của Excel người nhận mail
+    " cấu hình vùng miền của Excel người mở file
     APPEND |sep=;| TO lt_lines.
     APPEND |BOM Level;Tree View;Material;Material Description;Plant;BOM Category;Sales Order;Sales Order Item;| &&
            |Required Quantity;Component;Component Description;Component Quantity;| &&
@@ -393,6 +521,136 @@ CLASS zcl_zbom_export_job IMPLEMENTATION.
     DATA(lv_crlf) = cl_abap_char_utilities=>cr_lf.
     DATA(lv_csv)  = concat_lines_of( table = lt_lines sep = lv_crlf ) && lv_crlf.
 
+    rv_csv = cl_abap_conv_codepage=>create_out( codepage = `UTF-8` )->convert( source = lv_csv ).
+  ENDMETHOD.
+
+
+  METHOD build_folder_name.
+    " "ZBOM - <tên user> - yyyyMMdd - HHmmss", giờ Việt Nam lúc bấm export.
+    SELECT SINGLE FROM i_businessuserbasic
+      FIELDS PersonFullName
+      WHERE UserID = @iv_uname
+      INTO @DATA(lv_full_name).
+    DATA(lv_user) = COND string( WHEN lv_full_name IS NOT INITIAL THEN lv_full_name
+                                 ELSE iv_uname ).
+
+    " Ký tự OneDrive không cho dùng trong tên folder.
+    lv_user = replace( val = lv_user pcre = `["*:<>?/\\|]` with = ` ` occ = 0 ).
+    lv_user = condense( lv_user ).
+
+    DATA lv_date TYPE d.
+    DATA lv_time TYPE t.
+    CONVERT TIME STAMP iv_created_at TIME ZONE folder_time_zone INTO DATE lv_date TIME lv_time.
+
+    rv_name = |ZBOM - { lv_user } - { lv_date } - { lv_time }|.
+  ENDMETHOD.
+
+
+  METHOD graph_request.
+    " Một lời gọi Microsoft Graph qua communication arrangement của
+    " ZCS_ZBOM_GRAPH. iv_path tính từ /v1.0 (path prefix của outbound service).
+    CLEAR: ev_status, ev_body.
+
+    TRY.
+        DATA(lo_destination) = cl_http_destination_provider=>create_by_comm_arrangement(
+          comm_scenario = graph_scenario
+          service_id    = graph_service ).
+        DATA(lo_client) = cl_web_http_client_manager=>create_by_http_destination( lo_destination ).
+        DATA(lo_request) = lo_client->get_http_request( ).
+
+        lo_request->set_uri_path( i_uri_path = iv_path ).
+        lo_request->set_header_field( i_name = 'Accept' i_value = 'application/json' ).
+        IF iv_json IS NOT INITIAL.
+          lo_request->set_content_type( 'application/json' ).
+          lo_request->set_text( iv_json ).
+        ELSEIF iv_binary IS NOT INITIAL.
+          lo_request->set_content_type( iv_content_type ).
+          lo_request->set_binary( iv_binary ).
+        ENDIF.
+
+        DATA(lo_response) = lo_client->execute( iv_method ).
+        ev_status = lo_response->get_status( )-code.
+        ev_body   = lo_response->get_text( ).
+        lo_client->close( ).
+      CATCH cx_root INTO DATA(lx_error).
+        ev_status = 0.
+        ev_body   = lx_error->get_text( ).
+    ENDTRY.
+  ENDMETHOD.
+
+
+  METHOD create_folder.
+    " Trùng tên (2 lần export trong cùng 1 giây) thì OneDrive tự thêm số.
+    CLEAR: es_folder, ev_error.
+
+    graph_request(
+      EXPORTING iv_method = if_web_http_client=>post
+                iv_path   = |/sites/{ graph_site_id }/drive/items/{ graph_parent_id }/children|
+                iv_json   = |\{"name":"{ iv_name }","folder":\{\},| &&
+                            |"@microsoft.graph.conflictBehavior":"rename"\}|
+      IMPORTING ev_status = DATA(lv_status)
+                ev_body   = DATA(lv_body) ).
+
+    IF lv_status <> 200 AND lv_status <> 201.
+      ev_error = |HTTP { lv_status }: { lv_body }|.
+      RETURN.
+    ENDIF.
+
+    /ui2/cl_json=>deserialize( EXPORTING json        = lv_body
+                                         pretty_name = /ui2/cl_json=>pretty_mode-camel_case
+                               CHANGING  data        = es_folder ).
+    IF es_folder-id IS INITIAL.
+      ev_error = |Graph không trả về id folder: { lv_body }|.
+    ENDIF.
+  ENDMETHOD.
+
+
+  METHOD upload_file.
+    " Upload 1 lần (Graph cho phép file tới 250 MB với PUT .../content).
+    graph_request(
+      EXPORTING iv_method       = if_web_http_client=>put
+                iv_path         = |/sites/{ graph_site_id }/drive/items/{ iv_folder_id }:/{ iv_file_name }:/content|
+                iv_binary       = iv_content
+                iv_content_type = 'text/csv'
+      IMPORTING ev_status       = DATA(lv_status)
+                ev_body         = DATA(lv_body) ).
+
+    IF lv_status <> 200 AND lv_status <> 201.
+      rv_error = |HTTP { lv_status }: { lv_body }|.
+    ENDIF.
+  ENDMETHOD.
+
+
+  METHOD create_view_link.
+    " Link chỉ xem, ai có link cũng mở được. Lỗi thì trả rỗng, bên gọi dùng
+    " webUrl của folder thay thế.
+    TYPES: BEGIN OF ty_link,
+             web_url TYPE string,
+           END OF ty_link,
+           BEGIN OF ty_permission,
+             link TYPE ty_link,
+           END OF ty_permission.
+    DATA ls_permission TYPE ty_permission.
+
+    graph_request(
+      EXPORTING iv_method = if_web_http_client=>post
+                iv_path   = |/sites/{ graph_site_id }/drive/items/{ iv_folder_id }/createLink|
+                iv_json   = |\{"type":"view","scope":"anonymous"\}|
+      IMPORTING ev_status = DATA(lv_status)
+                ev_body   = DATA(lv_body) ).
+
+    IF lv_status <> 200 AND lv_status <> 201.
+      RETURN.
+    ENDIF.
+
+    /ui2/cl_json=>deserialize( EXPORTING json        = lv_body
+                                         pretty_name = /ui2/cl_json=>pretty_mode-camel_case
+                               CHANGING  data        = ls_permission ).
+    rv_url = ls_permission-link-web_url.
+  ENDMETHOD.
+
+
+  METHOD send_mail.
     " Dùng uname lưu trong batch, KHÔNG dùng sy-uname: job chunk sau do job
     " trước schedule nên sy-uname có thể không còn là người bấm nút.
     SELECT SINGLE FROM i_businessuserbasic
@@ -401,40 +659,25 @@ CLASS zcl_zbom_export_job IMPLEMENTATION.
       INTO @DATA(lv_email).
 
     IF lv_email IS INITIAL.
-      " TODO: không lấy được mail người dùng (chưa khai báo email) - log lỗi
       RETURN.
     ENDIF.
-
-    DATA(lv_part) = |{ iv_chunk_no WIDTH = 2 ALIGN = RIGHT PAD = '0' }|.
 
     TRY.
         DATA(lo_mail) = cl_bcs_mail_message=>create_instance( ).
 
         lo_mail->set_sender( CONV #( lv_email ) ).
         lo_mail->add_recipient( iv_address = CONV #( lv_email )
-                                 iv_copy    = cl_bcs_mail_message=>to ).
-        lo_mail->set_subject( |ZBOM Excel Export ({ iv_chunk_no }/{ iv_chunk_total })| ).
-
+                                iv_copy    = cl_bcs_mail_message=>to ).
+        lo_mail->set_subject( CONV #( iv_subject ) ).
         lo_mail->set_main( cl_bcs_mail_textpart=>create_instance(
-          iv_content      = |ZBOM Excel export phan { iv_chunk_no }/{ iv_chunk_total }, | &&
-                            |xem file dinh kem.{ lv_crlf }{ iv_stats }|
+          iv_content      = iv_body
           iv_content_type = 'text/plain' ) ).
 
-        lo_mail->add_attachment( cl_bcs_mail_textpart=>create_instance(
-          iv_content      = lv_csv
-          iv_content_type = 'text/csv'
-          iv_filename     = |ZBOM_Explode_{ lv_part }.csv| ) ).
-
-        lo_mail->send(
-          IMPORTING
-            et_status      = DATA(lt_status)
-            ev_mail_status = DATA(lv_mail_status) ).
-
+        lo_mail->send( ).
         COMMIT WORK.
-      CATCH cx_root INTO DATA(lx_error).
-        " TODO: log lỗi gửi mail (lx_error->get_text( ))
+      CATCH cx_root.
+        " File đã nằm trên OneDrive; mail lỗi thì user vẫn vào folder được.
     ENDTRY.
   ENDMETHOD.
 
 ENDCLASS.
-
