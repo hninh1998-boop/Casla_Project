@@ -286,8 +286,8 @@ CLASS zcl_zbom_export_job IMPLEMENTATION.
         APPEND |Không tạo được folder OneDrive: { lv_folder_error }| TO et_log.
         send_mail( iv_uname   = ls_batch-uname
                    iv_subject = |ZBOM Excel Export - LOI|
-                   iv_body    = |Khong tao duoc folder tren OneDrive, export bi dung.| &&
-                                |{ cl_abap_char_utilities=>cr_lf }{ lv_folder_error }| ).
+                   iv_body    = |<p>Khong tao duoc folder tren OneDrive, export bi dung.</p>| &&
+                                |<p>{ escape( val = lv_folder_error format = cl_abap_format=>e_html_text ) }</p>| ).
         UPDATE ztb_zbom_exp_bat SET status = 'E' WHERE batch_id = @iv_batch_id.
         DELETE FROM ztb_zbom_exp_hdr WHERE batch_id = @iv_batch_id.
         COMMIT WORK.
@@ -384,15 +384,16 @@ CLASS zcl_zbom_export_job IMPLEMENTATION.
       lv_link = ls_batch-folder_url.
     ENDIF.
 
-    DATA(lv_nl) = cl_abap_char_utilities=>cr_lf.
-    REPLACE ALL OCCURRENCES OF cl_abap_char_utilities=>newline IN lv_upload_log WITH lv_nl.
+    " Mail HTML: tên folder là link (link Graph rất dài), mỗi file một dòng.
+    DATA(lv_log_html) = escape( val = lv_upload_log format = cl_abap_format=>e_html_text ).
+    REPLACE ALL OCCURRENCES OF cl_abap_char_utilities=>newline IN lv_log_html WITH `<br>`.
     send_mail(
       iv_uname   = ls_batch-uname
       iv_subject = |ZBOM Excel Export - { ls_batch-folder_name }|
-      iv_body    = |ZBOM Excel export da xong { ls_batch-chunk_no }/{ lv_chunk_total } phan.{ lv_nl }{ lv_nl }| &&
-                   |Folder OneDrive: { ls_batch-folder_name }{ lv_nl }| &&
-                   |Link: { lv_link }{ lv_nl }{ lv_nl }| &&
-                   |Ket qua tung file:{ lv_nl }{ lv_upload_log }| ).
+      iv_body    = |<p>ZBOM Excel export da xong { ls_batch-chunk_no }/{ lv_chunk_total } phan.</p>| &&
+                   |<p>Folder OneDrive: <a href="{ escape( val = lv_link format = cl_abap_format=>e_html_attr ) }">| &&
+                   |{ escape( val = ls_batch-folder_name format = cl_abap_format=>e_html_text ) }</a></p>| &&
+                   |<p>Ket qua tung file:<br>{ lv_log_html }</p>| ).
   ENDMETHOD.
 
 
@@ -671,7 +672,7 @@ CLASS zcl_zbom_export_job IMPLEMENTATION.
         lo_mail->set_subject( CONV #( iv_subject ) ).
         lo_mail->set_main( cl_bcs_mail_textpart=>create_instance(
           iv_content      = iv_body
-          iv_content_type = 'text/plain' ) ).
+          iv_content_type = 'text/html' ) ).
 
         lo_mail->send( ).
         COMMIT WORK.
