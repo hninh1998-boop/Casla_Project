@@ -128,7 +128,7 @@ sap.ui.define([
 		 * Only the CURRENT FILTER is sent, not the header list: one call to the
 		 * static action scheduleExcelExport, which stores the filter and lets the
 		 * Application Job (zcl_zbom_export_buffer / zcl_zbom_export_job) do the
-		 * header selection, explosion and mail on the server.
+		 * header selection, explosion, OneDrive upload and mail on the server.
 		 *
 		 * That keeps the button instant and makes the authorization check
 		 * (get_global_authorizations, object ZBOM_EXP) the very first thing that
@@ -147,8 +147,8 @@ sap.ui.define([
 			var sNo = "Không";
 
 			MessageBox.confirm(
-				"Chương trình sẽ tiến hành xuất dữ liệu ra file excel và gửi về mail " +
-				"của bạn sau khi chạy xong, bạn có đồng ý xuất dữ liệu không?",
+				"Chương trình sẽ tiến hành xuất dữ liệu ra file excel lên OneDrive và gửi link " +
+				"về mail của bạn sau khi chạy xong, bạn có đồng ý xuất dữ liệu không?",
 				{
 					actions: [sYes, sNo],
 					emphasizedAction: sYes,
