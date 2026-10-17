@@ -23,6 +23,7 @@ CLASS lhc_zce_ci DEFINITION INHERITING FROM cl_abap_behavior_handler.
     METHODS export_excel
       IMPORTING it_keys_pdf TYPE zcl_ce_ci_top=>tt_key_pdf
                 iv_form     TYPE string
+                is_param    TYPE zabs_ci_param
       EXPORTING ev_content  TYPE string
                 ev_filename TYPE string.
 
@@ -73,6 +74,13 @@ CLASS lhc_zce_ci IMPLEMENTATION.
       IMPORTING
         et_result  = DATA(lt_data)
     ).
+
+    "10.HTS CODE / 12.: giá trị user tích chọn ở popup trước khi in (parameter của action)
+    DATA(ls_param) = keys[ 1 ]-%param.
+    LOOP AT lt_data ASSIGNING FIELD-SYMBOL(<lfs_data>).
+      <lfs_data>-HTSCode     = ls_param-HTSCode.
+      <lfs_data>-QuartzSlabs = ls_param-QuartzSlabs.
+    ENDLOOP.
 
     """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
     "2. Gen adobe
@@ -178,10 +186,20 @@ CLASS lhc_zce_ci IMPLEMENTATION.
                 && |</Cell6>|
             && |</Row2>|.
       ENDLOOP.
-      "In words - phải lấy trước khi format lv_total_amount
+      "DISCOUNT / CLAIM-CREDIT của invoice → TOTAL = SUB TOTAL + DISCOUNT + CLAIM/CREDIT
+      zcl_ce_ci_f01=>get_adjustments( EXPORTING iv_proformainvoice = ls_data_grp-ProFormaInvoice
+                                      IMPORTING ev_discount        = DATA(lv_discount)
+                                                ev_claim           = DATA(lv_claim) ).
+      DATA(lv_grand_total) = CONV zce_ci-Amount( lv_total_amount + lv_discount + lv_claim ).
+
+      "In words theo TOTAL - phải lấy trước khi format
       DATA(lv_inwords) = zcl_ce_ci_f01=>amount_to_words(
-        iv_amount   = lv_total_amount
+        iv_amount   = lv_grand_total
         iv_currency = ls_member_table2-TransactionCurrency ).
+      DATA(lv_currency)         = ls_member_table2-TransactionCurrency.
+      DATA(lv_discount_string)  = zcl_utility_ninhnh=>format_number_trim( iv_value = lv_discount ).
+      DATA(lv_claim_string)     = zcl_utility_ninhnh=>format_number_trim( iv_value = lv_claim ).
+      DATA(lv_grand_string)     = zcl_utility_ninhnh=>format_number_trim( iv_value = lv_grand_total ).
       lv_total_quantity = zcl_utility_ninhnh=>format_number_trim( iv_value = lv_total_quantity ).
       lv_total_amount   = zcl_utility_ninhnh=>format_number_trim( iv_value = lv_total_amount ).
 
@@ -273,9 +291,30 @@ CLASS lhc_zce_ci IMPLEMENTATION.
                                     && |{ lv_total_quantity }|
                                 && |</Cell3>|
                                 && |<Cell5>|
-                                    && |{ ls_member_table2-TransactionCurrency } { lv_total_amount }|
+                                    && |{ lv_currency } { lv_total_amount }|
                                 && |</Cell5>|
                             && |</Row3>|
+                            "DISCOUNT (as for free sample)
+                            && |<Row4>|
+                                && |<Cell5>|
+                                    && |{ lv_currency } { lv_discount_string }|
+                                && |</Cell5>|
+                            && |</Row4>|
+                            "CLAIM/CREDIT
+                            && |<Row5>|
+                                && |<Cell5>|
+                                    && |{ lv_currency } { lv_claim_string }|
+                                && |</Cell5>|
+                            && |</Row5>|
+                            "TOTAL
+                            && |<Row6>|
+                                && |<Cell3>|
+                                    && |{ lv_total_quantity }|
+                                && |</Cell3>|
+                                && |<Cell5>|
+                                    && |{ lv_currency } { lv_grand_string }|
+                                && |</Cell5>|
+                            && |</Row6>|
                         && |</Table2>|
                     && |</Sub4.1>|
                 && |</Row3>|
@@ -390,14 +429,36 @@ CLASS lhc_zce_ci IMPLEMENTATION.
         et_result  = DATA(lt_data)
     ).
 
+    "10.HTS CODE / 12.: giá trị user tích chọn ở popup trước khi in (parameter của action)
+    DATA(ls_param) = keys[ 1 ]-%param.
+    LOOP AT lt_data ASSIGNING FIELD-SYMBOL(<lfs_data>).
+      <lfs_data>-HTSCode     = ls_param-HTSCode.
+      <lfs_data>-QuartzSlabs = ls_param-QuartzSlabs.
+    ENDLOOP.
+
+    "Dòng cho bảng Packing List: chỉ lấy item (dòng tách batch / TAN không tách batch), bỏ header
+    "Phần đầu form (To, LOT#...) vẫn lấy theo lt_data (dòng TAN) như cũ
+    zcl_ce_ci_f01=>main(
+      EXPORTING
+        it_filters  = lt_filters
+        it_keys_pdf = lt_keys_pdf
+        iv_pl_items = abap_true
+      IMPORTING
+        et_result   = DATA(lt_items)
+    ).
+
     """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
     "2. Gen adobe
+    "SQM theo I_ProductUnitsOfMeasure
+    DATA(lt_sqm) = zcl_ce_ci_f01=>get_sqm( lt_items ).
+
     "2.1. Implement data (group data theo header là proformainvoice)
     DATA: lt_data_xml      TYPE STANDARD TABLE OF xstring,
           lv_lot           TYPE string,
           lv_table2        TYPE string,
           lv_table3        TYPE string,
           lv_total_pcs     TYPE fkimg,
+          lv_total_sqm     TYPE zcl_ce_ci_f01=>ty_sqm-sqm,
           lv_total_package TYPE string,
           lv_tabix         TYPE i.
 
@@ -462,13 +523,21 @@ CLASS lhc_zce_ci IMPLEMENTATION.
       CLEAR: lv_table2,
              lv_total_pcs,
              lv_total_package,
-             lv_tabix.
-      LOOP AT GROUP ls_data_grp INTO DATA(ls_member_table2).
+             lv_tabix,
+             lv_total_sqm.
+      LOOP AT lt_items INTO DATA(ls_member_table2) WHERE ProFormaInvoice = ls_data_grp-ProFormaInvoice.
         lv_tabix          += 1.
         DATA(lv_aztid)    = zcl_utility_ninhnh=>escape_xml( iv_text = ls_member_table2-aztid ).
         DATA(lv_pcs)      = zcl_utility_ninhnh=>format_number_trim( iv_value = ls_member_table2-Quantity ).
         DATA(lv_lot_item) = zcl_utility_ninhnh=>escape_xml( iv_text = ls_member_table2-lot ).
         lv_total_pcs      = lv_total_pcs + ls_member_table2-Quantity.
+
+        "SQM (m2), làm tròn 2 số lẻ
+        READ TABLE lt_sqm INTO DATA(ls_sqm) WITH TABLE KEY proformainvoice = ls_member_table2-ProFormaInvoice
+                                                           item            = ls_member_table2-Item.
+        DATA(lv_sqm) = COND string( WHEN sy-subrc = 0 AND ls_sqm-sqm IS NOT INITIAL
+                                    THEN |{ ls_sqm-sqm DECIMALS = 2 }| ).
+        lv_total_sqm = lv_total_sqm + COND #( WHEN sy-subrc = 0 THEN ls_sqm-sqm ).
 
         lv_table2 = |{ lv_table2 }|
             && |<Row2>|
@@ -488,7 +557,7 @@ CLASS lhc_zce_ci IMPLEMENTATION.
                     && |{ ls_member_table2-SizeH }|
                 && |</Cell5>|
                 && |<Cell6>|
-*                    && |SQM - chưa có logic|
+                    && |{ lv_sqm }|
                 && |</Cell6>|
                 && |<Cell7>|
                     && |{ lv_pcs }|
@@ -505,6 +574,8 @@ CLASS lhc_zce_ci IMPLEMENTATION.
             && |</Row2>|.
       ENDLOOP.
       DATA(lv_total_pcs_string) = zcl_utility_ninhnh=>format_number_trim( iv_value = lv_total_pcs ).
+      DATA(lv_total_sqm_string) = COND string( WHEN lv_total_sqm IS NOT INITIAL
+                                               THEN |{ lv_total_sqm DECIMALS = 2 }| ).
       lv_total_package = |TOTAL: { lv_tabix } { COND string( WHEN lv_tabix = 1 THEN 'PACKAGE' ELSE 'PACKAGES' ) }|.
 
       CLEAR: lv_table3.
@@ -589,6 +660,9 @@ CLASS lhc_zce_ci IMPLEMENTATION.
                                 && |<Cell1>|
                                     && |{ lv_total_package }|
                                 && |</Cell1>|
+                                && |<Cell5>|
+                                    && |{ lv_total_sqm_string }|
+                                && |</Cell5>|
                                 && |<Cell6>|
                                     && |{ lv_total_pcs_string }|
                                 && |</Cell6>|
@@ -683,6 +757,7 @@ CLASS lhc_zce_ci IMPLEMENTATION.
 
     export_excel( EXPORTING it_keys_pdf = lt_keys_pdf
                             iv_form     = `CI`
+                            is_param    = CORRESPONDING #( keys[ 1 ]-%param )
                   IMPORTING ev_content  = DATA(lv_content)
                             ev_filename = DATA(lv_filename) ).
 
@@ -713,6 +788,7 @@ CLASS lhc_zce_ci IMPLEMENTATION.
 
     export_excel( EXPORTING it_keys_pdf = lt_keys_pdf
                             iv_form     = `PL`
+                            is_param    = CORRESPONDING #( keys[ 1 ]-%param )
                   IMPORTING ev_content  = DATA(lv_content)
                             ev_filename = DATA(lv_filename) ).
 
@@ -750,10 +826,30 @@ CLASS lhc_zce_ci IMPLEMENTATION.
       RETURN.
     ENDIF.
 
+    "10.HTS CODE / 12.: giá trị user tích chọn ở popup trước khi in
+    LOOP AT lt_data ASSIGNING FIELD-SYMBOL(<lfs_data>).
+      <lfs_data>-HTSCode     = is_param-HTSCode.
+      <lfs_data>-QuartzSlabs = is_param-QuartzSlabs.
+    ENDLOOP.
+
+    "Packing List: bảng chỉ lấy item (bỏ header TAN đã tách batch)
+    DATA lt_items TYPE zcl_ce_ci_top=>tt_result.
+    IF iv_form = `PL`.
+      zcl_ce_ci_f01=>main(
+        EXPORTING
+          it_filters  = lt_filters
+          it_keys_pdf = it_keys_pdf
+          iv_pl_items = abap_true
+        IMPORTING
+          et_result   = lt_items
+      ).
+    ENDIF.
+
     """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
     "2. Gen file xlsx - mỗi Pro-forma Invoice 1 sheet
     DATA(lv_xlsx) = COND xstring( WHEN iv_form = `PL`
-                                  THEN zcl_ce_ci_xlsx=>build_pl( lt_data )
+                                  THEN zcl_ce_ci_xlsx=>build_pl( it_data  = lt_data
+                                                                 it_items = lt_items )
                                   ELSE zcl_ce_ci_xlsx=>build_ci( lt_data ) ).
     IF lv_xlsx IS INITIAL.
       RETURN.

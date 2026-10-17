@@ -12,8 +12,10 @@ CLASS zcl_ce_ci_xlsx DEFINITION
       IMPORTING it_data        TYPE zcl_ce_ci_top=>tt_result
       RETURNING VALUE(rv_xlsx) TYPE xstring.
 
+    " it_data: dòng TAN (phần đầu form), it_items: dòng của bảng Packing List
     CLASS-METHODS build_pl
       IMPORTING it_data        TYPE zcl_ce_ci_top=>tt_result
+                it_items       TYPE zcl_ce_ci_top=>tt_result
       RETURNING VALUE(rv_xlsx) TYPE xstring.
 
   PROTECTED SECTION.
@@ -60,6 +62,8 @@ CLASS zcl_ce_ci_xlsx DEFINITION
                  box_b       TYPE i VALUE 21,
                  box_br      TYPE i VALUE 22,
                  sign        TYPE i VALUE 23, " CASABLANCA VIET NAM JSC
+                 tbl_sqm     TYPE i VALUE 24, " SQM 0.00
+                 tot_sqm     TYPE i VALUE 25,
                END OF gc_style.
 
     CONSTANTS gc_excel_epoch TYPE d VALUE '18991230'.
@@ -71,6 +75,7 @@ CLASS zcl_ce_ci_xlsx DEFINITION
 
     CLASS-METHODS pl_sheet_xml
       IMPORTING it_items      TYPE zcl_ce_ci_top=>tt_result
+                it_rows       TYPE zcl_ce_ci_top=>tt_result
       RETURNING VALUE(rv_xml) TYPE string.
 
     " Row 1 - 12: tên công ty, tiêu đề, To / Add / Tel, Invoice / Date / PO / LOT
@@ -194,17 +199,22 @@ CLASS zcl_ce_ci_xlsx IMPLEMENTATION.
   METHOD build_pl.
 
     DATA lt_sheets TYPE tt_sheet.
-    DATA lt_items  TYPE zcl_ce_ci_top=>tt_result.
+    DATA lt_head   TYPE zcl_ce_ci_top=>tt_result.
+    DATA lt_rows   TYPE zcl_ce_ci_top=>tt_result.
 
     LOOP AT it_data INTO DATA(ls_data) GROUP BY ( proformainvoice = ls_data-ProFormaInvoice )
         INTO DATA(ls_group).
-      CLEAR lt_items.
+      CLEAR: lt_head, lt_rows.
       LOOP AT GROUP ls_group INTO DATA(ls_member).
-        APPEND ls_member TO lt_items.
+        APPEND ls_member TO lt_head.
+      ENDLOOP.
+      LOOP AT it_items INTO DATA(ls_row) WHERE ProFormaInvoice = ls_group-proformainvoice.
+        APPEND ls_row TO lt_rows.
       ENDLOOP.
 
       APPEND VALUE #( name = |PL { ls_group-proformainvoice ALPHA = OUT }|
-                      xml  = pl_sheet_xml( lt_items ) ) TO lt_sheets.
+                      xml  = pl_sheet_xml( it_items = lt_head
+                                           it_rows  = lt_rows ) ) TO lt_sheets.
     ENDLOOP.
 
     IF lt_sheets IS INITIAL.
@@ -281,17 +291,39 @@ CLASS zcl_ce_ci_xlsx IMPLEMENTATION.
       lv_total_amount += ls_item-Amount.
     ENDLOOP.
 
-    " ── Dòng TOTAL ──────────────────────────────────────────
-    lv_row += 1.
-    lv_rows = lv_rows
-      && row( iv_row = lv_row iv_height = `25.5` iv_cells =
-              text_cell(   iv_col = `A` iv_row = lv_row iv_style = gc_style-tot_text iv_value = `TOTAL` )
-           && empty_cells( iv_cols = `BCD` iv_row = lv_row iv_style = gc_style-tot_text )
-           && number_cell( iv_col = `E` iv_row = lv_row iv_style = gc_style-tot_text iv_value = lv_total_qty )
-           && text_cell(   iv_col = `F` iv_row = lv_row iv_style = gc_style-tot_text )
-           && number_cell( iv_col = `G` iv_row = lv_row iv_style = gc_style-tot_amount
-                           iv_value = CONV #( lv_total_amount ) ) ).
-    APPEND |A{ lv_row }:C{ lv_row }| TO lt_merge.
+    " ── SUB TOTAL / DISCOUNT / CLAIM-CREDIT / TOTAL ─────────
+    " TOTAL = SUB TOTAL + DISCOUNT + CLAIM/CREDIT
+    zcl_ce_ci_f01=>get_adjustments( EXPORTING iv_proformainvoice = ls_head-ProFormaInvoice
+                                    IMPORTING ev_discount        = DATA(lv_discount)
+                                              ev_claim           = DATA(lv_claim) ).
+    DATA(lv_grand_total) = CONV zce_ci-Amount( lv_total_amount + lv_discount + lv_claim ).
+
+    TYPES: BEGIN OF ty_total,
+             label  TYPE string,
+             qty    TYPE abap_bool,
+             amount TYPE zce_ci-Amount,
+           END OF ty_total.
+    DATA lt_total TYPE STANDARD TABLE OF ty_total WITH EMPTY KEY.
+    lt_total = VALUE #( ( label = `SUB TOTAL`                     qty = abap_true amount = lv_total_amount )
+                        ( label = `DISCOUNT (as for free sample)`                 amount = lv_discount )
+                        ( label = `CLAIM/CREDIT`                                  amount = lv_claim )
+                        ( label = `TOTAL`                         qty = abap_true amount = lv_grand_total ) ).
+
+    LOOP AT lt_total INTO DATA(ls_total).
+      lv_row += 1.
+      lv_rows = lv_rows
+        && row( iv_row = lv_row iv_height = `25.5` iv_cells =
+                text_cell(   iv_col = `A` iv_row = lv_row iv_style = gc_style-tot_text iv_value = ls_total-label )
+             && empty_cells( iv_cols = `BCD` iv_row = lv_row iv_style = gc_style-tot_text )
+             && COND string( WHEN ls_total-qty = abap_true
+                             THEN number_cell( iv_col = `E` iv_row = lv_row iv_style = gc_style-tot_text
+                                               iv_value = lv_total_qty )
+                             ELSE text_cell( iv_col = `E` iv_row = lv_row iv_style = gc_style-tot_text ) )
+             && text_cell(   iv_col = `F` iv_row = lv_row iv_style = gc_style-tot_text )
+             && number_cell( iv_col = `G` iv_row = lv_row iv_style = gc_style-tot_amount
+                             iv_value = CONV #( ls_total-amount ) ) ).
+      APPEND |A{ lv_row }:C{ lv_row }| TO lt_merge.
+    ENDLOOP.
 
     " ── In words ────────────────────────────────────────────
     lv_row += 1.
@@ -300,7 +332,7 @@ CLASS zcl_ce_ci_xlsx IMPLEMENTATION.
               text_cell( iv_col = `A` iv_row = lv_row iv_style = gc_style-text iv_value = `In words:` )
            && text_cell( iv_col = `B` iv_row = lv_row iv_style = gc_style-text_wrap
                          iv_value = zcl_ce_ci_f01=>amount_to_words(
-                                      iv_amount   = lv_total_amount
+                                      iv_amount   = lv_grand_total
                                       iv_currency = ls_head-TransactionCurrency ) ) ).
     APPEND |B{ lv_row }:G{ lv_row }| TO lt_merge.
 
@@ -315,8 +347,8 @@ CLASS zcl_ce_ci_xlsx IMPLEMENTATION.
       ( `Beneficiary Name: Casablanca Vietnam Joint Stock Company` )
       ( `Address: Lot CN-03 Chau Son Industrial Zone, Chau Son Ward, Ninh Binh Province, Vietnam` )
       ( `Advising Bank: Joint Stock Commercial Bank for Investment and development of Vietnam, Hoang Mai Hanoi branch` )
-      ( `Bank's Address: 1st and 2nd Floor, CT4 Ecogreen City Building,` )
-      ( `South West Kim Giang I, Urban Area, Tan Trieu - Commune, Thanh Tri District, Hanoi City, Vietnam` )
+      ( `Bank's Address: 1st and 2nd Floor, CT4 Ecogreen City Building, `
+     && `South West Kim Giang I Urban Area, Thanh Liet Ward, Hanoi City, Vietnam` )
       ( `SWIFT Code: BIDVVNVX` )
       ( `Account number: 1290000056` ) ).
 
@@ -373,6 +405,7 @@ CLASS zcl_ce_ci_xlsx IMPLEMENTATION.
 
     DATA: lt_merge     TYPE tt_string,
           lv_total_pcs TYPE ty_num,
+          lv_total_sqm TYPE ty_num,
           lv_package   TYPE i.
 
     DATA(ls_head) = it_items[ 1 ].
@@ -418,11 +451,18 @@ CLASS zcl_ce_ci_xlsx IMPLEMENTATION.
     APPEND `K13:K14` TO lt_merge.
 
     " ── Các dòng item ───────────────────────────────────────
-    " SQM / N.W / G.W: chưa có logic → để trống
+    " N.W / G.W: chưa có logic → để trống
+    DATA(lt_sqm) = zcl_ce_ci_f01=>get_sqm( it_rows ).
     DATA(lv_row) = gc_item_row - 1.
-    LOOP AT it_items INTO DATA(ls_item).
+    LOOP AT it_rows INTO DATA(ls_item).
       lv_row     += 1.
       lv_package += 1.
+
+      READ TABLE lt_sqm INTO DATA(ls_sqm) WITH TABLE KEY proformainvoice = ls_item-ProFormaInvoice
+                                                         item            = ls_item-Item.
+      IF sy-subrc <> 0.
+        CLEAR ls_sqm.
+      ENDIF.
 
       lv_rows = lv_rows
         && row( iv_row = lv_row iv_height = `31.5` iv_cells =
@@ -433,7 +473,7 @@ CLASS zcl_ce_ci_xlsx IMPLEMENTATION.
              && auto_cell(   iv_col = `D` iv_row = lv_row iv_style = gc_style-tbl_cell iv_value = ls_item-SizeL )
              && auto_cell(   iv_col = `E` iv_row = lv_row iv_style = gc_style-tbl_cell iv_value = ls_item-SizeW )
              && auto_cell(   iv_col = `F` iv_row = lv_row iv_style = gc_style-tbl_cell iv_value = ls_item-SizeH )
-             && text_cell(   iv_col = `G` iv_row = lv_row iv_style = gc_style-tbl_cell )
+             && number_cell( iv_col = `G` iv_row = lv_row iv_style = gc_style-tbl_sqm iv_value = ls_sqm-sqm )
              && number_cell( iv_col = `H` iv_row = lv_row iv_style = gc_style-tbl_cell
                              iv_value = CONV #( ls_item-Quantity ) )
              && empty_cells( iv_cols = `IJ` iv_row = lv_row iv_style = gc_style-tbl_cell )
@@ -442,6 +482,7 @@ CLASS zcl_ce_ci_xlsx IMPLEMENTATION.
       APPEND |B{ lv_row }:C{ lv_row }| TO lt_merge.
 
       lv_total_pcs += ls_item-Quantity.
+      lv_total_sqm += ls_sqm-sqm.
     ENDLOOP.
 
     " ── Dòng TOTAL ──────────────────────────────────────────
@@ -452,7 +493,8 @@ CLASS zcl_ce_ci_xlsx IMPLEMENTATION.
            && text_cell(   iv_col = `B` iv_row = lv_row iv_style = gc_style-tot_text
                            iv_value = |TOTAL: { lv_package } |
                                    && COND string( WHEN lv_package = 1 THEN `PACKAGE` ELSE `PACKAGES` ) )
-           && empty_cells( iv_cols = `CDEFG` iv_row = lv_row iv_style = gc_style-tot_text )
+           && empty_cells( iv_cols = `CDEF` iv_row = lv_row iv_style = gc_style-tot_text )
+           && number_cell( iv_col = `G` iv_row = lv_row iv_style = gc_style-tot_sqm iv_value = lv_total_sqm )
            && number_cell( iv_col = `H` iv_row = lv_row iv_style = gc_style-tot_text iv_value = lv_total_pcs )
            && empty_cells( iv_cols = `IJK` iv_row = lv_row iv_style = gc_style-tot_text ) ).
     APPEND |B{ lv_row }:C{ lv_row }| TO lt_merge.
@@ -794,7 +836,7 @@ CLASS zcl_ce_ci_xlsx IMPLEMENTATION.
           && `<cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs>`
 
           " numFmtId: 15 = d-mmm-yy   164 = xem numFmts ở trên
-          && `<cellXfs count="24">`
+          && `<cellXfs count="26">`
           " 0: mặc định
           && `<xf numFmtId="0" fontId="0" fillId="0" borderId="0" xfId="0"/>`
           " 1: co_title
@@ -843,6 +885,10 @@ CLASS zcl_ce_ci_xlsx IMPLEMENTATION.
           && |<xf numFmtId="0" fontId="0" borderId="9" { lv_plain } applyBorder="1">{ lv_left }/></xf>|
           " 23: sign
           && |<xf numFmtId="0" fontId="1" borderId="0" { lv_plain }>{ lv_center }/></xf>|
+          " 24: tbl_sqm (numFmtId 2 = 0.00)
+          && |<xf numFmtId="2" fontId="0" { lv_grid } applyNumberFormat="1">{ lv_center }/></xf>|
+          " 25: tot_sqm
+          && |<xf numFmtId="2" fontId="1" { lv_grid } applyNumberFormat="1">{ lv_center }/></xf>|
           && `</cellXfs>`
 
           && `<cellStyles count="1"><cellStyle name="Normal" xfId="0" builtinId="0"/></cellStyles>`

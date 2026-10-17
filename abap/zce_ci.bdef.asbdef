@@ -12,10 +12,11 @@ authorization master ( instance )
   //  delete;
   field ( readonly ) ProFormaInvoice, Item;
 
-  action btnPrintPDF result [1] zabs_ci_result;
-  action PDFPackingList result [1] zabs_ci_result;
+  action btnPrintPDF parameter zabs_ci_param result [1] zabs_ci_result;
+  action PDFPackingList parameter zabs_ci_param result [1] zabs_ci_result;
 
   // Export Excel: file sinh hoàn toàn ở backend (zcl_ce_ci_xlsx), FE chỉ nhận file
-  action ExportExcelCI result [1] zabs_ci_result;
-  action ExportExcelPL result [1] zabs_ci_result;
+  // zabs_ci_param: 10.HTS CODE / 12. user tích chọn ở popup trước khi in
+  action ExportExcelCI parameter zabs_ci_param result [1] zabs_ci_result;
+  action ExportExcelPL parameter zabs_ci_param result [1] zabs_ci_result;
 }

@@ -13,13 +13,26 @@ sap.ui.define([
     'sap/m/Text',
     'sap/ui/core/Item',
     'sap/ui/core/HTML',
-    'sap/ui/core/util/File'
+    'sap/ui/core/util/File',
+    'sap/m/MultiComboBox',
+    'sap/m/Label'
 ], function (
     ControllerExtension, MessageToast, MessageBox, BusyDialog,
     PDFViewer, Dialog, Toolbar, ToolbarSpacer, Select, VBox,
-    Button, Text, Item, HTML, File
+    Button, Text, Item, HTML, File, MultiComboBox, Label
 ) {
     'use strict';
+
+    // Dropdown của mục 10.HTS CODE và 12. trên form (FS v4) - tích được nhiều giá trị
+    var HTS_CODES = ["6810990020", "6810990040", "70200060"];
+    var QUARTZ_SLABS = [
+        "QUARTZ SLABS",
+        "QUARTZ SLABS SAMPLES/QUARTZ SLABS AND QUARTZ SLABS SAMPLES",
+        "CUT-TO-SIZE QUARTZ SLABS OF THE TYPE USED FOR COUNTERTOPS",
+        "GLASS SLABS",
+        "GLASS SAMPLES",
+        "GLASS SLABS & GLASS SAMPLES"
+    ];
 
     return ControllerExtension.extend('zciov4.ext.controller.PDF', {
 
@@ -74,6 +87,71 @@ sap.ui.define([
         /* ================================================================
          *  LẤY SELECTED CONTEXTS - Fiori Elements V4
          * ================================================================ */
+        /* ================================================================
+         *  POPUP "THÔNG TIN IN" - tích chọn 10.HTS CODE / 12. trước khi in
+         *  Dùng chung cho Export PDF và Export Excel; giá trị gửi xuống backend qua parameter zabs_ci_param
+         * ================================================================ */
+        _askPrintParams: function (fnContinue) {
+            var that = this;
+
+            if (!this._paramDialog) {
+                // Dropdown chọn nhiều: mỗi option có checkbox bên trong danh sách xổ xuống
+                // showSelectAll: dòng "Select All" đầu danh sách để tích / bỏ tích tất cả
+                var fnBox = function (aValues) {
+                    return new MultiComboBox({
+                        width: "100%",
+                        showSelectAll: true,
+                        items: aValues.map(function (sValue) {
+                            return new Item({ key: sValue, text: sValue });
+                        })
+                    });
+                };
+                this._htsBox = fnBox(HTS_CODES);
+                this._slabsBox = fnBox(QUARTZ_SLABS);
+
+                this._paramDialog = new Dialog({
+                    title: "Thông tin in",
+                    contentWidth: "36rem",
+                    content: [
+                        new VBox({
+                            items: [
+                                new Label({ text: "10. HTS CODE", design: "Bold", labelFor: this._htsBox }),
+                                this._htsBox,
+                                new Label({ text: "12. QUARTZ SLABS", design: "Bold", labelFor: this._slabsBox })
+                                    .addStyleClass("sapUiSmallMarginTop"),
+                                this._slabsBox
+                            ]
+                        }).addStyleClass("sapUiSmallMargin")
+                    ],
+                    beginButton: new Button({
+                        text: "OK",
+                        type: "Emphasized",
+                        press: function () {
+                            that._paramDialog.close();
+                            that._fnParamContinue(that._getPrintParams());
+                        }
+                    }),
+                    endButton: new Button({
+                        text: "Cancel",
+                        press: function () { that._paramDialog.close(); }
+                    })
+                });
+                this.getView().addDependent(this._paramDialog);
+            }
+
+            // Giữ lựa chọn lần trước để user không phải tích lại
+            this._fnParamContinue = fnContinue;
+            this._paramDialog.open();
+        },
+
+        // Các giá trị đang chọn → chuỗi, nhiều giá trị cách nhau bằng ", "
+        _getPrintParams: function () {
+            return {
+                HTSCode: this._htsBox.getSelectedKeys().join(", "),
+                QuartzSlabs: this._slabsBox.getSelectedKeys().join(", ")
+            };
+        },
+
         _getSelectedContexts: function () {
             var oExtensionAPI = this.base.getExtensionAPI();
             return oExtensionAPI.getSelectedContexts ? oExtensionAPI.getSelectedContexts() : [];
@@ -88,7 +166,10 @@ sap.ui.define([
                 MessageToast.show("Vui lòng chọn ít nhất 1 dòng.");
                 return;
             }
-            this._callPrintPdfAction(aContexts, "btnPrintPDF", "Commercial_Invoice_");
+            var that = this;
+            this._askPrintParams(function (oParams) {
+                that._callPrintPdfAction(aContexts, "btnPrintPDF", "Commercial_Invoice_", oParams);
+            });
         },
 
         btnPrintPackingList: function () {
@@ -97,7 +178,10 @@ sap.ui.define([
                 MessageToast.show("Vui lòng chọn ít nhất 1 dòng.");
                 return;
             }
-            this._callPrintPdfAction(aContexts, "PDFPackingList", "Packing_List_");
+            var that = this;
+            this._askPrintParams(function (oParams) {
+                that._callPrintPdfAction(aContexts, "PDFPackingList", "Packing_List_", oParams);
+            });
         },
 
         /* ================================================================
@@ -120,6 +204,13 @@ sap.ui.define([
                 return;
             }
 
+            this._askPrintParams(function (oParams) {
+                that._runExportExcel(aContexts, sActionName, sDefaultName, oParams);
+            });
+        },
+
+        _runExportExcel: function (aContexts, sActionName, sDefaultName, oParams) {
+            var that = this;
             var oModel = this.base.getExtensionAPI().getModel();
             var oBusy = new BusyDialog({ text: "Đang export " + aContexts.length + " dòng..." });
             oBusy.open();
@@ -132,6 +223,8 @@ sap.ui.define([
                     oContext,
                     { $$groupId: sGroupId }
                 );
+                oOperation.setParameter("HTSCode", oParams.HTSCode);
+                oOperation.setParameter("QuartzSlabs", oParams.QuartzSlabs);
                 return oOperation.execute().then(function () {
                     return oOperation.getBoundContext().getObject();
                 });
@@ -176,7 +269,7 @@ sap.ui.define([
         /* ================================================================
          *  GỌI ACTION - OData V4 (Dùng $batch gửi full dữ liệu & lọc trùng file ở Frontend)
          * ================================================================ */
-        _callPrintPdfAction: function (aContexts, sActionName, sDefaultPrefix) {
+        _callPrintPdfAction: function (aContexts, sActionName, sDefaultPrefix, oParams) {
             var that = this;
             var oModel = this.base.getExtensionAPI().getModel();
 
@@ -192,6 +285,8 @@ sap.ui.define([
                     oContext,
                     { $$groupId: sGroupId }
                 );
+                oOperation.setParameter("HTSCode", oParams.HTSCode);
+                oOperation.setParameter("QuartzSlabs", oParams.QuartzSlabs);
 
                 var pExecute = oOperation.execute().then(function () {
                     var oResult = oOperation.getBoundContext().getObject();

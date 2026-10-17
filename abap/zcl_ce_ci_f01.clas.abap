@@ -4,6 +4,13 @@ CLASS zcl_ce_ci_f01 DEFINITION
   CREATE PUBLIC .
 
   PUBLIC SECTION.
+    TYPES: BEGIN OF ty_sqm,
+             proformainvoice TYPE vbeln,
+             item            TYPE posnr,
+             sqm             TYPE p LENGTH 16 DECIMALS 3,
+           END OF ty_sqm,
+           tt_sqm TYPE HASHED TABLE OF ty_sqm WITH UNIQUE KEY proformainvoice item.
+
     CLASS-METHODS requested
       IMPORTING
         io_request TYPE REF TO if_rap_query_request
@@ -21,6 +28,8 @@ CLASS zcl_ce_ci_f01 DEFINITION
       IMPORTING
         it_filters  TYPE if_rap_query_filter=>tt_name_range_pairs
         it_keys_pdf TYPE zcl_ce_ci_top=>tt_key_pdf OPTIONAL
+        "abap_true: lấy các dòng cho bảng Packing List (item), thay cho dòng TAN (header)
+        iv_pl_items TYPE abap_bool DEFAULT abap_false
       EXPORTING
         et_result   TYPE zcl_ce_ci_top=>tt_result.
 
@@ -30,6 +39,21 @@ CLASS zcl_ce_ci_f01 DEFINITION
         iv_currency     TYPE zce_ci-TransactionCurrency
       RETURNING
         VALUE(rv_words) TYPE string.
+
+    "DISCOUNT (ZC03) / CLAIM-CREDIT (ZC01, ZC02) của 1 Pro-forma invoice
+    CLASS-METHODS get_adjustments
+      IMPORTING
+        iv_proformainvoice TYPE vbeln
+      EXPORTING
+        ev_discount        TYPE zce_ci-Amount
+        ev_claim           TYPE zce_ci-Amount.
+
+    "SQM (m2) theo I_ProductUnitsOfMeasure - Packing List
+    CLASS-METHODS get_sqm
+      IMPORTING
+        it_data       TYPE zcl_ce_ci_top=>tt_result
+      RETURNING
+        VALUE(rt_sqm) TYPE tt_sqm.
   PROTECTED SECTION.
   PRIVATE SECTION.
     CLASS-METHODS get_longtext_result_billing
@@ -141,20 +165,70 @@ CLASS ZCL_CE_CI_F01 IMPLEMENTATION.
 
       DATA(lt_keys) = lt_keys_raw.
     ELSE.
-      "In PDF (CI + Packing List): chỉ lấy item có item category = TAN
+      "In PDF / Excel: lấy các dòng đang chọn + thông tin delivery để phân header / item
       SELECT FROM I_BillingDocumentItem AS a
+      LEFT JOIN I_OutboundDeliveryItem AS d
+          ON  d~OutboundDelivery     = a~ReferenceSDDocument
+          AND d~OutboundDeliveryItem = a~ReferenceSDDocumentItem
       FIELDS
           a~BillingDocument     AS ProFormaInvoice,
-          a~BillingDocumentItem AS Item
+          a~BillingDocumentItem AS Item,
+          a~SalesDocumentItemCategory AS ItemCategory,
+          d~OutboundDelivery,
+          d~DeliveryDocumentItemCategory,
+          d~HigherLvlItmOfBatSpltItm,
+          d~Batch,
+          d~ActualDeliveryQuantity
       FOR ALL ENTRIES IN @it_keys_pdf
       WHERE
-          a~BillingDocument               = @it_keys_pdf-proformainvoice
-          AND a~BillingDocumentItem       = @it_keys_pdf-item
-          AND a~SalesDocumentItemCategory = 'TAN'
-      INTO TABLE @lt_keys.
-      IF sy-subrc <> 0.
+          a~BillingDocument         = @it_keys_pdf-proformainvoice
+          AND a~BillingDocumentItem = @it_keys_pdf-item
+      INTO TABLE @DATA(lt_keys_sel).
+
+      IF iv_pl_items = abap_false.
+        "Header form (CI + phần đầu Packing List): chỉ lấy item có item category = TAN
+        DELETE lt_keys_sel WHERE ItemCategory <> 'TAN'.
+      ELSE.
+        "Bảng Packing List: chỉ lấy item, bỏ header
+        "- Header: dòng TAN mà item delivery TAN không có batch (đã tách batch xuống item con)
+        "- Item  : dòng TAN có batch (không tách batch)
+        "          + dòng tách batch (item delivery có HigherLvlItmOfBatSpltItm, item cha là TAN)
+        DATA(lt_parent) = lt_keys_sel.
+        DELETE lt_parent WHERE HigherLvlItmOfBatSpltItm IS INITIAL.
+        IF lt_parent IS NOT INITIAL.
+          SELECT FROM I_OutboundDeliveryItem
+          FIELDS
+              OutboundDelivery,
+              OutboundDeliveryItem,
+              DeliveryDocumentItemCategory
+          FOR ALL ENTRIES IN @lt_parent
+          WHERE
+              OutboundDelivery         = @lt_parent-OutboundDelivery
+              AND OutboundDeliveryItem = @lt_parent-HigherLvlItmOfBatSpltItm
+          INTO TABLE @DATA(lt_parent_do).
+        ENDIF.
+
+        LOOP AT lt_keys_sel INTO DATA(ls_key_sel).
+          DATA(lv_keep) = abap_false.
+          IF ls_key_sel-ItemCategory = 'TAN'.
+            "TAN là header nếu item delivery TAN không có batch
+            lv_keep = xsdbool( NOT ( ls_key_sel-DeliveryDocumentItemCategory = 'TAN'
+                                     AND ls_key_sel-Batch IS INITIAL ) ).
+          ELSEIF ls_key_sel-HigherLvlItmOfBatSpltItm IS NOT INITIAL.
+            lv_keep = xsdbool( line_exists( lt_parent_do[ OutboundDelivery             = ls_key_sel-OutboundDelivery
+                                                          OutboundDeliveryItem         = ls_key_sel-HigherLvlItmOfBatSpltItm
+                                                          DeliveryDocumentItemCategory = 'TAN' ] ) ).
+          ENDIF.
+          IF lv_keep = abap_false.
+            DELETE lt_keys_sel.
+          ENDIF.
+        ENDLOOP.
+      ENDIF.
+
+      IF lt_keys_sel IS INITIAL.
         RETURN.
       ENDIF.
+      lt_keys = CORRESPONDING #( lt_keys_sel ).
       SORT lt_keys BY ProFormaInvoice Item.
     ENDIF.
 
@@ -189,16 +263,19 @@ CLASS ZCL_CE_CI_F01 IMPLEMENTATION.
     INTO TABLE @DATA(lt_po).
 
     "2.5. Get Material
+    "AZT ID: MaterialByCustomer trên Sales order item của billing item
     SELECT FROM I_BillingDocumentItem AS a
-    LEFT JOIN I_ProductBasicTextTP_2 AS b
-        ON b~Product   = a~Product
-        AND b~Language = @sy-langu
+    LEFT JOIN I_SalesOrderItem AS b
+        ON  b~SalesOrder     = a~SalesDocument
+        AND b~SalesOrderItem = a~SalesDocumentItem
     FIELDS
         a~BillingDocument     AS ProFormaInvoice,
         a~BillingDocumentItem AS Item,
         a~Product             AS Material,
         a~SalesDocumentItemCategory AS ItemCategory,
-        b~ProductLongText     AS aztid,
+        a~ReferenceSDDocument,
+        a~ReferenceSDDocumentItem,
+        b~MaterialByCustomer  AS aztid,
         a~BillingQuantityUnit,
         a~BillingQuantity     AS Quantity,
         a~TransactionCurrency,
@@ -209,24 +286,95 @@ CLASS ZCL_CE_CI_F01 IMPLEMENTATION.
         AND a~BillingDocumentItem = @lt_keys-item
     INTO TABLE @DATA(lt_material).
 
+    "Amount: ConditionRateAmount của ZPR0, không có ZPR0 thì lấy ZPR2
+    SELECT FROM I_BillingDocumentItemPrcgElmnt
+    FIELDS
+        BillingDocument     AS ProFormaInvoice,
+        BillingDocumentItem AS Item,
+        ConditionType,
+        ConditionRateAmount
+    FOR ALL ENTRIES IN @lt_keys
+    WHERE
+        BillingDocument         = @lt_keys-proformainvoice
+        AND BillingDocumentItem = @lt_keys-item
+        AND ConditionType       IN ( 'ZPR0', 'ZPR2' )
+    INTO TABLE @DATA(lt_price).
+
     "2.6. Get LOT
     IF lt_material IS NOT INITIAL.
-      "(2) - Tìm Batch: tất cả batch của invoice (không phụ thuộc dòng đang chọn / đang hiển thị)
-      "      Khi gán LOT: dòng TAN gom batch của TAN + CB99 cùng material, dòng khác chỉ lấy batch của chính nó
+      "(2) - Tìm Batch cho LOT
+      TYPES: BEGIN OF ty_lot_batch,
+               proformainvoice TYPE vbeln,
+               item            TYPE posnr,
+               material        TYPE matnr,
+               batch           TYPE I_BillingDocumentItem-Batch,
+             END OF ty_lot_batch.
+      DATA lt_batch TYPE STANDARD TABLE OF ty_lot_batch WITH EMPTY KEY.
+
+      "- Dòng TAN: batch lấy từ delivery (I_OutboundDeliveryItem)
+      "  + Item delivery tương ứng (DeliveryDocumentItemCategory = TAN) có batch → lấy batch đó
+      "  + Item delivery TAN không có batch (tách batch) → lấy batch của các item con
+      "    (HigherLvlItmOfBatSpltItm = item delivery tương ứng, item con là CB99 nên không lọc TAN)
+      DATA(lt_tan) = lt_material.
+      DELETE lt_tan WHERE ItemCategory <> 'TAN' OR ReferenceSDDocument IS INITIAL.
+
+      IF lt_tan IS NOT INITIAL.
+        SELECT FROM I_OutboundDeliveryItem
+        FIELDS
+            OutboundDelivery,
+            OutboundDeliveryItem,
+            HigherLvlItmOfBatSpltItm,
+            DeliveryDocumentItemCategory,
+            Batch
+        FOR ALL ENTRIES IN @lt_tan
+        WHERE
+            OutboundDelivery = @lt_tan-ReferenceSDDocument
+            AND ( OutboundDeliveryItem     = @lt_tan-ReferenceSDDocumentItem
+               OR HigherLvlItmOfBatSpltItm = @lt_tan-ReferenceSDDocumentItem )
+        INTO TABLE @DATA(lt_do_item).
+        SORT lt_do_item BY OutboundDelivery OutboundDeliveryItem.
+
+        LOOP AT lt_tan INTO DATA(ls_tan).
+          READ TABLE lt_do_item INTO DATA(ls_do_item) WITH KEY OutboundDelivery     = ls_tan-ReferenceSDDocument
+                                                               OutboundDeliveryItem = ls_tan-ReferenceSDDocumentItem
+                                                               BINARY SEARCH.
+          IF sy-subrc <> 0 OR ls_do_item-DeliveryDocumentItemCategory <> 'TAN'.
+            CONTINUE.
+          ENDIF.
+
+          IF ls_do_item-Batch IS NOT INITIAL.
+            APPEND VALUE #( proformainvoice = ls_tan-ProFormaInvoice
+                            item            = ls_tan-Item
+                            material        = ls_tan-Material
+                            batch           = ls_do_item-Batch ) TO lt_batch.
+          ELSE.
+            LOOP AT lt_do_item INTO ls_do_item WHERE OutboundDelivery         = ls_tan-ReferenceSDDocument
+                                                 AND HigherLvlItmOfBatSpltItm = ls_tan-ReferenceSDDocumentItem
+                                                 AND Batch                    IS NOT INITIAL.
+              APPEND VALUE #( proformainvoice = ls_tan-ProFormaInvoice
+                              item            = ls_tan-Item
+                              material        = ls_tan-Material
+                              batch           = ls_do_item-Batch ) TO lt_batch.
+            ENDLOOP.
+          ENDIF.
+        ENDLOOP.
+      ENDIF.
+
+      "- Dòng khác TAN (chỉ hiện trên ALV): batch của chính billing item đó
       SELECT FROM I_BillingDocumentItem AS a
       FIELDS
         a~BillingDocument     AS ProformaInvoice,
         a~BillingDocumentItem AS Item,
         a~Product             AS Material,
-        a~SalesDocumentItemCategory AS ItemCategory,
         a~Batch
       FOR ALL ENTRIES IN @lt_keys
       WHERE
         a~BillingDocument               = @lt_keys-proformainvoice
-        AND a~SalesDocumentItemCategory IN ( 'TAN', 'CB99', 'CBLN' )
+        AND a~BillingDocumentItem       = @lt_keys-item
+        AND a~SalesDocumentItemCategory <> 'TAN'
         AND a~Batch                     <> ''
-      INTO TABLE @DATA(lt_batch).
-      SORT lt_batch BY ProformaInvoice Item.
+      APPENDING CORRESPONDING FIELDS OF TABLE @lt_batch.
+      SORT lt_batch BY proformainvoice item.
 
       DATA: lr_mch1 TYPE RANGE OF I_ClfnObjectCharcValue-CharcValue,
             lr_mara TYPE RANGE OF I_ClfnObjectCharcValue-CharcValue.
@@ -438,11 +586,29 @@ CLASS ZCL_CE_CI_F01 IMPLEMENTATION.
         <lfs_result>-aztid               = ls_material-aztid.
         <lfs_result>-BillingQuantityUnit = ls_material-BillingQuantityUnit.
         <lfs_result>-Quantity            = ls_material-quantity.
+        "Bảng Packing List (FS v5): PCS = ActualDeliveryQuantity của item delivery theo batch
+        "(billing item tách batch CB99 có BillingQuantity = 0, số lượng nằm ở item delivery)
+        IF iv_pl_items = abap_true.
+          READ TABLE lt_keys_sel INTO DATA(ls_key_qty) WITH KEY proformainvoice = ls_key-proformainvoice
+                                                                item            = ls_key-item.
+          IF sy-subrc = 0 AND ls_key_qty-ActualDeliveryQuantity IS NOT INITIAL.
+            <lfs_result>-Quantity = ls_key_qty-ActualDeliveryQuantity.
+          ENDIF.
+        ENDIF.
         <lfs_result>-TransactionCurrency = ls_material-TransactionCurrency.
-        <lfs_result>-Amount              = ls_material-amount.
-        <lfs_result>-UnitPrice           = COND #( WHEN <lfs_result>-quantity IS NOT INITIAL
-                                                   THEN <lfs_result>-amount / <lfs_result>-Quantity
-                                                   ELSE 0 ).
+        "Unit price / Amount: ZPR0, không có thì ZPR2 (ConditionRateAmount)
+        READ TABLE lt_price INTO DATA(ls_price) WITH KEY proformainvoice = ls_key-proformainvoice
+                                                         item            = ls_key-item
+                                                         ConditionType   = 'ZPR0'.
+        IF sy-subrc <> 0.
+          READ TABLE lt_price INTO ls_price WITH KEY proformainvoice = ls_key-proformainvoice
+                                                     item            = ls_key-item
+                                                     ConditionType   = 'ZPR2'.
+        ENDIF.
+        "ConditionRateAmount là đơn giá → Unit price = rate, Amount = rate * Quantity
+        <lfs_result>-UnitPrice = COND #( WHEN sy-subrc = 0 THEN ls_price-ConditionRateAmount ).
+        <lfs_result>-Amount    = <lfs_result>-UnitPrice * <lfs_result>-Quantity.
+        CLEAR ls_price.
         "Size L W H
         READ TABLE lt_size_lwh INTO DATA(ls_size) WITH KEY ClfnObjectID   = ls_material-material
                                                            Characteristic = 'Z_CHIEU_DAI'.
@@ -464,24 +630,12 @@ CLASS ZCL_CE_CI_F01 IMPLEMENTATION.
       ENDIF.
 
       "LOT field - mỗi lot = D_(1)_(2)(3), mỗi lot 1 dòng, không lặp
-      "- Dòng TAN     : gom lot của các item TAN + CB99 cùng invoice, cùng material (các dòng tách batch)
-      "- Dòng khác TAN: chỉ lấy lot theo batch của chính dòng đó
-      DATA(lv_is_tan) = xsdbool( line_exists( lt_material[ proformainvoice = ls_key-proformainvoice
-                                                           item            = ls_key-item
-                                                           ItemCategory    = 'TAN' ] ) ).
+      "Batch của từng dòng đã xác định ở bước 2.6 (TAN: theo delivery, khác TAN: batch của chính dòng)
       DATA lt_lot TYPE STANDARD TABLE OF string WITH EMPTY KEY.
       CLEAR lt_lot.
 
       LOOP AT lt_batch INTO ls_batch WHERE proformainvoice = ls_key-proformainvoice
-                                       AND material        = <lfs_result>-Material.
-        IF lv_is_tan = abap_true.
-          IF ls_batch-ItemCategory <> 'TAN' AND ls_batch-ItemCategory <> 'CB99'.
-            CONTINUE.
-          ENDIF.
-        ELSEIF ls_batch-item <> ls_key-item.
-          CONTINUE.
-        ENDIF.
-
+                                       AND item            = ls_key-item.
         "(2) - Batch (cắt 6 ký tự đầu của batch: đang là định dạng yymmdd --> chuyển sang định dạng mmddyyyy)
         DATA(lv_batch_raw) = ls_batch-Batch+0(6). "định dạng yymmdd
         IF lv_batch_raw <> '000000' AND lv_batch_raw CO '0123456789'.
@@ -723,5 +877,70 @@ CLASS ZCL_CE_CI_F01 IMPLEMENTATION.
     rv_words = COND #( WHEN rv_words IS INITIAL
                        THEN lv_rest_words
                        ELSE |{ rv_words } { lv_rest_words }| ).
+  ENDMETHOD.
+
+  METHOD get_adjustments.
+    CLEAR: ev_discount, ev_claim.
+
+    "DISCOUNT (as for free sample) - ZC03
+    SELECT SUM( ConditionAmount )
+      FROM I_BillingDocumentItemPrcgElmnt
+      WHERE BillingDocument = @iv_proformainvoice
+        AND ConditionType   = 'ZC03'
+      INTO @DATA(lv_discount).
+    ev_discount = lv_discount.
+
+    "CLAIM/CREDIT - ZC01, ZC02
+    SELECT SUM( ConditionAmount )
+      FROM I_BillingDocumentItemPrcgElmnt
+      WHERE BillingDocument = @iv_proformainvoice
+        AND ConditionType   IN ( 'ZC01', 'ZC02' )
+      INTO @DATA(lv_claim).
+    ev_claim = lv_claim.
+  ENDMETHOD.
+
+
+  METHOD get_sqm.
+    "1 đơn vị AlternativeUnit = QuantityNumerator / QuantityDenominator đơn vị BaseUnit
+    "- AlternativeUnit = M2, BaseUnit <> M2: m2 = Quantity * Denominator / Numerator
+    "- BaseUnit = M2, AlternativeUnit = đơn vị bán (PC...): m2 = Quantity * Numerator / Denominator
+    IF it_data IS INITIAL.
+      RETURN.
+    ENDIF.
+
+    SELECT FROM I_Product AS a
+    INNER JOIN I_ProductUnitsOfMeasure AS b
+        ON b~Product = a~Product
+    FIELDS
+        a~Product,
+        a~BaseUnit,
+        b~AlternativeUnit,
+        b~QuantityNumerator,
+        b~QuantityDenominator
+    FOR ALL ENTRIES IN @it_data
+    WHERE
+        a~Product = @it_data-Material
+    INTO TABLE @DATA(lt_uom).
+
+    LOOP AT it_data INTO DATA(ls_data).
+      DATA(ls_sqm) = VALUE ty_sqm( proformainvoice = ls_data-ProFormaInvoice
+                                   item            = ls_data-Item ).
+
+      READ TABLE lt_uom INTO DATA(ls_uom) WITH KEY Product         = ls_data-Material
+                                                   AlternativeUnit = 'M2'.
+      IF sy-subrc = 0 AND ls_uom-BaseUnit <> 'M2' AND ls_uom-QuantityNumerator <> 0.
+        ls_sqm-sqm = ls_data-Quantity * ls_uom-QuantityDenominator / ls_uom-QuantityNumerator.
+      ELSE.
+        READ TABLE lt_uom INTO ls_uom WITH KEY Product         = ls_data-Material
+                                               BaseUnit        = 'M2'
+                                               AlternativeUnit = ls_data-BillingQuantityUnit.
+        IF sy-subrc = 0 AND ls_uom-QuantityDenominator <> 0.
+          ls_sqm-sqm = ls_data-Quantity * ls_uom-QuantityNumerator / ls_uom-QuantityDenominator.
+        ENDIF.
+      ENDIF.
+
+      INSERT ls_sqm INTO TABLE rt_sqm.
+      CLEAR ls_uom.
+    ENDLOOP.
   ENDMETHOD.
 ENDCLASS.
