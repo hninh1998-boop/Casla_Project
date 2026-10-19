@@ -14,6 +14,9 @@ CLASS lhc_zce_ci DEFINITION INHERITING FROM cl_abap_behavior_handler.
     METHODS PDFPackingList FOR MODIFY
        keys FOR ACTION zce_ci~PDFPackingList RESULT result.
 
+    METHODS updCIText FOR MODIFY
+       keys FOR ACTION zce_ci~updCIText.
+
     METHODS ExportExcelCI FOR MODIFY
        keys FOR ACTION zce_ci~ExportExcelCI RESULT result.
     METHODS ExportExcelPL FOR MODIFY
@@ -216,6 +219,9 @@ CLASS lhc_zce_ci IMPLEMENTATION.
         DATA(lv_HTSCode) = zcl_utility_ninhnh=>escape_xml( iv_text = ls_data_table3-HTSCode ).
         DATA(lv_CountryOfOrigin) = zcl_utility_ninhnh=>escape_xml( iv_text = CONV string( ls_data_table3-CountryOfOrigin ) ).
         DATA(lv_QuartzSlabs) = zcl_utility_ninhnh=>escape_xml( iv_text = ls_data_table3-QuartzSlabs ).
+        DATA(lv_remarks) = zcl_utility_ninhnh=>escape_xml( iv_text = ls_data_table3-Remarks ).
+        DATA(lv_mbl) = zcl_utility_ninhnh=>escape_xml( iv_text = ls_data_table3-MBL ).
+        DATA(lv_hbl) = zcl_utility_ninhnh=>escape_xml( iv_text = ls_data_table3-HBL ).
       ENDIF.
       lv_table3 =
         |<Row2>|
@@ -223,6 +229,21 @@ CLASS lhc_zce_ci IMPLEMENTATION.
                 && |{ lv_inwords }|
             && |</Cell2>|
         && |</Row2>|
+        && |<Row3>|
+            && |<Cell2>|
+                && |{ lv_remarks }|
+            && |</Cell2>|
+        && |</Row3>|
+        && |<Row4>|
+            && |<Cell2>|
+                && |{ lv_mbl }|
+            && |</Cell2>|
+        && |</Row4>|
+        && |<Row5>|
+            && |<Cell2>|
+                && |{ lv_hbl }|
+            && |</Cell2>|
+        && |</Row5>|
         && |<Row6>|
             && |<Cell2>|
                 && |{ lv_vesselname }|
@@ -591,9 +612,27 @@ CLASS lhc_zce_ci IMPLEMENTATION.
         DATA(lv_HTSCode) = zcl_utility_ninhnh=>escape_xml( iv_text = ls_data_table3-HTSCode ).
         DATA(lv_CountryOfOrigin) = zcl_utility_ninhnh=>escape_xml( iv_text = CONV string( ls_data_table3-CountryOfOrigin ) ).
         DATA(lv_QuartzSlabs) = zcl_utility_ninhnh=>escape_xml( iv_text = ls_data_table3-QuartzSlabs ).
+        DATA(lv_remarks) = zcl_utility_ninhnh=>escape_xml( iv_text = ls_data_table3-Remarks ).
+        DATA(lv_mbl) = zcl_utility_ninhnh=>escape_xml( iv_text = ls_data_table3-MBL ).
+        DATA(lv_hbl) = zcl_utility_ninhnh=>escape_xml( iv_text = ls_data_table3-HBL ).
       ENDIF.
       lv_table3 =
-        |<Row6>|
+        |<Row3>|
+            && |<Cell2>|
+                && |{ lv_remarks }|
+            && |</Cell2>|
+        && |</Row3>|
+        && |<Row4>|
+            && |<Cell2>|
+                && |{ lv_mbl }|
+            && |</Cell2>|
+        && |</Row4>|
+        && |<Row5>|
+            && |<Cell2>|
+                && |{ lv_hbl }|
+            && |</Cell2>|
+        && |</Row5>|
+        && |<Row6>|
             && |<Cell2>|
                 && |{ lv_vesselname }|
             && |</Cell2>|
@@ -744,6 +783,64 @@ CLASS lhc_zce_ci IMPLEMENTATION.
       <lfs_result>-%param-FileExtension = 'pdf'.
       <lfs_result>-%param-MimeType = 'application/pdf'.
     ENDLOOP.
+  ENDMETHOD.
+
+  METHOD updCIText.
+    "Thông tin in theo Pro-forma invoice: chọn nhiều dòng cùng invoice → chỉ lưu 1 lần
+    "Để trống = giữ nguyên giá trị đang có, nhập D = xóa giá trị
+    DATA lt_ci_text TYPE zcl_ce_ci_text_buffer=>tt_ci_text.
+
+    SELECT FROM ztb_ci_text
+      FIELDS *
+      FOR ALL ENTRIES IN @keys
+      WHERE proforma = @keys-%key-ProFormaInvoice
+      INTO TABLE @DATA(lt_existing).
+
+    LOOP AT keys INTO DATA(ls_key).
+      IF line_exists( lt_ci_text[ proforma = ls_key-%key-ProFormaInvoice ] ).
+        CONTINUE.
+      ENDIF.
+
+      APPEND INITIAL LINE TO lt_ci_text ASSIGNING FIELD-SYMBOL(<lfs_ci_text>).
+      READ TABLE lt_existing INTO DATA(ls_existing) WITH KEY proforma = ls_key-%key-ProFormaInvoice.
+      IF sy-subrc = 0.
+        <lfs_ci_text> = ls_existing.
+      ENDIF.
+
+      <lfs_ci_text>-client   = sy-mandt.
+      <lfs_ci_text>-proforma = ls_key-%key-ProFormaInvoice.
+
+      IF ls_key-%param-InvoiceNo IS NOT INITIAL.
+        <lfs_ci_text>-invoice_no = COND #( WHEN ls_key-%param-InvoiceNo = 'D' THEN `` ELSE ls_key-%param-InvoiceNo ).
+      ENDIF.
+      IF ls_key-%param-Remarks IS NOT INITIAL.
+        <lfs_ci_text>-remarks = COND #( WHEN ls_key-%param-Remarks = 'D' THEN `` ELSE ls_key-%param-Remarks ).
+      ENDIF.
+      IF ls_key-%param-MBL IS NOT INITIAL.
+        <lfs_ci_text>-mbl = COND #( WHEN ls_key-%param-MBL = 'D' THEN `` ELSE ls_key-%param-MBL ).
+      ENDIF.
+      IF ls_key-%param-HBL IS NOT INITIAL.
+        <lfs_ci_text>-hbl = COND #( WHEN ls_key-%param-HBL = 'D' THEN `` ELSE ls_key-%param-HBL ).
+      ENDIF.
+      IF ls_key-%param-VesselName IS NOT INITIAL.
+        <lfs_ci_text>-vessel_name = COND #( WHEN ls_key-%param-VesselName = 'D' THEN `` ELSE ls_key-%param-VesselName ).
+      ENDIF.
+      IF ls_key-%param-ETD IS NOT INITIAL.
+        <lfs_ci_text>-etd = COND #( WHEN ls_key-%param-ETD = 'D' THEN `` ELSE ls_key-%param-ETD ).
+      ENDIF.
+      IF ls_key-%param-ETA IS NOT INITIAL.
+        <lfs_ci_text>-eta = COND #( WHEN ls_key-%param-ETA = 'D' THEN `` ELSE ls_key-%param-ETA ).
+      ENDIF.
+      IF ls_key-%param-ContainerNo IS NOT INITIAL.
+        <lfs_ci_text>-container_no = COND #( WHEN ls_key-%param-ContainerNo = 'D' THEN `` ELSE ls_key-%param-ContainerNo ).
+      ENDIF.
+
+      <lfs_ci_text>-changed_by = sy-uname.
+      <lfs_ci_text>-changed_at = utclong_current( ).
+      CLEAR ls_existing.
+    ENDLOOP.
+
+    zcl_ce_ci_text_buffer=>set_data( it_data = lt_ci_text ).
   ENDMETHOD.
 
   METHOD ExportExcelCI.
@@ -897,9 +994,15 @@ CLASS lsc_ZCE_CI IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD save.
+    "Lưu thông tin in (action updCIText)
+    zcl_ce_ci_text_buffer=>get_data( IMPORTING et_data = DATA(lt_ci_text) ).
+    IF lt_ci_text IS NOT INITIAL.
+      MODIFY ztb_ci_text FROM TABLE @lt_ci_text.
+    ENDIF.
   ENDMETHOD.
 
   METHOD cleanup.
+    zcl_ce_ci_text_buffer=>clear_data( ).
   ENDMETHOD.
 
   METHOD cleanup_finalize.

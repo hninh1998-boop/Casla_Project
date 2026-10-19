@@ -623,9 +623,9 @@ CLASS zcl_ce_ci_xlsx IMPLEMENTATION.
 
   METHOD remark_rows.
 
-    " REMARKS / MB/L / HB/L: FS ghi "Điền text" → chưa có nguồn dữ liệu thì để trống
+    " REMARKS / MB/L / HB/L / ETA...: user điền qua nút Cập nhật thông tin in (bảng ztb_ci_text)
     DATA(lt_remark) = VALUE tt_remark(
-      ( label = `REMARKS:` )
+      ( label = `REMARKS:`               value = is_data-Remarks )
       ( label = `1.MB/L#:`               value = is_data-MBL )
       ( label = `2.HB/L#:`               value = is_data-HBL )
       ( label = `3.VESSEL NAME:`         value = is_data-VesselName )

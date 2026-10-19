@@ -427,6 +427,23 @@ CLASS ZCL_CE_CI_F01 IMPLEMENTATION.
       ENDIF.
     ENDIF.
 
+    "2.6b. Thông tin in user tự điền (nút Cập nhật thông tin in) - ztb_ci_text
+    SELECT FROM zi_ci_text
+    FIELDS
+        ProFormaInvoice,
+        InvoiceNo,
+        Remarks,
+        MBL,
+        HBL,
+        VesselName,
+        ETD,
+        ETA,
+        ContainerNo
+    FOR ALL ENTRIES IN @lt_keys
+    WHERE
+        ProFormaInvoice = @lt_keys-proformainvoice
+    INTO TABLE @DATA(lt_ci_text).
+
     "2.7. Long text Billing - I_BillingDocumentTP
     READ ENTITIES OF I_BillingDocumentTP FORWARDING PRIVILEGED
     ENTITY BillingDocument
@@ -698,6 +715,27 @@ CLASS ZCL_CE_CI_F01 IMPLEMENTATION.
 
       "Country of Origin - Fix Text VIETNAM
       <lfs_result>-CountryOfOrigin = 'VIETNAM'.
+
+      "Thông tin user tự điền: Invoice#, Remarks, MB/L, HB/L, ETA lấy từ bảng Z
+      "Vessel Name / ETD / Container No: có điền thì ưu tiên giá trị điền, không thì lấy long text như trên
+      READ TABLE lt_ci_text INTO DATA(ls_ci_text) WITH KEY ProFormaInvoice = ls_key-proformainvoice.
+      IF sy-subrc = 0.
+        <lfs_result>-Invoice = ls_ci_text-InvoiceNo.
+        <lfs_result>-Remarks = ls_ci_text-Remarks.
+        <lfs_result>-MBL     = ls_ci_text-MBL.
+        <lfs_result>-HBL     = ls_ci_text-HBL.
+        <lfs_result>-ETA     = ls_ci_text-ETA.
+        IF ls_ci_text-VesselName IS NOT INITIAL.
+          <lfs_result>-VesselName = ls_ci_text-VesselName.
+        ENDIF.
+        IF ls_ci_text-ETD IS NOT INITIAL.
+          <lfs_result>-ETD = ls_ci_text-ETD.
+        ENDIF.
+        IF ls_ci_text-ContainerNo IS NOT INITIAL.
+          <lfs_result>-ContainerNo = ls_ci_text-ContainerNo.
+        ENDIF.
+      ENDIF.
+      CLEAR ls_ci_text.
     ENDLOOP.
   ENDMETHOD.
 

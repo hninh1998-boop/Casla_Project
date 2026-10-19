@@ -637,7 +637,235 @@ AAAAAAAAAAAAAAAAAAAAAAAAAAAAAADD4v8FGAAaHKKB+TURswAAAABJRU5ErkJggg==</image>
                                  <corner thickness="0.1778mm"/>
                               </border>
                               <value>
-                                 <text xliff:rid="BC935AB0-5665-4680-93D4-053658C247EF">TOTAL</text>
+                                 <text xliff:rid="BC935AB0-5665-4680-93D4-053658C247EF">SUB TOTAL</text>
+                              </value>
+                           </draw>
+                           <draw h="10mm" name="Cell2">
+                              <ui>
+                                 <textEdit>
+                                    <margin/>
+                                 </textEdit>
+                              </ui>
+                              <font typeface="Times New Roman" size="9pt" weight="bold"/>
+                              <para vAlign="middle" hAlign="center"/>
+                              <margin topInset="0.5mm" bottomInset="0.5mm" leftInset="0.5mm" rightInset="0.5mm"/>
+                              <border>
+                                 <edge/>
+                                 <corner thickness="0.1778mm"/>
+                              </border>
+                           </draw>
+                           <field h="10mm" name="Cell3">
+                              <ui>
+                                 <textEdit>
+                                    <margin/>
+                                 </textEdit>
+                              </ui>
+                              <font typeface="Times New Roman" size="9pt" weight="bold"/>
+                              <margin topInset="0.5mm" bottomInset="0.5mm" leftInset="0.5mm" rightInset="0.5mm"/>
+                              <para vAlign="middle" hAlign="center"/>
+                              <border>
+                                 <edge/>
+                                 <corner thickness="0.1778mm"/>
+                              </border>
+                           </field>
+                           <draw h="10mm" w="1in" name="Cell4">
+                              <ui>
+                                 <textEdit>
+                                    <margin/>
+                                 </textEdit>
+                              </ui>
+                              <font typeface="Times New Roman" size="9pt" weight="bold"/>
+                              <para vAlign="middle" hAlign="right"/>
+                              <margin topInset="0.5mm" bottomInset="0.5mm" leftInset="0.5mm" rightInset="0.5mm"/>
+                              <border>
+                                 <edge/>
+                                 <corner thickness="0.1778mm"/>
+                              </border>
+                           </draw>
+                           <field h="10mm" name="Cell5">
+                              <ui>
+                                 <textEdit>
+                                    <margin/>
+                                 </textEdit>
+                              </ui>
+                              <font typeface="Times New Roman" size="9pt" weight="bold"/>
+                              <margin topInset="0.5mm" bottomInset="0.5mm" leftInset="0.5mm" rightInset="0.5mm"/>
+                              <para vAlign="middle" hAlign="right"/>
+                              <border>
+                                 <edge/>
+                                 <corner thickness="0.1778mm"/>
+                              </border>
+                           </field>
+                           <?templateDesigner expand 1?></subform>
+<subform layout="row" name="Row4">
+                           <assist role="TR"/>
+                           <draw h="10mm" colSpan="2" name="Cell1">
+                              <ui>
+                                 <textEdit>
+                                    <margin/>
+                                 </textEdit>
+                              </ui>
+                              <font typeface="Times New Roman" size="9pt"/>
+                              <para vAlign="middle" hAlign="center"/>
+                              <margin topInset="0.5mm" bottomInset="0.5mm" leftInset="0.5mm" rightInset="0.5mm"/>
+                              <border>
+                                 <edge/>
+                                 <corner thickness="0.1778mm"/>
+                              </border>
+                              <value>
+                                 <text xliff:rid="F0959833-DECA-4513-86BB-876EEEF69DC4">DISCOUNT (as for free sample)</text>
+                              </value>
+                           </draw>
+                           <draw h="10mm" name="Cell2">
+                              <ui>
+                                 <textEdit>
+                                    <margin/>
+                                 </textEdit>
+                              </ui>
+                              <font typeface="Times New Roman" size="9pt"/>
+                              <para vAlign="middle" hAlign="center"/>
+                              <margin topInset="0.5mm" bottomInset="0.5mm" leftInset="0.5mm" rightInset="0.5mm"/>
+                              <border>
+                                 <edge/>
+                                 <corner thickness="0.1778mm"/>
+                              </border>
+                           </draw>
+                           <field h="10mm" name="Cell3">
+                              <ui>
+                                 <textEdit>
+                                    <margin/>
+                                 </textEdit>
+                              </ui>
+                              <font typeface="Times New Roman" size="9pt"/>
+                              <margin topInset="0.5mm" bottomInset="0.5mm" leftInset="0.5mm" rightInset="0.5mm"/>
+                              <para vAlign="middle" hAlign="center"/>
+                              <border>
+                                 <edge/>
+                                 <corner thickness="0.1778mm"/>
+                              </border>
+                           </field>
+                           <draw h="10mm" w="1in" name="Cell4">
+                              <ui>
+                                 <textEdit>
+                                    <margin/>
+                                 </textEdit>
+                              </ui>
+                              <font typeface="Times New Roman" size="9pt"/>
+                              <para vAlign="middle" hAlign="right"/>
+                              <margin topInset="0.5mm" bottomInset="0.5mm" leftInset="0.5mm" rightInset="0.5mm"/>
+                              <border>
+                                 <edge/>
+                                 <corner thickness="0.1778mm"/>
+                              </border>
+                           </draw>
+                           <field h="10mm" name="Cell5">
+                              <ui>
+                                 <textEdit>
+                                    <margin/>
+                                 </textEdit>
+                              </ui>
+                              <font typeface="Times New Roman" size="9pt"/>
+                              <margin topInset="0.5mm" bottomInset="0.5mm" leftInset="0.5mm" rightInset="0.5mm"/>
+                              <para vAlign="middle" hAlign="right"/>
+                              <border>
+                                 <edge/>
+                                 <corner thickness="0.1778mm"/>
+                              </border>
+                           </field>
+                           <?templateDesigner expand 1?></subform>
+<subform layout="row" name="Row5">
+                           <assist role="TR"/>
+                           <draw h="10mm" colSpan="2" name="Cell1">
+                              <ui>
+                                 <textEdit>
+                                    <margin/>
+                                 </textEdit>
+                              </ui>
+                              <font typeface="Times New Roman" size="9pt"/>
+                              <para vAlign="middle" hAlign="center"/>
+                              <margin topInset="0.5mm" bottomInset="0.5mm" leftInset="0.5mm" rightInset="0.5mm"/>
+                              <border>
+                                 <edge/>
+                                 <corner thickness="0.1778mm"/>
+                              </border>
+                              <value>
+                                 <text xliff:rid="3111F430-470C-4B32-B228-F5C09DDE8395">CLAIM/CREDIT</text>
+                              </value>
+                           </draw>
+                           <draw h="10mm" name="Cell2">
+                              <ui>
+                                 <textEdit>
+                                    <margin/>
+                                 </textEdit>
+                              </ui>
+                              <font typeface="Times New Roman" size="9pt"/>
+                              <para vAlign="middle" hAlign="center"/>
+                              <margin topInset="0.5mm" bottomInset="0.5mm" leftInset="0.5mm" rightInset="0.5mm"/>
+                              <border>
+                                 <edge/>
+                                 <corner thickness="0.1778mm"/>
+                              </border>
+                           </draw>
+                           <field h="10mm" name="Cell3">
+                              <ui>
+                                 <textEdit>
+                                    <margin/>
+                                 </textEdit>
+                              </ui>
+                              <font typeface="Times New Roman" size="9pt"/>
+                              <margin topInset="0.5mm" bottomInset="0.5mm" leftInset="0.5mm" rightInset="0.5mm"/>
+                              <para vAlign="middle" hAlign="center"/>
+                              <border>
+                                 <edge/>
+                                 <corner thickness="0.1778mm"/>
+                              </border>
+                           </field>
+                           <draw h="10mm" w="1in" name="Cell4">
+                              <ui>
+                                 <textEdit>
+                                    <margin/>
+                                 </textEdit>
+                              </ui>
+                              <font typeface="Times New Roman" size="9pt"/>
+                              <para vAlign="middle" hAlign="right"/>
+                              <margin topInset="0.5mm" bottomInset="0.5mm" leftInset="0.5mm" rightInset="0.5mm"/>
+                              <border>
+                                 <edge/>
+                                 <corner thickness="0.1778mm"/>
+                              </border>
+                           </draw>
+                           <field h="10mm" name="Cell5">
+                              <ui>
+                                 <textEdit>
+                                    <margin/>
+                                 </textEdit>
+                              </ui>
+                              <font typeface="Times New Roman" size="9pt"/>
+                              <margin topInset="0.5mm" bottomInset="0.5mm" leftInset="0.5mm" rightInset="0.5mm"/>
+                              <para vAlign="middle" hAlign="right"/>
+                              <border>
+                                 <edge/>
+                                 <corner thickness="0.1778mm"/>
+                              </border>
+                           </field>
+                           <?templateDesigner expand 1?></subform>
+<subform layout="row" name="Row6">
+                           <assist role="TR"/>
+                           <draw h="10mm" colSpan="2" name="Cell1">
+                              <ui>
+                                 <textEdit>
+                                    <margin/>
+                                 </textEdit>
+                              </ui>
+                              <font typeface="Times New Roman" size="9pt" weight="bold"/>
+                              <para vAlign="middle" hAlign="center"/>
+                              <margin topInset="0.5mm" bottomInset="0.5mm" leftInset="0.5mm" rightInset="0.5mm"/>
+                              <border>
+                                 <edge/>
+                                 <corner thickness="0.1778mm"/>
+                              </border>
+                              <value>
+                                 <text xliff:rid="016661CC-873E-4438-83CA-D9020AD602E1">TOTAL</text>
                               </value>
                            </draw>
                            <draw h="10mm" name="Cell2">
@@ -782,14 +1010,20 @@ AAAAAAAAAAAAAAAAAAAAAAAAAAAAAADD4v8FGAAaHKKB+TURswAAAABJRU5ErkJggg==</image>
                                  <text xliff:rid="8EBDC425-E765-4582-8FED-D9239139E597">REMARKS:</text>
                               </value>
                            </draw>
-                           <draw h="6.35mm" name="Cell2">
-                              <font typeface="Arial" size="9pt"/>
+                           <field name="Cell2" minH="6.35mm">
+                              <ui>
+                                 <textEdit multiLine="1">
+                                    <margin/>
+                                 </textEdit>
+                              </ui>
+                              <font typeface="Times New Roman" size="9pt"/>
+                              <margin topInset="0.5mm" bottomInset="0.5mm" leftInset="0.5mm" rightInset="0.5mm"/>
+                              <para vAlign="middle"/>
                               <border>
                                  <edge presence="hidden"/>
                                  <corner thickness="0.1778mm" presence="hidden"/>
                               </border>
-                              <para vAlign="middle"/>
-                           </draw>
+                           </field>
                            <border>
                               <edge presence="hidden"/>
                            </border>
@@ -814,20 +1048,20 @@ AAAAAAAAAAAAAAAAAAAAAAAAAAAAAADD4v8FGAAaHKKB+TURswAAAABJRU5ErkJggg==</image>
                                  <text xliff:rid="A61046D2-0E36-40AD-BED7-43EA65D4B3BA">1. MB/L#:</text>
                               </value>
                            </draw>
-                           <draw h="6.35mm" name="Cell2">
+                           <field name="Cell2" minH="6.35mm">
                               <ui>
-                                 <textEdit>
+                                 <textEdit multiLine="1">
                                     <margin/>
                                  </textEdit>
                               </ui>
-                              <font typeface="Arial" size="9pt"/>
-                              <para vAlign="middle"/>
+                              <font typeface="Times New Roman" size="9pt"/>
                               <margin topInset="0.5mm" bottomInset="0.5mm" leftInset="0.5mm" rightInset="0.5mm"/>
+                              <para vAlign="middle"/>
                               <border>
                                  <edge presence="hidden"/>
                                  <corner thickness="0.1778mm" presence="hidden"/>
                               </border>
-                           </draw>
+                           </field>
                            <?templateDesigner expand 0?></subform>
                         <subform layout="row" name="Row5">
                            <assist role="TR"/>
@@ -848,20 +1082,20 @@ AAAAAAAAAAAAAAAAAAAAAAAAAAAAAADD4v8FGAAaHKKB+TURswAAAABJRU5ErkJggg==</image>
                                  <corner thickness="0.1778mm" presence="hidden"/>
                               </border>
                            </draw>
-                           <draw h="6.35mm" name="Cell2">
+                           <field name="Cell2" minH="6.35mm">
                               <ui>
-                                 <textEdit>
+                                 <textEdit multiLine="1">
                                     <margin/>
                                  </textEdit>
                               </ui>
-                              <font typeface="Arial" size="9pt"/>
-                              <para vAlign="middle"/>
+                              <font typeface="Times New Roman" size="9pt"/>
                               <margin topInset="0.5mm" bottomInset="0.5mm" leftInset="0.5mm" rightInset="0.5mm"/>
+                              <para vAlign="middle"/>
                               <border>
                                  <edge presence="hidden"/>
                                  <corner thickness="0.1778mm" presence="hidden"/>
                               </border>
-                           </draw>
+                           </field>
                            <?templateDesigner expand 0?></subform>
                         <subform layout="row" name="Row6">
                            <assist role="TR"/>

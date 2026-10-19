@@ -999,14 +999,20 @@ AAAAAAAAAAAAAAAAAAAAAAAAAAAAAADD4v8FGAAaHKKB+TURswAAAABJRU5ErkJggg==</image>
                                  <text xliff:rid="8EBDC425-E765-4582-8FED-D9239139E597">REMARKS:</text>
                               </value>
                            </draw>
-                           <draw h="6.35mm" name="Cell2">
-                              <font typeface="Arial" size="9pt"/>
+                           <field name="Cell2" minH="6.35mm">
+                              <ui>
+                                 <textEdit multiLine="1">
+                                    <margin/>
+                                 </textEdit>
+                              </ui>
+                              <font typeface="Times New Roman" size="9pt"/>
+                              <margin topInset="0.5mm" bottomInset="0.5mm" leftInset="0.5mm" rightInset="0.5mm"/>
+                              <para vAlign="middle"/>
                               <border>
                                  <edge presence="hidden"/>
                                  <corner thickness="0.1778mm" presence="hidden"/>
                               </border>
-                              <para vAlign="middle"/>
-                           </draw>
+                           </field>
                            <border>
                               <edge presence="hidden"/>
                            </border>
@@ -1031,20 +1037,20 @@ AAAAAAAAAAAAAAAAAAAAAAAAAAAAAADD4v8FGAAaHKKB+TURswAAAABJRU5ErkJggg==</image>
                                  <text xliff:rid="A61046D2-0E36-40AD-BED7-43EA65D4B3BA">1. MB/L#:</text>
                               </value>
                            </draw>
-                           <draw h="6.35mm" name="Cell2">
+                           <field name="Cell2" minH="6.35mm">
                               <ui>
-                                 <textEdit>
+                                 <textEdit multiLine="1">
                                     <margin/>
                                  </textEdit>
                               </ui>
-                              <font typeface="Arial" size="9pt"/>
-                              <para vAlign="middle"/>
+                              <font typeface="Times New Roman" size="9pt"/>
                               <margin topInset="0.5mm" bottomInset="0.5mm" leftInset="0.5mm" rightInset="0.5mm"/>
+                              <para vAlign="middle"/>
                               <border>
                                  <edge presence="hidden"/>
                                  <corner thickness="0.1778mm" presence="hidden"/>
                               </border>
-                           </draw>
+                           </field>
                            <?templateDesigner expand 0?></subform>
                         <subform layout="row" name="Row5">
                            <assist role="TR"/>
@@ -1065,20 +1071,20 @@ AAAAAAAAAAAAAAAAAAAAAAAAAAAAAADD4v8FGAAaHKKB+TURswAAAABJRU5ErkJggg==</image>
                                  <corner thickness="0.1778mm" presence="hidden"/>
                               </border>
                            </draw>
-                           <draw h="6.35mm" name="Cell2">
+                           <field name="Cell2" minH="6.35mm">
                               <ui>
-                                 <textEdit>
+                                 <textEdit multiLine="1">
                                     <margin/>
                                  </textEdit>
                               </ui>
-                              <font typeface="Arial" size="9pt"/>
-                              <para vAlign="middle"/>
+                              <font typeface="Times New Roman" size="9pt"/>
                               <margin topInset="0.5mm" bottomInset="0.5mm" leftInset="0.5mm" rightInset="0.5mm"/>
+                              <para vAlign="middle"/>
                               <border>
                                  <edge presence="hidden"/>
                                  <corner thickness="0.1778mm" presence="hidden"/>
                               </border>
-                           </draw>
+                           </field>
                            <?templateDesigner expand 0?></subform>
                         <subform layout="row" name="Row6">
                            <assist role="TR"/>

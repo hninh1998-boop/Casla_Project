@@ -32,10 +32,18 @@ annotate entity zce_ci with
   ToCI;
 
   @EndUserText.label: 'Invoice'
-  @UI.lineItem: [{ position: 30 }]
-  @UI.identification: [{ position: 30 }]
+  @UI.lineItem: [{ position: 30 },
+                 { type: #FOR_ACTION, dataAction: 'updCIText', label: 'Cập nhật thông tin in' }]
+  @UI.identification: [{ position: 30 },
+                       { type: #FOR_ACTION, dataAction: 'updCIText', label: 'Cập nhật thông tin in' }]
   @Consumption.filter.hidden: true
   Invoice;
+
+  @EndUserText.label: 'Remarks'
+  @UI.lineItem: [{ position: 125 }]
+  @UI.identification: [{ position: 125 }]
+  @Consumption.filter.hidden: true
+  Remarks;
 
   @EndUserText.label: 'Date'
   @UI.lineItem: [{ position: 40 }]
