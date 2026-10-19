@@ -17,6 +17,7 @@ define table ztb_custom_hu {
   customer              : abap.char(2);
   ngay_nhap_kho         : abap.dats;
   tem                   : abap.char(1);
+  khoi_luong            : abap.char(40);
   status                : abap.char(1);
   del_flag              : abap.char(1);
   uuidfile              : sysuuid_x16;

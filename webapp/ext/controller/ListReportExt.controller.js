@@ -136,7 +136,8 @@ sap.ui.define([
 				{ header: "Vị trí (Storage Location)", key: "StorageLocation", width: 24 },
 				{ header: "Khách hàng", key: "Customer", width: 14 },
 				{ header: "Ngày nhập kho", key: "NgayNhapKho", width: 18 },
-				{ header: "Tem", key: "Tem", width: 18 }
+				{ header: "Tem", key: "Tem", width: 18 },
+				{ header: "Khối lượng (kg)", key: "KhoiLuong", width: 18 }
 			];
 
 			const hintRow = {
@@ -149,7 +150,8 @@ sap.ui.define([
 				StorageLocation: "Storage Location\nVD: 3002",
 				Customer: "Khách hàng\n2 ký tự, VD: CA",
 				NgayNhapKho: "DD/MM/YYYY\nVD: 08/10/2026",
-				Tem: "CÓ TEM / KHÔNG TEM"
+				Tem: "CÓ TEM / KHÔNG TEM",
+				KhoiLuong: "Khối lượng thùng mẫu (kg)\nVD: 8, 2000"
 			};
 
 			return this._downloadExcel(columns, hintRow, "Template_Upload thung mau.xlsx");

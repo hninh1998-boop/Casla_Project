@@ -2,17 +2,34 @@
     <edmx:Reference Uri="https://sap.github.io/odata-vocabularies/vocabularies/UI.xml">
         <edmx:Include Namespace="com.sap.vocabularies.UI.v1" Alias="UI"/>
     </edmx:Reference>
-    <edmx:Reference Uri="https://sap.github.io/odata-vocabularies/vocabularies/Common.xml">
-        <edmx:Include Namespace="com.sap.vocabularies.Common.v1" Alias="Common"/>
-    </edmx:Reference>
     <edmx:Reference Uri="/sap/opu/odata4/sap/zui_thung_mau_ov4/srvd/sap/zui_thung_mau/0001/$metadata">
         <edmx:Include Namespace="com.sap.gateway.srvd.zui_thung_mau.v0001" Alias="SAP__self"/>
     </edmx:Reference>
     <edmx:DataServices>
         <Schema xmlns="http://docs.oasis-open.org/odata/ns/edm" Namespace="local">
-            <!-- Mặc định chỉ hiện dòng chưa xóa (A); filter vẫn cho chọn nhiều giá trị -->
-            <Annotations Target="SAP__self.ThungMauType/DelStatus">
-                <Annotation Term="Common.FilterDefaultValue" String="A"/>
+            <!-- Giá trị mặc định của filter bar: "Bao gồm" = Đang sử dụng (A); filter vẫn cho chọn nhiều giá trị.
+                 Thêm Record vào Ranges nếu cần mặc định nhiều giá trị -->
+            <Annotations Target="SAP__self.ThungMauType">
+                <Annotation Term="UI.SelectionVariant">
+                    <Record Type="UI.SelectionVariantType">
+                        <PropertyValue Property="SelectOptions">
+                            <Collection>
+                                <Record Type="UI.SelectOptionType">
+                                    <PropertyValue Property="PropertyName" PropertyPath="DelStatus"/>
+                                    <PropertyValue Property="Ranges">
+                                        <Collection>
+                                            <Record Type="UI.SelectionRangeType">
+                                                <PropertyValue Property="Sign" EnumMember="UI.SelectionRangeSignType/I"/>
+                                                <PropertyValue Property="Option" EnumMember="UI.SelectionRangeOptionType/EQ"/>
+                                                <PropertyValue Property="Low" String="A"/>
+                                            </Record>
+                                        </Collection>
+                                    </PropertyValue>
+                                </Record>
+                            </Collection>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
             </Annotations>
         </Schema>
     </edmx:DataServices>

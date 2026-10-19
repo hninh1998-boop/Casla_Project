@@ -32,6 +32,7 @@ define view entity zi_d_thung
       customer              as Customer,
       ngay_nhap_kho         as NgayNhapKho,
       tem                   as Tem,
+      khoi_luong            as KhoiLuong,
 
       @Semantics.user.createdBy: true
       created_by            as CreatedBy,

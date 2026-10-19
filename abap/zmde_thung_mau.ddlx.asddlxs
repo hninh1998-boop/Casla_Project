@@ -87,8 +87,12 @@ annotate entity zc_thung_mau with
   @EndUserText.label: 'Tem'
   Tem;
 
+  @UI.lineItem       : [{ position: 115 }]
+  @EndUserText.label: 'Khối lượng (kg)'
+  KhoiLuong;
+
   @UI.selectionField : [{ position: 120 }]
-  @EndUserText.label: 'Tình trạng xóa'
+  @EndUserText.label: 'Bao gồm'
   DelStatus;
 
   @UI.lineItem       : [{ position: 95, criticality: 'DelCriticality' }]

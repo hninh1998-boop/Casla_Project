@@ -258,6 +258,7 @@ CLASS ZCL_THUNG_IMPLEMENT IMPLEMENTATION.
                         Customer        = <lfs_data>-customer
                         NgayNhapKho     = <lfs_data>-ngay_nhap_kho
                         Tem             = <lfs_data>-tem
+                        KhoiLuong       = <lfs_data>-khoi_luong
                         TrangThai          = hu_status-in_stock
                         DelFlag         = del_flag-none
                         Uuidfile        = <lfs_data>-uuidfile
@@ -267,6 +268,7 @@ CLASS ZCL_THUNG_IMPLEMENT IMPLEMENTATION.
                                                    Customer        = if_abap_behv=>mk-on
                                                    NgayNhapKho     = if_abap_behv=>mk-on
                                                    Tem             = if_abap_behv=>mk-on
+                                                   KhoiLuong       = if_abap_behv=>mk-on
                                                    TrangThai          = if_abap_behv=>mk-on
                                                    DelFlag         = if_abap_behv=>mk-on
                                                    Uuidfile        = if_abap_behv=>mk-on ) ) TO lt_update.
@@ -283,6 +285,7 @@ CLASS ZCL_THUNG_IMPLEMENT IMPLEMENTATION.
                         Customer        = <lfs_data>-customer
                         NgayNhapKho     = <lfs_data>-ngay_nhap_kho
                         Tem             = <lfs_data>-tem
+                        KhoiLuong       = <lfs_data>-khoi_luong
                         TrangThai          = hu_status-in_stock
                         DelFlag         = del_flag-none
                         Uuidfile        = <lfs_data>-uuidfile ) TO lt_create.
@@ -315,7 +318,7 @@ CLASS ZCL_THUNG_IMPLEMENT IMPLEMENTATION.
         ENTITY ThungMau
           CREATE FIELDS ( SoKhsx SoThung Material Batch
                           Quantity BaseUnit StorageLocation Customer
-                          NgayNhapKho Tem TrangThai DelFlag Uuidfile )
+                          NgayNhapKho Tem KhoiLuong TrangThai DelFlag Uuidfile )
           WITH lt_create
           UPDATE FROM lt_update
         FAILED   DATA(ls_failed)

@@ -21,13 +21,14 @@ define root view entity zi_thung_mau
       customer              as Customer,
       ngay_nhap_kho         as NgayNhapKho,
       tem                   as Tem,
+      khoi_luong            as KhoiLuong,
       status                as TrangThai,
       del_flag              as DelFlag,
 
-      // Cờ xóa dùng cho filter: X = đã xóa, A = chưa xóa (dỡ thùng không tính là xóa)
+      // Filter "Bao gồm": A = đang sử dụng, X = đã xóa, D = đã dỡ thùng (đủ giá trị domain ZDO_THUNG_DEL)
       case del_flag
-      when 'X' then 'X'
-      else 'A'
+      when '' then 'A'
+      else del_flag
       end                   as DelStatus,
 
       // Màu cột Trạng thái: chỉ theo trạng thái (Tồn kho xanh, Đã xuất vàng)

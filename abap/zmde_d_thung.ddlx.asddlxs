@@ -85,6 +85,10 @@ annotate entity zc_d_thung with
   @UI.identification: [{ position: 150 }]
   @EndUserText.label: 'Tem'
   Tem;
+  @UI.lineItem: [{ position: 160 }]
+  @UI.identification: [{ position: 160 }]
+  @EndUserText.label: 'Khối lượng (kg)'
+  KhoiLuong;
 
   @UI.lineItem: [{ position: 190 }]
   @UI.identification: [{ position: 190 }]

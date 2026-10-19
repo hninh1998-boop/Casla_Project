@@ -31,6 +31,7 @@ authorization master ( global )
       Customer           = customer;
       NgayNhapKho        = ngay_nhap_kho;
       Tem                = tem;
+      KhoiLuong          = khoi_luong;
       TrangThai             = status;
       DelFlag            = del_flag;
       Uuidfile           = uuidfile;

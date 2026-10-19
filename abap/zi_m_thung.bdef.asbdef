@@ -78,6 +78,7 @@ authorization dependent by _ManageFile
       Customer           = customer;
       NgayNhapKho        = ngay_nhap_kho;
       Tem                = tem;
+      KhoiLuong          = khoi_luong;
       CreatedBy          = created_by;
       CreatedAt          = created_at;
       LastChangedBy      = last_changed_by;

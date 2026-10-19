@@ -19,6 +19,7 @@ CLASS lhc_ManageFile DEFINITION INHERITING FROM cl_abap_behavior_handler.
              Customer        TYPE string,
              NgayNhapKho     TYPE string,
              Tem             TYPE string,
+             KhoiLuong       TYPE string,
            END OF ty_file_upload.
 
     METHODS get_global_authorizations FOR GLOBAL AUTHORIZATION
@@ -294,6 +295,8 @@ CLASS lhc_ManageFile IMPLEMENTATION.
           Customer        = to_upper( condense( ls_file-Customer ) )
           NgayNhapKho     = parse_date( ls_file-NgayNhapKho )
           Tem             = parse_tem( ls_file-Tem )
+          " Khối lượng: text tự do, không kiểm tra
+          KhoiLuong       = condense( ls_file-KhoiLuong )
         ) )
       ).
 
@@ -320,6 +323,7 @@ CLASS lhc_ManageFile IMPLEMENTATION.
         Customer
         NgayNhapKho
         Tem
+        KhoiLuong
       )
       WITH lt_file_c
       MAPPED   DATA(lt_mapped_create)

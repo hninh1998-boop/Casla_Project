@@ -20,6 +20,7 @@ define table ztb_d_thung {
   customer              : abap.char(2);
   ngay_nhap_kho         : abap.dats;
   tem                   : abap.char(1);
+  khoi_luong            : abap.char(40);
   messagetype           : abap.char(1);
   message               : abap.char(255);
   created_by            : abp_creation_user;

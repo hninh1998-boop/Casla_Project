@@ -35,6 +35,8 @@ define root view entity zc_thung_mau
       @Semantics.text: true
       _Tem.description         as TemText,
 
+      KhoiLuong,
+
       @Consumption.valueHelpDefinition: [{ entity: { name: 'zi_thung_sta_vh', element: 'Status' } }]
       @ObjectModel.text.element: ['TrangThaiText']
       TrangThai,
@@ -49,7 +51,7 @@ define root view entity zc_thung_mau
       @Semantics.text: true
       _DelFlag.description     as DelFlagText,
 
-      // Filter dạng dropdown chọn nhiều; giá trị mặc định "Chưa xóa" đặt ở annotation.xml của app
+      // Filter dạng dropdown chọn nhiều; giá trị mặc định "Đang sử dụng" đặt ở annotation.xml của app
       // (đặt @Consumption.filter.defaultValue ở đây thì service ép filter về chỉ chọn 1 giá trị)
       @Consumption.valueHelpDefinition: [{ entity: { name: 'zvh_thung_hienthi', element: 'DelStatus' } }]
       DelStatus,

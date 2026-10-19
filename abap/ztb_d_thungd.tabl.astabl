@@ -23,6 +23,7 @@ define table ztb_d_thungd {
   customer           : abap.char(2);
   ngaynhapkho        : abap.dats;
   tem                : abap.char(1);
+  khoiluong          : abap.char(40);
   createdby          : abp_creation_user;
   createdat          : abp_creation_tstmpl;
   lastchangedby      : abp_locinst_lastchange_user;
