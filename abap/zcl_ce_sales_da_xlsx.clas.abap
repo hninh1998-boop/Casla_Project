@@ -187,25 +187,23 @@ CLASS zcl_ce_sales_da_xlsx IMPLEMENTATION.
              && text_cell(   iv_col = `H` iv_row = lv_row iv_style = gc_style-text        iv_value = ls_data-DonViTinh )
              && number_cell( iv_col = `I` iv_row = lv_row iv_style = gc_style-number      iv_value = ls_data-SoLuong )
              && number_cell( iv_col = `J` iv_row = lv_row iv_style = gc_style-number      iv_value = ls_data-GiaCongThuc )
-             && text_cell(   iv_col = `K` iv_row = lv_row iv_style = gc_style-text        iv_value = ls_data-DonViTinh )
-             && number_cell( iv_col = `L` iv_row = lv_row iv_style = gc_style-number      iv_value = ls_data-GiaBan )
-             && number_cell( iv_col = `M` iv_row = lv_row iv_style = gc_style-number      iv_value = ls_data-ChenhLech )
-             && number_cell( iv_col = `N` iv_row = lv_row iv_style = gc_style-number      iv_value = ls_data-GiaInvKhachHang )
-             && number_cell( iv_col = `O` iv_row = lv_row iv_style = gc_style-number      iv_value = ls_data-GiaInvHaiQuan )
-             && number_cell( iv_col = `P` iv_row = lv_row iv_style = gc_style-number      iv_value = ls_data-NgoaiTe )
+             && number_cell( iv_col = `K` iv_row = lv_row iv_style = gc_style-number      iv_value = ls_data-GiaBan )
+             && number_cell( iv_col = `L` iv_row = lv_row iv_style = gc_style-number      iv_value = ls_data-ChenhLech )
+             && number_cell( iv_col = `M` iv_row = lv_row iv_style = gc_style-number      iv_value = ls_data-GiaInvHaiQuan )
+             && number_cell( iv_col = `N` iv_row = lv_row iv_style = gc_style-number      iv_value = ls_data-NgoaiTe )
              " Tỷ giá: số nguyên thì không hiện phần lẻ, có phần lẻ thì hiện đúng số chữ số lẻ thực tế
-             && number_cell( iv_col = `Q` iv_row = lv_row iv_value = ls_data-TyGia
+             && number_cell( iv_col = `O` iv_row = lv_row iv_value = ls_data-TyGia
                              iv_style = COND #( WHEN frac( ls_data-TyGia ) = 0
                                                 THEN gc_style-integer
                                                 ELSE gc_style-rate ) )
-             && number_cell( iv_col = `R` iv_row = lv_row iv_style = gc_style-integer     iv_value = ls_data-ThanhTien )
-             && mark_cell(   iv_col = `S` iv_row = lv_row iv_value = ls_data-LoaiDaSlabE62 )
-             && mark_cell(   iv_col = `T` iv_row = lv_row iv_value = ls_data-LoaiDaCutToSizeE62 )
-             && mark_cell(   iv_col = `U` iv_row = lv_row iv_value = ls_data-LoaiDaMauBanE62 )
-             && mark_cell(   iv_col = `V` iv_row = lv_row iv_value = ls_data-LoaiDaMauTangE62 )
-             && mark_cell(   iv_col = `W` iv_row = lv_row iv_value = ls_data-LoaiDaMauTangH21 )
-             && mark_cell(   iv_col = `X` iv_row = lv_row iv_value = ls_data-LoaiDaGiaCongE52 )
-             && text_cell(   iv_col = `Y` iv_row = lv_row iv_style = gc_style-text
+             && number_cell( iv_col = `P` iv_row = lv_row iv_style = gc_style-integer     iv_value = ls_data-ThanhTien )
+             && mark_cell(   iv_col = `Q` iv_row = lv_row iv_value = ls_data-LoaiDaSlabE62 )
+             && mark_cell(   iv_col = `R` iv_row = lv_row iv_value = ls_data-LoaiDaCutToSizeE62 )
+             && mark_cell(   iv_col = `S` iv_row = lv_row iv_value = ls_data-LoaiDaMauBanE62 )
+             && mark_cell(   iv_col = `T` iv_row = lv_row iv_value = ls_data-LoaiDaMauTangE62 )
+             && mark_cell(   iv_col = `U` iv_row = lv_row iv_value = ls_data-LoaiDaMauTangH21 )
+             && mark_cell(   iv_col = `V` iv_row = lv_row iv_value = ls_data-LoaiDaGiaCongE52 )
+             && text_cell(   iv_col = `W` iv_row = lv_row iv_style = gc_style-text
                              iv_value = name_or_code( iv_name = ls_data-TenQuocGiaDen
                                                       iv_code = ls_data-QuocGiaDen ) )
              && |</row>|.
@@ -229,25 +227,22 @@ CLASS zcl_ce_sales_da_xlsx IMPLEMENTATION.
           && |<col min="8" max="8" width="14" customWidth="1"/>|
           && |<col min="9" max="9" width="19" customWidth="1"/>|
           && |<col min="10" max="10" width="22" customWidth="1"/>|
-          && |<col min="11" max="11" width="14" customWidth="1"/>|
-          && |<col min="12" max="12" width="18" customWidth="1"/>|
-          && |<col min="13" max="13" width="22" customWidth="1"/>|
-          && |<col min="14" max="14" width="26.5" customWidth="1"/>|
-          && |<col min="15" max="15" width="22" customWidth="1"/>|
-          && |<col min="16" max="16" width="17.5" customWidth="1"/>|
-          && |<col min="17" max="17" width="14" customWidth="1"/>|
-          && |<col min="18" max="18" width="19" customWidth="1"/>|
-          && |<col min="19" max="25" width="22" customWidth="1"/>|
+          && |<col min="11" max="11" width="18" customWidth="1"/>|
+          && |<col min="12" max="13" width="22" customWidth="1"/>|
+          && |<col min="14" max="14" width="17.5" customWidth="1"/>|
+          && |<col min="15" max="15" width="14" customWidth="1"/>|
+          && |<col min="16" max="16" width="19" customWidth="1"/>|
+          && |<col min="17" max="23" width="22" customWidth="1"/>|
           && |</cols>|
           && |<sheetData>{ lv_rows }</sheetData>|
-          && |<autoFilter ref="A{ lv_filter_row }:Y{ lv_row }"/>|
+          && |<autoFilter ref="A{ lv_filter_row }:W{ lv_row }"/>|
           " ── Header: các cột thường merge 2 dòng, LOẠI ĐÁ merge ngang 6 cột con ──
-          && |<mergeCells count="20">|
+          && |<mergeCells count="18">|
           && |<mergeCell ref="A7:A8"/><mergeCell ref="B7:B8"/><mergeCell ref="C7:C8"/><mergeCell ref="D7:D8"/>|
           && |<mergeCell ref="E7:E8"/><mergeCell ref="F7:F8"/><mergeCell ref="G7:G8"/><mergeCell ref="H7:H8"/>|
           && |<mergeCell ref="I7:I8"/><mergeCell ref="J7:J8"/><mergeCell ref="K7:K8"/><mergeCell ref="L7:L8"/>|
           && |<mergeCell ref="M7:M8"/><mergeCell ref="N7:N8"/><mergeCell ref="O7:O8"/><mergeCell ref="P7:P8"/>|
-          && |<mergeCell ref="Q7:Q8"/><mergeCell ref="R7:R8"/><mergeCell ref="S7:X7"/><mergeCell ref="Y7:Y8"/>|
+          && |<mergeCell ref="Q7:V7"/><mergeCell ref="W7:W8"/>|
           && |</mergeCells>|
           && |</worksheet>|.
 
@@ -271,21 +266,19 @@ CLASS zcl_ce_sales_da_xlsx IMPLEMENTATION.
           && text_cell( iv_col = `H` iv_row = lv_top iv_style = gc_style-header iv_value = `ĐƠN VỊ TÍNH` )
           && text_cell( iv_col = `I` iv_row = lv_top iv_style = gc_style-header iv_value = `SỐ LƯỢNG` )
           && text_cell( iv_col = `J` iv_row = lv_top iv_style = gc_style-header iv_value = `GIÁ CÔNG THỨC` )
-          && text_cell( iv_col = `K` iv_row = lv_top iv_style = gc_style-header iv_value = `ĐƠN VỊ TÍNH` )
-          && text_cell( iv_col = `L` iv_row = lv_top iv_style = gc_style-header iv_value = `GIÁ BÁN` )
-          && text_cell( iv_col = `M` iv_row = lv_top iv_style = gc_style-header iv_value = `CHÊNH LỆCH` )
-          && text_cell( iv_col = `N` iv_row = lv_top iv_style = gc_style-header iv_value = `GIÁ INV KHÁCH HÀNG` )
-          && text_cell( iv_col = `O` iv_row = lv_top iv_style = gc_style-header iv_value = `GIÁ INV HẢI QUAN` )
-          && text_cell( iv_col = `P` iv_row = lv_top iv_style = gc_style-header iv_value = `NGOẠI TỆ` )
-          && text_cell( iv_col = `Q` iv_row = lv_top iv_style = gc_style-header iv_value = `TỶ GIÁ` )
-          && text_cell( iv_col = `R` iv_row = lv_top iv_style = gc_style-header iv_value = `THÀNH TIỀN` )
-          && text_cell( iv_col = `S` iv_row = lv_top iv_style = gc_style-header iv_value = `LOẠI ĐÁ` )
+          && text_cell( iv_col = `K` iv_row = lv_top iv_style = gc_style-header iv_value = `GIÁ BÁN` )
+          && text_cell( iv_col = `L` iv_row = lv_top iv_style = gc_style-header iv_value = `CHÊNH LỆCH` )
+          && text_cell( iv_col = `M` iv_row = lv_top iv_style = gc_style-header iv_value = `GIÁ INV HẢI QUAN` )
+          && text_cell( iv_col = `N` iv_row = lv_top iv_style = gc_style-header iv_value = `NGOẠI TỆ` )
+          && text_cell( iv_col = `O` iv_row = lv_top iv_style = gc_style-header iv_value = `TỶ GIÁ` )
+          && text_cell( iv_col = `P` iv_row = lv_top iv_style = gc_style-header iv_value = `THÀNH TIỀN` )
+          && text_cell( iv_col = `Q` iv_row = lv_top iv_style = gc_style-header iv_value = `LOẠI ĐÁ` )
+          && text_cell( iv_col = `R` iv_row = lv_top iv_style = gc_style-header )
+          && text_cell( iv_col = `S` iv_row = lv_top iv_style = gc_style-header )
           && text_cell( iv_col = `T` iv_row = lv_top iv_style = gc_style-header )
           && text_cell( iv_col = `U` iv_row = lv_top iv_style = gc_style-header )
           && text_cell( iv_col = `V` iv_row = lv_top iv_style = gc_style-header )
-          && text_cell( iv_col = `W` iv_row = lv_top iv_style = gc_style-header )
-          && text_cell( iv_col = `X` iv_row = lv_top iv_style = gc_style-header )
-          && text_cell( iv_col = `Y` iv_row = lv_top iv_style = gc_style-header iv_value = `QUỐC GIA ĐẾN` )
+          && text_cell( iv_col = `W` iv_row = lv_top iv_style = gc_style-header iv_value = `QUỐC GIA ĐẾN` )
           && |</row>|
 
           " Dòng dưới: ô trống của các cột merge (để có viền) + cột con của LOẠI ĐÁ
@@ -306,15 +299,13 @@ CLASS zcl_ce_sales_da_xlsx IMPLEMENTATION.
           && text_cell( iv_col = `N` iv_row = lv_bottom iv_style = gc_style-header )
           && text_cell( iv_col = `O` iv_row = lv_bottom iv_style = gc_style-header )
           && text_cell( iv_col = `P` iv_row = lv_bottom iv_style = gc_style-header )
-          && text_cell( iv_col = `Q` iv_row = lv_bottom iv_style = gc_style-header )
-          && text_cell( iv_col = `R` iv_row = lv_bottom iv_style = gc_style-header )
-          && text_cell( iv_col = `S` iv_row = lv_bottom iv_style = gc_style-header iv_value = `SLAB (E62)` )
-          && text_cell( iv_col = `T` iv_row = lv_bottom iv_style = gc_style-header iv_value = `CUT TO SIZE (E62)` )
-          && text_cell( iv_col = `U` iv_row = lv_bottom iv_style = gc_style-header iv_value = `MẪU BÁN (E62)` )
-          && text_cell( iv_col = `V` iv_row = lv_bottom iv_style = gc_style-header iv_value = `MẪU TẶNG (E62)` )
-          && text_cell( iv_col = `W` iv_row = lv_bottom iv_style = gc_style-header iv_value = `MẪU TẶNG (H21)` )
-          && text_cell( iv_col = `X` iv_row = lv_bottom iv_style = gc_style-header iv_value = `GIA CÔNG (E52)` )
-          && text_cell( iv_col = `Y` iv_row = lv_bottom iv_style = gc_style-header )
+          && text_cell( iv_col = `Q` iv_row = lv_bottom iv_style = gc_style-header iv_value = `SLAB (E62)` )
+          && text_cell( iv_col = `R` iv_row = lv_bottom iv_style = gc_style-header iv_value = `CUT TO SIZE (E62)` )
+          && text_cell( iv_col = `S` iv_row = lv_bottom iv_style = gc_style-header iv_value = `MẪU BÁN (E62)` )
+          && text_cell( iv_col = `T` iv_row = lv_bottom iv_style = gc_style-header iv_value = `MẪU TẶNG (E62)` )
+          && text_cell( iv_col = `U` iv_row = lv_bottom iv_style = gc_style-header iv_value = `MẪU TẶNG (H21)` )
+          && text_cell( iv_col = `V` iv_row = lv_bottom iv_style = gc_style-header iv_value = `GIA CÔNG (E52)` )
+          && text_cell( iv_col = `W` iv_row = lv_bottom iv_style = gc_style-header )
           && |</row>|.
 
   ENDMETHOD.

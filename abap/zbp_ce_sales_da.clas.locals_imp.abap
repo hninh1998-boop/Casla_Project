@@ -115,6 +115,7 @@ CLASS lhc_salesda IMPLEMENTATION.
       RETURN.
     ENDIF.
 
+    " Giống ALV: Ngày chứng từ -> Billing Document -> Billing Item (tăng dần)
     SORT lt_data BY NgayChungTu BillingDocument BillingDocumentItem.
 
     " ── 3. THÔNG TIN HEADER CỦA FILE ────────────────────────

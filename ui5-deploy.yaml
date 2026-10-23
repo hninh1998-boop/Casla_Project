@@ -19,7 +19,7 @@ builder:
           authenticationType: reentranceTicket # SAML support for vscode
         app:
           name: ZSALES_DA_OV4
-          description: Báo cáo doanh thu bán hàng tháng đá
+          description: Báo cáo doanh thu bán hàng - Đá
           package: ZPK_SALES_DA
           transport: AK3K908417
         exclude:

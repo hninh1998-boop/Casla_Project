@@ -148,6 +148,7 @@ CLASS zcl_ce_sales_da_f01 IMPLEMENTATION.
     DATA lr_sotokhai       TYPE ry_string.
     DATA lr_doituongcongno TYPE tr_doituongcongno.
     DATA lr_mavattu        TYPE tr_mavattu.
+    DATA lr_mavattu_out    TYPE ry_string.
     DATA lr_billingdoc     TYPE tr_billingdoc.
     DATA lr_billingitem    TYPE tr_billingitem.
 
@@ -192,7 +193,13 @@ CLASS zcl_ce_sales_da_f01 IMPLEMENTATION.
         WHEN 'DOITUONGCONGNO'.
           lr_doituongcongno = conv_customer_range( ls_filter-range ).
         WHEN 'MAVATTU'.
-          lr_mavattu        = conv_product_range( ls_filter-range ).
+          " Mã vật tư toàn số lưu dạng có số 0 đầu (000000000300006762) -> pattern (vd. 3*) không khớp được
+          " trong SELECT, nên có pattern thì lọc sau theo mã hiển thị (bỏ số 0 đầu)
+          IF line_exists( ls_filter-range[ option = 'CP' ] ) OR line_exists( ls_filter-range[ option = 'NP' ] ).
+            lr_mavattu_out  = CORRESPONDING #( ls_filter-range ).
+          ELSE.
+            lr_mavattu      = conv_product_range( ls_filter-range ).
+          ENDIF.
         WHEN 'BILLINGDOCUMENT'.
           " Key: Object Page đọc 1 dòng theo Billing Document / Item
           lr_billingdoc     = conv_billingdoc_range( ls_filter-range ).
@@ -229,8 +236,8 @@ CLASS zcl_ce_sales_da_f01 IMPLEMENTATION.
         i~Product,
         i~ProductGroup,
         b~YY1_HangTangFree_BDI AS HangTang,
-        i~BillingQuantity,
-        i~BillingQuantityUnit,
+        i~BillingQuantityInBaseUnit,
+        i~BaseUnit,
         c~Currency    AS CompanyCodeCurrency,
         t~CountryName,
         k~CustomerName
@@ -243,10 +250,23 @@ CLASS zcl_ce_sales_da_f01 IMPLEMENTATION.
         AND h~BillingDocument     IN @lr_billingdoc
         AND i~BillingDocumentItem IN @lr_billingitem
         AND i~Product             IN @lr_mavattu
-        AND i~BillingQuantity     <> 0
+        AND i~BillingQuantityInBaseUnit <> 0
     INTO TABLE @DATA(lt_item).
     IF sy-subrc <> 0.
       RETURN.
+    ENDIF.
+
+    " Filter Mã vật tư dạng pattern: so theo mã hiển thị
+    IF lr_mavattu_out IS NOT INITIAL.
+      LOOP AT lt_item ASSIGNING FIELD-SYMBOL(<ls_item_filter>).
+        DATA(lv_product_out) = condense( |{ <ls_item_filter>-Product ALPHA = OUT }| ).
+        IF lv_product_out NOT IN lr_mavattu_out.
+          DELETE lt_item.
+        ENDIF.
+      ENDLOOP.
+      IF lt_item IS INITIAL.
+        RETURN.
+      ENDIF.
     ENDIF.
 
     " Dữ liệu mức header của từng Billing Document
@@ -473,7 +493,7 @@ CLASS zcl_ce_sales_da_f01 IMPLEMENTATION.
           TenDoiTuongCongNo   = ls_item-CustomerName
           SoInv               = ls_doc-soinv
           MaVatTu             = ls_item-Product
-          SoLuong             = ls_item-BillingQuantity
+          SoLuong             = ls_item-BillingQuantityInBaseUnit
           QuocGiaDen          = ls_item-Country
           TenQuocGiaDen       = ls_item-CountryName
           CompanyCodeCurrency = ls_item-CompanyCodeCurrency
@@ -494,7 +514,7 @@ CLASS zcl_ce_sales_da_f01 IMPLEMENTATION.
       ENDIF.
       ls_result-DonViTinh = COND #( WHEN lv_baseunit IS NOT INITIAL
                                     THEN lv_baseunit
-                                    ELSE ls_item-BillingQuantityUnit ).
+                                    ELSE ls_item-BaseUnit ).
 
       " Giá công thức (ZPXX): quy về Base Unit
       CLEAR: lv_giacongthuc, lv_giaban, lv_giainvkhachhang.
@@ -543,7 +563,7 @@ CLASS zcl_ce_sales_da_f01 IMPLEMENTATION.
                                             WHEN ls_zpr1-conditioncurrency IS NOT INITIAL THEN ls_zpr1-conditioncurrency
                                             ELSE ls_item-TransactionCurrency ).
 
-      lv_ngoaite = ls_item-BillingQuantity * lv_giaban.
+      lv_ngoaite = ls_item-BillingQuantityInBaseUnit * lv_giaban.
 
       ls_result-GiaCongThuc     = lv_giacongthuc.
       ls_result-GiaBan          = lv_giaban.
@@ -612,8 +632,8 @@ CLASS zcl_ce_sales_da_f01 IMPLEMENTATION.
       ENDLOOP.
       SORT ct_result BY (lt_sort_order).
     ELSE.
-      " Mặc định: theo key Billing Document / Item
-      SORT ct_result BY BillingDocument BillingDocumentItem.
+      " Mặc định: Ngày chứng từ -> Billing Document -> Billing Item (tăng dần)
+      SORT ct_result BY NgayChungTu BillingDocument BillingDocumentItem.
     ENDIF.
 
     DATA(lv_skip) = io_request->get_paging( )->get_offset( ).

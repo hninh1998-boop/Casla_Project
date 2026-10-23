@@ -1,6 +1,6 @@
 @Metadata.layer: #CORE
 @UI.headerInfo: {
-  typeName: 'Báo cáo doanh thu bán hàng tháng đá',
+  typeName: 'Báo cáo doanh thu bán hàng - Đá',
   typeNamePlural: 'Datas',
   title: { type: #STANDARD,
            value: 'BillingDocumentTitle' }
@@ -117,13 +117,13 @@ annotate entity zce_sales_da with
   ChenhLech;
 
   // 12
-  @EndUserText.label: 'Giá Inv Hải Quan'
+  @EndUserText.label: 'Giá INV Hải Quan'
   @UI.lineItem: [{ position: 150 }]
   @UI.identification: [{ position: 150 }]
   GiaInvHaiQuan;
 
   // 13
-  @EndUserText.label: 'Giá Inv Khách Hàng'
+  @EndUserText.label: 'Giá INV Khách Hàng'
   @UI.lineItem: [{ position: 160 }]
   @UI.identification: [{ position: 160 }]
   GiaInvKhachHang;

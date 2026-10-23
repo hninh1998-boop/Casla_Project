@@ -25,7 +25,7 @@ define root custom entity zce_sales_da
       // I_BillingDocumentItem
       MaVatTu             : matnr; // Product
       @Semantics.quantity.unitOfMeasure: 'DonViTinh'
-      SoLuong             : abap.quan(13,3); // BillingQuantity
+      SoLuong             : abap.quan(13,3); // BillingQuantityInBaseUnit
 
       // I_BillingDocumentTextTP
       SoToKhai            : abap.string; // LongTextID = Z020 --> LongText
