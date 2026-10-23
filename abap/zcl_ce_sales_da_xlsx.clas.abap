@@ -32,6 +32,9 @@ CLASS zcl_ce_sales_da_xlsx DEFINITION
                  number      TYPE i VALUE 9,
                  integer     TYPE i VALUE 10,
                  rate        TYPE i VALUE 11,
+                 whole       TYPE i VALUE 12,
+                 dec3        TYPE i VALUE 13,
+                 dec5        TYPE i VALUE 14,
                END OF gc_style.
 
     " Header chiếm 2 dòng (dòng dưới là các cột con của LOẠI ĐÁ)
@@ -55,6 +58,14 @@ CLASS zcl_ce_sales_da_xlsx DEFINITION
                 iv_row        TYPE i
                 iv_style      TYPE i
                 iv_value      TYPE csequence OPTIONAL
+      RETURNING VALUE(rv_xml) TYPE string.
+
+    " Số nguyên -> hiện không có phần lẻ (10); có phần lẻ -> làm tròn và hiện đúng iv_decimals số lẻ (10.89)
+    CLASS-METHODS decimal_cell
+      IMPORTING iv_col        TYPE string
+                iv_row        TYPE i
+                iv_value      TYPE numeric
+                iv_decimals   TYPE i
       RETURNING VALUE(rv_xml) TYPE string.
 
     CLASS-METHODS number_cell
@@ -185,12 +196,12 @@ CLASS zcl_ce_sales_da_xlsx IMPLEMENTATION.
              && text_cell(   iv_col = `F` iv_row = lv_row iv_style = gc_style-text        iv_value = lv_product )
              && text_cell(   iv_col = `G` iv_row = lv_row iv_style = gc_style-text        iv_value = ls_data-TenVatTu )
              && text_cell(   iv_col = `H` iv_row = lv_row iv_style = gc_style-text        iv_value = ls_data-DonViTinh )
-             && number_cell( iv_col = `I` iv_row = lv_row iv_style = gc_style-number      iv_value = ls_data-SoLuong )
-             && number_cell( iv_col = `J` iv_row = lv_row iv_style = gc_style-number      iv_value = ls_data-GiaCongThuc )
-             && number_cell( iv_col = `K` iv_row = lv_row iv_style = gc_style-number      iv_value = ls_data-GiaBan )
-             && number_cell( iv_col = `L` iv_row = lv_row iv_style = gc_style-number      iv_value = ls_data-ChenhLech )
-             && number_cell( iv_col = `M` iv_row = lv_row iv_style = gc_style-number      iv_value = ls_data-GiaInvHaiQuan )
-             && number_cell( iv_col = `N` iv_row = lv_row iv_style = gc_style-number      iv_value = ls_data-NgoaiTe )
+             && decimal_cell( iv_col = `I` iv_row = lv_row iv_value = ls_data-SoLuong iv_decimals = 3 )
+             && decimal_cell( iv_col = `J` iv_row = lv_row iv_value = ls_data-GiaCongThuc iv_decimals = 2 )
+             && decimal_cell( iv_col = `K` iv_row = lv_row iv_value = ls_data-GiaBan iv_decimals = 2 )
+             && decimal_cell( iv_col = `L` iv_row = lv_row iv_value = ls_data-ChenhLech iv_decimals = 2 )
+             && decimal_cell( iv_col = `M` iv_row = lv_row iv_value = ls_data-GiaInvHaiQuan iv_decimals = 5 )
+             && decimal_cell( iv_col = `N` iv_row = lv_row iv_value = ls_data-NgoaiTe iv_decimals = 2 )
              " Tỷ giá: số nguyên thì không hiện phần lẻ, có phần lẻ thì hiện đúng số chữ số lẻ thực tế
              && number_cell( iv_col = `O` iv_row = lv_row iv_value = ls_data-TyGia
                              iv_style = COND #( WHEN frac( ls_data-TyGia ) = 0
@@ -319,8 +330,9 @@ CLASS zcl_ce_sales_da_xlsx IMPLEMENTATION.
 
     rv_xml = |<styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">|
 
-          && |<numFmts count="2"><numFmt numFmtId="164" formatCode="###,###,###,###"/>|
-          && |<numFmt numFmtId="165" formatCode="#,##0.#####"/></numFmts>|
+          && |<numFmts count="4"><numFmt numFmtId="164" formatCode="###,###,###,###"/>|
+          && |<numFmt numFmtId="165" formatCode="#,##0.#####"/>|
+          && |<numFmt numFmtId="166" formatCode="#,##0.000"/><numFmt numFmtId="167" formatCode="#,##0.00000"/></numFmts>|
 
           " fontId: 0 = dữ liệu, 1 = tên công ty, 2 = địa chỉ / từ ngày - đến ngày, 3 = tiêu đề, 4 = header
           && |<fonts count="5">|
@@ -328,7 +340,7 @@ CLASS zcl_ce_sales_da_xlsx IMPLEMENTATION.
           && |<font><b/><sz val="12"/><name val="Times New Roman"/><family val="1"/></font>|
           && |<font><sz val="12"/><name val="Times New Roman"/><family val="1"/></font>|
           && |<font><b/><sz val="16"/><color rgb="FF006020"/><name val="Times New Roman"/><family val="1"/></font>|
-          && |<font><b/><sz val="11"/><color rgb="FFFFFFFF"/><name val="Times New Roman"/><family val="1"/></font>|
+          && |<font><b/><sz val="10"/><color rgb="FFFFFFFF"/><name val="Times New Roman"/><family val="1"/></font>|
           && |</fonts>|
 
           " fillId: 0, 1 = bắt buộc của Excel, 2 = nền xanh của header
@@ -348,7 +360,8 @@ CLASS zcl_ce_sales_da_xlsx IMPLEMENTATION.
           && |<cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs>|
 
           " numFmtId: 4 = #,##0.00   14 = ngày   49 = text   164 = ###,###,###,###   165 = #,##0.#####
-          && |<cellXfs count="12">|
+          "           3 = #,##0   166 = #,##0.000   167 = #,##0.00000
+          && |<cellXfs count="15">|
           " 0: mặc định
           && |<xf numFmtId="0" fontId="0" fillId="0" borderId="0" xfId="0"/>|
           " 1: company
@@ -378,6 +391,12 @@ CLASS zcl_ce_sales_da_xlsx IMPLEMENTATION.
           && |<xf numFmtId="164" { lv_data } applyNumberFormat="1"/>|
           " 11: rate
           && |<xf numFmtId="165" { lv_data } applyNumberFormat="1"/>|
+          " 12: whole (số nguyên, hiện cả số 0)
+          && |<xf numFmtId="3" { lv_data } applyNumberFormat="1"/>|
+          " 13: dec3
+          && |<xf numFmtId="166" { lv_data } applyNumberFormat="1"/>|
+          " 14: dec5
+          && |<xf numFmtId="167" { lv_data } applyNumberFormat="1"/>|
           && |</cellXfs>|
 
           && |<cellStyles count="1"><cellStyle name="Normal" xfId="0" builtinId="0"/></cellStyles>|
@@ -397,6 +416,25 @@ CLASS zcl_ce_sales_da_xlsx IMPLEMENTATION.
                             format = cl_abap_format=>e_xml_text ).
 
     rv_xml = |<c r="{ iv_col }{ iv_row }" s="{ iv_style }" t="inlineStr"><is><t xml:space="preserve">{ lv_text }</t></is></c>|.
+
+  ENDMETHOD.
+
+
+  METHOD decimal_cell.
+
+    IF frac( iv_value ) = 0.
+      rv_xml = number_cell( iv_col = iv_col iv_row = iv_row iv_style = gc_style-whole iv_value = iv_value ).
+      RETURN.
+    ENDIF.
+
+    DATA(lv_value) = round( val = CONV decfloat34( iv_value ) dec = iv_decimals ).
+
+    rv_xml = number_cell( iv_col   = iv_col
+                          iv_row   = iv_row
+                          iv_style = SWITCH #( iv_decimals WHEN 3 THEN gc_style-dec3
+                                                           WHEN 5 THEN gc_style-dec5
+                                                           ELSE        gc_style-number )
+                          iv_value = lv_value ).
 
   ENDMETHOD.
 

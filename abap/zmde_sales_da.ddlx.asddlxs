@@ -123,9 +123,9 @@ annotate entity zce_sales_da with
   GiaInvHaiQuan;
 
   // 13
+  // Không hiển thị trên ALV / màn hình detail (template v2 đã bỏ cột này)
   @EndUserText.label: 'Giá INV Khách Hàng'
-  @UI.lineItem: [{ position: 160 }]
-  @UI.identification: [{ position: 160 }]
+  @UI.hidden: true
   GiaInvKhachHang;
 
   // 14

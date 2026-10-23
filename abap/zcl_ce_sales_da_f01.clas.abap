@@ -238,6 +238,7 @@ CLASS zcl_ce_sales_da_f01 IMPLEMENTATION.
         b~YY1_HangTangFree_BDI AS HangTang,
         i~BillingQuantityInBaseUnit,
         i~BaseUnit,
+        i~NetAmount,
         c~Currency    AS CompanyCodeCurrency,
         t~CountryName,
         k~CustomerName
@@ -563,12 +564,21 @@ CLASS zcl_ce_sales_da_f01 IMPLEMENTATION.
                                             WHEN ls_zpr1-conditioncurrency IS NOT INITIAL THEN ls_zpr1-conditioncurrency
                                             ELSE ls_item-TransactionCurrency ).
 
-      lv_ngoaite = ls_item-BillingQuantityInBaseUnit * lv_giaban.
+      " Làm tròn giá về 2 số lẻ trước khi tính, để Chênh lệch / Ngoại tệ / Thành tiền khớp với số hiển thị
+      " (vd. Giá bán 2.9166 -> 2.92, Giá công thức 2.7949 -> 2.79 => Chênh lệch 0.13)
+      lv_giacongthuc     = round( val = lv_giacongthuc     dec = 2 ).
+      lv_giaban          = round( val = lv_giaban          dec = 2 ).
+      lv_giainvkhachhang = round( val = lv_giainvkhachhang dec = 2 ).
+
+      " Ngoại tệ = Net value của Billing Document Item (lấy trực tiếp để không lệch với hệ thống)
+      lv_ngoaite = ls_item-NetAmount.
 
       ls_result-GiaCongThuc     = lv_giacongthuc.
       ls_result-GiaBan          = lv_giaban.
       ls_result-ChenhLech       = lv_giaban - lv_giacongthuc.
-      ls_result-GiaInvHaiQuan   = lv_giaban.
+      " Giá INV hải quan = Ngoại tệ / Số lượng (lấy 5 số lẻ)
+      ls_result-GiaInvHaiQuan   = COND #( WHEN ls_item-BillingQuantityInBaseUnit <> 0
+                                          THEN round( val = lv_ngoaite / ls_item-BillingQuantityInBaseUnit dec = 5 ) ).
       ls_result-GiaInvKhachHang = lv_giainvkhachhang.
       ls_result-NgoaiTe         = lv_ngoaite.
 
