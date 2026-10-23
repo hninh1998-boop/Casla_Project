@@ -66,6 +66,8 @@ CLASS lhc_zc_masschange_product_orde IMPLEMENTATION.
         yy1_so_may_ord           TYPE string,
         yy1_thu_tu_ord           TYPE string,
         yy1_materialname_ord     TYPE string,
+        yy1_kdauf_ord            TYPE string,
+        yy1_kdpos_ord            TYPE string,
       END OF ty_file_up_gen,
 
       ty_t_file_up_gen TYPE STANDARD TABLE OF ty_file_up_gen WITH EMPTY KEY.
@@ -91,7 +93,7 @@ CLASS lhc_zc_masschange_product_orde IMPLEMENTATION.
 
     DATA(lo_selection_pattern) = xco_cp_xlsx_selection=>pattern_builder->simple_from_to(
                                )->from_column( xco_cp_xlsx=>coordinate->for_alphabetic_value( 'A' )
-                               )->to_column( xco_cp_xlsx=>coordinate->for_alphabetic_value( 'F' )
+                               )->to_column( xco_cp_xlsx=>coordinate->for_alphabetic_value( 'H' )
                                )->from_row( xco_cp_xlsx=>coordinate->for_numeric_value( 1 )
                                )->get_pattern( ).
 
@@ -135,6 +137,8 @@ CLASS lhc_zc_masschange_product_orde IMPLEMENTATION.
                        yy1_so_may_ord           = 'Số máy'
                        yy1_thu_tu_ord           = 'Số thứ tự'
                        yy1_materialname_ord     = 'Tên thành phẩm'
+                       yy1_kdauf_ord            = 'Sales Order (KDAUF)'
+                       yy1_kdpos_ord            = 'Sales Order Item (KDPOS)'
                        ) ).
 
     LOOP AT lt_data INTO DATA(ls_data).
@@ -151,6 +155,8 @@ CLASS lhc_zc_masschange_product_orde IMPLEMENTATION.
         yy1_so_may_ord           = ls_data-yy1_so_may_ord
         yy1_thu_tu_ord           = ls_data-yy1_thu_tu_ord
         yy1_materialname_ord     = ls_data-yy1_materialname_ord
+        yy1_kdauf_ord            = ls_data-yy1_kdauf_ord
+        yy1_kdpos_ord            = ls_data-yy1_kdpos_ord
       ) TO lt_file.
     ENDLOOP.
     lo_worksheet->select( lo_selection_pattern
@@ -186,6 +192,8 @@ CLASS lhc_zc_masschange_product_orde IMPLEMENTATION.
         yy1_so_may_ord           TYPE string,
         yy1_thu_tu_ord           TYPE string,
         yy1_materialname_ord     TYPE string,
+        yy1_kdauf_ord            TYPE string,
+        yy1_kdpos_ord            TYPE string,
 
 
       END OF ty_file_upload,
@@ -214,10 +222,10 @@ CLASS lhc_zc_masschange_product_orde IMPLEMENTATION.
         DATA(lo_document) = xco_cp_xlsx=>document->for_file_content( lv_file_content )->read_access( ).
         DATA(lo_worksheet) = lo_document->get_workbook( )->worksheet->at_position( 1 ).
 
-        " Định nghĩa vùng đọc dữ liệu (A3:F999 - bỏ header row 1-2)
+        " Định nghĩa vùng đọc dữ liệu (A2:H999 - bỏ header row 1)
         DATA(o_sel_pattern) = xco_cp_xlsx_selection=>pattern_builder->simple_from_to(
           )->from_column( xco_cp_xlsx=>coordinate->for_alphabetic_value( 'A' )  "
-          )->to_column(   xco_cp_xlsx=>coordinate->for_alphabetic_value( 'F' )  "
+          )->to_column(   xco_cp_xlsx=>coordinate->for_alphabetic_value( 'H' )  "
           )->from_row(    xco_cp_xlsx=>coordinate->for_numeric_value( 2 )       " Row 2: Bỏ qua header
           )->get_pattern( ).
 
@@ -261,6 +269,16 @@ CLASS lhc_zc_masschange_product_orde IMPLEMENTATION.
       IF strlen( <fs>-yy1_materialname_ord ) > 50.
         lw_error = 'X'.
         lv_error_msg = lv_error_msg && |Dòng { lw_index + 1 }: Tên thành phẩm dài quá 50 ký tự. |.
+      ENDIF.
+
+      " YY1_KDAUF_ORD, YY1_KDPOS_ORD là Text (20)
+      IF strlen( <fs>-yy1_kdauf_ord ) > 20.
+        lw_error = 'X'.
+        lv_error_msg = lv_error_msg && |Dòng { lw_index + 1 }: Sales Order (KDAUF) dài quá 20 ký tự. |.
+      ENDIF.
+      IF strlen( <fs>-yy1_kdpos_ord ) > 20.
+        lw_error = 'X'.
+        lv_error_msg = lv_error_msg && |Dòng { lw_index + 1 }: Sales Order Item (KDPOS) dài quá 20 ký tự. |.
       ENDIF.
 
 *      lw_checkdate =  <fs>-mfgorderplannedstartdate .
@@ -434,6 +452,10 @@ CLASS lhc_zc_masschange_product_orde IMPLEMENTATION.
           " Escape ký tự đặc biệt (" và \) để không làm hỏng JSON của batch
           DATA(lw_materialname) = escape( val    = ls_excel-yy1_materialname_ord
                                           format = cl_abap_format=>e_json_string ).
+          DATA(lw_kdauf) = escape( val    = ls_excel-yy1_kdauf_ord
+                                   format = cl_abap_format=>e_json_string ).
+          DATA(lw_kdpos) = escape( val    = ls_excel-yy1_kdpos_ord
+                                   format = cl_abap_format=>e_json_string ).
           lw_count += 1.
           lw_json_body = lw_json_body && |--changeset\r\n| && |Content-Type: application/http\r\n|
           && |Content-Transfer-Encoding: binary\r\n|
@@ -459,6 +481,12 @@ CLASS lhc_zc_masschange_product_orde IMPLEMENTATION.
           && COND #( WHEN lw_materialname IS INITIAL
             THEN ``
             ELSE |,"YY1_MaterialName_ORD": "{ lw_materialname }"| )
+          && COND #( WHEN lw_kdauf IS INITIAL
+            THEN ``
+            ELSE |,"YY1_KDAUF_ORD": "{ lw_kdauf }"| )
+          && COND #( WHEN lw_kdpos IS INITIAL
+            THEN ``
+            ELSE |,"YY1_KDPOS_ORD": "{ lw_kdpos }"| )
 ***********************************************************
           && | \}|
           && |\r\n\r\n|.

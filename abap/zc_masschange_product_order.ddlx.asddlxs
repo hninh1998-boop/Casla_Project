@@ -75,6 +75,28 @@ annotate entity zc_MASSCHANGE_PRODUCT_ORDER
     label: 'Tên thành phẩm'
   } ]
   YY1_MaterialName_ORD;
+
+  @UI.lineItem: [ {
+    position: 76 ,
+    importance: #HIGH,
+    label: 'Sales Order (KDAUF)'
+  } ]
+  @UI.identification: [ {
+    position: 76 ,
+    label: 'Sales Order (KDAUF)'
+  } ]
+  YY1_KDAUF_ORD;
+
+  @UI.lineItem: [ {
+    position: 77 ,
+    importance: #HIGH,
+    label: 'Sales Order Item (KDPOS)'
+  } ]
+  @UI.identification: [ {
+    position: 77 ,
+    label: 'Sales Order Item (KDPOS)'
+  } ]
+  YY1_KDPOS_ORD;
     @UI.lineItem: [ {
     position: 80 ,
     importance: #HIGH,

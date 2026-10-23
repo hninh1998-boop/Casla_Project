@@ -13,6 +13,8 @@ define root view entity zc_MASSCHANGE_PRODUCT_ORDER
       YY1_So_May_ORD,
       YY1_Thu_Tu_ORD,
       YY1_MaterialName_ORD,
+      YY1_KDAUF_ORD,
+      YY1_KDPOS_ORD,
       Material,
       _PRODUCTDESCRIPTION.ProductDescription,
       SalesOrder,

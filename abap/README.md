@@ -13,7 +13,7 @@ Source lấy từ hệ thống ngày 2026-10-05.
 
 | File | Object | Trạng thái |
 |---|---|---|
-| `zc_masschange_product_order.ddls.asddls` | CDS view `ZC_MASSCHANGE_PRODUCT_ORDER` | Giống hệ thống (đã activate 2026-10-05) |
+| `zc_masschange_product_order.ddls.asddls` | CDS view `ZC_MASSCHANGE_PRODUCT_ORDER` | **Đã sửa, chưa activate** (thêm `YY1_KDAUF_ORD`, `YY1_KDPOS_ORD`) |
 | `zc_masschange_product_order.ddlx.asddlxs` | Metadata Extension | **Đã sửa, chưa activate** |
 | `zbp_c_masschange_product_order.clas.locals_imp.abap` | Local types của class `ZBP_C_MASSCHANGE_PRODUCT_ORDER` | **Đã sửa, chưa activate** |
 | `zc_masschange_product_order.bdef.asbdef` | Behavior Definition | Giống hệ thống |
@@ -42,6 +42,25 @@ Thứ tự thực hiện trên hệ thống:
 2. Dán và activate CDS view. (Đã xong, transport `AK3K908243`.)
 3. Dán và activate Metadata Extension.
 4. Dán và activate phần Local Types của class.
+
+## Thay đổi đang chờ: thêm field Sales Order (`YY1_KDAUF_ORD`) và Sales Order Item (`YY1_KDPOS_ORD`)
+
+Custom field `YY1_KDAUF` và `YY1_KDPOS`, Text (20), business context Order Master Data (`FINS_ORDER`).
+Ngày 2026-10-22: `YY1_KDPOS` đã Published, `YY1_KDAUF` đang ở trạng thái **Changed** (chưa Publish).
+
+Nội dung thay đổi theo từng file:
+
+- **CDS view**: thêm `YY1_KDAUF_ORD`, `YY1_KDPOS_ORD` sau `YY1_MaterialName_ORD`.
+- **Metadata Extension**: thêm cột và field Object Page ở vị trí 76, 77.
+- **`downloadtemplate`**: thêm cột G "Sales Order (KDAUF)" và cột H "Sales Order Item (KDPOS)".
+- **`excelupload`**: đọc thêm cột G, H; báo lỗi nếu dài quá 20 ký tự; gửi `YY1_KDAUF_ORD` / `YY1_KDPOS_ORD` trong PATCH khi ô có giá trị (ô trống = giữ nguyên). Giá trị gửi nguyên như trong ô, không thêm số 0 ở đầu.
+
+Thứ tự thực hiện trên hệ thống:
+
+1. App Custom Fields: Publish `YY1_KDAUF`; kiểm tra cả hai field đã bật cho `I_ManufacturingOrder` và `API_PRODUCTION_ORDER_2_SRV`, rồi Publish.
+2. Dán và activate CDS view. (Đã dán ngày 2026-10-22.)
+3. Dán và activate Metadata Extension. (Đã dán ngày 2026-10-22.)
+4. Dán và activate phần Local Types của class. (Đã dán ngày 2026-10-22; cần dán lại bản có kiểm tra độ dài 20.)
 
 ## Vấn đề đang mở: upload không đổi được "Tên thành phẩm" (2026-10-05)
 
