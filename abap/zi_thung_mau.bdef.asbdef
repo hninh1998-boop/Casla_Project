@@ -11,8 +11,8 @@ authorization master ( global )
   create ( authorization : global );
   update;
 
-  field ( readonly : update ) SoKhsx, SoThung, Material, Batch;
-  field ( readonly ) CreatedBy, CreatedAt, LastChangedBy, LocalLastChangedAt, LastChangedAt;
+  field ( readonly : update ) SoThung, Material, Batch;
+  field ( readonly ) QuantityText, CreatedBy, CreatedAt, LastChangedBy, LocalLastChangedAt, LastChangedAt;
 
   action ( features : instance ) deleteThung result [1] $self;
   action ( features : instance ) doThung result [1] $self;
@@ -26,7 +26,6 @@ authorization master ( global )
       Material           = material;
       Batch              = batch;
       Quantity           = quantity;
-      BaseUnit           = base_unit;
       StorageLocation    = storage_location;
       Customer           = customer;
       NgayNhapKho        = ngay_nhap_kho;

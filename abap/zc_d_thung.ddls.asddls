@@ -20,9 +20,8 @@ define view entity zc_d_thung
       SoThung,
       Material,
       Batch,
-      @Semantics.quantity.unitOfMeasure: 'BaseUnit'
       Quantity,
-      BaseUnit,
+      QuantityText,
       StorageLocation,
       Customer,
       NgayNhapKho,

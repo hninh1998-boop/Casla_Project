@@ -23,7 +23,7 @@ annotate entity zc_d_thung with
   Uuid;
 
   @UI.lineItem: [{ position: 20, label: 'Message Type' , criticality: 'Criticality'  },
-                 { label: 'Post',
+                 { label: 'Ghi dữ liệu',
                    dataAction: 'PostConfirm',
                    type: #FOR_ACTION,
                    invocationGrouping: #CHANGE_SET
@@ -65,10 +65,13 @@ annotate entity zc_d_thung with
   @UI.identification: [{ position: 90 }]
   @EndUserText.label: 'Batch'
   Batch;
+  @UI.hidden: true
+  Quantity;
   @UI.lineItem: [{ position: 110 }]
   @UI.identification: [{ position: 110 }]
   @EndUserText.label: 'Số lượng (Viên)'
-  Quantity;
+  @Consumption.filter.hidden: true
+  QuantityText;
   @UI.lineItem: [{ position: 120 }]
   @UI.identification: [{ position: 120 }]
   @EndUserText.label: 'Vị trí (Storage Location)'

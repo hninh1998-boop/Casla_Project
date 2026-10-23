@@ -53,7 +53,7 @@ annotate entity zc_m_thung with
 
   @EndUserText.label: 'UUID File'
   @UI.lineItem     : [{ position: 10 },
-                        { type: #FOR_ACTION, dataAction: 'downloadTemplate', label: 'Download Template' }]
+                        { type: #FOR_ACTION, dataAction: 'downloadTemplate', label: 'Tải file mẫu' }]
   @UI.identification : [{ position: 10 }]
   @UI.fieldGroup     : [ { type: #STANDARD,  position: 10 ,  qualifier: 'QFBasicInfo'  }]
   Uuid;

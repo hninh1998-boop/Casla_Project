@@ -28,8 +28,11 @@ CLASS zcl_thung_implement DEFINITION
 
     "! Kiểm tra từng dòng upload và ghi vào ZTB_CUSTOM_HU (qua BO zi_thung_mau).
     "! Thùng nào có dòng lỗi thì không ghi dòng nào của thùng đó.
+    "! iv_check_only = true: chỉ kiểm tra và trả message cho từng dòng (dùng ngay lúc upload file),
+    "! không ghi dữ liệu. Lúc bấm Ghi dữ liệu thì kiểm tra lại toàn bộ rồi mới ghi.
     CLASS-METHODS post
-      CHANGING ct_data TYPE tt_data.
+      IMPORTING iv_check_only TYPE abap_boolean DEFAULT abap_false
+      CHANGING  ct_data       TYPE tt_data.
 
   PROTECTED SECTION.
   PRIVATE SECTION.
@@ -44,8 +47,8 @@ CLASS ZCL_THUNG_IMPLEMENT IMPLEMENTATION.
 
 
   METHOD post.
+    " Key nghiệp vụ của thùng mẫu: Số thùng + Mã hàng + Batch (Số KHSX không phải key, sửa được bằng Type M)
     TYPES: BEGIN OF ty_key,
-             so_khsx  TYPE ztb_d_thung-so_khsx,
              so_thung TYPE ztb_d_thung-so_thung,
              material TYPE ztb_d_thung-material,
              batch    TYPE ztb_d_thung-batch,
@@ -57,19 +60,28 @@ CLASS ZCL_THUNG_IMPLEMENT IMPLEMENTATION.
              so_khsx  TYPE ztb_d_thung-so_khsx,
            END OF ty_thung_so,
 
+           BEGIN OF ty_thung_kl,
+             so_thung   TYPE ztb_d_thung-so_thung,
+             khoi_luong TYPE ztb_d_thung-khoi_luong,
+           END OF ty_thung_kl,
+
            BEGIN OF ty_thung,
              so_thung   TYPE ztb_d_thung-so_thung,
              so_count   TYPE i,            "Số KHSX khác nhau của thùng trong file
+             kl_count   TYPE i,            "Khối lượng khác nhau của thùng trong file
              exist      TYPE abap_boolean, "Số thùng đã có trong bảng (không xét đánh dấu xóa)
+             active     TYPE abap_boolean, "Thùng còn dòng đang sử dụng (chưa xóa / dỡ thùng)
              issued     TYPE abap_boolean, "Thùng có dòng Đã xuất
              has_error  TYPE abap_boolean,
              has_modify TYPE abap_boolean,
            END OF ty_thung.
 
     DATA: lt_key      TYPE HASHED TABLE OF ty_key
-                      WITH UNIQUE KEY so_khsx so_thung material batch,
+                      WITH UNIQUE KEY so_thung material batch,
           lt_thung_so TYPE SORTED TABLE OF ty_thung_so
                       WITH UNIQUE KEY so_thung so_khsx,
+          lt_thung_kl TYPE SORTED TABLE OF ty_thung_kl
+                      WITH UNIQUE KEY so_thung khoi_luong,
           lt_thung    TYPE HASHED TABLE OF ty_thung WITH UNIQUE KEY so_thung.
 
     DATA: lt_create TYPE TABLE FOR CREATE zi_thung_mau,
@@ -84,15 +96,13 @@ CLASS ZCL_THUNG_IMPLEMENT IMPLEMENTATION.
       CLEAR: <lfs_data>-messagetype, <lfs_data>-message.
 
       READ TABLE lt_key ASSIGNING FIELD-SYMBOL(<lfs_key>)
-        WITH TABLE KEY so_khsx          = <lfs_data>-so_khsx
-                       so_thung         = <lfs_data>-so_thung
+        WITH TABLE KEY so_thung         = <lfs_data>-so_thung
                        material         = <lfs_data>-material
                        batch            = <lfs_data>-batch.
       IF sy-subrc = 0.
         <lfs_key>-cnt = <lfs_key>-cnt + 1.
       ELSE.
-        INSERT VALUE #( so_khsx          = <lfs_data>-so_khsx
-                        so_thung         = <lfs_data>-so_thung
+        INSERT VALUE #( so_thung         = <lfs_data>-so_thung
                         material         = <lfs_data>-material
                         batch            = <lfs_data>-batch
                         cnt              = 1 ) INTO TABLE lt_key.
@@ -108,6 +118,13 @@ CLASS ZCL_THUNG_IMPLEMENT IMPLEMENTATION.
                       so_khsx          = <lfs_data>-so_khsx ) INTO TABLE lt_thung_so.
       IF sy-subrc = 0.
         <lfs_thung>-so_count = <lfs_thung>-so_count + 1.
+      ENDIF.
+
+      " Khối lượng: so nguyên text đã bỏ khoảng trắng hai đầu; ô trống cũng tính là một giá trị
+      INSERT VALUE #( so_thung   = <lfs_data>-so_thung
+                      khoi_luong = <lfs_data>-khoi_luong ) INTO TABLE lt_thung_kl.
+      IF sy-subrc = 0.
+        <lfs_thung>-kl_count = <lfs_thung>-kl_count + 1.
       ENDIF.
 
       IF <lfs_data>-type = 'M'.
@@ -130,18 +147,24 @@ CLASS ZCL_THUNG_IMPLEMENT IMPLEMENTATION.
 
       <lfs_thung>-exist = abap_true.
 
+      IF ls_db-del_flag = del_flag-none.
+        <lfs_thung>-active = abap_true.
+      ENDIF.
+
       IF ls_db-status = hu_status-issued.
         <lfs_thung>-issued = abap_true.
       ENDIF.
     ENDLOOP.
 
-    SELECT FROM I_Product
-      FIELDS Product, BaseUnit
+    " WITH PRIVILEGED ACCESS: hàm này còn được gọi lúc upload (determination on save của ZI_M_THUNG),
+    " ở giai đoạn đó RAP cấm kiểm tra quyền DCL ngầm của CDS view → dump BEHAVIOR_ILLEGAL_STATEMENT
+    SELECT FROM I_Product WITH PRIVILEGED ACCESS
+      FIELDS Product
       FOR ALL ENTRIES IN @ct_data
       WHERE Product = @ct_data-material
       INTO TABLE @DATA(lt_product).
 
-    SELECT FROM I_StorageLocation
+    SELECT FROM I_StorageLocation WITH PRIVILEGED ACCESS
       FIELDS StorageLocation
       FOR ALL ENTRIES IN @ct_data
       WHERE Plant           = @plant
@@ -161,15 +184,15 @@ CLASS ZCL_THUNG_IMPLEMENT IMPLEMENTATION.
                    CHANGING  cs_data    = <lfs_data> ).
       ENDIF.
 
-      IF <lfs_data>-so_khsx IS INITIAL OR <lfs_data>-so_thung IS INITIAL OR <lfs_data>-material IS INITIAL.
-        set_error( EXPORTING iv_message = |Bắt buộc nhập Số KHSX, Số thùng và Mã hàng|
+      " Số KHSX không bắt buộc
+      IF <lfs_data>-so_thung IS INITIAL OR <lfs_data>-material IS INITIAL.
+        set_error( EXPORTING iv_message = |Bắt buộc nhập Số thùng và Mã hàng|
                    CHANGING  cs_data    = <lfs_data> ).
       ENDIF.
 
       " Trùng key trong file
       READ TABLE lt_key ASSIGNING <lfs_key>
-        WITH TABLE KEY so_khsx          = <lfs_data>-so_khsx
-                       so_thung         = <lfs_data>-so_thung
+        WITH TABLE KEY so_thung         = <lfs_data>-so_thung
                        material         = <lfs_data>-material
                        batch            = <lfs_data>-batch.
       IF sy-subrc = 0 AND <lfs_key>-cnt > 1.
@@ -185,10 +208,13 @@ CLASS ZCL_THUNG_IMPLEMENT IMPLEMENTATION.
                        CHANGING  cs_data    = <lfs_data> ).
           ENDIF.
 
-          READ TABLE lt_product INTO DATA(ls_product) WITH KEY Product = <lfs_data>-material.
-          IF sy-subrc = 0.
-            <lfs_data>-base_unit = ls_product-BaseUnit.
-          ELSE.
+          " Một số thùng chỉ có một khối lượng
+          IF <lfs_thung>-kl_count > 1.
+            set_error( EXPORTING iv_message = |Thùng { <lfs_data>-so_thung } có nhiều khối lượng khác nhau trong file, 1 thùng chỉ được có 1 khối lượng|
+                       CHANGING  cs_data    = <lfs_data> ).
+          ENDIF.
+
+          IF NOT line_exists( lt_product[ Product = <lfs_data>-material ] ).
             set_error( EXPORTING iv_message = |Mã hàng { lv_material } không tồn tại|
                        CHANGING  cs_data    = <lfs_data> ).
           ENDIF.
@@ -214,10 +240,15 @@ CLASS ZCL_THUNG_IMPLEMENT IMPLEMENTATION.
                        CHANGING  cs_data    = <lfs_data> ).
           ENDIF.
 
-          " Thùng đã xuất → không cho cập nhật. Thùng Tồn kho → dòng trùng key được ghi đè
-          " (reset về Tồn kho, bỏ đánh dấu xóa / dỡ thùng), key mới thì thêm dòng
+          " Thùng đã xuất → không cho cập nhật (cả I và M).
+          " I: thùng còn ít nhất 1 dòng đang sử dụng → báo thùng đã tồn tại (không xét Mã hàng / Batch).
+          "    Thùng chỉ còn dòng đã xóa / dỡ thùng → dòng trùng key được ghi đè, key mới thì thêm dòng.
+          " M: dòng trùng key được ghi đè (reset về Tồn kho, bỏ đánh dấu xóa / dỡ thùng), key mới thì thêm dòng
           IF <lfs_thung>-issued = abap_true.
             set_error( EXPORTING iv_message = |Thùng { <lfs_data>-so_thung } đã xuất, không cho phép cập nhật ({ lv_line })|
+                       CHANGING  cs_data    = <lfs_data> ).
+          ELSEIF <lfs_data>-type = 'I' AND <lfs_thung>-active = abap_true.
+            set_error( EXPORTING iv_message = |Thùng { <lfs_data>-so_thung } đã tồn tại trong hệ thống ({ lv_line })|
                        CHANGING  cs_data    = <lfs_data> ).
           ELSEIF <lfs_data>-type = 'M' AND <lfs_thung>-exist = abap_false.
             set_error( EXPORTING iv_message = |Thùng { <lfs_data>-so_thung } chưa tồn tại, không thể chỉnh sửa|
@@ -231,6 +262,18 @@ CLASS ZCL_THUNG_IMPLEMENT IMPLEMENTATION.
       ENDIF.
     ENDLOOP.
 
+    " Chỉ kiểm tra (lúc upload): dòng hợp lệ thuộc thùng có lỗi cũng báo lỗi, không ghi gì
+    IF iv_check_only = abap_true.
+      LOOP AT ct_data ASSIGNING <lfs_data> WHERE messagetype <> 'E'.
+        READ TABLE lt_thung ASSIGNING <lfs_thung> WITH TABLE KEY so_thung = <lfs_data>-so_thung.
+        IF sy-subrc = 0 AND <lfs_thung>-has_error = abap_true.
+          set_error( EXPORTING iv_message = |Thùng { <lfs_data>-so_thung } có dòng lỗi nên sẽ không được cập nhật|
+                     CHANGING  cs_data    = <lfs_data> ).
+        ENDIF.
+      ENDLOOP.
+      RETURN.
+    ENDIF.
+
     " ── 4. Build dữ liệu ghi - bỏ qua toàn bộ thùng có dòng lỗi ──
     LOOP AT ct_data ASSIGNING <lfs_data>.
       DATA(lv_tabix) = sy-tabix.
@@ -240,20 +283,19 @@ CLASS ZCL_THUNG_IMPLEMENT IMPLEMENTATION.
         CONTINUE.
       ENDIF.
 
-      READ TABLE lt_db INTO ls_db WITH KEY so_khsx          = <lfs_data>-so_khsx
-                                           so_thung         = <lfs_data>-so_thung
+      READ TABLE lt_db INTO ls_db WITH KEY so_thung         = <lfs_data>-so_thung
                                            material         = <lfs_data>-material
                                            batch            = <lfs_data>-batch.
       DATA(lv_exist) = xsdbool( sy-subrc = 0 ).
 
       IF lv_exist = abap_true.
-        " Key đã có trong bảng (thùng Tồn kho) → ghi đè, reset về Tồn kho và bỏ đánh dấu xóa / dỡ thùng
+        " Key đã có: Type M, hoặc Type I của thùng chỉ còn dòng đã xóa / dỡ thùng
+        " → ghi đè, reset về Tồn kho và bỏ đánh dấu xóa / dỡ thùng
         APPEND VALUE #( SoKhsx          = <lfs_data>-so_khsx
                         SoThung         = <lfs_data>-so_thung
                         Material        = <lfs_data>-material
                         Batch           = <lfs_data>-batch
                         Quantity        = <lfs_data>-quantity
-                        BaseUnit        = <lfs_data>-base_unit
                         StorageLocation = <lfs_data>-storage_location
                         Customer        = <lfs_data>-customer
                         NgayNhapKho     = <lfs_data>-ngay_nhap_kho
@@ -262,8 +304,8 @@ CLASS ZCL_THUNG_IMPLEMENT IMPLEMENTATION.
                         TrangThai          = hu_status-in_stock
                         DelFlag         = del_flag-none
                         Uuidfile        = <lfs_data>-uuidfile
-                        %control        = VALUE #( Quantity        = if_abap_behv=>mk-on
-                                                   BaseUnit        = if_abap_behv=>mk-on
+                        %control        = VALUE #( SoKhsx          = if_abap_behv=>mk-on
+                                                   Quantity        = if_abap_behv=>mk-on
                                                    StorageLocation = if_abap_behv=>mk-on
                                                    Customer        = if_abap_behv=>mk-on
                                                    NgayNhapKho     = if_abap_behv=>mk-on
@@ -280,7 +322,6 @@ CLASS ZCL_THUNG_IMPLEMENT IMPLEMENTATION.
                         Material        = <lfs_data>-material
                         Batch           = <lfs_data>-batch
                         Quantity        = <lfs_data>-quantity
-                        BaseUnit        = <lfs_data>-base_unit
                         StorageLocation = <lfs_data>-storage_location
                         Customer        = <lfs_data>-customer
                         NgayNhapKho     = <lfs_data>-ngay_nhap_kho
@@ -296,15 +337,13 @@ CLASS ZCL_THUNG_IMPLEMENT IMPLEMENTATION.
     LOOP AT lt_thung ASSIGNING <lfs_thung> WHERE has_modify = abap_true AND has_error = abap_false.
       LOOP AT lt_db INTO ls_db WHERE so_thung = <lfs_thung>-so_thung
                                  AND del_flag = del_flag-none.
-        IF line_exists( lt_key[ so_khsx          = ls_db-so_khsx
-                                so_thung         = ls_db-so_thung
+        IF line_exists( lt_key[ so_thung         = ls_db-so_thung
                                 material         = ls_db-material
                                 batch            = ls_db-batch ] ).
           CONTINUE.
         ENDIF.
 
-        APPEND VALUE #( SoKhsx           = ls_db-so_khsx
-                        SoThung          = ls_db-so_thung
+        APPEND VALUE #( SoThung          = ls_db-so_thung
                         Material         = ls_db-material
                         Batch            = ls_db-batch
                         DelFlag          = del_flag-deleted
@@ -317,7 +356,7 @@ CLASS ZCL_THUNG_IMPLEMENT IMPLEMENTATION.
       MODIFY ENTITIES OF zi_thung_mau
         ENTITY ThungMau
           CREATE FIELDS ( SoKhsx SoThung Material Batch
-                          Quantity BaseUnit StorageLocation Customer
+                          Quantity StorageLocation Customer
                           NgayNhapKho Tem KhoiLuong TrangThai DelFlag Uuidfile )
           WITH lt_create
           UPDATE FROM lt_update

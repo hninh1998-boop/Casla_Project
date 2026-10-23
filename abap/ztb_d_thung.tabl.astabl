@@ -13,9 +13,7 @@ define table ztb_d_thung {
   so_thung              : abap.char(8);
   material              : matnr;
   batch                 : charg_d;
-  @Semantics.quantity.unitOfMeasure : 'ztb_d_thung.base_unit'
-  quantity              : abap.quan(13,3);
-  base_unit             : abap.unit(3);
+  quantity              : abap.dec(13,3);
   storage_location      : lgort_d;
   customer              : abap.char(2);
   ngay_nhap_kho         : abap.dats;

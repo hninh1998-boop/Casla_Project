@@ -258,7 +258,8 @@ CLASS lhc_ManageFile IMPLEMENTATION.
     " ── 3. Chuẩn hóa dữ liệu & build DataFile ─────────────────────
     DATA: lv_index    TYPE i,
           lv_material TYPE string,
-          lv_quantity TYPE ztb_d_thung-quantity.
+          lv_quantity TYPE ztb_d_thung-quantity,
+          lt_check    TYPE zcl_thung_implement=>tt_data.
 
     LOOP AT lt_file INTO DATA(ls_file).
       " Bỏ qua dòng trống
@@ -273,9 +274,13 @@ CLASS lhc_ManageFile IMPLEMENTATION.
         lv_material = |{ lv_material WIDTH = 18 ALIGN = RIGHT PAD = '0' }|.
       ENDIF.
 
+      " Số lượng: số thập phân dec(13,3), làm tròn 3 chữ số (20,1234 → 20,123); nhận cả dấu phẩy thập phân
       CLEAR lv_quantity.
       TRY.
-          lv_quantity = condense( ls_file-Quantity ).
+          lv_quantity = round( val = CONV decfloat34( replace( val  = condense( ls_file-Quantity )
+                                                               sub  = ','
+                                                               with = '.' ) )
+                               dec = 3 ).
         CATCH cx_sy_conversion_error.
           CLEAR lv_quantity.
       ENDTRY.
@@ -301,12 +306,42 @@ CLASS lhc_ManageFile IMPLEMENTATION.
       ).
 
       APPEND ls_file_c TO lt_file_c.
+
+      " Dữ liệu để kiểm tra ngay khi upload (cùng thứ tự với lt_file_c)
+      DATA(ls_target) = ls_file_c-%target[ 1 ].
+      APPEND VALUE #( uuidfile         = <f_file>-Uuid
+                      type             = ls_target-Type
+                      so_khsx          = ls_target-SoKhsx
+                      so_thung         = ls_target-SoThung
+                      material         = ls_target-Material
+                      batch            = ls_target-Batch
+                      quantity         = ls_target-Quantity
+                      storage_location = ls_target-StorageLocation
+                      customer         = ls_target-Customer
+                      ngay_nhap_kho    = ls_target-NgayNhapKho
+                      tem              = ls_target-Tem
+                      khoi_luong       = ls_target-KhoiLuong ) TO lt_check.
+
       CLEAR ls_file_c.
     ENDLOOP.
 
     IF lt_file_c IS INITIAL.
       RETURN.
     ENDIF.
+
+    " ── 3b. Kiểm tra lỗi ngay khi upload (không ghi dữ liệu) ──────
+    " Lúc bấm Ghi dữ liệu sẽ kiểm tra lại, vì dữ liệu trong bảng có thể đã thay đổi
+    zcl_thung_implement=>post( EXPORTING iv_check_only = abap_true
+                               CHANGING  ct_data       = lt_check ).
+
+    LOOP AT lt_file_c ASSIGNING FIELD-SYMBOL(<lfs_file_c>).
+      DATA(lv_tabix) = sy-tabix.
+      READ TABLE lt_check INTO DATA(ls_check) INDEX lv_tabix.
+      IF sy-subrc = 0.
+        <lfs_file_c>-%target[ 1 ]-Messagetype = ls_check-messagetype.
+        <lfs_file_c>-%target[ 1 ]-Message     = ls_check-message.
+      ENDIF.
+    ENDLOOP.
 
     " ── 4. Create DataFile records ────────────────────────────────
     MODIFY ENTITIES OF zi_m_thung IN LOCAL MODE
@@ -324,11 +359,24 @@ CLASS lhc_ManageFile IMPLEMENTATION.
         NgayNhapKho
         Tem
         KhoiLuong
+        Messagetype
+        Message
       )
       WITH lt_file_c
       MAPPED   DATA(lt_mapped_create)
       REPORTED DATA(lt_mapped_reported)
       FAILED   DATA(lt_failed_create).
+
+    " ── 5. Header: có dòng lỗi → In process (P), không có lỗi → giữ Not process (M)
+    IF line_exists( lt_check[ messagetype = 'E' ] ).
+      MODIFY ENTITIES OF zi_m_thung IN LOCAL MODE
+        ENTITY ManageFile
+        UPDATE FIELDS ( Status )
+        WITH VALUE #( ( %tky   = <f_file>-%tky
+                        Status = file_status-inprocess ) )
+        FAILED   DATA(lt_failed_status)
+        REPORTED DATA(lt_reported_status).
+    ENDIF.
   ENDMETHOD.
 
 
@@ -460,13 +508,12 @@ CLASS lhc_DataFile IMPLEMENTATION.
     " ── 3. Update status từng dòng ───────────────────────────────
     MODIFY ENTITIES OF zi_m_thung IN LOCAL MODE
       ENTITY DataFile
-      UPDATE FIELDS ( messagetype message BaseUnit )
+      UPDATE FIELDS ( messagetype message )
       WITH VALUE #( FOR ls_data IN lt_data (
         %tky-uuid     = ls_data-uuid
         %tky-uuidfile = ls_data-uuidfile
         messagetype   = ls_data-messagetype
         message       = ls_data-message
-        BaseUnit      = ls_data-base_unit
       ) )
       FAILED   DATA(lt_failed)
       REPORTED DATA(lt_reported).

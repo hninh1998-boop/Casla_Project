@@ -21,7 +21,7 @@ builder:
           name: ZTHUNG_OV4
           description: Quản lý thùng mẫu
           package: ZPK_THUNG
-          transport: AK3K908466
+          transport: AK3K908579
         exclude:
           - /test/
           - /localService/

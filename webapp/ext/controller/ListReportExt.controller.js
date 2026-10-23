@@ -30,7 +30,7 @@ sap.ui.define([
 					if (oEvent.indexOf("downloadTemplate") !== -1) {
 						this.downloadTemplate();
 					} else if (["chuyenViTri", "doThung", "daXuat"].some((sAction) => oEvent.indexOf(sAction) !== -1)) {
-						// Các action này chạy theo cả số KHSX nên phải load lại list để thấy các dòng khác cùng SO
+						// Các action này chạy theo cả số thùng/pallet nên phải load lại list để thấy các dòng khác cùng thùng
 						this._refreshListReport();
 					}
 				}

@@ -131,6 +131,9 @@
             "settings": {
               "contextPath": "/ThungMau",
               "variantManagement": "Page",
+              "enhanceI18n": [
+                "i18n/i18n.properties"
+              ],
               "navigation": {
                 "ManageFile": {
                   "detail": {
@@ -155,7 +158,7 @@
                       "visible": true,
                       "enabled": true,
                       "requiresSelection": false,
-                      "text": "Upload Excel"
+                      "text": "Tải lên file Excel"
                     }
                   }
                 }

@@ -54,7 +54,7 @@ authorization dependent by _ManageFile
   update;
   delete;
   field ( numbering : managed, readonly ) Uuid;
-  field ( readonly ) Uuidfile, CreatedBy, CreatedAt, LocalLastChangedAt, LastChangedAt, LastChangedBy;
+  field ( readonly ) Uuidfile, QuantityText, CreatedBy, CreatedAt, LocalLastChangedAt, LastChangedAt, LastChangedBy;
   association _ManageFile { with draft; }
 
   action PostConfirm result [1] $self;
@@ -73,7 +73,6 @@ authorization dependent by _ManageFile
       Material           = material;
       Batch              = batch;
       Quantity           = quantity;
-      BaseUnit           = base_unit;
       StorageLocation    = storage_location;
       Customer           = customer;
       NgayNhapKho        = ngay_nhap_kho;

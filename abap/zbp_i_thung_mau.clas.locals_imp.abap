@@ -1,7 +1,7 @@
 CLASS lhc_ThungMau DEFINITION INHERITING FROM cl_abap_behavior_handler.
   PRIVATE SECTION.
     TYPES: tt_update TYPE TABLE FOR UPDATE zi_thung_mau,
-           tr_so     TYPE RANGE OF ztb_custom_hu-so_khsx.
+           tr_thung  TYPE RANGE OF ztb_custom_hu-so_thung.
 
     METHODS get_instance_features FOR INSTANCE FEATURES
       IMPORTING keys REQUEST requested_features FOR ThungMau RESULT result.
@@ -21,15 +21,10 @@ CLASS lhc_ThungMau DEFINITION INHERITING FROM cl_abap_behavior_handler.
     METHODS daXuat FOR MODIFY
       IMPORTING keys FOR ACTION ThungMau~daXuat RESULT result.
 
-    "! Số KHSX có dạng SO/SOITEM (vd 10001234/10) → trả về range lấy mọi item của cùng SO
-    METHODS add_so_header
-      IMPORTING iv_so_khsx TYPE ztb_custom_hu-so_khsx
-      CHANGING  cr_so      TYPE tr_so.
-
-    "! Chuyển vị trí / Dỡ thùng / Đã xuất chạy theo cấp header: lấy toàn bộ dòng
-    "! Tồn kho, chưa đánh dấu xóa của các SO được chọn.
-    METHODS get_lines_by_so
-      IMPORTING ir_so            TYPE tr_so
+    "! Chuyển vị trí / Dỡ thùng / Đã xuất chạy theo Số thùng/Pallet: lấy toàn bộ dòng
+    "! Tồn kho, chưa đánh dấu xóa của các thùng được chọn.
+    METHODS get_lines_by_thung
+      IMPORTING ir_thung         TYPE tr_thung
       RETURNING VALUE(rt_update) TYPE tt_update.
 
 ENDCLASS.
@@ -62,35 +57,22 @@ CLASS lhc_ThungMau IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD add_so_header.
-    DATA(lv_header) = COND string( WHEN iv_so_khsx CS '/'
-                                   THEN substring_before( val = iv_so_khsx sub = '/' )
-                                   ELSE iv_so_khsx ).
-
-    " Dòng chỉ có SO (không có item) và mọi dòng SO/item
-    APPEND VALUE #( sign = 'I' option = 'EQ' low = lv_header ) TO cr_so.
-    APPEND VALUE #( sign = 'I' option = 'CP' low = |{ lv_header }/*| ) TO cr_so.
-  ENDMETHOD.
-
-
-  METHOD get_lines_by_so.
-    IF ir_so IS INITIAL.
+  METHOD get_lines_by_thung.
+    IF ir_thung IS INITIAL.
       RETURN.
     ENDIF.
 
     " Dòng đã xuất hoặc có DELETE <> null thì không thay đổi
     SELECT FROM ztb_custom_hu
-      FIELDS so_khsx,
-             so_thung,
+      FIELDS so_thung,
              material,
              batch
-      WHERE so_khsx     IN @ir_so
-        AND status      =  @zcl_thung_implement=>hu_status-in_stock
-        AND del_flag    =  @zcl_thung_implement=>del_flag-none
+      WHERE so_thung IN @ir_thung
+        AND status   =  @zcl_thung_implement=>hu_status-in_stock
+        AND del_flag =  @zcl_thung_implement=>del_flag-none
       INTO TABLE @DATA(lt_line).
 
-    rt_update = VALUE #( FOR ls_line IN lt_line ( SoKhsx   = ls_line-so_khsx
-                                                  SoThung  = ls_line-so_thung
+    rt_update = VALUE #( FOR ls_line IN lt_line ( SoThung  = ls_line-so_thung
                                                   Material = ls_line-material
                                                   Batch    = ls_line-batch ) ).
   ENDMETHOD.
@@ -143,15 +125,9 @@ CLASS lhc_ThungMau IMPLEMENTATION.
 
 
   METHOD doThung.
-    " Dỡ thùng: đánh dấu D cho toàn bộ dòng Tồn kho của số KHSX được chọn
-    DATA lr_so TYPE tr_so.
-
-    LOOP AT keys INTO DATA(ls_key).
-      add_so_header( EXPORTING iv_so_khsx = ls_key-SoKhsx
-                     CHANGING  cr_so      = lr_so ).
-    ENDLOOP.
-
-    DATA(lt_update) = get_lines_by_so( lr_so ).
+    " Dỡ thùng: đánh dấu D cho toàn bộ dòng Tồn kho của số thùng/pallet được chọn
+    DATA(lt_update) = get_lines_by_thung( VALUE #( FOR ls_key IN keys
+                                                   ( sign = 'I' option = 'EQ' low = ls_key-SoThung ) ) ).
 
     LOOP AT lt_update ASSIGNING FIELD-SYMBOL(<lfs_update>).
       <lfs_update>-DelFlag = zcl_thung_implement=>del_flag-unpacked.
@@ -177,7 +153,7 @@ CLASS lhc_ThungMau IMPLEMENTATION.
 
 
   METHOD chuyenViTri.
-    " Chuyển vị trí: cập nhật Storage Location cho toàn bộ dòng Tồn kho của số KHSX được chọn
+    " Chuyển vị trí: cập nhật Storage Location cho toàn bộ dòng Tồn kho của số thùng/pallet được chọn
     READ TABLE keys INTO DATA(ls_first) INDEX 1.
     IF sy-subrc <> 0.
       RETURN.
@@ -212,14 +188,8 @@ CLASS lhc_ThungMau IMPLEMENTATION.
       RETURN.
     ENDIF.
 
-    DATA lr_so TYPE tr_so.
-
-    LOOP AT keys INTO DATA(ls_key).
-      add_so_header( EXPORTING iv_so_khsx = ls_key-SoKhsx
-                     CHANGING  cr_so      = lr_so ).
-    ENDLOOP.
-
-    DATA(lt_update) = get_lines_by_so( lr_so ).
+    DATA(lt_update) = get_lines_by_thung( VALUE #( FOR ls_key IN keys
+                                                   ( sign = 'I' option = 'EQ' low = ls_key-SoThung ) ) ).
 
     LOOP AT lt_update ASSIGNING FIELD-SYMBOL(<lfs_update>).
       <lfs_update>-StorageLocation = lv_sloc.
@@ -245,15 +215,9 @@ CLASS lhc_ThungMau IMPLEMENTATION.
 
 
   METHOD daXuat.
-    " Đã xuất: chuyển Tồn kho → Đã xuất cho toàn bộ dòng của số KHSX được chọn
-    DATA lr_so TYPE tr_so.
-
-    LOOP AT keys INTO DATA(ls_key).
-      add_so_header( EXPORTING iv_so_khsx = ls_key-SoKhsx
-                     CHANGING  cr_so      = lr_so ).
-    ENDLOOP.
-
-    DATA(lt_update) = get_lines_by_so( lr_so ).
+    " Đã xuất: chuyển Tồn kho → Đã xuất cho toàn bộ dòng của số thùng/pallet được chọn
+    DATA(lt_update) = get_lines_by_thung( VALUE #( FOR ls_key IN keys
+                                                   ( sign = 'I' option = 'EQ' low = ls_key-SoThung ) ) ).
 
     LOOP AT lt_update ASSIGNING FIELD-SYMBOL(<lfs_update>).
       <lfs_update>-TrangThai = zcl_thung_implement=>hu_status-issued.

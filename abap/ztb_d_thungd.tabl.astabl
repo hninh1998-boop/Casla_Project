@@ -16,9 +16,8 @@ define table ztb_d_thungd {
   sothung            : abap.char(8);
   material           : matnr;
   batch              : charg_d;
-  @Semantics.quantity.unitOfMeasure : 'ztb_d_thungd.baseunit'
-  quantity           : abap.quan(13,3);
-  baseunit           : abap.unit(3);
+  quantity           : abap.dec(13,3);
+  quantitytext       : abap.char(20);
   storagelocation    : lgort_d;
   customer           : abap.char(2);
   ngaynhapkho        : abap.dats;

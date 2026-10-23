@@ -6,13 +6,11 @@
 define table ztb_custom_hu {
 
   key client            : abap.clnt not null;
-  key so_khsx           : abap.char(17) not null;
   key so_thung          : abap.char(8) not null;
   key material          : matnr not null;
   key batch             : charg_d not null;
-  @Semantics.quantity.unitOfMeasure : 'ztb_custom_hu.base_unit'
-  quantity              : abap.quan(13,3);
-  base_unit             : abap.unit(3);
+  so_khsx               : abap.char(17);
+  quantity              : abap.dec(13,3);
   storage_location      : lgort_d;
   customer              : abap.char(2);
   ngay_nhap_kho         : abap.dats;

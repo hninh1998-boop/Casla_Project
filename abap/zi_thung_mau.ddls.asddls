@@ -10,13 +10,18 @@ define root view entity zi_thung_mau
   association [0..1] to zi_thung_del_vh as _DelFlag     on  $projection.DelFlag = _DelFlag.DelFlag
   association [0..1] to zi_thung_tem_vh as _Tem         on  $projection.Tem = _Tem.Tem
 {
-  key so_khsx               as SoKhsx,
   key so_thung              as SoThung,
   key material              as Material,
   key batch                 as Batch,
-      @Semantics.quantity.unitOfMeasure: 'BaseUnit'
+      so_khsx               as SoKhsx,
       quantity              as Quantity,
-      base_unit             as BaseUnit,
+
+      // Số lượng để hiển thị: bỏ số 0 thừa sau dấu thập phân (20.000 → 20, 20.100 → 20.1, 20.123 giữ nguyên)
+      // Ép kiểu về CHAR(20) để khớp cột quantitytext của bảng draft ZTB_D_THUNGD
+      cast( replace_regexpr( pcre          => '[.]?0+ *$',
+                             value         => cast( quantity as abap.char( 20 ) ),
+                             with          => '',
+                             result_length => 20 ) as abap.char( 20 ) ) as QuantityText,
       storage_location      as StorageLocation,
       customer              as Customer,
       ngay_nhap_kho         as NgayNhapKho,
@@ -38,9 +43,10 @@ define root view entity zi_thung_mau
       else 0
       end                   as Criticality,
 
-      // Màu cột Đánh dấu xóa và vạch đầu dòng: đỏ khi đã xóa / dỡ thùng
-      case
-      when del_flag <> '' then 1
+      // Màu cột Đánh dấu xóa và vạch đầu dòng: đỏ khi đã xóa, vàng khi đã dỡ thùng
+      case del_flag
+      when 'X' then 1
+      when 'D' then 2
       else 0
       end                   as DelCriticality,
 

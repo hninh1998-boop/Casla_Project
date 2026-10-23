@@ -2,6 +2,9 @@
     <edmx:Reference Uri="https://sap.github.io/odata-vocabularies/vocabularies/UI.xml">
         <edmx:Include Namespace="com.sap.vocabularies.UI.v1" Alias="UI"/>
     </edmx:Reference>
+    <edmx:Reference Uri="https://sap.github.io/odata-vocabularies/vocabularies/Common.xml">
+        <edmx:Include Namespace="com.sap.vocabularies.Common.v1" Alias="Common"/>
+    </edmx:Reference>
     <edmx:Reference Uri="/sap/opu/odata4/sap/zui_thung_mau_ov4/srvd/sap/zui_thung_mau/0001/$metadata">
         <edmx:Include Namespace="com.sap.gateway.srvd.zui_thung_mau.v0001" Alias="SAP__self"/>
     </edmx:Reference>
@@ -30,6 +33,16 @@
                         </PropertyValue>
                     </Record>
                 </Annotation>
+            </Annotations>
+            <!-- Hỏi xác nhận trước khi chạy các nút trên tab Quản lý thùng mẫu (nội dung ở i18n) -->
+            <Annotations Target="SAP__self.deleteThung(SAP__self.ThungMauType)">
+                <Annotation Term="Common.IsActionCritical" Bool="true"/>
+            </Annotations>
+            <Annotations Target="SAP__self.doThung(SAP__self.ThungMauType)">
+                <Annotation Term="Common.IsActionCritical" Bool="true"/>
+            </Annotations>
+            <Annotations Target="SAP__self.daXuat(SAP__self.ThungMauType)">
+                <Annotation Term="Common.IsActionCritical" Bool="true"/>
             </Annotations>
         </Schema>
     </edmx:DataServices>

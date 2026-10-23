@@ -6,22 +6,20 @@ define root view entity zc_thung_mau
   provider contract transactional_query
   as projection on zi_thung_mau
 {
-      @Consumption.valueHelpDefinition: [{ entity: { name: 'zvh_thung_sokhsx', element: 'SoKhsx' } }]
-  key SoKhsx,
       @Consumption.valueHelpDefinition: [{ entity: { name: 'zvh_thung_sothung', element: 'SoThung' } }]
   key SoThung,
       @Consumption.valueHelpDefinition: [{ entity: { name: 'I_ProductStdVH', element: 'Product' } }]
-      @ObjectModel.text.element: ['ProductName']
   key Material,
   key Batch,
+      @Consumption.valueHelpDefinition: [{ entity: { name: 'zvh_thung_sokhsx', element: 'SoKhsx' } }]
+      SoKhsx,
 
       @EndUserText.label: 'Tên hàng'
       @Semantics.text: true
       _ProductText.ProductName as ProductName,
 
-      @Semantics.quantity.unitOfMeasure: 'BaseUnit'
       Quantity,
-      BaseUnit,
+      QuantityText,
       @Consumption.valueHelpDefinition: [{ entity: { name: 'I_StorageLocationStdVH', element: 'StorageLocation' },
                                                additionalBinding: [{ element: 'Plant', localConstant: '6731', usage: #FILTER }] }]
       StorageLocation,

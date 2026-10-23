@@ -25,9 +25,14 @@ define view entity zi_d_thung
       so_thung              as SoThung,
       material              as Material,
       batch                 as Batch,
-      @Semantics.quantity.unitOfMeasure: 'BaseUnit'
       quantity              as Quantity,
-      base_unit             as BaseUnit,
+
+      // Số lượng để hiển thị: bỏ số 0 thừa sau dấu thập phân (20.000 → 20, 20.100 → 20.1, 20.123 giữ nguyên)
+      // Ép kiểu về CHAR(20) để khớp cột quantitytext của bảng draft ZTB_D_THUNGD
+      cast( replace_regexpr( pcre          => '[.]?0+ *$',
+                             value         => cast( quantity as abap.char( 20 ) ),
+                             with          => '',
+                             result_length => 20 ) as abap.char( 20 ) ) as QuantityText,
       storage_location      as StorageLocation,
       customer              as Customer,
       ngay_nhap_kho         as NgayNhapKho,

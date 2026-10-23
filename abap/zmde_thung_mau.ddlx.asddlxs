@@ -30,7 +30,7 @@ annotate entity zc_thung_mau with
 {
   @UI.selectionField : [{ position: 10 }]
   @UI.lineItem       : [{ position: 10 },
-                        { type: #FOR_ACTION, dataAction: 'deleteThung', label: 'Delete' },
+                        { type: #FOR_ACTION, dataAction: 'deleteThung', label: 'Xóa dữ liệu' },
                         { type: #FOR_ACTION, dataAction: 'chuyenViTri', label: 'Chuyển vị trí', invocationGrouping: #CHANGE_SET },
                         { type: #FOR_ACTION, dataAction: 'doThung',     label: 'Dỡ thùng',      invocationGrouping: #CHANGE_SET },
                         { type: #FOR_ACTION, dataAction: 'daXuat',      label: 'Đã xuất',       invocationGrouping: #CHANGE_SET }]
@@ -56,10 +56,14 @@ annotate entity zc_thung_mau with
   @EndUserText.label: 'Batch'
   Batch;
 
-  @UI.selectionField : [{ position: 60 }]
+  // Cột số gốc ẩn hoàn toàn (không làm cột, không làm filter); hiển thị bằng QuantityText (không có số 0 thừa)
+  @UI.hidden: true
+  Quantity;
+
   @UI.lineItem       : [{ position: 60 }]
   @EndUserText.label: 'Số lượng (Viên)'
-  Quantity;
+  @Consumption.filter.hidden: true
+  QuantityText;
 
   @UI.selectionField : [{ position: 70 }]
   @UI.lineItem       : [{ position: 70 }]
@@ -91,7 +95,9 @@ annotate entity zc_thung_mau with
   @EndUserText.label: 'Khối lượng (kg)'
   KhoiLuong;
 
+  // Chỉ dùng làm filter, không cho chọn làm cột
   @UI.selectionField : [{ position: 120 }]
+  @UI.adaptationHidden: true
   @EndUserText.label: 'Bao gồm'
   DelStatus;
 
