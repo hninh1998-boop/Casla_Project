@@ -1,0 +1,5 @@
+@EndUserText.label: 'Serv.Def. - Mass Upload OD Header'
+define service Zui_m_od_head {
+  expose zc_m_od_h_file as ManageFile;
+  expose zc_m_od_h_data as DataFile;
+}

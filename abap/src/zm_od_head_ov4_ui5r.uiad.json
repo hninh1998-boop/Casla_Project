@@ -1,0 +1,34 @@
+{
+  "formatVersion": "2",
+  "header": {
+    "description": "An SAP Fiori application.",
+    "originalLanguage": "en",
+    "abapLanguageVersion": "cloudDevelopment"
+  },
+  "generalInformation": {
+    "appType": "ui5",
+    "catalogId": "SAP_TC_UI5_REPO_UIAD",
+    "targetMappingTitle": "Mass Upload OD Header"
+  },
+  "ui5AppDetails": {
+    "appId": "zmodheadov4"
+  },
+  "navigation": {
+    "targetMappingId": "ZM_OD_HEAD_OV4_UI5R_TM",
+    "semanticObject": "zm_od_head_ov4",
+    "action": "display",
+    "desktop": true,
+    "tablet": true,
+    "phone": true
+  },
+  "tiles": [
+    {
+      "id": "ZM_OD_HEAD_OV4_UI5R_AL",
+      "tileType": "static",
+      "isDefault": true,
+      "standard": {
+        "title": "Mass Upload OD Header"
+      }
+    }
+  ]
+}

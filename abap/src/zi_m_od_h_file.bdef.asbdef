@@ -1,0 +1,106 @@
+managed implementation in class zbp_i_m_od_h_file unique;
+strict ( 2 );
+with draft;
+
+define behavior for ZI_M_OD_H_FILE alias ManageFile
+persistent table ztb_m_od_h_file
+draft table ztb_m_od_h_filed
+lock master
+total etag LastChangedAt
+etag master LastChangedAt
+authorization master ( global )
+{
+  create;
+  update;
+  delete;
+  field ( readonly, numbering : managed ) Uuid;
+  field ( readonly ) Attachment, CreatedBy, CreatedAt, LastChangedAt, LineCount, SuccessCount;
+  field ( readonly: update ) FileName;
+  association _DataFile { with draft; create; }
+  static action uploadExcel parameter zabs_file_crud_poc;
+
+  draft action Activate optimized;
+  draft action Discard;
+  draft action Edit;
+  draft action Resume;
+  draft determine action Prepare;
+  determination setStatusOpen on modify { create; }
+  validation validateFile on save { create; update; }
+  mapping for ztb_m_od_h_file
+    {
+      Uuid          = uuid;
+      FileName      = file_name;
+      FileMimeType  = file_mime_type;
+      Attachment    = attachment;
+      Status        = status;
+      Message       = message;
+      CreatedBy     = created_by;
+      CreatedAt     = created_at;
+      LastChangedAt = last_changed_at;
+    }
+}
+
+define behavior for ZI_M_OD_H_DATA alias DataFile
+persistent table ztb_m_od_h_data
+draft table ztb_m_od_h_datad
+lock dependent by _ManageFile
+authorization dependent by _ManageFile
+with additional save
+{
+  update;
+  delete;
+  association _ManageFile { with draft; }
+  field ( readonly, numbering : managed ) Uuid;
+  field ( readonly ) UuidFile, CreatedBy, CreatedAt, LastChangedBy, LastChangedAt;
+  field ( mandatory ) Od;
+  action PostConfirm result [1] $self;
+  validation validateRow on save { create; update; field Od; }
+  mapping for ztb_m_od_h_data
+    {
+      Uuid                = uuid;
+      UuidFile            = uuid_file;
+      Od                  = od;
+      PlanGiDate          = plan_gi_date;
+      IncoVers            = inco_vers;
+      Incoterm            = incoterm;
+      IncoLoc1            = inco_loc1;
+      IncoLoc2            = inco_loc2;
+      NhaCungCapVanTai    = nha_cung_cap_van_tai;
+      PhanLoaiPtvt        = phan_loai_ptvt;
+      SoLuongPtvt         = so_luong_ptvt;
+      BienSoXe            = bien_so_xe;
+      SoContainer         = so_container;
+      SoSeal              = so_seal;
+      TareWeight          = tare_weight;
+      Booking             = booking;
+      NgayTauChay         = ngay_tau_chay;
+      NgayGioXuatHang     = ngay_gio_xuat_hang;
+      CutOffTime          = cut_off_time;
+      GhiChuGiaoHang      = ghi_chu_giao_hang;
+      TyGiaLoNoiDia       = ty_gia_lo_noi_dia;
+      HasPlanGiDate       = has_plan_gi_date;
+      HasIncoVers         = has_inco_vers;
+      HasIncoterm         = has_incoterm;
+      HasIncoLoc1         = has_inco_loc1;
+      HasIncoLoc2         = has_inco_loc2;
+      HasNhaCungCapVanTai = has_nha_cung_cap_van_tai;
+      HasPhanLoaiPtvt     = has_phan_loai_ptvt;
+      HasSoLuongPtvt      = has_so_luong_ptvt;
+      HasBienSoXe         = has_bien_so_xe;
+      HasSoContainer      = has_so_container;
+      HasSoSeal           = has_so_seal;
+      HasTareWeight       = has_tare_weight;
+      HasBooking          = has_booking;
+      HasNgayTauChay      = has_ngay_tau_chay;
+      HasNgayGioXuatHang  = has_ngay_gio_xuat_hang;
+      HasCutOffTime       = has_cut_off_time;
+      HasGhiChuGiaoHang   = has_ghi_chu_giao_hang;
+      HasTyGiaLoNoiDia    = has_ty_gia_lo_noi_dia;
+      MessageType         = message_type;
+      Message             = message;
+      CreatedBy           = created_by;
+      CreatedAt           = created_at;
+      LastChangedBy       = last_changed_by;
+      LastChangedAt       = last_changed_at;
+    }
+}

@@ -1,0 +1,57 @@
+@AccessControl.authorizationCheck: #NOT_REQUIRED
+@EndUserText.label: 'Cons. View - Data Mass Upload OD Header'
+@Metadata.ignorePropagatedAnnotations: true
+@Metadata.allowExtensions: true
+define view entity zc_m_od_h_data
+  as projection on zi_m_od_h_data
+{
+  key Uuid,
+  key UuidFile,
+      Od,
+      PlanGiDate,
+      IncoVers,
+      Incoterm,
+      IncoLoc1,
+      IncoLoc2,
+      NhaCungCapVanTai,
+      PhanLoaiPtvt,
+      SoLuongPtvt,
+      BienSoXe,
+      SoContainer,
+      SoSeal,
+      TareWeight,
+      Booking,
+      NgayTauChay,
+      NgayGioXuatHang,
+      CutOffTime,
+      GhiChuGiaoHang,
+      TyGiaLoNoiDia,
+      HasPlanGiDate,
+      HasIncoVers,
+      HasIncoterm,
+      HasIncoLoc1,
+      HasIncoLoc2,
+      HasNhaCungCapVanTai,
+      HasPhanLoaiPtvt,
+      HasSoLuongPtvt,
+      HasBienSoXe,
+      HasSoContainer,
+      HasSoSeal,
+      HasTareWeight,
+      HasBooking,
+      HasNgayTauChay,
+      HasNgayGioXuatHang,
+      HasCutOffTime,
+      HasGhiChuGiaoHang,
+      HasTyGiaLoNoiDia,
+
+      MessageType,
+      Criticality,
+      OverallStatusText,
+      Message,
+      CreatedBy,
+      CreatedAt,
+      LastChangedBy,
+      LastChangedAt,
+      _ManageFile : redirected to parent zc_m_od_h_file
+}

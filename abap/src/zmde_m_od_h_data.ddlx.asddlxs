@@ -1,0 +1,210 @@
+@Metadata.layer: #CORE
+@UI.headerInfo: {
+  typeName: 'OD Header Upload',
+  typeNamePlural: 'OD Header Uploads',
+  title: { value: 'Od' }
+}
+@UI.lineItem: [{ criticality: 'Criticality' }]
+annotate entity zc_m_od_h_data with
+{
+  @UI.facet: [
+    { id: 'General', type: #COLLECTION, label: 'General', position: 10 },
+    { id: 'ChangeData', parentId: 'General', type: #FIELDGROUP_REFERENCE,
+      targetQualifier: 'ChangeData', label: 'OD Header Data', position: 10 },
+    { id: 'Result', parentId: 'General', type: #FIELDGROUP_REFERENCE,
+      targetQualifier: 'Result', label: 'Processing Result', position: 20 }
+  ]
+
+
+  @UI.lineItem: [
+           { label: 'Post Document',
+             dataAction: 'PostConfirm',
+             type: #FOR_ACTION,
+             invocationGrouping: #CHANGE_SET
+           }]
+  @UI.hidden: true
+  Uuid;
+
+  @UI.hidden: true
+  UuidFile;
+
+  @UI.selectionField: [{ position: 10 }]
+  @UI.lineItem: [{ position: 10, importance: #HIGH }]
+  @UI.identification: [{ position: 10 }]
+  @UI.fieldGroup: [{ qualifier: 'ChangeData', position: 10 }]
+  @EndUserText.label: 'OD'
+  Od;
+
+  @UI.lineItem: [{ position: 20 }]
+  @UI.identification: [{ position: 20 }]
+  @UI.fieldGroup: [{ qualifier: 'ChangeData', position: 20 }]
+  @EndUserText.label: 'Plan GI Date'
+  PlanGiDate;
+
+  @UI.lineItem: [{ position: 30 }]
+  @UI.identification: [{ position: 30 }]
+  @UI.fieldGroup: [{ qualifier: 'ChangeData', position: 30 }]
+  @EndUserText.label: 'Inco. Vers'
+  IncoVers;
+
+  @UI.lineItem: [{ position: 40 }]
+  @UI.identification: [{ position: 40 }]
+  @UI.fieldGroup: [{ qualifier: 'ChangeData', position: 40 }]
+  @EndUserText.label: 'Incoterm'
+  Incoterm;
+
+  @UI.lineItem: [{ position: 50 }]
+  @UI.identification: [{ position: 50 }]
+  @UI.fieldGroup: [{ qualifier: 'ChangeData', position: 50 }]
+  @EndUserText.label: 'Inco. Loc1'
+  IncoLoc1;
+
+  @UI.lineItem: [{ position: 60 }]
+  @UI.identification: [{ position: 60 }]
+  @UI.fieldGroup: [{ qualifier: 'ChangeData', position: 60 }]
+  @EndUserText.label: 'Inco. Loc2'
+  IncoLoc2;
+
+  @UI.lineItem: [{ position: 70 }]
+  @UI.identification: [{ position: 70 }]
+  @UI.fieldGroup: [{ qualifier: 'ChangeData', position: 70 }]
+  @EndUserText.label: 'Nhà cung cấp vận tải'
+  NhaCungCapVanTai;
+
+  @UI.lineItem: [{ position: 80 }]
+  @UI.identification: [{ position: 80 }]
+  @UI.fieldGroup: [{ qualifier: 'ChangeData', position: 80 }]
+  @EndUserText.label: 'Phân loại PTVT'
+  PhanLoaiPtvt;
+
+  @UI.lineItem: [{ position: 90 }]
+  @UI.identification: [{ position: 90 }]
+  @UI.fieldGroup: [{ qualifier: 'ChangeData', position: 90 }]
+  @EndUserText.label: 'Số lượng PTVT'
+  SoLuongPtvt;
+
+  @UI.lineItem: [{ position: 100 }]
+  @UI.identification: [{ position: 100 }]
+  @UI.fieldGroup: [{ qualifier: 'ChangeData', position: 100 }]
+  @EndUserText.label: 'Biển số xe'
+  BienSoXe;
+
+  @UI.lineItem: [{ position: 110 }]
+  @UI.identification: [{ position: 110 }]
+  @UI.fieldGroup: [{ qualifier: 'ChangeData', position: 110 }]
+  @EndUserText.label: 'Số container'
+  SoContainer;
+
+  @UI.lineItem: [{ position: 120 }]
+  @UI.identification: [{ position: 120 }]
+  @UI.fieldGroup: [{ qualifier: 'ChangeData', position: 120 }]
+  @EndUserText.label: 'Số seal'
+  SoSeal;
+
+  @UI.lineItem: [{ position: 130 }]
+  @UI.identification: [{ position: 130 }]
+  @UI.fieldGroup: [{ qualifier: 'ChangeData', position: 130 }]
+  @EndUserText.label: 'Tare Weight'
+  TareWeight;
+
+  @UI.lineItem: [{ position: 140 }]
+  @UI.identification: [{ position: 140 }]
+  @UI.fieldGroup: [{ qualifier: 'ChangeData', position: 140 }]
+  @EndUserText.label: 'Booking'
+  Booking;
+
+  @UI.lineItem: [{ position: 150 }]
+  @UI.identification: [{ position: 150 }]
+  @UI.fieldGroup: [{ qualifier: 'ChangeData', position: 150 }]
+  @EndUserText.label: 'Ngày tàu chạy'
+  NgayTauChay;
+
+  @UI.lineItem: [{ position: 160 }]
+  @UI.identification: [{ position: 160 }]
+  @UI.fieldGroup: [{ qualifier: 'ChangeData', position: 160 }]
+  @EndUserText.label: 'Ngày giờ xuất hàng'
+  NgayGioXuatHang;
+
+  @UI.lineItem: [{ position: 170 }]
+  @UI.identification: [{ position: 170 }]
+  @UI.fieldGroup: [{ qualifier: 'ChangeData', position: 170 }]
+  @EndUserText.label: 'Cut-off Time'
+  CutOffTime;
+
+  @UI.lineItem: [{ position: 180 }]
+  @UI.identification: [{ position: 180 }]
+  @UI.fieldGroup: [{ qualifier: 'ChangeData', position: 180 }]
+  @EndUserText.label: 'Ghi chú giao hàng'
+  GhiChuGiaoHang;
+
+  @UI.lineItem: [{ position: 190 }]
+  @UI.identification: [{ position: 190 }]
+  @UI.fieldGroup: [{ qualifier: 'ChangeData', position: 190 }]
+  @EndUserText.label: 'Tỷ giá lô nội địa'
+  TyGiaLoNoiDia;
+
+  @UI.hidden: true
+  HasPlanGiDate;
+  @UI.hidden: true
+  HasIncoVers;
+  @UI.hidden: true
+  HasIncoterm;
+  @UI.hidden: true
+  HasIncoLoc1;
+  @UI.hidden: true
+  HasIncoLoc2;
+  @UI.hidden: true
+  HasNhaCungCapVanTai;
+  @UI.hidden: true
+  HasPhanLoaiPtvt;
+  @UI.hidden: true
+  HasSoLuongPtvt;
+  @UI.hidden: true
+  HasBienSoXe;
+  @UI.hidden: true
+  HasSoContainer;
+  @UI.hidden: true
+  HasSoSeal;
+  @UI.hidden: true
+  HasTareWeight;
+  @UI.hidden: true
+  HasBooking;
+  @UI.hidden: true
+  HasNgayTauChay;
+  @UI.hidden: true
+  HasNgayGioXuatHang;
+  @UI.hidden: true
+  HasCutOffTime;
+  @UI.hidden: true
+  HasGhiChuGiaoHang;
+  @UI.hidden: true
+  HasTyGiaLoNoiDia;
+
+  @UI.lineItem: [{ position: 200, importance: #HIGH, criticality: 'Criticality' }]
+  @UI.identification: [{ position: 200 }]
+  @UI.fieldGroup: [{ qualifier: 'Result', position: 10 }]
+  @EndUserText.label: 'Result Type'
+  @UI.dataPoint: { title: 'Result Type', criticality: 'Criticality' }
+  MessageType;
+
+  @Consumption.filter.hidden: true
+  Criticality;
+
+  @UI.hidden: true
+  OverallStatusText;
+
+  @UI.lineItem: [{ position: 210, importance: #HIGH }]
+  @UI.identification: [{ position: 210 }]
+  @UI.fieldGroup: [{ qualifier: 'Result', position: 20 }]
+  @EndUserText.label: 'Result Message'
+  Message;
+
+  @UI.hidden: true
+  CreatedBy;
+  @UI.hidden: true
+  CreatedAt;
+  @UI.hidden: true
+  LastChangedBy;
+  @UI.hidden: true
+  LastChangedAt;
+}

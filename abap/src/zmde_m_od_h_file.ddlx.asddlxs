@@ -1,0 +1,99 @@
+@Metadata.layer: #CORE
+@UI.headerInfo: {
+  typeName: 'OD Header Upload',
+  typeNamePlural: 'OD Header Uploads',
+  title: { value: 'FileName' }
+}
+@UI.presentationVariant: [{
+  sortOrder: [{ by: 'CreatedAt', direction: #DESC }],
+  visualizations: [{ type: #AS_LINEITEM }]
+}]
+
+annotate entity zc_m_od_h_file with
+{
+  @UI.facet: [
+    { id: 'General', type: #COLLECTION, label: 'General', position: 10 },
+    { id: 'BasicInfo', parentId: 'General', type: #FIELDGROUP_REFERENCE,
+      targetQualifier: 'BasicInfo', label: 'Upload Information', position: 10 },
+    { id: 'HeaderRows', type: #LINEITEM_REFERENCE, targetElement: '_DataFile',
+      label: 'OD Headers', position: 20 }
+  ]
+  @UI.hidden: true
+  Uuid;
+
+    @UI.selectionField: [{ position: 10 }]
+    @UI.lineItem: [{ position: 10 }]
+    @UI.identification: [{ position: 10 }]
+    @UI.fieldGroup: [{ qualifier: 'BasicInfo', position: 10 }]
+    @EndUserText.label: 'Attachment'
+//  @UI.identification: [{ position: 10 }]
+//  @UI.fieldGroup: [{ qualifier: 'BasicInfo', position: 10 }]
+//  @EndUserText.label: 'Attachment'
+  Attachment;
+
+
+  @UI.selectionField: [{ position: 20 }]
+  @UI.lineItem: [{ position: 20 }]
+  @UI.identification: [{ position: 10 }]
+  @UI.fieldGroup: [{ qualifier: 'BasicInfo', position: 20 }]
+  @EndUserText.label: 'Total line of File'
+  LineCount;
+
+  @UI.selectionField: [{ position: 30 }]
+  @UI.lineItem: [{ position: 30 }]
+  @UI.identification: [{ position: 30 }]
+  @UI.fieldGroup: [{ qualifier: 'BasicInfo', position: 30 }]
+  @EndUserText.label: ' Total successful lines'
+  SuccessCount;
+
+  @UI.hidden: true
+  FileMimeType;
+
+  @UI.selectionField: [{ position: 40 }]
+  @UI.lineItem: [{ position: 40, criticality: 'Criticality' }]
+  @UI.identification: [{ position: 40 }]
+  @UI.fieldGroup: [{ qualifier: 'BasicInfo', position: 40 }]
+  @EndUserText.label: 'Status'
+  @UI.dataPoint: { title: 'Status', criticality: 'Criticality' }
+  Status;
+
+  @Consumption.filter.hidden: true
+  Criticality;
+
+  @UI.hidden: true
+  OverallStatusText;
+
+  @UI.lineItem: [{ position: 50 }]
+  @UI.identification: [{ position: 50 }]
+  @UI.fieldGroup: [{ qualifier: 'BasicInfo', position: 50 }]
+  Message;
+
+  @UI.selectionField: [{ position: 60 }]
+  @UI.lineItem: [{ position: 60 }]
+  @UI.identification: [{ position: 60 }]
+  @UI.fieldGroup: [{ qualifier: 'BasicInfo', position: 60 }]
+  CreatedBy;
+
+  @UI.selectionField: [{ position: 70 }]
+  @UI.lineItem: [{ position: 70 }]
+  @UI.identification: [{ position: 70 }]
+  @UI.fieldGroup: [{ qualifier: 'BasicInfo', position: 70 }]
+  @EndUserText.label: 'Create At'
+  CreatedAt;
+
+  @UI.selectionField: [{ position: 80 }]
+  @UI.lineItem: [{ position: 80 }]
+  @UI.identification: [{ position: 80 }]
+  @UI.fieldGroup: [{ qualifier: 'BasicInfo', position: 80 }]
+  @EndUserText.label: 'Last Change At'
+  LastChangedAt;
+
+
+  @UI.selectionField: [{ position: 90 }]
+  @UI.lineItem: [{ position: 90 }]
+  @UI.identification: [{ position: 90 }]
+  @UI.fieldGroup: [{ qualifier: 'BasicInfo', position: 90 }]
+  @EndUserText.label: 'File Name'
+  FileName;
+
+}

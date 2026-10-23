@@ -1,0 +1,16 @@
+{
+  "formatVersion": "1",
+  "header": {
+    "description": "ZAJC_M_OD_HEAD",
+    "originalLanguage": "en",
+    "abapLanguageVersion": "cloudDevelopment"
+  },
+  "generalInformation": {
+    "className": "ZCL_JOB_M_OD_HEAD"
+  },
+  "parameters": [
+    {
+      "name": "HDR_ID"
+    }
+  ]
+}
