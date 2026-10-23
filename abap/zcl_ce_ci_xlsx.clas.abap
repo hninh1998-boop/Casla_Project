@@ -94,7 +94,9 @@ CLASS zcl_ce_ci_xlsx DEFINITION
     CLASS-METHODS remark_rows
       IMPORTING is_data       TYPE zce_ci
                 iv_height     TYPE string
+                iv_last_col   TYPE string
       CHANGING  cv_row        TYPE i
+                ct_merge      TYPE tt_string
       RETURNING VALUE(rv_xml) TYPE string.
 
     CLASS-METHODS worksheet_xml
@@ -338,9 +340,11 @@ CLASS zcl_ce_ci_xlsx IMPLEMENTATION.
 
     " ── REMARKS ─────────────────────────────────────────────
     lv_row += 2.
-    lv_rows = lv_rows && remark_rows( EXPORTING is_data   = ls_head
-                                                iv_height = `22.5`
-                                      CHANGING  cv_row    = lv_row ).
+    lv_rows = lv_rows && remark_rows( EXPORTING is_data     = ls_head
+                                                iv_height   = `22.5`
+                                                iv_last_col = `G`
+                                      CHANGING  cv_row      = lv_row
+                                                ct_merge    = lt_merge ).
 
     " ── Khung thông tin ngân hàng ───────────────────────────
     DATA(lt_bank) = VALUE tt_string(
@@ -501,9 +505,11 @@ CLASS zcl_ce_ci_xlsx IMPLEMENTATION.
 
     " ── REMARKS ─────────────────────────────────────────────
     lv_row += 1.
-    lv_rows = lv_rows && remark_rows( EXPORTING is_data   = ls_head
-                                                iv_height = `27`
-                                      CHANGING  cv_row    = lv_row ).
+    lv_rows = lv_rows && remark_rows( EXPORTING is_data     = ls_head
+                                                iv_height   = `27`
+                                                iv_last_col = `K`
+                                      CHANGING  cv_row      = lv_row
+                                                ct_merge    = lt_merge ).
 
     " ── Chữ ký ──────────────────────────────────────────────
     lv_row += 1.
@@ -623,9 +629,9 @@ CLASS zcl_ce_ci_xlsx IMPLEMENTATION.
 
   METHOD remark_rows.
 
-    " REMARKS / MB/L / HB/L / ETA...: user điền qua nút Cập nhật thông tin in (bảng ztb_ci_text)
+    " MB/L / HB/L / ETA: user điền qua nút Cập nhật thông tin in (bảng ztb_ci_text)
     DATA(lt_remark) = VALUE tt_remark(
-      ( label = `REMARKS:`               value = is_data-Remarks )
+      ( label = `REMARKS:` )
       ( label = `1.MB/L#:`               value = is_data-MBL )
       ( label = `2.HB/L#:`               value = is_data-HBL )
       ( label = `3.VESSEL NAME:`         value = is_data-VesselName )
@@ -636,8 +642,7 @@ CLASS zcl_ce_ci_xlsx IMPLEMENTATION.
       ( label = `8.PORT OF DESTINATION:` value = is_data-PortOfDestination )
       ( label = `9.PRICE TERM:`          value = is_data-PriceTerm )
       ( label = `10.HTS CODE:`           value = is_data-HTSCode )
-      ( label = `11.COUNTRY OF ORIGIN:`  value = is_data-CountryOfOrigin )
-      ( label = `12.QUARTZ SLABS`        value = is_data-QuartzSlabs ) ).
+      ( label = `11.COUNTRY OF ORIGIN:`  value = is_data-CountryOfOrigin ) ).
 
     LOOP AT lt_remark INTO DATA(ls_remark).
       cv_row += 1.
@@ -646,6 +651,19 @@ CLASS zcl_ce_ci_xlsx IMPLEMENTATION.
                 text_cell( iv_col = `A` iv_row = cv_row iv_style = gc_style-text iv_value = ls_remark-label )
              && text_cell( iv_col = `C` iv_row = cv_row iv_style = gc_style-text iv_value = ls_remark-value ) ).
     ENDLOOP.
+
+    " 12.: không chọn gì trên popup → không in dòng này
+    "      có chọn → nhãn + giá trị cùng 1 ô, gộp tới cột cuối, tự xuống dòng
+    IF is_data-QuartzSlabs IS NOT INITIAL.
+      cv_row += 1.
+      DATA(lv_text_12) = |12. { is_data-QuartzSlabs }|.
+      " ~110 ký tự / dòng ở cỡ chữ 12 trên bề rộng form
+      DATA(lv_lines_12) = ( strlen( lv_text_12 ) + 109 ) DIV 110.
+      rv_xml = rv_xml
+        && row( iv_row = cv_row iv_height = |{ nmax( val1 = 1 val2 = lv_lines_12 ) * 16 + 6 }| iv_cells =
+                text_cell( iv_col = `A` iv_row = cv_row iv_style = gc_style-text_wrap iv_value = lv_text_12 ) ).
+      APPEND |A{ cv_row }:{ iv_last_col }{ cv_row }| TO ct_merge.
+    ENDIF.
 
   ENDMETHOD.
 

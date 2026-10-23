@@ -219,7 +219,6 @@ CLASS lhc_zce_ci IMPLEMENTATION.
         DATA(lv_HTSCode) = zcl_utility_ninhnh=>escape_xml( iv_text = ls_data_table3-HTSCode ).
         DATA(lv_CountryOfOrigin) = zcl_utility_ninhnh=>escape_xml( iv_text = CONV string( ls_data_table3-CountryOfOrigin ) ).
         DATA(lv_QuartzSlabs) = zcl_utility_ninhnh=>escape_xml( iv_text = ls_data_table3-QuartzSlabs ).
-        DATA(lv_remarks) = zcl_utility_ninhnh=>escape_xml( iv_text = ls_data_table3-Remarks ).
         DATA(lv_mbl) = zcl_utility_ninhnh=>escape_xml( iv_text = ls_data_table3-MBL ).
         DATA(lv_hbl) = zcl_utility_ninhnh=>escape_xml( iv_text = ls_data_table3-HBL ).
       ENDIF.
@@ -229,11 +228,6 @@ CLASS lhc_zce_ci IMPLEMENTATION.
                 && |{ lv_inwords }|
             && |</Cell2>|
         && |</Row2>|
-        && |<Row3>|
-            && |<Cell2>|
-                && |{ lv_remarks }|
-            && |</Cell2>|
-        && |</Row3>|
         && |<Row4>|
             && |<Cell2>|
                 && |{ lv_mbl }|
@@ -289,11 +283,13 @@ CLASS lhc_zce_ci IMPLEMENTATION.
                 && |{ lv_CountryOfOrigin }|
             && |</Cell2>|
         && |</Row14>|
-        && |<Row15>|
-            && |<Cell2>|
-                && |{ lv_QuartzSlabs }|
-            && |</Cell2>|
-        && |</Row15>|.
+        "12.: không chọn gì trên popup → không gửi Row15, form không in dòng 12
+        && COND string( WHEN lv_QuartzSlabs IS NOT INITIAL
+                        THEN |<Row15>|
+                          && |<Cell1>|
+                              && |12. { lv_QuartzSlabs }|
+                          && |</Cell1>|
+                          && |</Row15>| ).
 
       DATA(lv_sub4) =
         |<Sub4>|
@@ -612,17 +608,11 @@ CLASS lhc_zce_ci IMPLEMENTATION.
         DATA(lv_HTSCode) = zcl_utility_ninhnh=>escape_xml( iv_text = ls_data_table3-HTSCode ).
         DATA(lv_CountryOfOrigin) = zcl_utility_ninhnh=>escape_xml( iv_text = CONV string( ls_data_table3-CountryOfOrigin ) ).
         DATA(lv_QuartzSlabs) = zcl_utility_ninhnh=>escape_xml( iv_text = ls_data_table3-QuartzSlabs ).
-        DATA(lv_remarks) = zcl_utility_ninhnh=>escape_xml( iv_text = ls_data_table3-Remarks ).
         DATA(lv_mbl) = zcl_utility_ninhnh=>escape_xml( iv_text = ls_data_table3-MBL ).
         DATA(lv_hbl) = zcl_utility_ninhnh=>escape_xml( iv_text = ls_data_table3-HBL ).
       ENDIF.
       lv_table3 =
-        |<Row3>|
-            && |<Cell2>|
-                && |{ lv_remarks }|
-            && |</Cell2>|
-        && |</Row3>|
-        && |<Row4>|
+        |<Row4>|
             && |<Cell2>|
                 && |{ lv_mbl }|
             && |</Cell2>|
@@ -677,11 +667,13 @@ CLASS lhc_zce_ci IMPLEMENTATION.
                 && |{ lv_CountryOfOrigin }|
             && |</Cell2>|
         && |</Row14>|
-        && |<Row15>|
-            && |<Cell2>|
-                && |{ lv_QuartzSlabs }|
-            && |</Cell2>|
-        && |</Row15>|.
+        "12.: không chọn gì trên popup → không gửi Row15, form không in dòng 12
+        && COND string( WHEN lv_QuartzSlabs IS NOT INITIAL
+                        THEN |<Row15>|
+                          && |<Cell1>|
+                              && |12. { lv_QuartzSlabs }|
+                          && |</Cell1>|
+                          && |</Row15>| ).
 
       DATA(lv_sub4) =
         |<Sub4>|
@@ -786,35 +778,36 @@ CLASS lhc_zce_ci IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD updCIText.
-    "Thông tin in theo Pro-forma invoice: chọn nhiều dòng cùng invoice → chỉ lưu 1 lần
+    "Các mục FS ghi "Điền text" (Invoice#, MB/L, HB/L, ETA) - đều là thông tin cấp header
+    "→ lưu ztb_ci_text 1 dòng cho cả Pro-forma invoice (item = 000000), mọi dòng của invoice dùng chung
     "Để trống = giữ nguyên giá trị đang có, nhập D = xóa giá trị
+    CONSTANTS lc_header_item TYPE posnr VALUE '000000'.
     DATA lt_ci_text TYPE zcl_ce_ci_text_buffer=>tt_ci_text.
 
     SELECT FROM ztb_ci_text
       FIELDS *
       FOR ALL ENTRIES IN @keys
       WHERE proforma = @keys-%key-ProFormaInvoice
+        AND item     = @lc_header_item
       INTO TABLE @DATA(lt_existing).
 
     LOOP AT keys INTO DATA(ls_key).
-      IF line_exists( lt_ci_text[ proforma = ls_key-%key-ProFormaInvoice ] ).
-        CONTINUE.
+      "Chọn nhiều dòng cùng invoice → chỉ ghi 1 lần
+      READ TABLE lt_ci_text ASSIGNING FIELD-SYMBOL(<lfs_ci_text>) WITH KEY proforma = ls_key-%key-ProFormaInvoice.
+      IF sy-subrc <> 0.
+        APPEND INITIAL LINE TO lt_ci_text ASSIGNING <lfs_ci_text>.
+        READ TABLE lt_existing INTO DATA(ls_existing) WITH KEY proforma = ls_key-%key-ProFormaInvoice.
+        IF sy-subrc = 0.
+          <lfs_ci_text> = ls_existing.
+        ENDIF.
+        <lfs_ci_text>-client   = sy-mandt.
+        <lfs_ci_text>-proforma = ls_key-%key-ProFormaInvoice.
+        <lfs_ci_text>-item     = lc_header_item.
+        CLEAR ls_existing.
       ENDIF.
-
-      APPEND INITIAL LINE TO lt_ci_text ASSIGNING FIELD-SYMBOL(<lfs_ci_text>).
-      READ TABLE lt_existing INTO DATA(ls_existing) WITH KEY proforma = ls_key-%key-ProFormaInvoice.
-      IF sy-subrc = 0.
-        <lfs_ci_text> = ls_existing.
-      ENDIF.
-
-      <lfs_ci_text>-client   = sy-mandt.
-      <lfs_ci_text>-proforma = ls_key-%key-ProFormaInvoice.
 
       IF ls_key-%param-InvoiceNo IS NOT INITIAL.
         <lfs_ci_text>-invoice_no = COND #( WHEN ls_key-%param-InvoiceNo = 'D' THEN `` ELSE ls_key-%param-InvoiceNo ).
-      ENDIF.
-      IF ls_key-%param-Remarks IS NOT INITIAL.
-        <lfs_ci_text>-remarks = COND #( WHEN ls_key-%param-Remarks = 'D' THEN `` ELSE ls_key-%param-Remarks ).
       ENDIF.
       IF ls_key-%param-MBL IS NOT INITIAL.
         <lfs_ci_text>-mbl = COND #( WHEN ls_key-%param-MBL = 'D' THEN `` ELSE ls_key-%param-MBL ).
@@ -822,22 +815,12 @@ CLASS lhc_zce_ci IMPLEMENTATION.
       IF ls_key-%param-HBL IS NOT INITIAL.
         <lfs_ci_text>-hbl = COND #( WHEN ls_key-%param-HBL = 'D' THEN `` ELSE ls_key-%param-HBL ).
       ENDIF.
-      IF ls_key-%param-VesselName IS NOT INITIAL.
-        <lfs_ci_text>-vessel_name = COND #( WHEN ls_key-%param-VesselName = 'D' THEN `` ELSE ls_key-%param-VesselName ).
-      ENDIF.
-      IF ls_key-%param-ETD IS NOT INITIAL.
-        <lfs_ci_text>-etd = COND #( WHEN ls_key-%param-ETD = 'D' THEN `` ELSE ls_key-%param-ETD ).
-      ENDIF.
       IF ls_key-%param-ETA IS NOT INITIAL.
         <lfs_ci_text>-eta = COND #( WHEN ls_key-%param-ETA = 'D' THEN `` ELSE ls_key-%param-ETA ).
-      ENDIF.
-      IF ls_key-%param-ContainerNo IS NOT INITIAL.
-        <lfs_ci_text>-container_no = COND #( WHEN ls_key-%param-ContainerNo = 'D' THEN `` ELSE ls_key-%param-ContainerNo ).
       ENDIF.
 
       <lfs_ci_text>-changed_by = sy-uname.
       <lfs_ci_text>-changed_at = utclong_current( ).
-      CLEAR ls_existing.
     ENDLOOP.
 
     zcl_ce_ci_text_buffer=>set_data( it_data = lt_ci_text ).

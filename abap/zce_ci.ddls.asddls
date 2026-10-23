@@ -45,8 +45,7 @@ define root custom entity zce_ci
       // Fix data
       CountryOfOrigin     : abap.char(20); // VIETNAM
 
-      // Điền text - bảng ztb_ci_text (nút Cập nhật thông tin in)
-      Remarks             : abap.string;
+      // Điền text (Invoice, MB/L, HB/L, ETA) - bảng ztb_ci_text, nút Cập nhật thông tin in
       Invoice             : abap.string;
       MBL                 : abap.string;
       HBL                 : abap.string;

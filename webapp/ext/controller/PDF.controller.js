@@ -15,11 +15,12 @@ sap.ui.define([
     'sap/ui/core/HTML',
     'sap/ui/core/util/File',
     'sap/m/MultiComboBox',
-    'sap/m/Label'
+    'sap/m/Label',
+    'sap/m/Input'
 ], function (
     ControllerExtension, MessageToast, MessageBox, BusyDialog,
     PDFViewer, Dialog, Toolbar, ToolbarSpacer, Select, VBox,
-    Button, Text, Item, HTML, File, MultiComboBox, Label
+    Button, Text, Item, HTML, File, MultiComboBox, Label, Input
 ) {
     'use strict';
 
@@ -27,7 +28,8 @@ sap.ui.define([
     var HTS_CODES = ["6810990020", "6810990040", "70200060"];
     var QUARTZ_SLABS = [
         "QUARTZ SLABS",
-        "QUARTZ SLABS SAMPLES/QUARTZ SLABS AND QUARTZ SLABS SAMPLES",
+        "QUARTZ SLABS SAMPLES",
+        "QUARTZ SLABS AND QUARTZ SLABS SAMPLES",
         "CUT-TO-SIZE QUARTZ SLABS OF THE TYPE USED FOR COUNTERTOPS",
         "GLASS SLABS",
         "GLASS SAMPLES",
@@ -117,7 +119,7 @@ sap.ui.define([
                             items: [
                                 new Label({ text: "10. HTS CODE", design: "Bold", labelFor: this._htsBox }),
                                 this._htsBox,
-                                new Label({ text: "12. QUARTZ SLABS", design: "Bold", labelFor: this._slabsBox })
+                                new Label({ text: "12.", design: "Bold", labelFor: this._slabsBox })
                                     .addStyleClass("sapUiSmallMarginTop"),
                                 this._slabsBox
                             ]
@@ -155,6 +157,117 @@ sap.ui.define([
         _getSelectedContexts: function () {
             var oExtensionAPI = this.base.getExtensionAPI();
             return oExtensionAPI.getSelectedContexts ? oExtensionAPI.getSelectedContexts() : [];
+        },
+
+        /* ================================================================
+         *  CẬP NHẬT THÔNG TIN IN - Invoice#, MB/L, HB/L, ETA (cấp header, lưu theo Pro-forma invoice)
+         *  Gọi action updCIText rồi refresh cả bảng, để mọi dòng cùng invoice hiện giá trị mới ngay
+         * ================================================================ */
+        btnUpdateText: function () {
+            var that = this;
+            var aContexts = this._getSelectedContexts();
+            if (!aContexts.length) {
+                MessageToast.show("Vui lòng chọn ít nhất 1 dòng.");
+                return;
+            }
+
+            // Mỗi Pro-forma invoice chỉ cần gọi 1 lần
+            var oSeen = {};
+            var aInvoiceContexts = aContexts.filter(function (oContext) {
+                var sInvoice = oContext.getObject().ProFormaInvoice;
+                if (oSeen[sInvoice]) { return false; }
+                oSeen[sInvoice] = true;
+                return true;
+            });
+
+            if (!this._textDialog) {
+                var fnInput = function () { return new Input({ width: "100%" }); };
+                this._textInputs = {
+                    InvoiceNo: fnInput(),
+                    MBL: fnInput(),
+                    HBL: fnInput(),
+                    ETA: fnInput()
+                };
+                var aItems = [
+                    new Text({ text: "Để trống = giữ nguyên giá trị đang có, nhập D = xóa giá trị." })
+                        .addStyleClass("sapUiSmallMarginBottom")
+                ];
+                [["InvoiceNo", "Invoice#"], ["MBL", "MB/L#"], ["HBL", "HB/L#"], ["ETA", "ETA"]]
+                    .forEach(function (aField) {
+                        aItems.push(new Label({ text: aField[1], labelFor: that._textInputs[aField[0]] }));
+                        aItems.push(that._textInputs[aField[0]]);
+                    });
+
+                this._textDialog = new Dialog({
+                    title: "Cập nhật thông tin in",
+                    contentWidth: "28rem",
+                    content: [new VBox({ items: aItems }).addStyleClass("sapUiSmallMargin")],
+                    beginButton: new Button({
+                        text: "Cập nhật thông tin in",
+                        type: "Emphasized",
+                        press: function () {
+                            that._textDialog.close();
+                            that._callUpdateText(that._textContexts, that._getTextParams());
+                        }
+                    }),
+                    endButton: new Button({
+                        text: "Cancel",
+                        press: function () { that._textDialog.close(); }
+                    })
+                });
+                this.getView().addDependent(this._textDialog);
+            }
+
+            // Ô để trống mỗi lần mở; placeholder hiện giá trị đang có của dòng đầu tiên
+            var oRow = aInvoiceContexts[0].getObject();
+            this._textInputs.InvoiceNo.setValue("").setPlaceholder(oRow.Invoice || "");
+            this._textInputs.MBL.setValue("").setPlaceholder(oRow.MBL || "");
+            this._textInputs.HBL.setValue("").setPlaceholder(oRow.HBL || "");
+            this._textInputs.ETA.setValue("").setPlaceholder(oRow.ETA || "");
+
+            this._textContexts = aInvoiceContexts;
+            this._textDialog.open();
+        },
+
+        _getTextParams: function () {
+            var oParams = {};
+            Object.keys(this._textInputs).forEach(function (sKey) {
+                oParams[sKey] = this._textInputs[sKey].getValue().trim();
+            }, this);
+            return oParams;
+        },
+
+        _callUpdateText: function (aContexts, oParams) {
+            var oExtensionAPI = this.base.getExtensionAPI();
+            var oModel = oExtensionAPI.getModel();
+            var oBusy = new BusyDialog({ text: "Đang cập nhật..." });
+            oBusy.open();
+
+            var sGroupId = "UpdateTextBatchGroup";
+            var aPromises = aContexts.map(function (oContext) {
+                var oOperation = oModel.bindContext(
+                    "com.sap.gateway.srvd.zui_ci.v0001.updCIText(...)",
+                    oContext,
+                    { $$groupId: sGroupId }
+                );
+                Object.keys(oParams).forEach(function (sKey) {
+                    oOperation.setParameter(sKey, oParams[sKey]);
+                });
+                return oOperation.execute();
+            });
+
+            oModel.submitBatch(sGroupId);
+
+            Promise.all(aPromises).then(function () {
+                oBusy.close();
+                MessageToast.show("Cập nhật thông tin in thành công");
+                // Đọc lại cả bảng để mọi dòng cùng Pro-forma invoice hiện giá trị mới (không phải bấm Go)
+                oExtensionAPI.refresh();
+            }).catch(function (oError) {
+                oBusy.close();
+                console.error("[updCIText]", oError);
+                MessageBox.error(oError && oError.message ? oError.message : "Đã xảy ra lỗi khi cập nhật thông tin in.");
+            });
         },
 
         /* ================================================================

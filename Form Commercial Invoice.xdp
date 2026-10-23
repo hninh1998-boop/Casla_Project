@@ -1405,24 +1405,7 @@ AAAAAAAAAAAAAAAAAAAAAAAAAAAAAADD4v8FGAAaHKKB+TURswAAAABJRU5ErkJggg==</image>
                            <?templateDesigner expand 1?></subform>
                         <subform layout="row" name="Row15">
                            <assist role="TR"/>
-                           <draw h="6.35mm" name="Cell1">
-                              <ui>
-                                 <textEdit>
-                                    <margin/>
-                                 </textEdit>
-                              </ui>
-                              <value>
-                                 <text xliff:rid="060C950D-0A1B-4E27-BF5D-408461F84DBE">12. QUARTZ SLABS:</text>
-                              </value>
-                              <font typeface="Times New Roman" size="9pt"/>
-                              <para vAlign="middle"/>
-                              <margin topInset="0.5mm" bottomInset="0.5mm" leftInset="0.5mm" rightInset="0.5mm"/>
-                              <border>
-                                 <edge presence="hidden"/>
-                                 <corner thickness="0.1778mm" presence="hidden"/>
-                              </border>
-                           </draw>
-                           <field name="Cell2" minH="6.35mm">
+                           <field name="Cell1" minH="6.35mm" colSpan="2">
                               <ui>
                                  <textEdit multiLine="1">
                                     <margin/>
@@ -1436,7 +1419,9 @@ AAAAAAAAAAAAAAAAAAAAAAAAAAAAAADD4v8FGAAaHKKB+TURswAAAABJRU5ErkJggg==</image>
                                  <corner thickness="0.1778mm" presence="hidden"/>
                               </border>
                            </field>
-                           <?templateDesigner expand 1?></subform>
+                           <?templateDesigner expand 1?>
+                           <occur min="0" max="1"/>
+                        </subform>
                         <?templateDesigner expand 1?></subform>
                      <?templateDesigner expand 1?></subform>
                   <keep intact="none"/>

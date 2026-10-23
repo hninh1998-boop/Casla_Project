@@ -5,17 +5,14 @@
 @AbapCatalog.dataMaintenance : #RESTRICTED
 define table ztb_ci_text {
 
-  key client       : mandt not null;
-  key proforma     : vbeln not null;
-  invoice_no       : abap.string(0);
-  remarks          : abap.string(0);
-  mbl              : abap.string(0);
-  hbl              : abap.string(0);
-  vessel_name      : abap.string(0);
-  etd              : abap.string(0);
-  eta              : abap.string(0);
-  container_no     : abap.string(0);
-  changed_by       : syuname;
-  changed_at       : utcl;
+  key client   : mandt not null;
+  key proforma : vbeln not null;
+  key item     : posnr not null;
+  invoice_no   : abap.string(0);
+  mbl          : abap.string(0);
+  hbl          : abap.string(0);
+  eta          : abap.string(0);
+  changed_by   : syuname;
+  changed_at   : utcl;
 
 }

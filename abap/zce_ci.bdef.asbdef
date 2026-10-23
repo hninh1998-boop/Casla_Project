@@ -1,5 +1,5 @@
 unmanaged implementation in class zbp_ce_ci unique;
-//strict ( 2 ); //Uncomment this line in order to enable strict mode 2. The strict mode has two variants (strict(1), strict(2)) and is prerequisite to be future proof regarding syntax and to be able to release your BO.
+strict ( 2 ); // bắt buộc để dùng side effects (tự refresh dòng sau Cập nhật thông tin in)
 
 define behavior for zce_ci //alias <alias_name>
 //late numbering
@@ -12,7 +12,8 @@ authorization master ( instance )
   //  delete;
   field ( readonly ) ProFormaInvoice, Item;
 
-  // Các mục "Điền text" trên form (Invoice#, Remarks, MB/L, HB/L, Vessel, ETD, ETA, Container) - lưu ztb_ci_text
+  // Các mục FS ghi "Điền text" (Invoice#, MB/L, HB/L, ETA) - cấp header, lưu ztb_ci_text theo Pro-forma invoice
+  // Nút Cập nhật thông tin in đặt ở manifest (PDF.controller.js) để sau khi lưu refresh lại cả bảng
   action updCIText parameter zabs_ci_text;
 
   action btnPrintPDF parameter zabs_ci_param result [1] zabs_ci_result;
@@ -22,4 +23,10 @@ authorization master ( instance )
   // zabs_ci_param: 10.HTS CODE / 12. user tích chọn ở popup trước khi in
   action ExportExcelCI parameter zabs_ci_param result [1] zabs_ci_result;
   action ExportExcelPL parameter zabs_ci_param result [1] zabs_ci_result;
+
+  // Sau khi Cập nhật thông tin in, Fiori tự đọc lại các cột này của dòng vừa sửa (không phải bấm Go)
+  side effects
+  {
+    action updCIText affects field Invoice, field MBL, field HBL, field ETA;
+  }
 }

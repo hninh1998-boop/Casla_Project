@@ -165,65 +165,21 @@ CLASS ZCL_CE_CI_F01 IMPLEMENTATION.
 
       DATA(lt_keys) = lt_keys_raw.
     ELSE.
-      "In PDF / Excel: lấy các dòng đang chọn + thông tin delivery để phân header / item
+      "In PDF / Excel: lấy các dòng đang chọn
       SELECT FROM I_BillingDocumentItem AS a
-      LEFT JOIN I_OutboundDeliveryItem AS d
-          ON  d~OutboundDelivery     = a~ReferenceSDDocument
-          AND d~OutboundDeliveryItem = a~ReferenceSDDocumentItem
       FIELDS
           a~BillingDocument     AS ProFormaInvoice,
           a~BillingDocumentItem AS Item,
-          a~SalesDocumentItemCategory AS ItemCategory,
-          d~OutboundDelivery,
-          d~DeliveryDocumentItemCategory,
-          d~HigherLvlItmOfBatSpltItm,
-          d~Batch,
-          d~ActualDeliveryQuantity
+          a~SalesDocumentItemCategory AS ItemCategory
       FOR ALL ENTRIES IN @it_keys_pdf
       WHERE
           a~BillingDocument         = @it_keys_pdf-proformainvoice
           AND a~BillingDocumentItem = @it_keys_pdf-item
       INTO TABLE @DATA(lt_keys_sel).
 
-      IF iv_pl_items = abap_false.
-        "Header form (CI + phần đầu Packing List): chỉ lấy item có item category = TAN
-        DELETE lt_keys_sel WHERE ItemCategory <> 'TAN'.
-      ELSE.
-        "Bảng Packing List: chỉ lấy item, bỏ header
-        "- Header: dòng TAN mà item delivery TAN không có batch (đã tách batch xuống item con)
-        "- Item  : dòng TAN có batch (không tách batch)
-        "          + dòng tách batch (item delivery có HigherLvlItmOfBatSpltItm, item cha là TAN)
-        DATA(lt_parent) = lt_keys_sel.
-        DELETE lt_parent WHERE HigherLvlItmOfBatSpltItm IS INITIAL.
-        IF lt_parent IS NOT INITIAL.
-          SELECT FROM I_OutboundDeliveryItem
-          FIELDS
-              OutboundDelivery,
-              OutboundDeliveryItem,
-              DeliveryDocumentItemCategory
-          FOR ALL ENTRIES IN @lt_parent
-          WHERE
-              OutboundDelivery         = @lt_parent-OutboundDelivery
-              AND OutboundDeliveryItem = @lt_parent-HigherLvlItmOfBatSpltItm
-          INTO TABLE @DATA(lt_parent_do).
-        ENDIF.
-
-        LOOP AT lt_keys_sel INTO DATA(ls_key_sel).
-          DATA(lv_keep) = abap_false.
-          IF ls_key_sel-ItemCategory = 'TAN'.
-            "TAN là header nếu item delivery TAN không có batch
-            lv_keep = xsdbool( NOT ( ls_key_sel-DeliveryDocumentItemCategory = 'TAN'
-                                     AND ls_key_sel-Batch IS INITIAL ) ).
-          ELSEIF ls_key_sel-HigherLvlItmOfBatSpltItm IS NOT INITIAL.
-            lv_keep = xsdbool( line_exists( lt_parent_do[ OutboundDelivery             = ls_key_sel-OutboundDelivery
-                                                          OutboundDeliveryItem         = ls_key_sel-HigherLvlItmOfBatSpltItm
-                                                          DeliveryDocumentItemCategory = 'TAN' ] ) ).
-          ENDIF.
-          IF lv_keep = abap_false.
-            DELETE lt_keys_sel.
-          ENDIF.
-        ENDLOOP.
-      ENDIF.
+      "Chỉ lấy item có item category = TAN
+      "(Packing List: mỗi dòng TAN được tách theo batch của delivery ở cuối method - xem iv_pl_items)
+      DELETE lt_keys_sel WHERE ItemCategory <> 'TAN'.
 
       IF lt_keys_sel IS INITIAL.
         RETURN.
@@ -286,13 +242,13 @@ CLASS ZCL_CE_CI_F01 IMPLEMENTATION.
         AND a~BillingDocumentItem = @lt_keys-item
     INTO TABLE @DATA(lt_material).
 
-    "Amount: ConditionRateAmount của ZPR0, không có ZPR0 thì lấy ZPR2
+    "Amount: ConditionAmount của ZPR0, không có ZPR0 thì lấy ZPR2
     SELECT FROM I_BillingDocumentItemPrcgElmnt
     FIELDS
         BillingDocument     AS ProFormaInvoice,
         BillingDocumentItem AS Item,
         ConditionType,
-        ConditionRateAmount
+        ConditionAmount
     FOR ALL ENTRIES IN @lt_keys
     WHERE
         BillingDocument         = @lt_keys-proformainvoice
@@ -308,6 +264,9 @@ CLASS ZCL_CE_CI_F01 IMPLEMENTATION.
                item            TYPE posnr,
                material        TYPE matnr,
                batch           TYPE I_BillingDocumentItem-Batch,
+               do_item         TYPE posnr,                                      "item delivery của batch
+               qty             TYPE I_OutboundDeliveryItem-ActualDeliveryQuantity,
+               lot             TYPE string,                                     "lot của riêng batch này
              END OF ty_lot_batch.
       DATA lt_batch TYPE STANDARD TABLE OF ty_lot_batch WITH EMPTY KEY.
 
@@ -325,7 +284,8 @@ CLASS ZCL_CE_CI_F01 IMPLEMENTATION.
             OutboundDeliveryItem,
             HigherLvlItmOfBatSpltItm,
             DeliveryDocumentItemCategory,
-            Batch
+            Batch,
+            ActualDeliveryQuantity
         FOR ALL ENTRIES IN @lt_tan
         WHERE
             OutboundDelivery = @lt_tan-ReferenceSDDocument
@@ -346,7 +306,9 @@ CLASS ZCL_CE_CI_F01 IMPLEMENTATION.
             APPEND VALUE #( proformainvoice = ls_tan-ProFormaInvoice
                             item            = ls_tan-Item
                             material        = ls_tan-Material
-                            batch           = ls_do_item-Batch ) TO lt_batch.
+                            batch           = ls_do_item-Batch
+                            do_item         = ls_do_item-OutboundDeliveryItem
+                            qty             = ls_do_item-ActualDeliveryQuantity ) TO lt_batch.
           ELSE.
             LOOP AT lt_do_item INTO ls_do_item WHERE OutboundDelivery         = ls_tan-ReferenceSDDocument
                                                  AND HigherLvlItmOfBatSpltItm = ls_tan-ReferenceSDDocumentItem
@@ -354,7 +316,9 @@ CLASS ZCL_CE_CI_F01 IMPLEMENTATION.
               APPEND VALUE #( proformainvoice = ls_tan-ProFormaInvoice
                               item            = ls_tan-Item
                               material        = ls_tan-Material
-                              batch           = ls_do_item-Batch ) TO lt_batch.
+                              batch           = ls_do_item-Batch
+                              do_item         = ls_do_item-OutboundDeliveryItem
+                              qty             = ls_do_item-ActualDeliveryQuantity ) TO lt_batch.
             ENDLOOP.
           ENDIF.
         ENDLOOP.
@@ -431,17 +395,15 @@ CLASS ZCL_CE_CI_F01 IMPLEMENTATION.
     SELECT FROM zi_ci_text
     FIELDS
         ProFormaInvoice,
+        Item,
         InvoiceNo,
-        Remarks,
         MBL,
         HBL,
-        VesselName,
-        ETD,
-        ETA,
-        ContainerNo
+        ETA
     FOR ALL ENTRIES IN @lt_keys
     WHERE
         ProFormaInvoice = @lt_keys-proformainvoice
+        AND Item        = '000000'         "thông tin cấp header, lưu ở dòng item = 000000
     INTO TABLE @DATA(lt_ci_text).
 
     "2.7. Long text Billing - I_BillingDocumentTP
@@ -603,17 +565,8 @@ CLASS ZCL_CE_CI_F01 IMPLEMENTATION.
         <lfs_result>-aztid               = ls_material-aztid.
         <lfs_result>-BillingQuantityUnit = ls_material-BillingQuantityUnit.
         <lfs_result>-Quantity            = ls_material-quantity.
-        "Bảng Packing List (FS v5): PCS = ActualDeliveryQuantity của item delivery theo batch
-        "(billing item tách batch CB99 có BillingQuantity = 0, số lượng nằm ở item delivery)
-        IF iv_pl_items = abap_true.
-          READ TABLE lt_keys_sel INTO DATA(ls_key_qty) WITH KEY proformainvoice = ls_key-proformainvoice
-                                                                item            = ls_key-item.
-          IF sy-subrc = 0 AND ls_key_qty-ActualDeliveryQuantity IS NOT INITIAL.
-            <lfs_result>-Quantity = ls_key_qty-ActualDeliveryQuantity.
-          ENDIF.
-        ENDIF.
         <lfs_result>-TransactionCurrency = ls_material-TransactionCurrency.
-        "Unit price / Amount: ZPR0, không có thì ZPR2 (ConditionRateAmount)
+        "Amount: ConditionAmount của ZPR0, không có thì ZPR2
         READ TABLE lt_price INTO DATA(ls_price) WITH KEY proformainvoice = ls_key-proformainvoice
                                                          item            = ls_key-item
                                                          ConditionType   = 'ZPR0'.
@@ -622,9 +575,10 @@ CLASS ZCL_CE_CI_F01 IMPLEMENTATION.
                                                      item            = ls_key-item
                                                      ConditionType   = 'ZPR2'.
         ENDIF.
-        "ConditionRateAmount là đơn giá → Unit price = rate, Amount = rate * Quantity
-        <lfs_result>-UnitPrice = COND #( WHEN sy-subrc = 0 THEN ls_price-ConditionRateAmount ).
-        <lfs_result>-Amount    = <lfs_result>-UnitPrice * <lfs_result>-Quantity.
+        <lfs_result>-Amount    = COND #( WHEN sy-subrc = 0 THEN ls_price-ConditionAmount ).
+        "Unit price = Amount / Quantity
+        <lfs_result>-UnitPrice = COND #( WHEN <lfs_result>-Quantity IS NOT INITIAL
+                                         THEN <lfs_result>-Amount / <lfs_result>-Quantity ).
         CLEAR ls_price.
         "Size L W H
         READ TABLE lt_size_lwh INTO DATA(ls_size) WITH KEY ClfnObjectID   = ls_material-material
@@ -653,6 +607,7 @@ CLASS ZCL_CE_CI_F01 IMPLEMENTATION.
 
       LOOP AT lt_batch INTO ls_batch WHERE proformainvoice = ls_key-proformainvoice
                                        AND item            = ls_key-item.
+        DATA(lv_batch_tabix) = sy-tabix.
         "(2) - Batch (cắt 6 ký tự đầu của batch: đang là định dạng yymmdd --> chuyển sang định dạng mmddyyyy)
         DATA(lv_batch_raw) = ls_batch-Batch+0(6). "định dạng yymmdd
         IF lv_batch_raw <> '000000' AND lv_batch_raw CO '0123456789'.
@@ -676,6 +631,7 @@ CLASS ZCL_CE_CI_F01 IMPLEMENTATION.
 
         IF lv_batch_date IS NOT INITIAL AND lv_mch1 IS NOT INITIAL AND lv_mara IS NOT INITIAL.
           DATA(lv_lot) = |D_{ lv_mch1 }_{ lv_batch_date }{ lv_mara }|.
+          lt_batch[ lv_batch_tabix ]-lot = lv_lot. "Packing List: lot của riêng batch
           IF NOT line_exists( lt_lot[ table_line = lv_lot ] ).
             APPEND lv_lot TO lt_lot.
           ENDIF.
@@ -716,27 +672,59 @@ CLASS ZCL_CE_CI_F01 IMPLEMENTATION.
       "Country of Origin - Fix Text VIETNAM
       <lfs_result>-CountryOfOrigin = 'VIETNAM'.
 
-      "Thông tin user tự điền: Invoice#, Remarks, MB/L, HB/L, ETA lấy từ bảng Z
-      "Vessel Name / ETD / Container No: có điền thì ưu tiên giá trị điền, không thì lấy long text như trên
+      "Thông tin user tự điền (FS ghi "Điền text"): Invoice#, MB/L, HB/L, ETA - cấp header,
+      "mọi dòng của Pro-forma invoice dùng chung
       READ TABLE lt_ci_text INTO DATA(ls_ci_text) WITH KEY ProFormaInvoice = ls_key-proformainvoice.
       IF sy-subrc = 0.
         <lfs_result>-Invoice = ls_ci_text-InvoiceNo.
-        <lfs_result>-Remarks = ls_ci_text-Remarks.
         <lfs_result>-MBL     = ls_ci_text-MBL.
         <lfs_result>-HBL     = ls_ci_text-HBL.
         <lfs_result>-ETA     = ls_ci_text-ETA.
-        IF ls_ci_text-VesselName IS NOT INITIAL.
-          <lfs_result>-VesselName = ls_ci_text-VesselName.
-        ENDIF.
-        IF ls_ci_text-ETD IS NOT INITIAL.
-          <lfs_result>-ETD = ls_ci_text-ETD.
-        ENDIF.
-        IF ls_ci_text-ContainerNo IS NOT INITIAL.
-          <lfs_result>-ContainerNo = ls_ci_text-ContainerNo.
-        ENDIF.
       ENDIF.
       CLEAR ls_ci_text.
     ENDLOOP.
+
+    """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+    "3. Bảng Packing List: mỗi batch của delivery là 1 dòng (FS: 17 SQM, 18 PCS, 21 LOT)
+    "- Dòng TAN có batch          → 1 dòng
+    "- Dòng TAN đã tách batch     → mỗi item con (HigherLvlItmOfBatSpltItm) 1 dòng
+    "PCS = ActualDeliveryQuantity của item delivery, LOT = lot của riêng batch đó
+    "Item của dòng tách ra chỉ là số thứ tự nội bộ trong invoice (không hiện lên form)
+    IF iv_pl_items = abap_true.
+      DATA: lt_pl_rows    TYPE zcl_ce_ci_top=>tt_result,
+            lv_pl_seq     TYPE posnr,
+            lv_pl_invoice TYPE vbeln.
+
+      LOOP AT et_result INTO DATA(ls_res).
+        "Đánh số lại từ 1 cho mỗi invoice
+        IF ls_res-ProFormaInvoice <> lv_pl_invoice.
+          lv_pl_invoice = ls_res-ProFormaInvoice.
+          CLEAR lv_pl_seq.
+        ENDIF.
+
+        DATA(lv_split) = abap_false.
+        LOOP AT lt_batch INTO DATA(ls_pl_batch) WHERE proformainvoice = ls_res-ProFormaInvoice
+                                                  AND item            = ls_res-Item
+                                                  AND do_item         IS NOT INITIAL.
+          lv_split = abap_true.
+          lv_pl_seq += 1.
+          DATA(ls_pl_row)   = ls_res.
+          ls_pl_row-Item     = lv_pl_seq.
+          ls_pl_row-Quantity = ls_pl_batch-qty.
+          ls_pl_row-LOT      = ls_pl_batch-lot.
+          APPEND ls_pl_row TO lt_pl_rows.
+        ENDLOOP.
+
+        IF lv_split = abap_false.
+          lv_pl_seq += 1.
+          ls_pl_row      = ls_res.
+          ls_pl_row-Item = lv_pl_seq.
+          APPEND ls_pl_row TO lt_pl_rows.
+        ENDIF.
+      ENDLOOP.
+
+      et_result = lt_pl_rows.
+    ENDIF.
   ENDMETHOD.
 
 
@@ -981,4 +969,5 @@ CLASS ZCL_CE_CI_F01 IMPLEMENTATION.
       CLEAR ls_uom.
     ENDLOOP.
   ENDMETHOD.
+
 ENDCLASS.

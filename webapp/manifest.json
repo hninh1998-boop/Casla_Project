@@ -143,6 +143,13 @@
                     "type": "GridTable"
                   },
                   "actions": {
+                    "UpdateText": {
+                      "press": ".extension.zciov4.ext.controller.PDF.btnUpdateText",
+                      "visible": true,
+                      "enabled": true,
+                      "requiresSelection": true,
+                      "text": "Cập nhật thông tin in"
+                    },
                     "ExportPDF": {
                       "text": "Export PDF",
                       "menu": [
