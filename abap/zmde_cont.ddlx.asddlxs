@@ -136,6 +136,12 @@ annotate entity zce_cont with
   @Consumption.filter.hidden: true
   LoaiManh;
 
+  @EndUserText.label: 'Loại túi'
+  @UI.lineItem: [{ position: 133 }]
+  @UI.identification: [{ position: 133 }]
+  @Consumption.filter.hidden: true
+  LoaiTui;
+
   @EndUserText.label: 'Số lượng theo KHSX'
   //  @UI.lineItem: [{ position: 140 }]
   //  @UI.identification: [{ position: 140 }]
@@ -191,6 +197,12 @@ annotate entity zce_cont with
   @UI.identification: [{ position: 180 }]
   @Consumption.filter.hidden: true
   Cont;
+
+  @EndUserText.label: 'Nhà cung cấp vận tải'
+  @UI.lineItem: [{ position: 185 }]
+  @UI.identification: [{ position: 185 }]
+  @Consumption.filter.hidden: true
+  NhaCungCapVanTai;
 
   @EndUserText.label: 'Tare Weight'
   @UI.lineItem: [{ position: 190 }]

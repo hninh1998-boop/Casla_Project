@@ -13,4 +13,7 @@ authorization master ( instance )
   field ( readonly ) SO, SOItem, SoLenhXuatHang, SoLenhXuatHangItem;
 
   action ( features : instance ) updContText parameter zabs_cont_text;
+
+  // Export Excel: file sinh hoàn toàn ở backend (zcl_ce_cont_xlsx), FE chỉ gửi filter + sort rồi nhận file
+  static action ExportExcel parameter zabs_cont_export_param result [1] zabs_cont_export_result;
 }

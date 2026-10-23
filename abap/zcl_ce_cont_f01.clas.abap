@@ -361,6 +361,14 @@ CLASS ZCL_CE_CONT_F01 IMPLEMENTATION.
       ENDIF.
     ENDIF.
 
+    "Địa điểm đóng hàng: SO item plant 6711, 6712 mặc định là địa điểm 6713
+    "--> filter 6713 phải lấy được cả SO item plant 6711, 6712 (lọc chính xác lại ở build_result)
+    DATA(lr_temp_diadiemdonghang) = ir_diadiemdonghang.
+    IF lr_temp_diadiemdonghang IS NOT INITIAL AND '6713' IN lr_temp_diadiemdonghang.
+      APPEND VALUE #( sign = 'I' option = 'EQ' low = '6711' ) TO lr_temp_diadiemdonghang.
+      APPEND VALUE #( sign = 'I' option = 'EQ' low = '6712' ) TO lr_temp_diadiemdonghang.
+    ENDIF.
+
     "Select keys
     SELECT FROM I_SalesOrderitem AS a
     LEFT JOIN I_SalesOrderitem AS aMaterial
@@ -400,7 +408,7 @@ CLASS ZCL_CE_CONT_F01 IMPLEMENTATION.
         AND b~Customer               NOT IN ('0000006710','0000006720')
         AND a~SalesOrderItemCategory IN ('TAN', 'CBXN')
 
-        AND ( a~plant                 IN @ir_diadiemdonghang
+        AND ( a~plant                 IN @lr_temp_diadiemdonghang
             OR g~DiaDiemDongHangCont IN @ir_diadiemdonghang )
         AND a~SalesOrder            IN @ir_so
         AND c~OutboundDelivery      IN @lr_temp_solenhxuathang
@@ -499,6 +507,11 @@ CLASS ZCL_CE_CONT_F01 IMPLEMENTATION.
                                                iv_longtextid = 'Z034'
                                                iv_od         = iv_od ).
 
+    "Nhà cung cấp vận tải - Z031
+    cs_result-NhaCungCapVanTai = get_longtext_result_data( it_longtext   = it_longtext
+                                                           iv_longtextid = 'Z031'
+                                                           iv_od         = iv_od ).
+
     "Booking - Z047 "Update 24.08.2026
     cs_result-Booking = get_longtext_result_data( it_longtext   = it_longtext
                                                   iv_longtextid = 'Z047'
@@ -553,7 +566,7 @@ CLASS ZCL_CE_CONT_F01 IMPLEMENTATION.
 
           a~CharcValue
       WHERE
-          b~Characteristic      IN ( 'Z_LOAIMANG', 'Z_LOAIMANH' )
+          b~Characteristic      IN ( 'Z_LOAIMANG', 'Z_LOAIMANH', 'Z_LOAITUI' )
           AND a~ClassType       = '001'
           AND a~ClfnObjectID IN @lr_mara
           AND a~ClfnObjectTable = 'MARA'
@@ -587,7 +600,7 @@ CLASS ZCL_CE_CONT_F01 IMPLEMENTATION.
                                      is_key      = ls_key
                             CHANGING cs_result   = <lfs_result> ).
 
-      "Loại màng + Loại manh
+      "Loại màng + Loại manh + Loại túi
       READ TABLE lt_material INTO ls_material WITH KEY SalesOrder     = ls_key-so
                                                        SalesOrderItem = ls_key-soitem
                                                        Product        = <lfs_result>-MaHang.
@@ -597,6 +610,8 @@ CLASS ZCL_CE_CONT_F01 IMPLEMENTATION.
             <lfs_result>-LoaiMang = ls_mara-CharcValue.
           ELSEIF ls_mara-Characteristic = 'Z_LOAIMANH'.
             <lfs_result>-LoaiManh = ls_mara-CharcValue.
+          ELSEIF ls_mara-Characteristic = 'Z_LOAITUI'.
+            <lfs_result>-LoaiTui = ls_mara-CharcValue.
           ENDIF.
         ENDLOOP.
       ENDIF.
@@ -656,12 +671,15 @@ CLASS ZCL_CE_CONT_F01 IMPLEMENTATION.
         b~RequestedDeliveryDate AS NgayGiaoHangDuKien,
         b~Product AS MaHang,
         b~SalesOrderItemText AS TenHang,
-        CASE WHEN e~DiaDiemDongHangCont IS NOT INITIAL
-             THEN e~DiaDiemDongHangCont
+        "Địa điểm đóng hàng: ưu tiên bảng Z --> plant 6711, 6712 thì mặc định 6713 --> plant của SO item
+        "(cột Plant giữ nguyên plant của SO item)
+        CASE WHEN e~DiaDiemDongHangCont IS NOT INITIAL THEN e~DiaDiemDongHangCont
+             WHEN b~Plant IN ( '6711', '6712' )       THEN '6713'
              ELSE b~Plant END AS DiaDiemDongHangCont,
-        CASE WHEN e~DiaDiemDongHangCont IS NOT INITIAL
-             THEN e~DiaDiemDongHangContName
-             ELSE c~PlantName END AS DiaDiemDongHangContName,
+        "Plant 6711, 6712 --> để trống, lấy tên của 6713 ở đoạn fallback I_Plant bên dưới
+        CASE WHEN e~DiaDiemDongHangCont IS NOT INITIAL THEN e~DiaDiemDongHangContName
+             WHEN b~Plant NOT IN ( '6711', '6712' )   THEN c~PlantName
+        END AS DiaDiemDongHangContName,
         d~ActualDeliveryQuantity AS SoLuongTrenLenhXuatHang,
         d~DeliveryQuantityUnit,
 
