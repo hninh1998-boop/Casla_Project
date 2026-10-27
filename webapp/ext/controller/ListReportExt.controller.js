@@ -27,7 +27,10 @@ sap.ui.define([
 				onAfterActionExecution: function (oEvent) {
 					if (!oEvent) { return; }
 
-					if (oEvent.indexOf("downloadTemplate") !== -1) {
+					// Kiểm tra OD trước vì "downloadTemplateOD" cũng chứa chuỗi "downloadTemplate"
+					if (oEvent.indexOf("downloadTemplateOD") !== -1) {
+						this.downloadTemplateOD();
+					} else if (oEvent.indexOf("downloadTemplate") !== -1) {
 						this.downloadTemplate();
 					} else if (["chuyenViTri", "doThung", "daXuat"].some((sAction) => oEvent.indexOf(sAction) !== -1)) {
 						// Các action này chạy theo cả số thùng/pallet nên phải load lại list để thấy các dòng khác cùng thùng
@@ -137,7 +140,8 @@ sap.ui.define([
 				{ header: "Khách hàng", key: "Customer", width: 14 },
 				{ header: "Ngày nhập kho", key: "NgayNhapKho", width: 18 },
 				{ header: "Tem", key: "Tem", width: 18 },
-				{ header: "Khối lượng (kg)", key: "KhoiLuong", width: 18 }
+				{ header: "Net weight", key: "KhoiLuong", width: 22 },
+				{ header: "Gross weight", key: "GrossWeight", width: 22 }
 			];
 
 			const hintRow = {
@@ -151,13 +155,36 @@ sap.ui.define([
 				Customer: "Khách hàng\n2 ký tự, VD: CA",
 				NgayNhapKho: "DD/MM/YYYY\nVD: 08/10/2026",
 				Tem: "CÓ TEM / KHÔNG TEM",
-				KhoiLuong: "Khối lượng thùng mẫu (kg)\nVD: 8, 2000"
+				KhoiLuong: "Khối lượng thùng mẫu (không bao gồm thùng)\nVD: 10, 100",
+				GrossWeight: "Khối lượng thùng mẫu (kg)\nVD: 15, 150"
 			};
 
 			return this._downloadExcel(columns, hintRow, "Template_Upload thung mau.xlsx");
 		},
 
 		// ===== Upload =============================================================
+		// ===== Template cập nhật lệnh xuất hàng (OD) ===========================
+		// Thứ tự cột phải khớp ty_file_upload của ZBP_I_M_OD (dòng 1 header, dòng 2 hướng dẫn, dữ liệu từ dòng 3)
+		downloadTemplateOD: function () {
+			const columns = [
+				{ header: "Số thùng/Pallet", key: "SoThung", width: 24 },
+				{ header: "Delivery", key: "Delivery", width: 26 }
+			];
+
+			const hintRow = {
+				SoThung: "PAYYXXXX\n2 ký tự đầu: loại thùng\nYY: năm đóng thùng\nXXXX: số thứ tự\nVD: PA260001",
+				Delivery: "Điền số lệnh xuất hàng\n1 thùng 1 lệnh xuất hàng"
+			};
+
+			return this._downloadExcel(columns, hintRow, "Template_Upload delivery.xlsx");
+		},
+
+		uploadExcelDialogOD: async function () {
+			this._sActiveEntitySet = "ManageFileOD";
+			this._sActiveAction = "uploadExcelOD";
+			await this._openUploadDialog();
+		},
+
 		uploadExcelDialog: async function () {
 			this._sActiveEntitySet = "ManageFile";
 			this._sActiveAction = "uploadExcel";

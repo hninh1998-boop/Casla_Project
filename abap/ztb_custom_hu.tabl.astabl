@@ -16,6 +16,8 @@ define table ztb_custom_hu {
   ngay_nhap_kho         : abap.dats;
   tem                   : abap.char(1);
   khoi_luong            : abap.char(40);
+  gross_weight          : abap.char(40);
+  delivery              : vbeln_vl;
   status                : abap.char(1);
   del_flag              : abap.char(1);
   uuidfile              : sysuuid_x16;

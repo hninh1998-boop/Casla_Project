@@ -19,7 +19,8 @@ CLASS lhc_ManageFile DEFINITION INHERITING FROM cl_abap_behavior_handler.
              Customer        TYPE string,
              NgayNhapKho     TYPE string,
              Tem             TYPE string,
-             KhoiLuong       TYPE string,
+             KhoiLuong       TYPE string, "Net weight
+             GrossWeight     TYPE string, "Gross weight
            END OF ty_file_upload.
 
     METHODS get_global_authorizations FOR GLOBAL AUTHORIZATION
@@ -300,8 +301,9 @@ CLASS lhc_ManageFile IMPLEMENTATION.
           Customer        = to_upper( condense( ls_file-Customer ) )
           NgayNhapKho     = parse_date( ls_file-NgayNhapKho )
           Tem             = parse_tem( ls_file-Tem )
-          " Khối lượng: text tự do, không kiểm tra
+          " Net / Gross weight: text tự do
           KhoiLuong       = condense( ls_file-KhoiLuong )
+          GrossWeight     = condense( ls_file-GrossWeight )
         ) )
       ).
 
@@ -320,7 +322,8 @@ CLASS lhc_ManageFile IMPLEMENTATION.
                       customer         = ls_target-Customer
                       ngay_nhap_kho    = ls_target-NgayNhapKho
                       tem              = ls_target-Tem
-                      khoi_luong       = ls_target-KhoiLuong ) TO lt_check.
+                      khoi_luong       = ls_target-KhoiLuong
+                      gross_weight     = ls_target-GrossWeight ) TO lt_check.
 
       CLEAR ls_file_c.
     ENDLOOP.
@@ -359,6 +362,7 @@ CLASS lhc_ManageFile IMPLEMENTATION.
         NgayNhapKho
         Tem
         KhoiLuong
+        GrossWeight
         Messagetype
         Message
       )

@@ -1,0 +1,31 @@
+projection;
+strict ( 2 );
+use draft;
+use side effects;
+
+define behavior for zc_m_od alias ManageFileOD
+{
+  use update;
+  use delete;
+
+  use action uploadExcelOD;
+  use action downloadTemplateOD;
+
+  use action Activate;
+  use action Discard;
+  use action Edit;
+  use action Resume;
+  use action Prepare;
+
+  use association _DataFile { create; with draft; }
+}
+
+define behavior for zc_d_od alias DataFileOD
+{
+  use update;
+  use delete;
+
+  use action PostConfirmOD;
+
+  use association _ManageFile { with draft; }
+}

@@ -28,6 +28,7 @@ define view entity zc_d_thung
       @Consumption.valueHelpDefinition: [{ entity: { name: 'zi_thung_tem_vh', element: 'Tem' } }]
       Tem,
       KhoiLuong,
+      GrossWeight,
 
       @EndUserText.label: 'Status'
       @Semantics.text: true

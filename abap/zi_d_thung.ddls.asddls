@@ -37,7 +37,9 @@ define view entity zi_d_thung
       customer              as Customer,
       ngay_nhap_kho         as NgayNhapKho,
       tem                   as Tem,
+      // KhoiLuong = Net weight (không gồm thùng), GrossWeight = Gross weight (gồm thùng)
       khoi_luong            as KhoiLuong,
+      gross_weight          as GrossWeight,
 
       @Semantics.user.createdBy: true
       created_by            as CreatedBy,

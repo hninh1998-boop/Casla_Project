@@ -31,6 +31,8 @@ authorization master ( global )
       NgayNhapKho        = ngay_nhap_kho;
       Tem                = tem;
       KhoiLuong          = khoi_luong;
+      GrossWeight        = gross_weight;
+      Delivery           = delivery;
       TrangThai             = status;
       DelFlag            = del_flag;
       Uuidfile           = uuidfile;

@@ -90,8 +90,12 @@ annotate entity zc_d_thung with
   Tem;
   @UI.lineItem: [{ position: 160 }]
   @UI.identification: [{ position: 160 }]
-  @EndUserText.label: 'Khối lượng (kg)'
+  @EndUserText.label: 'Net weight'
   KhoiLuong;
+  @UI.lineItem: [{ position: 165 }]
+  @UI.identification: [{ position: 165 }]
+  @EndUserText.label: 'Gross weight'
+  GrossWeight;
 
   @UI.lineItem: [{ position: 190 }]
   @UI.identification: [{ position: 190 }]

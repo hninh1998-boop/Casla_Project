@@ -120,6 +120,16 @@
           "pattern": "ManageFile({key})/_DataFile({key2}):?query:",
           "name": "DataFileObjectPage",
           "target": "DataFileObjectPage"
+        },
+        {
+          "pattern": "ManageFileOD({key}):?query:",
+          "name": "ManageFileODObjectPage",
+          "target": "ManageFileODObjectPage"
+        },
+        {
+          "pattern": "ManageFileOD({key})/_DataFile({key2}):?query:",
+          "name": "DataFileODObjectPage",
+          "target": "DataFileODObjectPage"
         }
       ],
       "targets": {
@@ -138,6 +148,11 @@
                 "ManageFile": {
                   "detail": {
                     "route": "ManageFileObjectPage"
+                  }
+                },
+                "ManageFileOD": {
+                  "detail": {
+                    "route": "ManageFileODObjectPage"
                   }
                 }
               },
@@ -161,6 +176,20 @@
                       "text": "Tải lên file Excel"
                     }
                   }
+                },
+                "/ManageFileOD/@com.sap.vocabularies.UI.v1.LineItem": {
+                  "tableSettings": {
+                    "type": "GridTable"
+                  },
+                  "actions": {
+                    "idUploadExcelOD": {
+                      "press": ".extension.zthungov4.ext.controller.ListReportExt.uploadExcelDialogOD",
+                      "visible": true,
+                      "enabled": true,
+                      "requiresSelection": false,
+                      "text": "Tải lên file Excel"
+                    }
+                  }
                 }
               },
               "views": {
@@ -173,6 +202,11 @@
                     "key": "Upload",
                     "annotationPath": "com.sap.vocabularies.UI.v1.SelectionPresentationVariant#Upload",
                     "entitySet": "ManageFile"
+                  },
+                  {
+                    "key": "OD",
+                    "annotationPath": "com.sap.vocabularies.UI.v1.SelectionPresentationVariant#OD",
+                    "entitySet": "ManageFileOD"
                   }
                 ]
               }
@@ -213,6 +247,43 @@
             "settings": {
               "editableHeaderContent": false,
               "contextPath": "/ManageFile/_DataFile"
+            }
+          }
+        },
+        "ManageFileODObjectPage": {
+          "type": "Component",
+          "id": "ManageFileODObjectPage",
+          "name": "sap.fe.templates.ObjectPage",
+          "options": {
+            "settings": {
+              "editableHeaderContent": false,
+              "contextPath": "/ManageFileOD",
+              "navigation": {
+                "_DataFile": {
+                  "detail": {
+                    "route": "DataFileODObjectPage"
+                  }
+                }
+              },
+              "controlConfiguration": {
+                "_DataFile/@com.sap.vocabularies.UI.v1.LineItem": {
+                  "tableSettings": {
+                    "type": "GridTable",
+                    "selectionMode": "Multi"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "DataFileODObjectPage": {
+          "type": "Component",
+          "id": "DataFileODObjectPage",
+          "name": "sap.fe.templates.ObjectPage",
+          "options": {
+            "settings": {
+              "editableHeaderContent": false,
+              "contextPath": "/ManageFileOD/_DataFile"
             }
           }
         }

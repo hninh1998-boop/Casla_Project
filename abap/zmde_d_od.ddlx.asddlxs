@@ -1,0 +1,72 @@
+@Metadata.layer: #CORE
+@UI:{
+    headerInfo: { typeName: 'General',
+                  typeNamePlural: 'Upload Data',
+                  title: { value: 'SoThung' }
+    }
+}
+
+@UI.lineItem: [{criticality: 'Criticality'}]
+annotate entity zc_d_od with
+{
+  @UI.facet          : [
+   {
+   id                 : 'General',
+   purpose            : #STANDARD,
+   position           : 10,
+   isPartOfPreview    : true,
+   label              : 'General',
+   type               : #IDENTIFICATION_REFERENCE
+   }]
+
+  @UI.hidden: true
+  Uuid;
+
+  @UI.lineItem: [{ position: 20, label: 'Message Type' , criticality: 'Criticality'  },
+                 { label: 'Ghi dữ liệu',
+                   dataAction: 'PostConfirmOD',
+                   type: #FOR_ACTION,
+                   invocationGrouping: #CHANGE_SET
+                 }]
+  @UI.identification: [{ position: 20 }]
+  @UI.selectionField: [{ position: 10 }]
+  @EndUserText.label: 'Message Type'
+  @UI.dataPoint : { title: 'Message Type', criticality: 'Criticality' }
+  Messagetype;
+
+  @Consumption.filter.hidden: true
+  Criticality;
+
+  @UI.adaptationHidden: true
+  OverallStatusText;
+
+  @UI.lineItem: [{ position: 30 }]
+  @UI.identification: [{ position: 30 }]
+  @EndUserText.label: 'Message Text'
+  Message;
+
+  @UI.lineItem: [{ position: 40 }]
+  @UI.identification: [{ position: 40 }]
+  @EndUserText.label: 'Số thùng/Pallet'
+  SoThung;
+
+  @UI.lineItem: [{ position: 50 }]
+  @UI.identification: [{ position: 50 }]
+  @EndUserText.label: 'Lệnh xuất hàng (OD)'
+  Delivery;
+
+  @UI.lineItem: [{ position: 190 }]
+  @UI.identification: [{ position: 190 }]
+  CreatedBy;
+
+  @UI.lineItem: [{ position: 200 }]
+  @UI.identification: [{ position: 200 }]
+  CreatedAt;
+
+  @UI.hidden: true
+  LastChangedBy;
+  @UI.hidden: true
+  LocalLastChangedAt;
+  @UI.hidden: true
+  LastChangedAt;
+}

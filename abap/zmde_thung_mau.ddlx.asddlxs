@@ -92,8 +92,17 @@ annotate entity zc_thung_mau with
   Tem;
 
   @UI.lineItem       : [{ position: 115 }]
-  @EndUserText.label: 'Khối lượng (kg)'
+  @EndUserText.label: 'Net weight'
   KhoiLuong;
+
+  @UI.lineItem       : [{ position: 116 }]
+  @EndUserText.label: 'Gross weight'
+  GrossWeight;
+
+  @UI.selectionField : [{ position: 115 }]
+  @UI.lineItem       : [{ position: 117 }]
+  @EndUserText.label: 'Lệnh xuất hàng (OD)'
+  Delivery;
 
   // Chỉ dùng làm filter, không cho chọn làm cột
   @UI.selectionField : [{ position: 120 }]

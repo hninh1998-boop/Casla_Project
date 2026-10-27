@@ -1,0 +1,21 @@
+@EndUserText.label : 'Data upload lệnh xuất hàng thùng mẫu'
+@AbapCatalog.enhancement.category : #NOT_EXTENSIBLE
+@AbapCatalog.tableCategory : #TRANSPARENT
+@AbapCatalog.deliveryClass : #A
+@AbapCatalog.dataMaintenance : #RESTRICTED
+define table ztb_d_od {
+
+  key client            : abap.clnt not null;
+  key uuid              : sysuuid_x16 not null;
+  key uuidfile          : sysuuid_x16 not null;
+  so_thung              : abap.char(8);
+  delivery              : vbeln_vl;
+  messagetype           : abap.char(1);
+  message               : abap.char(255);
+  created_by            : abp_creation_user;
+  created_at            : abp_creation_tstmpl;
+  last_changed_by       : abp_locinst_lastchange_user;
+  local_last_changed_at : abp_locinst_lastchange_tstmpl;
+  last_changed_at       : abp_lastchange_tstmpl;
+
+}

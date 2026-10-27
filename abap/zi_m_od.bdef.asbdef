@@ -1,0 +1,78 @@
+managed implementation in class zbp_i_m_od unique;
+strict ( 2 );
+
+with draft;
+
+define behavior for zi_m_od alias ManageFileOD
+persistent table ztb_m_od
+draft table ztb_m_odd
+etag master Changeddate
+lock master total etag Changeddate
+authorization master ( global )
+early numbering
+{
+  create ( authorization : global );
+  update;
+  delete;
+  field ( readonly ) Uuid, Zcount, Countline, Createdbyuser, Createddate, Changedbyuser, Changeddate;
+  association _DataFile { with draft; create; }
+  draft action Activate optimized;
+  draft action Discard;
+  draft action Edit;
+  draft action Resume;
+  draft determine action Prepare;
+
+  static action uploadExcelOD parameter zabs_file_thung;
+
+  determination getExcelDataOD on save { field Filename; }
+  determination setStatusToOpenOD on modify { create; }
+
+  static action downloadTemplateOD;
+
+  mapping for ztb_m_od
+    {
+      Uuid          = uuid;
+      Zcount        = zcount;
+      Status        = status;
+      Attachment    = attachment;
+      Mimetype      = mimetype;
+      Filename      = filename;
+      Countline     = countline;
+      Createdbyuser = createdbyuser;
+      Createddate   = createddate;
+      Changedbyuser = changedbyuser;
+      Changeddate   = changeddate;
+    }
+}
+
+define behavior for zi_d_od alias DataFileOD
+persistent table ztb_d_od
+draft table ztb_d_odd
+lock dependent by _ManageFile
+authorization dependent by _ManageFile
+{
+  update;
+  delete;
+  field ( numbering : managed, readonly ) Uuid;
+  field ( readonly ) Uuidfile, CreatedBy, CreatedAt, LocalLastChangedAt, LastChangedAt, LastChangedBy;
+  association _ManageFile { with draft; }
+
+  action PostConfirmOD result [1] $self;
+
+  side effects { action PostConfirmOD affects entity _ManageFile; }
+
+  mapping for ztb_d_od
+    {
+      Uuid               = uuid;
+      Uuidfile           = uuidfile;
+      MessageType        = messagetype;
+      Message            = message;
+      SoThung            = so_thung;
+      Delivery           = delivery;
+      CreatedBy          = created_by;
+      CreatedAt          = created_at;
+      LastChangedBy      = last_changed_by;
+      LocalLastChangedAt = local_last_changed_at;
+      LastChangedAt      = last_changed_at;
+    }
+}

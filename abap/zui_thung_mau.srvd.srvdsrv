@@ -3,6 +3,8 @@ define service Zui_thung_mau {
   expose zc_thung_mau          as ThungMau;
   expose zc_m_thung            as ManageFile;
   expose zc_d_thung            as DataFile;
+  expose zc_m_od               as ManageFileOD;
+  expose zc_d_od               as DataFileOD;
   expose zi_req_sta_mass_pr_vh as FileStatusVH;
   expose zi_thung_sta_vh       as StatusVH;
   expose zi_thung_del_vh       as DelFlagVH;

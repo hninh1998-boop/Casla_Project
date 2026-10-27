@@ -26,7 +26,11 @@ define root view entity zi_thung_mau
       customer              as Customer,
       ngay_nhap_kho         as NgayNhapKho,
       tem                   as Tem,
+      // KhoiLuong = Net weight (không gồm thùng), GrossWeight = Gross weight (gồm thùng)
       khoi_luong            as KhoiLuong,
+      gross_weight          as GrossWeight,
+      // Lệnh xuất hàng (OD) của thùng, cập nhật qua tab Cập nhật lệnh xuất hàng
+      delivery              as Delivery,
       status                as TrangThai,
       del_flag              as DelFlag,
 

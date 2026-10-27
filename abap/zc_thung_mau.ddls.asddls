@@ -34,6 +34,8 @@ define root view entity zc_thung_mau
       _Tem.description         as TemText,
 
       KhoiLuong,
+      GrossWeight,
+      Delivery,
 
       @Consumption.valueHelpDefinition: [{ entity: { name: 'zi_thung_sta_vh', element: 'Status' } }]
       @ObjectModel.text.element: ['TrangThaiText']

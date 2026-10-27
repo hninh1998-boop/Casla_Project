@@ -78,6 +78,7 @@ authorization dependent by _ManageFile
       NgayNhapKho        = ngay_nhap_kho;
       Tem                = tem;
       KhoiLuong          = khoi_luong;
+      GrossWeight        = gross_weight;
       CreatedBy          = created_by;
       CreatedAt          = created_at;
       LastChangedBy      = last_changed_by;
