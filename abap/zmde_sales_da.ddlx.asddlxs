@@ -14,9 +14,15 @@ annotate entity zce_sales_da with
     label: 'General Information',
     position: 10 }]
 
+  // Bấm số Billing Document -> mở app Display Billing Document (VF03)
   @EndUserText.label: 'Billing Document'
-  @UI.lineItem: [{ position: 10 }]
-  @UI.identification: [{ position: 10 }]
+  @Consumption.semanticObject: 'BillingDocument'
+  @UI.lineItem: [{ position: 10,
+                   type: #WITH_INTENT_BASED_NAVIGATION,
+                   semanticObjectAction: 'displayBillingDocument' }]
+  @UI.identification: [{ position: 10,
+                         type: #WITH_INTENT_BASED_NAVIGATION,
+                         semanticObjectAction: 'displayBillingDocument' }]
   BillingDocument;
 
   // Tiêu đề màn hình detail: Billing Document/Billing Item

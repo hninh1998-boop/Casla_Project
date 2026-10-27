@@ -146,6 +146,11 @@
                       "requiresSelection": false,
                       "text": "Export Excel"
                     }
+                  },
+                  "columns": {
+                    "DataField::TyGiaText": {
+                      "horizontalAlign": "End"
+                    }
                   }
                 }
               }

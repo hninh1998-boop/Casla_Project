@@ -188,11 +188,11 @@ CLASS zcl_ce_sales_da_xlsx IMPLEMENTATION.
              && |<row r="{ lv_row }">|
              && date_cell(   iv_col = `A` iv_row = lv_row iv_style = gc_style-date        iv_value = ls_data-NgayChungTu )
              && text_cell(   iv_col = `B` iv_row = lv_row iv_style = gc_style-text        iv_value = ls_data-SoToKhai )
-             && text_cell(   iv_col = `C` iv_row = lv_row iv_style = gc_style-text_center iv_value = ls_data-SoHoaDon )
-             && text_cell(   iv_col = `D` iv_row = lv_row iv_style = gc_style-text
+             && text_cell(   iv_col = `C` iv_row = lv_row iv_style = gc_style-text        iv_value = ls_data-SoInv )
+             && text_cell(   iv_col = `D` iv_row = lv_row iv_style = gc_style-text_center iv_value = ls_data-SoHoaDon )
+             && text_cell(   iv_col = `E` iv_row = lv_row iv_style = gc_style-text
                              iv_value = name_or_code( iv_name = ls_data-TenDoiTuongCongNo
                                                       iv_code = ls_data-DoiTuongCongNo ) )
-             && text_cell(   iv_col = `E` iv_row = lv_row iv_style = gc_style-text        iv_value = ls_data-SoInv )
              && text_cell(   iv_col = `F` iv_row = lv_row iv_style = gc_style-text        iv_value = lv_product )
              && text_cell(   iv_col = `G` iv_row = lv_row iv_style = gc_style-text        iv_value = ls_data-TenVatTu )
              && text_cell(   iv_col = `H` iv_row = lv_row iv_style = gc_style-text        iv_value = ls_data-DonViTinh )
@@ -231,9 +231,11 @@ CLASS zcl_ce_sales_da_xlsx IMPLEMENTATION.
           " ── Column widths ──
           && |<cols>|
           && |<col min="1" max="1" width="20.5" customWidth="1"/>|
-          && |<col min="2" max="3" width="22" customWidth="1"/>|
-          && |<col min="4" max="4" width="30" customWidth="1"/>|
-          && |<col min="5" max="6" width="19" customWidth="1"/>|
+          && |<col min="2" max="2" width="22" customWidth="1"/>|
+          && |<col min="3" max="3" width="19" customWidth="1"/>|
+          && |<col min="4" max="4" width="22" customWidth="1"/>|
+          && |<col min="5" max="5" width="30" customWidth="1"/>|
+          && |<col min="6" max="6" width="19" customWidth="1"/>|
           && |<col min="7" max="7" width="32" customWidth="1"/>|
           && |<col min="8" max="8" width="14" customWidth="1"/>|
           && |<col min="9" max="9" width="19" customWidth="1"/>|
@@ -269,9 +271,9 @@ CLASS zcl_ce_sales_da_xlsx IMPLEMENTATION.
     rv_xml = |<row r="{ lv_top }" ht="21.75" customHeight="1">|
           && text_cell( iv_col = `A` iv_row = lv_top iv_style = gc_style-header iv_value = `NGÀY CHỨNG TỪ` )
           && text_cell( iv_col = `B` iv_row = lv_top iv_style = gc_style-header iv_value = `SỐ TỜ KHAI` )
-          && text_cell( iv_col = `C` iv_row = lv_top iv_style = gc_style-header iv_value = `SỐ HÓA ĐƠN` )
-          && text_cell( iv_col = `D` iv_row = lv_top iv_style = gc_style-header iv_value = `ĐỐI TƯỢNG CÔNG NỢ` )
-          && text_cell( iv_col = `E` iv_row = lv_top iv_style = gc_style-header iv_value = `SỐ INV` )
+          && text_cell( iv_col = `C` iv_row = lv_top iv_style = gc_style-header iv_value = `SỐ INV` )
+          && text_cell( iv_col = `D` iv_row = lv_top iv_style = gc_style-header iv_value = `SỐ HÓA ĐƠN` )
+          && text_cell( iv_col = `E` iv_row = lv_top iv_style = gc_style-header iv_value = `ĐỐI TƯỢNG CÔNG NỢ` )
           && text_cell( iv_col = `F` iv_row = lv_top iv_style = gc_style-header iv_value = `MÃ VẬT TƯ` )
           && text_cell( iv_col = `G` iv_row = lv_top iv_style = gc_style-header iv_value = `TÊN VẬT TƯ` )
           && text_cell( iv_col = `H` iv_row = lv_top iv_style = gc_style-header iv_value = `ĐƠN VỊ TÍNH` )
