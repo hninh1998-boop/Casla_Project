@@ -4,7 +4,9 @@ CLASS zcl_ce_ci_text_buffer DEFINITION
   CREATE PUBLIC .
 
   PUBLIC SECTION.
-    TYPES: tt_ci_text TYPE STANDARD TABLE OF ztb_ci_text WITH EMPTY KEY.
+    " Giữ dữ liệu điền tay tới lúc save (saver của ZBP_CE_CI_H)
+    TYPES: tt_ci_text TYPE STANDARD TABLE OF ztb_ci_text WITH EMPTY KEY, " header: Invoice#, MB/L, HB/L, Vessel, ETD, ETA
+           tt_ci_item TYPE STANDARD TABLE OF ztb_ci_item WITH EMPTY KEY. " item: N.W, G.W
 
     CLASS-METHODS set_data
       IMPORTING
@@ -14,11 +16,20 @@ CLASS zcl_ce_ci_text_buffer DEFINITION
       EXPORTING
         et_data TYPE tt_ci_text.
 
+    CLASS-METHODS set_item_data
+      IMPORTING
+        it_data TYPE tt_ci_item.
+
+    CLASS-METHODS get_item_data
+      EXPORTING
+        et_data TYPE tt_ci_item.
+
     CLASS-METHODS clear_data.
 
   PROTECTED SECTION.
   PRIVATE SECTION.
-    CLASS-DATA: gt_ci_text TYPE tt_ci_text.
+    CLASS-DATA: gt_ci_text TYPE tt_ci_text,
+                gt_ci_item TYPE tt_ci_item.
 
 ENDCLASS.
 
@@ -32,12 +43,22 @@ CLASS zcl_ce_ci_text_buffer IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD clear_data.
-    CLEAR: gt_ci_text.
+  METHOD get_data.
+    et_data = gt_ci_text.
   ENDMETHOD.
 
 
-  METHOD get_data.
-    et_data = gt_ci_text.
+  METHOD set_item_data.
+    gt_ci_item = it_data.
+  ENDMETHOD.
+
+
+  METHOD get_item_data.
+    et_data = gt_ci_item.
+  ENDMETHOD.
+
+
+  METHOD clear_data.
+    CLEAR: gt_ci_text, gt_ci_item.
   ENDMETHOD.
 ENDCLASS.

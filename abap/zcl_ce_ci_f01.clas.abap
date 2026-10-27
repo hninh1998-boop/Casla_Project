@@ -11,6 +11,11 @@ CLASS zcl_ce_ci_f01 DEFINITION
            END OF ty_sqm,
            tt_sqm TYPE HASHED TABLE OF ty_sqm WITH UNIQUE KEY proformainvoice item.
 
+    TYPES: tt_header      TYPE STANDARD TABLE OF zce_ci_h WITH EMPTY KEY,
+           tt_item        TYPE STANDARD TABLE OF zce_ci_i WITH EMPTY KEY,
+           "zcl_ce_ci_top=>tt_key_pdf chưa khai báo key (kiểu generic) → không dùng được cho RETURNING
+           tt_invoice_key TYPE STANDARD TABLE OF zcl_ce_ci_top=>ty_key_pdf WITH EMPTY KEY.
+
     CLASS-METHODS requested
       IMPORTING
         io_request TYPE REF TO if_rap_query_request
@@ -39,6 +44,34 @@ CLASS zcl_ce_ci_f01 DEFINITION
         iv_currency     TYPE zce_ci-TransactionCurrency
       RETURNING
         VALUE(rv_words) TYPE string.
+
+    "Màn hình ngoài (zce_ci_h): mỗi Pro-forma invoice 1 dòng
+    CLASS-METHODS get_headers
+      IMPORTING
+        it_filters        TYPE if_rap_query_filter=>tt_name_range_pairs
+      RETURNING
+        VALUE(rt_headers) TYPE tt_header.
+
+    "Màn hình chi tiết (zce_ci_i): các dòng batch của Pro-forma invoice (giống bảng Packing List)
+    CLASS-METHODS get_items
+      IMPORTING
+        ir_proformainvoice TYPE zcl_ce_ci_top=>ry_string
+      RETURNING
+        VALUE(rt_items)    TYPE tt_item.
+
+    "N.W / G.W chỉ cho điền tay khi ProductGroup khác 320001 (TH2)
+    CLASS-METHODS is_weight_auto
+      IMPORTING
+        iv_material    TYPE matnr
+      RETURNING
+        VALUE(rv_auto) TYPE abap_bool.
+
+    "Tất cả billing item của các Pro-forma invoice (in PDF / Excel theo invoice)
+    CLASS-METHODS get_invoice_keys
+      IMPORTING
+        ir_proformainvoice TYPE zcl_ce_ci_top=>ry_string
+      RETURNING
+        VALUE(rt_keys)     TYPE tt_invoice_key.
 
     "DISCOUNT (ZC03) / CLAIM-CREDIT (ZC01, ZC02) của 1 Pro-forma invoice
     CLASS-METHODS get_adjustments
@@ -71,6 +104,13 @@ CLASS zcl_ce_ci_f01 DEFINITION
         iv_do          TYPE I_OutboundDelivery-OutboundDelivery
       RETURNING
         VALUE(rv_data) TYPE string.
+
+    "Số → chuỗi, bỏ số 0 thừa sau dấu thập phân (1000.000 → 1000, 12.500 → 12.5)
+    CLASS-METHODS format_number
+      IMPORTING
+        iv_value       TYPE decfloat34
+      RETURNING
+        VALUE(rv_text) TYPE string.
 
     CLASS-METHODS three_digits_to_words
       IMPORTING
@@ -264,6 +304,7 @@ CLASS ZCL_CE_CI_F01 IMPLEMENTATION.
                item            TYPE posnr,
                material        TYPE matnr,
                batch           TYPE I_BillingDocumentItem-Batch,
+               delivery        TYPE vbeln,                                      "delivery của batch
                do_item         TYPE posnr,                                      "item delivery của batch
                qty             TYPE I_OutboundDeliveryItem-ActualDeliveryQuantity,
                lot             TYPE string,                                     "lot của riêng batch này
@@ -307,6 +348,7 @@ CLASS ZCL_CE_CI_F01 IMPLEMENTATION.
                             item            = ls_tan-Item
                             material        = ls_tan-Material
                             batch           = ls_do_item-Batch
+                            delivery        = ls_tan-ReferenceSDDocument
                             do_item         = ls_do_item-OutboundDeliveryItem
                             qty             = ls_do_item-ActualDeliveryQuantity ) TO lt_batch.
           ELSE.
@@ -317,6 +359,7 @@ CLASS ZCL_CE_CI_F01 IMPLEMENTATION.
                               item            = ls_tan-Item
                               material        = ls_tan-Material
                               batch           = ls_do_item-Batch
+                              delivery        = ls_tan-ReferenceSDDocument
                               do_item         = ls_do_item-OutboundDeliveryItem
                               qty             = ls_do_item-ActualDeliveryQuantity ) TO lt_batch.
             ENDLOOP.
@@ -399,7 +442,9 @@ CLASS ZCL_CE_CI_F01 IMPLEMENTATION.
         InvoiceNo,
         MBL,
         HBL,
-        ETA
+        ETA,
+        VesselName,
+        ETD
     FOR ALL ENTRIES IN @lt_keys
     WHERE
         ProFormaInvoice = @lt_keys-proformainvoice
@@ -479,8 +524,27 @@ CLASS ZCL_CE_CI_F01 IMPLEMENTATION.
       INTO TABLE @DATA(lt_tel).
     ENDIF.
 
-    "2.10. Get Size L W H
-    IF lr_mara IS NOT INITIAL.
+    "2.10. Get Size L W H (Packing List)
+    "TH1: I_ProductUnitsOfMeasure - UnitSpecificProductLength / Width / Height
+    "TH2: TH1 trống → classification MARA (Z_CHIEU_DAI / Z_CHIEU_RONG / Z_DO_DAY_2)
+    IF lt_material IS NOT INITIAL.
+      SELECT FROM I_ProductUnitsOfMeasure
+      FIELDS
+          Product,
+          AlternativeUnit,
+          UnitSpecificProductLength,
+          UnitSpecificProductWidth,
+          UnitSpecificProductHeight
+      FOR ALL ENTRIES IN @lt_material
+      WHERE
+          Product = @lt_material-Material
+      INTO TABLE @DATA(lt_size_uom).
+
+      DATA lr_size_mat TYPE RANGE OF I_ClfnObjectCharcValue-ClfnObjectID.
+      lr_size_mat = VALUE #( FOR ls_mat IN lt_material ( sign = 'I' option = 'EQ' low = ls_mat-Material ) ).
+      SORT lr_size_mat BY low.
+      DELETE ADJACENT DUPLICATES FROM lr_size_mat COMPARING low.
+
       SELECT FROM I_ClfnObjectCharcValue AS a
       INNER JOIN I_ClfnCharacteristic AS b
           ON b~CharcInternalID     = a~CharcInternalID
@@ -492,7 +556,7 @@ CLASS ZCL_CE_CI_F01 IMPLEMENTATION.
       WHERE
           b~Characteristic      IN ( 'Z_CHIEU_DAI', 'Z_CHIEU_RONG', 'Z_DO_DAY_2' )
           AND a~ClassType       = '001'
-          AND a~ClfnObjectID IN @lr_mara
+          AND a~ClfnObjectID IN @lr_size_mat
           AND a~ClfnObjectTable = 'MARA'
       INTO TABLE @DATA(lt_size_lwh).
     ENDIF.
@@ -580,24 +644,56 @@ CLASS ZCL_CE_CI_F01 IMPLEMENTATION.
         <lfs_result>-UnitPrice = COND #( WHEN <lfs_result>-Quantity IS NOT INITIAL
                                          THEN <lfs_result>-Amount / <lfs_result>-Quantity ).
         CLEAR ls_price.
-        "Size L W H
-        READ TABLE lt_size_lwh INTO DATA(ls_size) WITH KEY ClfnObjectID   = ls_material-material
-                                                           Characteristic = 'Z_CHIEU_DAI'.
-        IF sy-subrc = 0.
-          <lfs_result>-SizeL = ls_size-CharcValue.
+        "Size L W H - TH1: kích thước trên UoM của material
+        "Ưu tiên dòng đơn vị bán; dòng đó không có kích thước thì lấy dòng UoM đầu tiên có kích thước
+        READ TABLE lt_size_uom INTO DATA(ls_size_uom) WITH KEY Product         = ls_material-material
+                                                               AlternativeUnit = ls_material-BillingQuantityUnit.
+        IF sy-subrc <> 0
+           OR (     ls_size_uom-UnitSpecificProductLength IS INITIAL
+                AND ls_size_uom-UnitSpecificProductWidth  IS INITIAL
+                AND ls_size_uom-UnitSpecificProductHeight IS INITIAL ).
+          CLEAR ls_size_uom.
+          LOOP AT lt_size_uom INTO DATA(ls_size_uom_any) WHERE Product = ls_material-material.
+            IF    ls_size_uom_any-UnitSpecificProductLength IS NOT INITIAL
+               OR ls_size_uom_any-UnitSpecificProductWidth  IS NOT INITIAL
+               OR ls_size_uom_any-UnitSpecificProductHeight IS NOT INITIAL.
+              ls_size_uom = ls_size_uom_any.
+              EXIT.
+            ENDIF.
+          ENDLOOP.
         ENDIF.
 
-        READ TABLE lt_size_lwh INTO ls_size WITH KEY ClfnObjectID   = ls_material-material
-                                                     Characteristic = 'Z_CHIEU_RONG'.
-        IF sy-subrc = 0.
-          <lfs_result>-SizeW = ls_size-CharcValue.
+        IF ls_size_uom-UnitSpecificProductLength IS NOT INITIAL.
+          <lfs_result>-SizeL = format_number( CONV #( ls_size_uom-UnitSpecificProductLength ) ).
+        ELSE.
+          "TH2: classification
+          READ TABLE lt_size_lwh INTO DATA(ls_size) WITH KEY ClfnObjectID   = ls_material-material
+                                                             Characteristic = 'Z_CHIEU_DAI'.
+          IF sy-subrc = 0.
+            <lfs_result>-SizeL = ls_size-CharcValue.
+          ENDIF.
         ENDIF.
 
-        READ TABLE lt_size_lwh INTO ls_size WITH KEY ClfnObjectID   = ls_material-material
-                                                     Characteristic = 'Z_DO_DAY_2'.
-        IF sy-subrc = 0.
-          <lfs_result>-SizeH = ls_size-CharcValue.
+        IF ls_size_uom-UnitSpecificProductWidth IS NOT INITIAL.
+          <lfs_result>-SizeW = format_number( CONV #( ls_size_uom-UnitSpecificProductWidth ) ).
+        ELSE.
+          READ TABLE lt_size_lwh INTO ls_size WITH KEY ClfnObjectID   = ls_material-material
+                                                       Characteristic = 'Z_CHIEU_RONG'.
+          IF sy-subrc = 0.
+            <lfs_result>-SizeW = ls_size-CharcValue.
+          ENDIF.
         ENDIF.
+
+        IF ls_size_uom-UnitSpecificProductHeight IS NOT INITIAL.
+          <lfs_result>-SizeH = format_number( CONV #( ls_size_uom-UnitSpecificProductHeight ) ).
+        ELSE.
+          READ TABLE lt_size_lwh INTO ls_size WITH KEY ClfnObjectID   = ls_material-material
+                                                       Characteristic = 'Z_DO_DAY_2'.
+          IF sy-subrc = 0.
+            <lfs_result>-SizeH = ls_size-CharcValue.
+          ENDIF.
+        ENDIF.
+        CLEAR ls_size_uom.
       ENDIF.
 
       "LOT field - mỗi lot = D_(1)_(2)(3), mỗi lot 1 dòng, không lặp
@@ -680,6 +776,13 @@ CLASS ZCL_CE_CI_F01 IMPLEMENTATION.
         <lfs_result>-MBL     = ls_ci_text-MBL.
         <lfs_result>-HBL     = ls_ci_text-HBL.
         <lfs_result>-ETA     = ls_ci_text-ETA.
+        "Vessel Name / ETD: có điền tay thì lấy giá trị điền, không thì giữ long text
+        IF ls_ci_text-VesselName IS NOT INITIAL.
+          <lfs_result>-VesselName = ls_ci_text-VesselName.
+        ENDIF.
+        IF ls_ci_text-ETD IS NOT INITIAL.
+          <lfs_result>-ETD = ls_ci_text-ETD.
+        ENDIF.
       ENDIF.
       CLEAR ls_ci_text.
     ENDLOOP.
@@ -693,7 +796,83 @@ CLASS ZCL_CE_CI_F01 IMPLEMENTATION.
     IF iv_pl_items = abap_true.
       DATA: lt_pl_rows    TYPE zcl_ce_ci_top=>tt_result,
             lv_pl_seq     TYPE posnr,
-            lv_pl_invoice TYPE vbeln.
+            lv_pl_invoice TYPE vbeln,
+            lv_nw         TYPE decfloat34.
+
+      "N.W / G.W (KGS) - chỉ tính khi ProductGroup = 320001, còn lại để trống cho user điền tay
+      "- N.W = tổng CharcFromNumericValue của Z_KHOI_LUONG_2 trên batch (class type 023, MCH1)
+      "- G.W = N.W + trọng lượng phương tiện đóng hàng
+      "        (delivery → I_DeliveryDocument-YY1_PTDHHEADER_DLH = mã → ZR_TLPTDH-Ptdh → TrongLuong)
+      "- ProductGroup khác 320001: N.W / G.W user điền tay trên màn hình chi tiết (ztb_ci_item)
+      IF et_result IS NOT INITIAL.
+        SELECT FROM I_Product
+        FIELDS Product, ProductGroup
+        FOR ALL ENTRIES IN @et_result
+        WHERE Product = @et_result-Material
+        INTO TABLE @DATA(lt_prod_grp).
+      ENDIF.
+
+      IF lr_mch1 IS NOT INITIAL.
+        SELECT FROM I_ClfnObjectCharcValue AS a
+        INNER JOIN I_ClfnCharacteristic AS b
+            ON b~CharcInternalID     = a~CharcInternalID
+            AND b~TimeIntervalNumber = a~TimeIntervalNumber
+        FIELDS
+            a~ClfnObjectID,
+            a~CharcFromNumericValue
+        WHERE
+            b~Characteristic      = 'Z_KHOI_LUONG_2'
+            AND a~ClassType       = '023'
+            AND a~ClfnObjectTable = 'MCH1'
+            AND a~ClfnObjectID    IN @lr_mch1
+        INTO TABLE @DATA(lt_kl).
+      ENDIF.
+
+      "N.W / G.W user điền tay trên màn hình chi tiết (ztb_ci_item) - có giá trị thì ưu tiên
+      SELECT FROM zi_ci_item
+      FIELDS ProFormaInvoice, BillingItem, Batch, NetWeight, GrossWeight
+      FOR ALL ENTRIES IN @lt_keys
+      WHERE ProFormaInvoice = @lt_keys-proformainvoice
+        AND BillingItem     = @lt_keys-item
+      INTO TABLE @DATA(lt_item_text).
+
+      DATA(lt_pl_dlv) = lt_batch.
+      DELETE lt_pl_dlv WHERE delivery IS INITIAL.
+      SORT lt_pl_dlv BY delivery.
+      DELETE ADJACENT DUPLICATES FROM lt_pl_dlv COMPARING delivery.
+      TYPES: BEGIN OF ty_ptdh,
+               deliverydocument TYPE vbeln,
+               trong_luong       TYPE decfloat34,
+             END OF ty_ptdh.
+      DATA lt_ptdh TYPE STANDARD TABLE OF ty_ptdh WITH EMPTY KEY.
+
+      IF lt_pl_dlv IS NOT INITIAL.
+        "Mã phương tiện đóng hàng trên header delivery
+        SELECT FROM I_DeliveryDocument
+        FIELDS DeliveryDocument, YY1_PTDHHEADER_DLH
+        FOR ALL ENTRIES IN @lt_pl_dlv
+        WHERE DeliveryDocument = @lt_pl_dlv-delivery
+        INTO TABLE @DATA(lt_dlv_ptdh).
+
+        "Bảng khai báo trọng lượng phương tiện (ít dòng) - so mã sau khi bỏ số 0 đứng đầu
+        SELECT FROM zr_tlptdh
+        FIELDS Ptdh, TrongLuong
+        INTO TABLE @DATA(lt_tlptdh).
+
+        LOOP AT lt_dlv_ptdh INTO DATA(ls_dlv_ptdh) WHERE YY1_PTDHHEADER_DLH IS NOT INITIAL.
+          DATA(lv_ptdh_dlv) = condense( CONV string( ls_dlv_ptdh-YY1_PTDHHEADER_DLH ) ).
+          SHIFT lv_ptdh_dlv LEFT DELETING LEADING '0'.
+          LOOP AT lt_tlptdh INTO DATA(ls_tlptdh).
+            DATA(lv_ptdh_tab) = condense( CONV string( ls_tlptdh-Ptdh ) ).
+            SHIFT lv_ptdh_tab LEFT DELETING LEADING '0'.
+            IF lv_ptdh_tab = lv_ptdh_dlv.
+              APPEND VALUE #( deliverydocument = ls_dlv_ptdh-DeliveryDocument
+                              trong_luong       = ls_tlptdh-TrongLuong ) TO lt_ptdh.
+              EXIT.
+            ENDIF.
+          ENDLOOP.
+        ENDLOOP.
+      ENDIF.
 
       LOOP AT et_result INTO DATA(ls_res).
         "Đánh số lại từ 1 cho mỗi invoice
@@ -708,17 +887,54 @@ CLASS ZCL_CE_CI_F01 IMPLEMENTATION.
                                                   AND do_item         IS NOT INITIAL.
           lv_split = abap_true.
           lv_pl_seq += 1.
-          DATA(ls_pl_row)   = ls_res.
-          ls_pl_row-Item     = lv_pl_seq.
-          ls_pl_row-Quantity = ls_pl_batch-qty.
-          ls_pl_row-LOT      = ls_pl_batch-lot.
+          DATA(ls_pl_row)      = ls_res.
+          ls_pl_row-Item        = lv_pl_seq.
+          ls_pl_row-BillingItem = ls_res-Item.
+          ls_pl_row-Batch       = ls_pl_batch-batch.
+          ls_pl_row-Quantity    = ls_pl_batch-qty.
+          ls_pl_row-Amount      = ls_res-UnitPrice * ls_pl_batch-qty.
+          ls_pl_row-LOT         = ls_pl_batch-lot.
+
+          "N.W / G.W - TH1: ProductGroup = 320001 (TH2: để trống, điền tay)
+          IF line_exists( lt_prod_grp[ Product = ls_res-Material ProductGroup = '320001' ] ).
+            CLEAR lv_nw.
+            DATA(lv_kl_object) = |{ ls_pl_batch-material WIDTH = 40 ALIGN = LEFT }{ ls_pl_batch-batch }|.
+            LOOP AT lt_kl INTO DATA(ls_kl) WHERE ClfnObjectID = lv_kl_object.
+              lv_nw += ls_kl-CharcFromNumericValue.
+            ENDLOOP.
+            IF lv_nw IS NOT INITIAL.
+              ls_pl_row-NetWeight = lv_nw.
+              READ TABLE lt_ptdh INTO DATA(ls_ptdh) WITH KEY DeliveryDocument = ls_pl_batch-delivery.
+              ls_pl_row-GrossWeight = lv_nw + COND decfloat34( WHEN sy-subrc = 0 THEN ls_ptdh-trong_luong ).
+            ENDIF.
+
+          "TH2 (ProductGroup khác 320001): lấy giá trị user điền tay trên màn hình chi tiết
+          ELSE.
+            READ TABLE lt_item_text INTO DATA(ls_item_text) WITH KEY ProFormaInvoice = ls_res-ProFormaInvoice
+                                                                     BillingItem     = ls_res-Item
+                                                                     Batch           = ls_pl_batch-batch.
+            IF sy-subrc = 0.
+              ls_pl_row-NetWeight   = ls_item_text-NetWeight.
+              ls_pl_row-GrossWeight = ls_item_text-GrossWeight.
+            ENDIF.
+          ENDIF.
+
           APPEND ls_pl_row TO lt_pl_rows.
         ENDLOOP.
 
         IF lv_split = abap_false.
           lv_pl_seq += 1.
-          ls_pl_row      = ls_res.
-          ls_pl_row-Item = lv_pl_seq.
+          ls_pl_row             = ls_res.
+          ls_pl_row-Item        = lv_pl_seq.
+          ls_pl_row-BillingItem = ls_res-Item.
+          READ TABLE lt_item_text INTO ls_item_text WITH KEY ProFormaInvoice = ls_res-ProFormaInvoice
+                                                             BillingItem     = ls_res-Item
+                                                             Batch           = ''.
+          "Không có batch thì không tính được N.W tự động → chỉ có giá trị điền tay (TH2)
+          IF sy-subrc = 0 AND NOT line_exists( lt_prod_grp[ Product = ls_res-Material ProductGroup = '320001' ] ).
+            ls_pl_row-NetWeight   = ls_item_text-NetWeight.
+            ls_pl_row-GrossWeight = ls_item_text-GrossWeight.
+          ENDIF.
           APPEND ls_pl_row TO lt_pl_rows.
         ENDIF.
       ENDLOOP.
@@ -970,4 +1186,123 @@ CLASS ZCL_CE_CI_F01 IMPLEMENTATION.
     ENDLOOP.
   ENDMETHOD.
 
+
+  METHOD format_number.
+    rv_text = |{ iv_value NUMBER = RAW }|.
+    IF rv_text CS '.'.
+      SHIFT rv_text RIGHT DELETING TRAILING '0'.
+      SHIFT rv_text RIGHT DELETING TRAILING '.'.
+      CONDENSE rv_text.
+    ENDIF.
+  ENDMETHOD.
+
+
+  METHOD get_headers.
+    "Filter Date trên màn hình có tên DATECI, main đọc theo tên DATE
+    DATA(lt_filters) = it_filters.
+    LOOP AT lt_filters ASSIGNING FIELD-SYMBOL(<lfs_filter>) WHERE name = 'DATECI'.
+      <lfs_filter>-name = 'DATE'.
+    ENDLOOP.
+
+    main( EXPORTING it_filters = lt_filters
+          IMPORTING et_result  = DATA(lt_data) ).
+
+    SORT lt_data BY ProFormaInvoice Item.
+
+    LOOP AT lt_data INTO DATA(ls_data).
+      IF line_exists( rt_headers[ ProFormaInvoice = ls_data-ProFormaInvoice ] ).
+        CONTINUE.
+      ENDIF.
+      APPEND VALUE #( ProFormaInvoice   = ls_data-ProFormaInvoice
+                      ToCI              = ls_data-ToCI
+                      Invoice           = ls_data-Invoice
+                      DateCI            = ls_data-DateCI
+                      PO                = ls_data-PO
+                      MBL               = ls_data-MBL
+                      HBL               = ls_data-HBL
+                      VesselName        = ls_data-VesselName
+                      ETD               = ls_data-ETD
+                      ETA               = ls_data-ETA
+                      ContainerNo       = ls_data-ContainerNo
+                      PortOfLoading     = ls_data-PortOfLoading
+                      PortOfDestination = ls_data-PortOfDestination
+                      PriceTerm         = ls_data-PriceTerm
+                      CountryOfOrigin   = ls_data-CountryOfOrigin
+                      SalesOrganization = ls_data-SalesOrganization
+                      Customer          = ls_data-Customer ) TO rt_headers.
+    ENDLOOP.
+  ENDMETHOD.
+
+
+  METHOD get_items.
+    DATA lt_filters TYPE if_rap_query_filter=>tt_name_range_pairs.
+
+    DATA(lt_keys) = get_invoice_keys( ir_proformainvoice ).
+    IF lt_keys IS INITIAL.
+      RETURN.
+    ENDIF.
+
+    lt_filters = VALUE #( ( name = 'PROFORMAINVOICE' range = CORRESPONDING #( ir_proformainvoice ) ) ).
+
+    "Cùng logic bảng Packing List: dòng TAN, tách theo batch của delivery
+    main( EXPORTING it_filters  = lt_filters
+                    it_keys_pdf = lt_keys
+                    iv_pl_items = abap_true
+          IMPORTING et_result   = DATA(lt_data) ).
+
+    "ProductGroup 320001 → N.W / G.W tự tính, không cho sửa tay
+    IF lt_data IS NOT INITIAL.
+      SELECT FROM I_Product
+      FIELDS Product
+      FOR ALL ENTRIES IN @lt_data
+      WHERE Product      = @lt_data-Material
+        AND ProductGroup = '320001'
+      INTO TABLE @DATA(lt_auto).
+    ENDIF.
+
+    LOOP AT lt_data INTO DATA(ls_data).
+      APPEND VALUE #( ProFormaInvoice     = ls_data-ProFormaInvoice
+                      WeightAuto          = xsdbool( line_exists( lt_auto[ Product = ls_data-Material ] ) )
+                      BillingItem         = ls_data-BillingItem
+                      Batch               = ls_data-Batch
+                      PO                  = ls_data-PO
+                      Material            = ls_data-Material
+                      AZTID               = ls_data-AZTID
+                      VendorID            = '223637'
+                      Quantity            = ls_data-Quantity
+                      BillingQuantityUnit = ls_data-BillingQuantityUnit
+                      NetWeight           = ls_data-NetWeight
+                      GrossWeight         = ls_data-GrossWeight
+                      SizeL               = ls_data-SizeL
+                      SizeW               = ls_data-SizeW
+                      SizeH               = ls_data-SizeH
+                      LOT                 = ls_data-LOT
+                      UnitPrice           = ls_data-UnitPrice
+                      Amount              = ls_data-Amount
+                      TransactionCurrency = ls_data-TransactionCurrency ) TO rt_items.
+    ENDLOOP.
+  ENDMETHOD.
+
+
+  METHOD get_invoice_keys.
+    IF ir_proformainvoice IS INITIAL.
+      RETURN.
+    ENDIF.
+
+    SELECT FROM I_BillingDocumentItem
+    FIELDS
+        BillingDocument     AS ProFormaInvoice,
+        BillingDocumentItem AS Item
+    WHERE BillingDocument IN @ir_proformainvoice
+    INTO CORRESPONDING FIELDS OF TABLE @rt_keys.
+  ENDMETHOD.
+
+
+  METHOD is_weight_auto.
+    SELECT SINGLE FROM I_Product
+      FIELDS ProductGroup
+      WHERE Product = @iv_material
+      INTO @DATA(lv_product_group).
+    rv_auto = xsdbool( sy-subrc = 0 AND lv_product_group = '320001' ).
+  ENDMETHOD.
 ENDCLASS.

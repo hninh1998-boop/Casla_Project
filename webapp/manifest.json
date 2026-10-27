@@ -116,7 +116,7 @@
           "target": "zce_ciList"
         },
         {
-          "pattern": "zce_ci({key}):?query:",
+          "pattern": "zce_ci_h({key}):?query:",
           "name": "zce_ciObjectPage",
           "target": "zce_ciObjectPage"
         }
@@ -128,10 +128,10 @@
           "name": "sap.fe.templates.ListReport",
           "options": {
             "settings": {
-              "contextPath": "/zce_ci",
+              "contextPath": "/zce_ci_h",
               "variantManagement": "Page",
               "navigation": {
-                "zce_ci": {
+                "zce_ci_h": {
                   "detail": {
                     "route": "zce_ciObjectPage"
                   }
@@ -148,7 +148,7 @@
                       "visible": true,
                       "enabled": true,
                       "requiresSelection": true,
-                      "text": "Cập nhật thông tin in"
+                      "text": "Change header"
                     },
                     "ExportPDF": {
                       "text": "Export PDF",
@@ -205,7 +205,24 @@
           "options": {
             "settings": {
               "editableHeaderContent": false,
-              "contextPath": "/zce_ci"
+              "contextPath": "/zce_ci_h",
+              "controlConfiguration": {
+                "_Item/@com.sap.vocabularies.UI.v1.LineItem": {
+                  "tableSettings": {
+                    "type": "GridTable",
+                    "selectionMode": "Multi"
+                  },
+                  "actions": {
+                    "EditWeight": {
+                      "press": ".extension.zciov4.ext.controller.OPExt.btnEditWeight",
+                      "visible": true,
+                      "enabled": true,
+                      "requiresSelection": true,
+                      "text": "Edit"
+                    }
+                  }
+                }
+              }
             }
           }
         }
@@ -216,6 +233,9 @@
         "sap.ui.controllerExtensions": {
           "sap.fe.templates.ListReport.ListReportController#zciov4::zce_ciList": {
             "controllerName": "zciov4.ext.controller.PDF"
+          },
+          "sap.fe.templates.ObjectPage.ObjectPageController#zciov4::zce_ciObjectPage": {
+            "controllerName": "zciov4.ext.controller.OPExt"
           }
         }
       }

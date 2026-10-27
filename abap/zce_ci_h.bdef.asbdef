@@ -1,0 +1,44 @@
+unmanaged implementation in class zbp_ce_ci_h unique;
+strict ( 2 );
+
+// Màn hình ngoài: mỗi Pro-forma invoice 1 dòng; màn hình chi tiết: các dòng batch (FS v8 - Layout Screen)
+// Các trường "Điền tay" sửa theo chuẩn (Edit / Save trên Object Page), lưu ztb_ci_text / ztb_ci_item
+define behavior for zce_ci_h alias Header
+lock master
+authorization master ( instance )
+{
+  update;
+  field ( readonly ) ProFormaInvoice, ToCI, DateCI, PO, ContainerNo, PortOfLoading, PortOfDestination,
+                     PriceTerm, CountryOfOrigin, SalesOrganization, Customer;
+  association _Item;
+
+  // Change header: sửa Invoice#, MB/L, HB/L, Vessel, ETD, ETA cho nhiều invoice cùng lúc trên danh sách
+  action updCIText parameter zabs_ci_text;
+
+  // In / Export: zabs_ci_param = 10.HTS CODE / 12. user chọn ở popup trước khi in
+  action btnPrintPDF parameter zabs_ci_param result [1] zabs_ci_result;
+  action PDFPackingList parameter zabs_ci_param result [1] zabs_ci_result;
+  action ExportExcelCI parameter zabs_ci_param result [1] zabs_ci_result;
+  action ExportExcelPL parameter zabs_ci_param result [1] zabs_ci_result;
+}
+
+define behavior for zce_ci_i alias Item
+lock dependent by _Header
+authorization master ( instance )
+{
+  update;
+  // N.W / G.W: ProductGroup = 320001 tự tính (chỉ đọc), khác 320001 thì user điền tay
+  field ( features : instance ) NetWeight, GrossWeight;
+  field ( readonly ) ProFormaInvoice, BillingItem, Batch, PO, Material, AZTID, VendorID, Quantity,
+                     BillingQuantityUnit, SizeL, SizeW, SizeH, LOT, UnitPrice, Amount, TransactionCurrency, WeightAuto;
+  association _Header;
+
+  // Nút Edit trên bảng Items (webapp OPExt.controller.js): nhập N.W / G.W, chỉ cho dòng ProductGroup khác 320001
+  action ( features : instance ) updWeight parameter zabs_ci_weight;
+
+  // Sau khi Edit, Fiori tự đọc lại N.W / G.W của dòng vừa sửa
+  side effects
+  {
+    action updWeight affects field NetWeight, field GrossWeight;
+  }
+}

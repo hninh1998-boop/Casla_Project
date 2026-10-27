@@ -62,4 +62,12 @@ define root custom entity zce_ci
       SizeL               : abap.string; // Z_CHIEU_DAI
       SizeW               : abap.string; // Z_CHIEU_RONG
       SizeH               : abap.string; // Z_DO_DAY_2
+
+      // Packing List - N.W / G.W (KGS) theo từng batch
+      NetWeight           : abap.dec(15,3);
+      GrossWeight         : abap.dec(15,3);
+
+      // Packing List / màn hình chi tiết: dòng batch thuộc billing item nào, batch nào
+      BillingItem         : posnr;
+      Batch               : abap.char(10);
 }

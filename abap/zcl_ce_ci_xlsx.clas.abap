@@ -410,6 +410,8 @@ CLASS zcl_ce_ci_xlsx IMPLEMENTATION.
     DATA: lt_merge     TYPE tt_string,
           lv_total_pcs TYPE ty_num,
           lv_total_sqm TYPE ty_num,
+          lv_total_nw  TYPE ty_num,
+          lv_total_gw  TYPE ty_num,
           lv_package   TYPE i.
 
     DATA(ls_head) = it_items[ 1 ].
@@ -455,7 +457,7 @@ CLASS zcl_ce_ci_xlsx IMPLEMENTATION.
     APPEND `K13:K14` TO lt_merge.
 
     " ── Các dòng item ───────────────────────────────────────
-    " N.W / G.W: chưa có logic → để trống
+    " N.W / G.W: theo ZCL_CE_CI_F01 (ProductGroup 320001), còn lại để trống cho user điền tay
     DATA(lt_sqm) = zcl_ce_ci_f01=>get_sqm( it_rows ).
     DATA(lv_row) = gc_item_row - 1.
     LOOP AT it_rows INTO DATA(ls_item).
@@ -480,13 +482,23 @@ CLASS zcl_ce_ci_xlsx IMPLEMENTATION.
              && number_cell( iv_col = `G` iv_row = lv_row iv_style = gc_style-tbl_sqm iv_value = ls_sqm-sqm )
              && number_cell( iv_col = `H` iv_row = lv_row iv_style = gc_style-tbl_cell
                              iv_value = CONV #( ls_item-Quantity ) )
-             && empty_cells( iv_cols = `IJ` iv_row = lv_row iv_style = gc_style-tbl_cell )
+             " N.W / G.W: ProductGroup khác 320001 → trống (điền tay)
+             && COND string( WHEN ls_item-NetWeight IS NOT INITIAL
+                             THEN number_cell( iv_col = `I` iv_row = lv_row iv_style = gc_style-tbl_cell
+                                               iv_value = CONV #( ls_item-NetWeight ) )
+                             ELSE text_cell( iv_col = `I` iv_row = lv_row iv_style = gc_style-tbl_cell ) )
+             && COND string( WHEN ls_item-GrossWeight IS NOT INITIAL
+                             THEN number_cell( iv_col = `J` iv_row = lv_row iv_style = gc_style-tbl_cell
+                                               iv_value = CONV #( ls_item-GrossWeight ) )
+                             ELSE text_cell( iv_col = `J` iv_row = lv_row iv_style = gc_style-tbl_cell ) )
              && text_cell(   iv_col = `K` iv_row = lv_row iv_style = gc_style-tbl_cell iv_value = ls_item-LOT ) ).
 
       APPEND |B{ lv_row }:C{ lv_row }| TO lt_merge.
 
       lv_total_pcs += ls_item-Quantity.
       lv_total_sqm += ls_sqm-sqm.
+      lv_total_nw  += ls_item-NetWeight.
+      lv_total_gw  += ls_item-GrossWeight.
     ENDLOOP.
 
     " ── Dòng TOTAL ──────────────────────────────────────────
@@ -500,7 +512,13 @@ CLASS zcl_ce_ci_xlsx IMPLEMENTATION.
            && empty_cells( iv_cols = `CDEF` iv_row = lv_row iv_style = gc_style-tot_text )
            && number_cell( iv_col = `G` iv_row = lv_row iv_style = gc_style-tot_sqm iv_value = lv_total_sqm )
            && number_cell( iv_col = `H` iv_row = lv_row iv_style = gc_style-tot_text iv_value = lv_total_pcs )
-           && empty_cells( iv_cols = `IJK` iv_row = lv_row iv_style = gc_style-tot_text ) ).
+           && COND string( WHEN lv_total_nw IS NOT INITIAL
+                           THEN number_cell( iv_col = `I` iv_row = lv_row iv_style = gc_style-tot_text iv_value = lv_total_nw )
+                           ELSE text_cell( iv_col = `I` iv_row = lv_row iv_style = gc_style-tot_text ) )
+           && COND string( WHEN lv_total_gw IS NOT INITIAL
+                           THEN number_cell( iv_col = `J` iv_row = lv_row iv_style = gc_style-tot_text iv_value = lv_total_gw )
+                           ELSE text_cell( iv_col = `J` iv_row = lv_row iv_style = gc_style-tot_text ) )
+           && text_cell( iv_col = `K` iv_row = lv_row iv_style = gc_style-tot_text ) ).
     APPEND |B{ lv_row }:C{ lv_row }| TO lt_merge.
 
     " ── REMARKS ─────────────────────────────────────────────

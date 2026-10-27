@@ -204,6 +204,14 @@ annotate entity zce_ci with
   @Consumption.filter.hidden: true
   SizeH;
 
+  @EndUserText.label: 'N.W (KGS)'
+  @Consumption.filter.hidden: true
+  NetWeight;
+
+  @EndUserText.label: 'G.W (KGS)'
+  @Consumption.filter.hidden: true
+  GrossWeight;
+
   @EndUserText.label: 'Sales Organization'
   @UI.lineItem: [{ hidden: true }]
   @UI.identification: [{ hidden: true }]

@@ -1,0 +1,17 @@
+@EndUserText.label : 'DB - Commercial Invoice Item Text'
+@AbapCatalog.enhancement.category : #NOT_EXTENSIBLE
+@AbapCatalog.tableCategory : #TRANSPARENT
+@AbapCatalog.deliveryClass : #A
+@AbapCatalog.dataMaintenance : #RESTRICTED
+define table ztb_ci_item {
+
+  key client       : mandt not null;
+  key proforma     : vbeln not null;
+  key billing_item : posnr not null;
+  key batch        : abap.char(10) not null;
+  net_weight       : abap.dec(15,3);
+  gross_weight     : abap.dec(15,3);
+  changed_by       : syuname;
+  changed_at       : utcl;
+
+}

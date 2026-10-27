@@ -160,7 +160,8 @@ sap.ui.define([
         },
 
         /* ================================================================
-         *  CẬP NHẬT THÔNG TIN IN - Invoice#, MB/L, HB/L, ETA (cấp header, lưu theo Pro-forma invoice)
+         *  CHANGE HEADER - Invoice#, MB/L, HB/L, Vessel Name, ETD, ETA cho nhiều Pro-forma invoice cùng lúc
+         *  (sửa từng invoice thì vào màn hình chi tiết → Edit / Save)
          *  Gọi action updCIText rồi refresh cả bảng, để mọi dòng cùng invoice hiện giá trị mới ngay
          * ================================================================ */
         btnUpdateText: function () {
@@ -186,24 +187,27 @@ sap.ui.define([
                     InvoiceNo: fnInput(),
                     MBL: fnInput(),
                     HBL: fnInput(),
+                    VesselName: fnInput(),
+                    ETD: fnInput(),
                     ETA: fnInput()
                 };
                 var aItems = [
                     new Text({ text: "Để trống = giữ nguyên giá trị đang có, nhập D = xóa giá trị." })
                         .addStyleClass("sapUiSmallMarginBottom")
                 ];
-                [["InvoiceNo", "Invoice#"], ["MBL", "MB/L#"], ["HBL", "HB/L#"], ["ETA", "ETA"]]
+                [["InvoiceNo", "Invoice#"], ["MBL", "MB/L#"], ["HBL", "HB/L#"], ["VesselName", "Vessel Name"],
+                 ["ETD", "ETD"], ["ETA", "ETA"]]
                     .forEach(function (aField) {
                         aItems.push(new Label({ text: aField[1], labelFor: that._textInputs[aField[0]] }));
                         aItems.push(that._textInputs[aField[0]]);
                     });
 
                 this._textDialog = new Dialog({
-                    title: "Cập nhật thông tin in",
+                    title: "Change header",
                     contentWidth: "28rem",
                     content: [new VBox({ items: aItems }).addStyleClass("sapUiSmallMargin")],
                     beginButton: new Button({
-                        text: "Cập nhật thông tin in",
+                        text: "Save",
                         type: "Emphasized",
                         press: function () {
                             that._textDialog.close();
@@ -223,6 +227,8 @@ sap.ui.define([
             this._textInputs.InvoiceNo.setValue("").setPlaceholder(oRow.Invoice || "");
             this._textInputs.MBL.setValue("").setPlaceholder(oRow.MBL || "");
             this._textInputs.HBL.setValue("").setPlaceholder(oRow.HBL || "");
+            this._textInputs.VesselName.setValue("").setPlaceholder(oRow.VesselName || "");
+            this._textInputs.ETD.setValue("").setPlaceholder(oRow.ETD || "");
             this._textInputs.ETA.setValue("").setPlaceholder(oRow.ETA || "");
 
             this._textContexts = aInvoiceContexts;
@@ -260,7 +266,7 @@ sap.ui.define([
 
             Promise.all(aPromises).then(function () {
                 oBusy.close();
-                MessageToast.show("Cập nhật thông tin in thành công");
+                MessageToast.show("Cập nhật header thành công");
                 // Đọc lại cả bảng để mọi dòng cùng Pro-forma invoice hiện giá trị mới (không phải bấm Go)
                 oExtensionAPI.refresh();
             }).catch(function (oError) {

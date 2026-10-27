@@ -1,0 +1,146 @@
+@Metadata.layer: #CORE
+@UI.headerInfo: {
+    typeName: 'Commercial Invoice',
+    typeNamePlural: 'Commercial Invoices',
+    title: { type: #STANDARD, value: 'ProFormaInvoice' },
+    description: { type: #STANDARD, value: 'ToCI' }
+}
+annotate entity zce_ci_h with
+{
+  @UI.facet: [{
+      id: 'GeneralInfo',
+      purpose: #STANDARD,
+      type: #IDENTIFICATION_REFERENCE,
+      label: 'General Information',
+      position: 10
+    },
+    {
+      id: 'Items',
+      purpose: #STANDARD,
+      type: #LINEITEM_REFERENCE,
+      label: 'Items',
+      position: 20,
+      targetElement: '_Item'
+    }]
+
+  @EndUserText.label: 'Pro-forma Invoice'
+  @UI.lineItem: [{ position: 10 }]
+  @UI.identification: [{ position: 10 }]
+  @UI.selectionField: [{ position: 30 }]
+  @Consumption.valueHelpDefinition: [{
+    entity: {
+        name: 'I_BillingDocument',
+        element: 'BillingDocument'
+    }
+  }]
+  ProFormaInvoice;
+
+  @EndUserText.label: 'To'
+  @UI.lineItem: [{ position: 20 }]
+  @UI.identification: [{ position: 20 }]
+  @Consumption.filter.hidden: true
+  ToCI;
+
+  @EndUserText.label: 'Invoice'
+  @UI.lineItem: [{ position: 30 }]
+  @UI.identification: [{ position: 30 }]
+  @Consumption.filter.hidden: true
+  Invoice;
+
+  @EndUserText.label: 'Date'
+  @UI.lineItem: [{ position: 40 }]
+  @UI.identification: [{ position: 40 }]
+  @UI.selectionField: [{ position: 20 }]
+  @Consumption.filter.selectionType: #INTERVAL
+  DateCI;
+
+  @EndUserText.label: 'PO'
+  @UI.lineItem: [{ position: 50 }]
+  @UI.identification: [{ position: 50 }]
+  @Consumption.filter.hidden: true
+  PO;
+
+  @EndUserText.label: 'MB/L'
+  @UI.lineItem: [{ position: 60 }]
+  @UI.identification: [{ position: 60 }]
+  @Consumption.filter.hidden: true
+  MBL;
+
+  @EndUserText.label: 'HB/L'
+  @UI.lineItem: [{ position: 70 }]
+  @UI.identification: [{ position: 70 }]
+  @Consumption.filter.hidden: true
+  HBL;
+
+  @EndUserText.label: 'Vessel Name'
+  @UI.lineItem: [{ position: 80 }]
+  @UI.identification: [{ position: 80 }]
+  @Consumption.filter.hidden: true
+  VesselName;
+
+  @EndUserText.label: 'ETD'
+  @UI.lineItem: [{ position: 90 }]
+  @UI.identification: [{ position: 90 }]
+  @Consumption.filter.hidden: true
+  ETD;
+
+  @EndUserText.label: 'ETA'
+  @UI.lineItem: [{ position: 100 }]
+  @UI.identification: [{ position: 100 }]
+  @Consumption.filter.hidden: true
+  ETA;
+
+  @EndUserText.label: 'Container No'
+  @UI.lineItem: [{ position: 110 }]
+  @UI.identification: [{ position: 110 }]
+  @Consumption.filter.hidden: true
+  ContainerNo;
+
+  @EndUserText.label: 'Port of loading'
+  @UI.lineItem: [{ position: 120 }]
+  @UI.identification: [{ position: 120 }]
+  @Consumption.filter.hidden: true
+  PortOfLoading;
+
+  @EndUserText.label: 'Port of destination'
+  @UI.lineItem: [{ position: 130 }]
+  @UI.identification: [{ position: 130 }]
+  @Consumption.filter.hidden: true
+  PortOfDestination;
+
+  @EndUserText.label: 'Price terms'
+  @UI.lineItem: [{ position: 140 }]
+  @UI.identification: [{ position: 140 }]
+  @Consumption.filter.hidden: true
+  PriceTerm;
+
+  @EndUserText.label: 'Country of origin'
+  @UI.lineItem: [{ position: 150 }]
+  @UI.identification: [{ position: 150 }]
+  @Consumption.filter.hidden: true
+  CountryOfOrigin;
+
+  @EndUserText.label: 'Sales Organization'
+  @UI.lineItem: [{ hidden: true }]
+  @UI.identification: [{ hidden: true }]
+  @UI.selectionField: [{ position: 10 }]
+  @Consumption.valueHelpDefinition: [{
+    entity: {
+        name: 'I_SalesOrganizationStdVH',
+        element: 'SalesOrganization'
+    }
+  }]
+  SalesOrganization;
+
+  @EndUserText.label: 'Customer'
+  @UI.lineItem: [{ hidden: true }]
+  @UI.identification: [{ hidden: true }]
+  @UI.selectionField: [{ position: 40 }]
+  @Consumption.valueHelpDefinition: [{
+    entity: {
+        name: 'I_Customer_VH',
+        element: 'Customer'
+    }
+  }]
+  Customer;
+}

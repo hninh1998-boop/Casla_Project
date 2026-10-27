@@ -1,0 +1,1320 @@
+CLASS lhc_header DEFINITION INHERITING FROM cl_abap_behavior_handler.
+  PRIVATE SECTION.
+    METHODS get_instance_authorizations FOR INSTANCE AUTHORIZATION
+      IMPORTING keys REQUEST requested_authorizations FOR Header RESULT result.
+
+    METHODS read FOR READ
+      IMPORTING keys FOR READ Header RESULT result.
+
+    METHODS lock FOR LOCK
+      IMPORTING keys FOR LOCK Header.
+
+    "Edit / Save trên Object Page: Invoice#, MB/L, HB/L, Vessel Name, ETD, ETA
+    METHODS update FOR MODIFY
+      IMPORTING entities FOR UPDATE Header.
+
+    METHODS rba_Item FOR READ
+      IMPORTING keys_rba FOR READ Header\_Item FULL result_requested RESULT result LINK association_links.
+
+    METHODS btnPrintPDF FOR MODIFY
+       keys FOR ACTION Header~btnPrintPDF RESULT result.
+    METHODS PDFPackingList FOR MODIFY
+       keys FOR ACTION Header~PDFPackingList RESULT result.
+
+    METHODS updCIText FOR MODIFY
+       keys FOR ACTION Header~updCIText.
+
+    METHODS ExportExcelCI FOR MODIFY
+       keys FOR ACTION Header~ExportExcelCI RESULT result.
+    METHODS ExportExcelPL FOR MODIFY
+       keys FOR ACTION Header~ExportExcelPL RESULT result.
+
+    "Dùng chung cho 2 action export excel - iv_form = `CI` / `PL`
+    METHODS export_excel
+      IMPORTING it_keys_pdf TYPE zcl_ce_ci_top=>tt_key_pdf
+                iv_form     TYPE string
+                is_param    TYPE zabs_ci_param
+      EXPORTING ev_content  TYPE string
+                ev_filename TYPE string.
+
+ENDCLASS.
+
+CLASS lhc_header IMPLEMENTATION.
+
+  METHOD get_instance_authorizations.
+  ENDMETHOD.
+
+  METHOD read.
+    DATA lr_proformainvoice TYPE zcl_ce_ci_top=>ry_string.
+    lr_proformainvoice = VALUE #( FOR ls_for IN keys ( sign = 'I' option = 'EQ' low = ls_for-ProFormaInvoice ) ).
+    IF lr_proformainvoice IS INITIAL.
+      RETURN.
+    ENDIF.
+
+    DATA(lt_headers) = zcl_ce_ci_f01=>get_headers(
+      VALUE #( ( name = 'PROFORMAINVOICE' range = CORRESPONDING #( lr_proformainvoice ) ) ) ).
+
+    LOOP AT lt_headers INTO DATA(ls_header).
+      APPEND CORRESPONDING #( ls_header ) TO result.
+    ENDLOOP.
+  ENDMETHOD.
+
+  METHOD lock.
+  ENDMETHOD.
+
+  METHOD update.
+    "Sửa trên Object Page → ghi đè đúng các field user đổi (%control), lưu ztb_ci_text dòng header (item = 000000)
+    CONSTANTS lc_header_item TYPE posnr VALUE '000000'.
+    DATA lt_ci_text TYPE zcl_ce_ci_text_buffer=>tt_ci_text.
+
+    zcl_ce_ci_text_buffer=>get_data( IMPORTING et_data = lt_ci_text ).
+
+    SELECT FROM ztb_ci_text
+      FIELDS *
+      FOR ALL ENTRIES IN @entities
+      WHERE proforma = @entities-ProFormaInvoice
+        AND item     = @lc_header_item
+      INTO TABLE @DATA(lt_existing).
+
+    LOOP AT entities INTO DATA(ls_entity).
+      READ TABLE lt_ci_text ASSIGNING FIELD-SYMBOL(<lfs_ci_text>) WITH KEY proforma = ls_entity-ProFormaInvoice.
+      IF sy-subrc <> 0.
+        APPEND INITIAL LINE TO lt_ci_text ASSIGNING <lfs_ci_text>.
+        READ TABLE lt_existing INTO DATA(ls_existing) WITH KEY proforma = ls_entity-ProFormaInvoice.
+        IF sy-subrc = 0.
+          <lfs_ci_text> = ls_existing.
+        ENDIF.
+        <lfs_ci_text>-client   = sy-mandt.
+        <lfs_ci_text>-proforma = ls_entity-ProFormaInvoice.
+        <lfs_ci_text>-item     = lc_header_item.
+        CLEAR ls_existing.
+      ENDIF.
+
+      IF ls_entity-%control-Invoice = if_abap_behv=>mk-on.
+        <lfs_ci_text>-invoice_no = ls_entity-Invoice.
+      ENDIF.
+      IF ls_entity-%control-MBL = if_abap_behv=>mk-on.
+        <lfs_ci_text>-mbl = ls_entity-MBL.
+      ENDIF.
+      IF ls_entity-%control-HBL = if_abap_behv=>mk-on.
+        <lfs_ci_text>-hbl = ls_entity-HBL.
+      ENDIF.
+      IF ls_entity-%control-VesselName = if_abap_behv=>mk-on.
+        <lfs_ci_text>-vessel_name = ls_entity-VesselName.
+      ENDIF.
+      IF ls_entity-%control-ETD = if_abap_behv=>mk-on.
+        <lfs_ci_text>-etd = ls_entity-ETD.
+      ENDIF.
+      IF ls_entity-%control-ETA = if_abap_behv=>mk-on.
+        <lfs_ci_text>-eta = ls_entity-ETA.
+      ENDIF.
+
+      <lfs_ci_text>-changed_by = sy-uname.
+      <lfs_ci_text>-changed_at = utclong_current( ).
+    ENDLOOP.
+
+    zcl_ce_ci_text_buffer=>set_data( it_data = lt_ci_text ).
+  ENDMETHOD.
+
+  METHOD rba_Item.
+    DATA lr_proformainvoice TYPE zcl_ce_ci_top=>ry_string.
+    lr_proformainvoice = VALUE #( FOR ls_for IN keys_rba ( sign = 'I' option = 'EQ' low = ls_for-ProFormaInvoice ) ).
+    IF lr_proformainvoice IS INITIAL.
+      RETURN.
+    ENDIF.
+
+    DATA(lt_items) = zcl_ce_ci_f01=>get_items( lr_proformainvoice ).
+    LOOP AT lt_items INTO DATA(ls_item).
+      APPEND VALUE #( source = VALUE #( ProFormaInvoice = ls_item-ProFormaInvoice )
+                      target = VALUE #( ProFormaInvoice = ls_item-ProFormaInvoice
+                                        BillingItem     = ls_item-BillingItem
+                                        Batch           = ls_item-Batch ) ) TO association_links.
+      IF result_requested = abap_true.
+        APPEND CORRESPONDING #( ls_item ) TO result.
+      ENDIF.
+    ENDLOOP.
+  ENDMETHOD.
+
+  METHOD btnPrintPDF.
+    IF keys IS INITIAL.
+      RETURN.
+    ENDIF.
+
+    """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+    "1. Get data
+    DATA: lt_filters         TYPE if_rap_query_filter=>tt_name_range_pairs,
+          lr_proformainvoice TYPE zcl_ce_ci_top=>ry_string,
+          lt_keys_pdf        TYPE zcl_ce_ci_top=>tt_key_pdf.
+
+    LOOP AT keys INTO DATA(ls_key_d).
+      APPEND INITIAL LINE TO lr_proformainvoice ASSIGNING FIELD-SYMBOL(<lfs_proformainvoice>).
+      <lfs_proformainvoice>-sign = 'I'.
+      <lfs_proformainvoice>-option = 'EQ'.
+      <lfs_proformainvoice>-low = ls_key_d-%key-ProFormaInvoice.
+    ENDLOOP.
+
+    SORT lr_proformainvoice BY low.
+    DELETE ADJACENT DUPLICATES FROM lr_proformainvoice COMPARING low.
+
+    "Chọn theo Pro-forma invoice → in toàn bộ billing item của invoice (main tự lọc TAN)
+    lt_keys_pdf = zcl_ce_ci_f01=>get_invoice_keys( lr_proformainvoice ).
+
+    lt_filters = VALUE #( ( name = 'PROFORMAINVOICE' range = CORRESPONDING #( lr_proformainvoice ) ) ).
+
+    zcl_ce_ci_f01=>main(
+      EXPORTING
+        it_filters  = lt_filters
+        it_keys_pdf = lt_keys_pdf
+      IMPORTING
+        et_result  = DATA(lt_data)
+    ).
+
+    "10.HTS CODE / 12.: giá trị user tích chọn ở popup trước khi in (parameter của action)
+    DATA(ls_param) = keys[ 1 ]-%param.
+    LOOP AT lt_data ASSIGNING FIELD-SYMBOL(<lfs_data>).
+      <lfs_data>-HTSCode     = ls_param-HTSCode.
+      <lfs_data>-QuartzSlabs = ls_param-QuartzSlabs.
+    ENDLOOP.
+
+    """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+    "2. Gen adobe
+    """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+    "2.1. Implement data (group data theo header là proformainvoice)
+    DATA: lt_data_xml       TYPE STANDARD TABLE OF xstring,
+          lv_lot            TYPE string,
+          lv_table2         TYPE string,
+          lv_table3         TYPE string,
+          lv_total_quantity TYPE fkimg,
+          lv_total_amount   TYPE zce_ci-Amount.
+
+    LOOP AT lt_data INTO DATA(ls_grp) GROUP BY ( ProFormaInvoice = ls_grp-ProFormaInvoice )
+        INTO DATA(ls_data_grp).
+
+      "Sub3
+      READ TABLE lt_data INTO DATA(ls_data_sub3) WITH KEY ProFormaInvoice = ls_data_grp-ProFormaInvoice.
+      IF sy-subrc = 0.
+        DATA(lv_toci) = zcl_utility_ninhnh=>escape_xml( iv_text = ls_data_sub3-ToCI ).
+        DATA(lv_addci) = zcl_utility_ninhnh=>escape_xml( iv_text = ls_data_sub3-AddCI ).
+        DATA(lv_telci)  = zcl_utility_ninhnh=>escape_xml( iv_text = ls_data_sub3-TelCI ).
+        DATA(lv_invoice) = zcl_utility_ninhnh=>escape_xml( iv_text = ls_data_sub3-Invoice ).
+        DATA(lv_dateci) = zcl_utility_ninhnh=>convert_date_to_ddmmmyy( iv_date = ls_data_sub3-DateCI ).
+        DATA(lv_po) = zcl_utility_ninhnh=>escape_xml( iv_text = CONV string( ls_data_sub3-po ) ).
+      ENDIF.
+
+      DATA(lv_sub3) =
+        |<Sub3>|
+            && |<DataTo>|
+                && |To: { lv_toci }|
+            && |</DataTo>|
+            && |<DataAddCI>|
+                && |Add.: { lv_addci }|
+            && |</DataAddCI>|
+            && |<DataTelCI>|
+                && |Tel: { lv_telci }|
+            && |</DataTelCI>|
+            && |<DataInvoice>|
+                && |{ lv_invoice }|
+            && |</DataInvoice>|
+            && |<DataDateCI>|
+                && |{ lv_dateci }|
+            && |</DataDateCI>|
+            && |<DataDateCI>|
+                && |{ lv_dateci }|
+            && |</DataDateCI>|
+            && |<DataPO>|
+                && |{ lv_po }|
+            && |</DataPO>|
+        && |</Sub3>|.
+
+
+      "Sub4
+      CLEAR: lv_lot.
+      "LOT header: gộp lot của các dòng được in, không lặp (1 dòng có thể có nhiều lot, cách nhau bằng xuống dòng)
+      DATA lt_lot_head TYPE STANDARD TABLE OF string WITH EMPTY KEY.
+      CLEAR lt_lot_head.
+      LOOP AT GROUP ls_data_grp INTO DATA(ls_member_lot).
+        SPLIT ls_member_lot-lot AT cl_abap_char_utilities=>newline INTO TABLE DATA(lt_lot_row).
+        LOOP AT lt_lot_row INTO DATA(lv_lot_row) WHERE table_line IS NOT INITIAL.
+          IF NOT line_exists( lt_lot_head[ table_line = lv_lot_row ] ).
+            APPEND lv_lot_row TO lt_lot_head.
+          ENDIF.
+        ENDLOOP.
+      ENDLOOP.
+      LOOP AT lt_lot_head INTO DATA(lv_lot_head).
+        DATA(lv_lot_esc) = zcl_utility_ninhnh=>escape_xml( iv_text = lv_lot_head ).
+        lv_lot = COND #( WHEN lv_lot IS INITIAL
+                         THEN lv_lot_esc
+                         ELSE |{ lv_lot }&#10;{ lv_lot_esc }| ).
+      ENDLOOP.
+
+      CLEAR: lv_table2,
+             lv_total_quantity,
+             lv_total_amount.
+      LOOP AT GROUP ls_data_grp INTO DATA(ls_member_table2).
+        DATA(lv_aztid)     = zcl_utility_ninhnh=>escape_xml( iv_text = ls_member_table2-aztid ).
+        DATA(lv_quantity)  = zcl_utility_ninhnh=>format_number_trim( iv_value = ls_member_table2-Quantity ).
+        DATA(lv_unitprice) = zcl_utility_ninhnh=>format_number_trim( iv_value = ls_member_table2-UnitPrice ).
+        DATA(lv_amount)    = zcl_utility_ninhnh=>format_number_trim( iv_value = ls_member_table2-Amount ).
+        lv_total_quantity  = lv_total_quantity + ls_member_table2-Quantity.
+        lv_total_amount    = lv_total_amount + ls_member_table2-Amount.
+
+        lv_table2 = |{ lv_table2 }|
+            && |<Row2>|
+                && |<Cell1>|
+                    && |{ lv_po }|
+                && |</Cell1>|
+                && |<Cell2>|
+                    && |{ lv_aztid }|
+                && |</Cell2>|
+                && |<Cell3>|
+                    && |223637|
+                && |</Cell3>|
+                && |<Cell4>|
+                    && |{ lv_quantity }|
+                && |</Cell4>|
+                && |<Cell5>|
+                    && |{ ls_member_table2-TransactionCurrency } { lv_unitprice }|
+                && |</Cell5>|
+                && |<Cell6>|
+                    && |{ ls_member_table2-TransactionCurrency } { lv_amount }|
+                && |</Cell6>|
+            && |</Row2>|.
+      ENDLOOP.
+      "DISCOUNT / CLAIM-CREDIT của invoice → TOTAL = SUB TOTAL + DISCOUNT + CLAIM/CREDIT
+      zcl_ce_ci_f01=>get_adjustments( EXPORTING iv_proformainvoice = ls_data_grp-ProFormaInvoice
+                                      IMPORTING ev_discount        = DATA(lv_discount)
+                                                ev_claim           = DATA(lv_claim) ).
+      DATA(lv_grand_total) = CONV zce_ci-Amount( lv_total_amount + lv_discount + lv_claim ).
+
+      "In words theo TOTAL - phải lấy trước khi format
+      DATA(lv_inwords) = zcl_ce_ci_f01=>amount_to_words(
+        iv_amount   = lv_grand_total
+        iv_currency = ls_member_table2-TransactionCurrency ).
+      DATA(lv_currency)         = ls_member_table2-TransactionCurrency.
+      DATA(lv_discount_string)  = zcl_utility_ninhnh=>format_number_trim( iv_value = lv_discount ).
+      DATA(lv_claim_string)     = zcl_utility_ninhnh=>format_number_trim( iv_value = lv_claim ).
+      DATA(lv_grand_string)     = zcl_utility_ninhnh=>format_number_trim( iv_value = lv_grand_total ).
+      lv_total_quantity = zcl_utility_ninhnh=>format_number_trim( iv_value = lv_total_quantity ).
+      lv_total_amount   = zcl_utility_ninhnh=>format_number_trim( iv_value = lv_total_amount ).
+
+      CLEAR: lv_table3.
+      READ TABLE lt_data INTO DATA(ls_data_table3) WITH KEY ProFormaInvoice = ls_data_grp-ProFormaInvoice.
+      IF sy-subrc = 0.
+        DATA(lv_vesselname) = zcl_utility_ninhnh=>escape_xml( iv_text = ls_data_table3-VesselName ).
+        DATA(lv_etd) = zcl_utility_ninhnh=>escape_xml( iv_text = ls_data_table3-etd ).
+        DATA(lv_eta) = zcl_utility_ninhnh=>escape_xml( iv_text = ls_data_table3-eta ).
+        DATA(lv_containerno) = zcl_utility_ninhnh=>escape_xml( iv_text = ls_data_table3-ContainerNo ).
+        DATA(lv_PortOfLoading) = zcl_utility_ninhnh=>escape_xml( iv_text = CONV string( ls_data_table3-PortOfLoading ) ).
+        DATA(lv_PortOfDestination) = zcl_utility_ninhnh=>escape_xml( iv_text = CONV string( ls_data_table3-PortOfDestination ) ).
+        DATA(lv_PriceTerm) = zcl_utility_ninhnh=>escape_xml( iv_text = CONV string( ls_data_table3-PriceTerm ) ).
+        DATA(lv_HTSCode) = zcl_utility_ninhnh=>escape_xml( iv_text = ls_data_table3-HTSCode ).
+        DATA(lv_CountryOfOrigin) = zcl_utility_ninhnh=>escape_xml( iv_text = CONV string( ls_data_table3-CountryOfOrigin ) ).
+        DATA(lv_QuartzSlabs) = zcl_utility_ninhnh=>escape_xml( iv_text = ls_data_table3-QuartzSlabs ).
+        DATA(lv_mbl) = zcl_utility_ninhnh=>escape_xml( iv_text = ls_data_table3-MBL ).
+        DATA(lv_hbl) = zcl_utility_ninhnh=>escape_xml( iv_text = ls_data_table3-HBL ).
+      ENDIF.
+      lv_table3 =
+        |<Row2>|
+            && |<Cell2>|
+                && |{ lv_inwords }|
+            && |</Cell2>|
+        && |</Row2>|
+        && |<Row4>|
+            && |<Cell2>|
+                && |{ lv_mbl }|
+            && |</Cell2>|
+        && |</Row4>|
+        && |<Row5>|
+            && |<Cell2>|
+                && |{ lv_hbl }|
+            && |</Cell2>|
+        && |</Row5>|
+        && |<Row6>|
+            && |<Cell2>|
+                && |{ lv_vesselname }|
+            && |</Cell2>|
+        && |</Row6>|
+        && |<Row7>|
+            && |<Cell2>|
+                && |{ lv_etd }|
+            && |</Cell2>|
+        && |</Row7>|
+        && |<Row8>|
+            && |<Cell2>|
+                && |{ lv_eta }|
+            && |</Cell2>|
+        && |</Row8>|
+        && |<Row9>|
+            && |<Cell2>|
+                && |{ lv_containerno }|
+            && |</Cell2>|
+        && |</Row9>|
+        && |<Row10>|
+            && |<Cell2>|
+                && |{ lv_PortOfLoading }|
+            && |</Cell2>|
+        && |</Row10>|
+        && |<Row11>|
+            && |<Cell2>|
+                && |{ lv_PortOfDestination }|
+            && |</Cell2>|
+        && |</Row11>|
+        && |<Row12>|
+            && |<Cell2>|
+                && |{ lv_PriceTerm }|
+            && |</Cell2>|
+        && |</Row12>|
+        && |<Row13>|
+            && |<Cell2>|
+                && |{ lv_HTSCode }|
+            && |</Cell2>|
+        && |</Row13>|
+        && |<Row14>|
+            && |<Cell2>|
+                && |{ lv_CountryOfOrigin }|
+            && |</Cell2>|
+        && |</Row14>|
+        "12.: không chọn gì trên popup → không gửi Row15, form không in dòng 12
+        && COND string( WHEN lv_QuartzSlabs IS NOT INITIAL
+                        THEN |<Row15>|
+                          && |<Cell1>|
+                              && |12. { lv_QuartzSlabs }|
+                          && |</Cell1>|
+                          && |</Row15>| ).
+
+      DATA(lv_sub4) =
+        |<Sub4>|
+            && |<Table1>|
+                && |<Row1>|
+                    && |<DataLOT>|
+                        && |{ lv_lot }|
+                    && |</DataLOT>|
+                && |</Row1>|
+                && |<Row3>|
+                    && |<Sub4.1>|
+                        && |<Table2>|
+                            && |{ lv_table2 }|
+                            && |<Row3>|
+                                && |<Cell3>|
+                                    && |{ lv_total_quantity }|
+                                && |</Cell3>|
+                                && |<Cell5>|
+                                    && |{ lv_currency } { lv_total_amount }|
+                                && |</Cell5>|
+                            && |</Row3>|
+                            "DISCOUNT (as for free sample)
+                            && |<Row4>|
+                                && |<Cell5>|
+                                    && |{ lv_currency } { lv_discount_string }|
+                                && |</Cell5>|
+                            && |</Row4>|
+                            "CLAIM/CREDIT
+                            && |<Row5>|
+                                && |<Cell5>|
+                                    && |{ lv_currency } { lv_claim_string }|
+                                && |</Cell5>|
+                            && |</Row5>|
+                            "TOTAL
+                            && |<Row6>|
+                                && |<Cell3>|
+                                    && |{ lv_total_quantity }|
+                                && |</Cell3>|
+                                && |<Cell5>|
+                                    && |{ lv_currency } { lv_grand_string }|
+                                && |</Cell5>|
+                            && |</Row6>|
+                        && |</Table2>|
+                    && |</Sub4.1>|
+                && |</Row3>|
+                && |<Row4>|
+                    && |<Sub4.2>|
+                        && |<Table3>|
+                            && |{ lv_table3 }|
+                        && |</Table3>|
+                    && |</Sub4.2>|
+                && |</Row4>|
+            && |</Table1>|
+        && |</Sub4>|.
+
+
+      "Add data to form
+      DATA(lv_form) =
+        |<?xml version="1.0" encoding="UTF-8"?>|
+        && |<form>|
+            && |{ lv_sub3 }|
+            && |{ lv_sub4 }|
+        && |</form>|.
+
+      "Decode data
+      DATA(lv_encode) = cl_web_http_utility=>encode_x_base64(
+        cl_web_http_utility=>encode_utf8( lv_form )
+        ).
+      DATA(lv_decode) = cl_web_http_utility=>decode_x_base64( lv_encode ).
+
+      lt_data_xml = VALUE #( BASE lt_data_xml ( lv_decode ) ).
+    ENDLOOP.
+
+    """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+    "2.2. Get Template
+    SELECT SINGLE FROM zcore_tb_temppdf
+    FIELDS file_content
+    WHERE id = 'zci_pdf'
+    INTO @DATA(lv_xdp).
+
+    """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+    "2.3. Print PDF
+    DATA(lo_merge_pdf) = cl_rspo_pdf_merger=>create_instance( ).
+
+    LOOP AT lt_data_xml INTO DATA(ls_data_xml).
+      TRY.
+          cl_fp_ads_util=>render_pdf(
+            EXPORTING
+              iv_xml_data     = ls_data_xml "test
+              iv_xdp_layout   = CONV xstring( lv_xdp )
+              iv_locale       = 'de_DE'
+              is_options      = VALUE #( embed_fonts = 'X' )
+            IMPORTING
+              ev_pdf          = DATA(lv_pdf)
+              ev_pages        = DATA(lv_pages)
+              ev_trace_string = DATA(lv_trace_string)
+          ).
+          "Add
+          lo_merge_pdf->add_document( lv_pdf ).
+        CATCH cx_fp_ads_util INTO DATA(lx_err).
+          DATA(lv_err) = lx_err->get_longtext( ).
+      ENDTRY.
+    ENDLOOP.
+
+    TRY.
+        DATA(lv_pdf_base64) = cl_web_http_utility=>encode_x_base64(
+            lo_merge_pdf->merge_documents( )
+         ).
+      CATCH cx_rspo_pdf_merger INTO DATA(lx_merge_err).
+        DATA(lv_merge_err) = lx_merge_err->get_longtext( ).
+    ENDTRY.
+
+
+    """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+    "3. Display result
+    LOOP AT keys INTO DATA(ls_key_r).
+      APPEND INITIAL LINE TO result ASSIGNING FIELD-SYMBOL(<lfs_result>).
+      <lfs_result>-%tky = ls_key_r-%tky.
+      <lfs_result>-%param-FileContent = lv_pdf_base64.
+      <lfs_result>-%param-FileName = |CI_{ ls_key_r-ProFormaInvoice }_{ sy-datum }_{ sy-uzeit }|.
+      <lfs_result>-%param-FileExtension = 'pdf'.
+      <lfs_result>-%param-MimeType = 'application/pdf'.
+    ENDLOOP.
+  ENDMETHOD.
+
+  METHOD PDFPackingList.
+    """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+    "1. Get data
+    DATA: lt_filters         TYPE if_rap_query_filter=>tt_name_range_pairs,
+          lr_proformainvoice TYPE zcl_ce_ci_top=>ry_string,
+          lt_keys_pdf        TYPE zcl_ce_ci_top=>tt_key_pdf.
+
+    LOOP AT keys INTO DATA(ls_key_d).
+      APPEND INITIAL LINE TO lr_proformainvoice ASSIGNING FIELD-SYMBOL(<lfs_proformainvoice>).
+      <lfs_proformainvoice>-sign = 'I'.
+      <lfs_proformainvoice>-option = 'EQ'.
+      <lfs_proformainvoice>-low = ls_key_d-%key-ProFormaInvoice.
+    ENDLOOP.
+
+    SORT lr_proformainvoice BY low.
+    DELETE ADJACENT DUPLICATES FROM lr_proformainvoice COMPARING low.
+
+    "Chọn theo Pro-forma invoice → in toàn bộ billing item của invoice (main tự lọc TAN)
+    lt_keys_pdf = zcl_ce_ci_f01=>get_invoice_keys( lr_proformainvoice ).
+
+    lt_filters = VALUE #( ( name = 'PROFORMAINVOICE' range = CORRESPONDING #( lr_proformainvoice ) ) ).
+
+    zcl_ce_ci_f01=>main(
+      EXPORTING
+        it_filters  = lt_filters
+        it_keys_pdf = lt_keys_pdf
+      IMPORTING
+        et_result  = DATA(lt_data)
+    ).
+
+    "10.HTS CODE / 12.: giá trị user tích chọn ở popup trước khi in (parameter của action)
+    DATA(ls_param) = keys[ 1 ]-%param.
+    LOOP AT lt_data ASSIGNING FIELD-SYMBOL(<lfs_data>).
+      <lfs_data>-HTSCode     = ls_param-HTSCode.
+      <lfs_data>-QuartzSlabs = ls_param-QuartzSlabs.
+    ENDLOOP.
+
+    "Dòng cho bảng Packing List: chỉ lấy item (dòng tách batch / TAN không tách batch), bỏ header
+    "Phần đầu form (To, LOT#...) vẫn lấy theo lt_data (dòng TAN) như cũ
+    zcl_ce_ci_f01=>main(
+      EXPORTING
+        it_filters  = lt_filters
+        it_keys_pdf = lt_keys_pdf
+        iv_pl_items = abap_true
+      IMPORTING
+        et_result   = DATA(lt_items)
+    ).
+
+    """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+    "2. Gen adobe
+    "SQM theo I_ProductUnitsOfMeasure
+    DATA(lt_sqm) = zcl_ce_ci_f01=>get_sqm( lt_items ).
+
+    "2.1. Implement data (group data theo header là proformainvoice)
+    DATA: lt_data_xml      TYPE STANDARD TABLE OF xstring,
+          lv_lot           TYPE string,
+          lv_table2        TYPE string,
+          lv_table3        TYPE string,
+          lv_total_pcs     TYPE fkimg,
+          lv_total_sqm     TYPE zcl_ce_ci_f01=>ty_sqm-sqm,
+          lv_total_nw      TYPE zce_ci-NetWeight,
+          lv_total_gw      TYPE zce_ci-GrossWeight,
+          lv_total_package TYPE string,
+          lv_tabix         TYPE i.
+
+    LOOP AT lt_data INTO DATA(ls_grp) GROUP BY ( ProFormaInvoice = ls_grp-ProFormaInvoice )
+        INTO DATA(ls_data_grp).
+      "Sub3
+      READ TABLE lt_data INTO DATA(ls_data_sub3) WITH KEY ProFormaInvoice = ls_data_grp-ProFormaInvoice.
+      IF sy-subrc = 0.
+        DATA(lv_toci) = zcl_utility_ninhnh=>escape_xml( iv_text = ls_data_sub3-ToCI ).
+        DATA(lv_addci) = zcl_utility_ninhnh=>escape_xml( iv_text = ls_data_sub3-AddCI ).
+        DATA(lv_telci)  = zcl_utility_ninhnh=>escape_xml( iv_text = ls_data_sub3-TelCI ).
+        DATA(lv_invoice) = zcl_utility_ninhnh=>escape_xml( iv_text = ls_data_sub3-Invoice ).
+        DATA(lv_dateci) = zcl_utility_ninhnh=>convert_date_to_ddmmmyy( iv_date = ls_data_sub3-DateCI ).
+        DATA(lv_po) = zcl_utility_ninhnh=>escape_xml( iv_text = CONV string( ls_data_sub3-po ) ).
+      ENDIF.
+
+      DATA(lv_sub3) =
+        |<Sub3>|
+            && |<DataTo>|
+                && |To: { lv_toci }|
+            && |</DataTo>|
+            && |<DataAddCI>|
+                && |Add.: { lv_addci }|
+            && |</DataAddCI>|
+            && |<DataTelCI>|
+                && |Tel: { lv_telci }|
+            && |</DataTelCI>|
+            && |<DataInvoice>|
+                && |{ lv_invoice }|
+            && |</DataInvoice>|
+            && |<DataDateCI>|
+                && |{ lv_dateci }|
+            && |</DataDateCI>|
+            && |<DataDateCI>|
+                && |{ lv_dateci }|
+            && |</DataDateCI>|
+            && |<DataPO>|
+                && |{ lv_po }|
+            && |</DataPO>|
+        && |</Sub3>|.
+
+      "Sub4
+      CLEAR: lv_lot.
+      "LOT header: gộp lot của các dòng được in, không lặp (1 dòng có thể có nhiều lot, cách nhau bằng xuống dòng)
+      DATA lt_lot_head TYPE STANDARD TABLE OF string WITH EMPTY KEY.
+      CLEAR lt_lot_head.
+      LOOP AT GROUP ls_data_grp INTO DATA(ls_member_lot).
+        SPLIT ls_member_lot-lot AT cl_abap_char_utilities=>newline INTO TABLE DATA(lt_lot_row).
+        LOOP AT lt_lot_row INTO DATA(lv_lot_row) WHERE table_line IS NOT INITIAL.
+          IF NOT line_exists( lt_lot_head[ table_line = lv_lot_row ] ).
+            APPEND lv_lot_row TO lt_lot_head.
+          ENDIF.
+        ENDLOOP.
+      ENDLOOP.
+      LOOP AT lt_lot_head INTO DATA(lv_lot_head).
+        DATA(lv_lot_esc) = zcl_utility_ninhnh=>escape_xml( iv_text = lv_lot_head ).
+        lv_lot = COND #( WHEN lv_lot IS INITIAL
+                         THEN lv_lot_esc
+                         ELSE |{ lv_lot }&#10;{ lv_lot_esc }| ).
+      ENDLOOP.
+
+      CLEAR: lv_table2,
+             lv_total_pcs,
+             lv_total_package,
+             lv_tabix,
+             lv_total_sqm,
+             lv_total_nw,
+             lv_total_gw.
+      LOOP AT lt_items INTO DATA(ls_member_table2) WHERE ProFormaInvoice = ls_data_grp-ProFormaInvoice.
+        lv_tabix          += 1.
+        DATA(lv_aztid)    = zcl_utility_ninhnh=>escape_xml( iv_text = ls_member_table2-aztid ).
+        DATA(lv_pcs)      = zcl_utility_ninhnh=>format_number_trim( iv_value = ls_member_table2-Quantity ).
+        DATA(lv_lot_item) = zcl_utility_ninhnh=>escape_xml( iv_text = ls_member_table2-lot ).
+        lv_total_pcs      = lv_total_pcs + ls_member_table2-Quantity.
+        lv_total_nw       = lv_total_nw + ls_member_table2-NetWeight.
+        lv_total_gw       = lv_total_gw + ls_member_table2-GrossWeight.
+        "N.W / G.W: ProductGroup khác 320001 → trống (điền tay)
+        DATA(lv_nw) = COND string( WHEN ls_member_table2-NetWeight IS NOT INITIAL
+                                   THEN zcl_utility_ninhnh=>format_number_trim( iv_value = ls_member_table2-NetWeight ) ).
+        DATA(lv_gw) = COND string( WHEN ls_member_table2-GrossWeight IS NOT INITIAL
+                                   THEN zcl_utility_ninhnh=>format_number_trim( iv_value = ls_member_table2-GrossWeight ) ).
+
+        "SQM (m2), làm tròn 2 số lẻ
+        READ TABLE lt_sqm INTO DATA(ls_sqm) WITH TABLE KEY proformainvoice = ls_member_table2-ProFormaInvoice
+                                                           item            = ls_member_table2-Item.
+        DATA(lv_sqm) = COND string( WHEN sy-subrc = 0 AND ls_sqm-sqm IS NOT INITIAL
+                                    THEN |{ ls_sqm-sqm DECIMALS = 2 }| ).
+        lv_total_sqm = lv_total_sqm + COND #( WHEN sy-subrc = 0 THEN ls_sqm-sqm ).
+
+        lv_table2 = |{ lv_table2 }|
+            && |<Row2>|
+                && |<Cell1>|
+                    && |{ lv_tabix }|
+                && |</Cell1>|
+                && |<Cell2>|
+                    && |{ lv_aztid }|
+                && |</Cell2>|
+                && |<Cell3>|
+                    && |{ ls_member_table2-SizeL }|
+                && |</Cell3>|
+                && |<Cell4>|
+                    && |{ ls_member_table2-SizeW }|
+                && |</Cell4>|
+                && |<Cell5>|
+                    && |{ ls_member_table2-SizeH }|
+                && |</Cell5>|
+                && |<Cell6>|
+                    && |{ lv_sqm }|
+                && |</Cell6>|
+                && |<Cell7>|
+                    && |{ lv_pcs }|
+                && |</Cell7>|
+                && |<Cell8>|
+                    && |{ lv_nw }|
+                && |</Cell8>|
+                && |<Cell9>|
+                    && |{ lv_gw }|
+                && |</Cell9>|
+                && |<Cell10>|
+                    && |{ lv_lot_item }|
+                && |</Cell10>|
+            && |</Row2>|.
+      ENDLOOP.
+      DATA(lv_total_pcs_string) = zcl_utility_ninhnh=>format_number_trim( iv_value = lv_total_pcs ).
+      DATA(lv_total_nw_string) = COND string( WHEN lv_total_nw IS NOT INITIAL
+                                              THEN zcl_utility_ninhnh=>format_number_trim( iv_value = lv_total_nw ) ).
+      DATA(lv_total_gw_string) = COND string( WHEN lv_total_gw IS NOT INITIAL
+                                              THEN zcl_utility_ninhnh=>format_number_trim( iv_value = lv_total_gw ) ).
+      DATA(lv_total_sqm_string) = COND string( WHEN lv_total_sqm IS NOT INITIAL
+                                               THEN |{ lv_total_sqm DECIMALS = 2 }| ).
+      lv_total_package = |TOTAL: { lv_tabix } { COND string( WHEN lv_tabix = 1 THEN 'PACKAGE' ELSE 'PACKAGES' ) }|.
+
+      CLEAR: lv_table3.
+      READ TABLE lt_data INTO DATA(ls_data_table3) WITH KEY ProFormaInvoice = ls_data_grp-ProFormaInvoice.
+      IF sy-subrc = 0.
+        DATA(lv_vesselname) = zcl_utility_ninhnh=>escape_xml( iv_text = ls_data_table3-VesselName ).
+        DATA(lv_etd) = zcl_utility_ninhnh=>escape_xml( iv_text = ls_data_table3-etd ).
+        DATA(lv_eta) = zcl_utility_ninhnh=>escape_xml( iv_text = ls_data_table3-eta ).
+        DATA(lv_containerno) = zcl_utility_ninhnh=>escape_xml( iv_text = ls_data_table3-ContainerNo ).
+        DATA(lv_PortOfLoading) = zcl_utility_ninhnh=>escape_xml( iv_text = CONV string( ls_data_table3-PortOfLoading ) ).
+        DATA(lv_PortOfDestination) = zcl_utility_ninhnh=>escape_xml( iv_text = CONV string( ls_data_table3-PortOfDestination ) ).
+        DATA(lv_PriceTerm) = zcl_utility_ninhnh=>escape_xml( iv_text = CONV string( ls_data_table3-PriceTerm ) ).
+        DATA(lv_HTSCode) = zcl_utility_ninhnh=>escape_xml( iv_text = ls_data_table3-HTSCode ).
+        DATA(lv_CountryOfOrigin) = zcl_utility_ninhnh=>escape_xml( iv_text = CONV string( ls_data_table3-CountryOfOrigin ) ).
+        DATA(lv_QuartzSlabs) = zcl_utility_ninhnh=>escape_xml( iv_text = ls_data_table3-QuartzSlabs ).
+        DATA(lv_mbl) = zcl_utility_ninhnh=>escape_xml( iv_text = ls_data_table3-MBL ).
+        DATA(lv_hbl) = zcl_utility_ninhnh=>escape_xml( iv_text = ls_data_table3-HBL ).
+      ENDIF.
+      lv_table3 =
+        |<Row4>|
+            && |<Cell2>|
+                && |{ lv_mbl }|
+            && |</Cell2>|
+        && |</Row4>|
+        && |<Row5>|
+            && |<Cell2>|
+                && |{ lv_hbl }|
+            && |</Cell2>|
+        && |</Row5>|
+        && |<Row6>|
+            && |<Cell2>|
+                && |{ lv_vesselname }|
+            && |</Cell2>|
+        && |</Row6>|
+        && |<Row7>|
+            && |<Cell2>|
+                && |{ lv_etd }|
+            && |</Cell2>|
+        && |</Row7>|
+        && |<Row8>|
+            && |<Cell2>|
+                && |{ lv_eta }|
+            && |</Cell2>|
+        && |</Row8>|
+        && |<Row9>|
+            && |<Cell2>|
+                && |{ lv_containerno }|
+            && |</Cell2>|
+        && |</Row9>|
+        && |<Row10>|
+            && |<Cell2>|
+                && |{ lv_PortOfLoading }|
+            && |</Cell2>|
+        && |</Row10>|
+        && |<Row11>|
+            && |<Cell2>|
+                && |{ lv_PortOfDestination }|
+            && |</Cell2>|
+        && |</Row11>|
+        && |<Row12>|
+            && |<Cell2>|
+                && |{ lv_PriceTerm }|
+            && |</Cell2>|
+        && |</Row12>|
+        && |<Row13>|
+            && |<Cell2>|
+                && |{ lv_HTSCode }|
+            && |</Cell2>|
+        && |</Row13>|
+        && |<Row14>|
+            && |<Cell2>|
+                && |{ lv_CountryOfOrigin }|
+            && |</Cell2>|
+        && |</Row14>|
+        "12.: không chọn gì trên popup → không gửi Row15, form không in dòng 12
+        && COND string( WHEN lv_QuartzSlabs IS NOT INITIAL
+                        THEN |<Row15>|
+                          && |<Cell1>|
+                              && |12. { lv_QuartzSlabs }|
+                          && |</Cell1>|
+                          && |</Row15>| ).
+
+      DATA(lv_sub4) =
+        |<Sub4>|
+            && |<Table1>|
+                && |<Row1>|
+                    && |<DataLOT>|
+                        && |{ lv_lot }|
+                    && |</DataLOT>|
+                && |</Row1>|
+                && |<Row3>|
+                    && |<Sub4.1>|
+                        && |<Table2>|
+                            && |{ lv_table2 }|
+                            && |<Row3>|
+                                && |<Cell1>|
+                                    && |{ lv_total_package }|
+                                && |</Cell1>|
+                                && |<Cell5>|
+                                    && |{ lv_total_sqm_string }|
+                                && |</Cell5>|
+                                && |<Cell6>|
+                                    && |{ lv_total_pcs_string }|
+                                && |</Cell6>|
+                                && |<Cell7>|
+                                    && |{ lv_total_nw_string }|
+                                && |</Cell7>|
+                                && |<Cell8>|
+                                    && |{ lv_total_gw_string }|
+                                && |</Cell8>|
+                            && |</Row3>|
+                        && |</Table2>|
+                    && |</Sub4.1>|
+                && |</Row3>|
+                && |<Row4>|
+                    && |<Sub4.2>|
+                        && |<Table3>|
+                            && |{ lv_table3 }|
+                        && |</Table3>|
+                    && |</Sub4.2>|
+                && |</Row4>|
+            && |</Table1>|
+        && |</Sub4>|.
+
+      "Add data to form
+      DATA(lv_form) =
+        |<?xml version="1.0" encoding="UTF-8"?>|
+        && |<form>|
+            && |{ lv_sub3 }|
+            && |{ lv_sub4 }|
+        && |</form>|.
+
+      "Decode data
+      DATA(lv_encode) = cl_web_http_utility=>encode_x_base64(
+        cl_web_http_utility=>encode_utf8( lv_form )
+        ).
+      DATA(lv_decode) = cl_web_http_utility=>decode_x_base64( lv_encode ).
+
+      lt_data_xml = VALUE #( BASE lt_data_xml ( lv_decode ) ).
+    ENDLOOP.
+
+    "2.2. Get Template
+    SELECT SINGLE FROM zcore_tb_temppdf
+    FIELDS file_content
+    WHERE id = 'zpl_pdf'
+    INTO @DATA(lv_xdp).
+
+    "2.3. Print PDF
+    DATA(lo_merge_pdf) = cl_rspo_pdf_merger=>create_instance( ).
+
+    LOOP AT lt_data_xml INTO DATA(ls_data_xml).
+      TRY.
+          cl_fp_ads_util=>render_pdf(
+            EXPORTING
+              iv_xml_data     = ls_data_xml "test
+              iv_xdp_layout   = CONV xstring( lv_xdp )
+              iv_locale       = 'de_DE'
+              is_options      = VALUE #( embed_fonts = 'X' )
+            IMPORTING
+              ev_pdf          = DATA(lv_pdf)
+              ev_pages        = DATA(lv_pages)
+              ev_trace_string = DATA(lv_trace_string)
+          ).
+          "Add
+          lo_merge_pdf->add_document( lv_pdf ).
+        CATCH cx_fp_ads_util INTO DATA(lx_err).
+          DATA(lv_err) = lx_err->get_longtext( ).
+      ENDTRY.
+    ENDLOOP.
+
+    TRY.
+        DATA(lv_pdf_base64) = cl_web_http_utility=>encode_x_base64(
+            lo_merge_pdf->merge_documents( )
+         ).
+      CATCH cx_rspo_pdf_merger INTO DATA(lx_merge_err).
+        DATA(lv_merge_err) = lx_merge_err->get_longtext( ).
+    ENDTRY.
+
+    """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+    "3. Display result
+    LOOP AT keys INTO DATA(ls_key_r).
+      APPEND INITIAL LINE TO result ASSIGNING FIELD-SYMBOL(<lfs_result>).
+      <lfs_result>-%tky = ls_key_r-%tky.
+      <lfs_result>-%param-FileContent = lv_pdf_base64.
+      <lfs_result>-%param-FileName = |PL_{ ls_key_r-ProFormaInvoice }_{ sy-datum }_{ sy-uzeit }|.
+      <lfs_result>-%param-FileExtension = 'pdf'.
+      <lfs_result>-%param-MimeType = 'application/pdf'.
+    ENDLOOP.
+  ENDMETHOD.
+
+  METHOD updCIText.
+    "Change header (chọn nhiều invoice trên danh sách): Invoice#, MB/L, HB/L, Vessel Name, ETD, ETA
+    "→ lưu ztb_ci_text 1 dòng cho cả Pro-forma invoice (item = 000000)
+    "Để trống = giữ nguyên giá trị đang có, nhập D = xóa giá trị
+    CONSTANTS lc_header_item TYPE posnr VALUE '000000'.
+    DATA lt_ci_text TYPE zcl_ce_ci_text_buffer=>tt_ci_text.
+
+    zcl_ce_ci_text_buffer=>get_data( IMPORTING et_data = lt_ci_text ).
+
+    SELECT FROM ztb_ci_text
+      FIELDS *
+      FOR ALL ENTRIES IN @keys
+      WHERE proforma = @keys-%key-ProFormaInvoice
+        AND item     = @lc_header_item
+      INTO TABLE @DATA(lt_existing).
+
+    LOOP AT keys INTO DATA(ls_key).
+      "Chọn nhiều dòng cùng invoice → chỉ ghi 1 lần
+      READ TABLE lt_ci_text ASSIGNING FIELD-SYMBOL(<lfs_ci_text>) WITH KEY proforma = ls_key-%key-ProFormaInvoice.
+      IF sy-subrc <> 0.
+        APPEND INITIAL LINE TO lt_ci_text ASSIGNING <lfs_ci_text>.
+        READ TABLE lt_existing INTO DATA(ls_existing) WITH KEY proforma = ls_key-%key-ProFormaInvoice.
+        IF sy-subrc = 0.
+          <lfs_ci_text> = ls_existing.
+        ENDIF.
+        <lfs_ci_text>-client   = sy-mandt.
+        <lfs_ci_text>-proforma = ls_key-%key-ProFormaInvoice.
+        <lfs_ci_text>-item     = lc_header_item.
+        CLEAR ls_existing.
+      ENDIF.
+
+      IF ls_key-%param-InvoiceNo IS NOT INITIAL.
+        <lfs_ci_text>-invoice_no = COND #( WHEN ls_key-%param-InvoiceNo = 'D' THEN `` ELSE ls_key-%param-InvoiceNo ).
+      ENDIF.
+      IF ls_key-%param-MBL IS NOT INITIAL.
+        <lfs_ci_text>-mbl = COND #( WHEN ls_key-%param-MBL = 'D' THEN `` ELSE ls_key-%param-MBL ).
+      ENDIF.
+      IF ls_key-%param-HBL IS NOT INITIAL.
+        <lfs_ci_text>-hbl = COND #( WHEN ls_key-%param-HBL = 'D' THEN `` ELSE ls_key-%param-HBL ).
+      ENDIF.
+      IF ls_key-%param-ETA IS NOT INITIAL.
+        <lfs_ci_text>-eta = COND #( WHEN ls_key-%param-ETA = 'D' THEN `` ELSE ls_key-%param-ETA ).
+      ENDIF.
+      IF ls_key-%param-VesselName IS NOT INITIAL.
+        <lfs_ci_text>-vessel_name = COND #( WHEN ls_key-%param-VesselName = 'D' THEN `` ELSE ls_key-%param-VesselName ).
+      ENDIF.
+      IF ls_key-%param-ETD IS NOT INITIAL.
+        <lfs_ci_text>-etd = COND #( WHEN ls_key-%param-ETD = 'D' THEN `` ELSE ls_key-%param-ETD ).
+      ENDIF.
+
+      <lfs_ci_text>-changed_by = sy-uname.
+      <lfs_ci_text>-changed_at = utclong_current( ).
+    ENDLOOP.
+
+    zcl_ce_ci_text_buffer=>set_data( it_data = lt_ci_text ).
+  ENDMETHOD.
+
+  METHOD ExportExcelCI.
+    DATA lt_keys_pdf TYPE zcl_ce_ci_top=>tt_key_pdf.
+
+    DATA lr_proformainvoice TYPE zcl_ce_ci_top=>ry_string.
+    lr_proformainvoice = VALUE #( FOR ls_for IN keys ( sign = 'I' option = 'EQ' low = ls_for-%key-ProFormaInvoice ) ).
+    lt_keys_pdf = zcl_ce_ci_f01=>get_invoice_keys( lr_proformainvoice ).
+
+    export_excel( EXPORTING it_keys_pdf = lt_keys_pdf
+                            iv_form     = `CI`
+                            is_param    = CORRESPONDING #( keys[ 1 ]-%param )
+                  IMPORTING ev_content  = DATA(lv_content)
+                            ev_filename = DATA(lv_filename) ).
+
+    "Mọi dòng được chọn dùng chung 1 file → chỉ trả nội dung ở dòng đầu để response không bị lặp
+    "Không có dữ liệu (không có item TAN) → FileContent rỗng, FE tự báo
+    DATA(lv_first) = abap_true.
+    LOOP AT keys INTO DATA(ls_key_r).
+      APPEND INITIAL LINE TO result ASSIGNING FIELD-SYMBOL(<lfs_result>).
+      <lfs_result>-%tky = ls_key_r-%tky.
+      IF lv_first = abap_true.
+        <lfs_result>-%param-FileContent = lv_content.
+        lv_first = abap_false.
+      ENDIF.
+      <lfs_result>-%param-FileName      = lv_filename.
+      <lfs_result>-%param-FileExtension = 'xlsx'.
+      <lfs_result>-%param-MimeType      = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'.
+    ENDLOOP.
+  ENDMETHOD.
+
+  METHOD ExportExcelPL.
+    DATA lt_keys_pdf TYPE zcl_ce_ci_top=>tt_key_pdf.
+
+    DATA lr_proformainvoice TYPE zcl_ce_ci_top=>ry_string.
+    lr_proformainvoice = VALUE #( FOR ls_for IN keys ( sign = 'I' option = 'EQ' low = ls_for-%key-ProFormaInvoice ) ).
+    lt_keys_pdf = zcl_ce_ci_f01=>get_invoice_keys( lr_proformainvoice ).
+
+    export_excel( EXPORTING it_keys_pdf = lt_keys_pdf
+                            iv_form     = `PL`
+                            is_param    = CORRESPONDING #( keys[ 1 ]-%param )
+                  IMPORTING ev_content  = DATA(lv_content)
+                            ev_filename = DATA(lv_filename) ).
+
+    "Mọi dòng được chọn dùng chung 1 file → chỉ trả nội dung ở dòng đầu để response không bị lặp
+    "Không có dữ liệu (không có item TAN) → FileContent rỗng, FE tự báo
+    DATA(lv_first) = abap_true.
+    LOOP AT keys INTO DATA(ls_key_r).
+      APPEND INITIAL LINE TO result ASSIGNING FIELD-SYMBOL(<lfs_result>).
+      <lfs_result>-%tky = ls_key_r-%tky.
+      IF lv_first = abap_true.
+        <lfs_result>-%param-FileContent = lv_content.
+        lv_first = abap_false.
+      ENDIF.
+      <lfs_result>-%param-FileName      = lv_filename.
+      <lfs_result>-%param-FileExtension = 'xlsx'.
+      <lfs_result>-%param-MimeType      = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'.
+    ENDLOOP.
+  ENDMETHOD.
+
+  METHOD export_excel.
+    DATA lt_filters TYPE if_rap_query_filter=>tt_name_range_pairs.
+
+    CLEAR: ev_content, ev_filename.
+
+    """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+    "1. Get data - dùng chung logic với in PDF (chỉ lấy item TAN)
+    zcl_ce_ci_f01=>main(
+      EXPORTING
+        it_filters  = lt_filters
+        it_keys_pdf = it_keys_pdf
+      IMPORTING
+        et_result   = DATA(lt_data)
+    ).
+    IF lt_data IS INITIAL.
+      RETURN.
+    ENDIF.
+
+    "10.HTS CODE / 12.: giá trị user tích chọn ở popup trước khi in
+    LOOP AT lt_data ASSIGNING FIELD-SYMBOL(<lfs_data>).
+      <lfs_data>-HTSCode     = is_param-HTSCode.
+      <lfs_data>-QuartzSlabs = is_param-QuartzSlabs.
+    ENDLOOP.
+
+    "Packing List: bảng chỉ lấy item (bỏ header TAN đã tách batch)
+    DATA lt_items TYPE zcl_ce_ci_top=>tt_result.
+    IF iv_form = `PL`.
+      zcl_ce_ci_f01=>main(
+        EXPORTING
+          it_filters  = lt_filters
+          it_keys_pdf = it_keys_pdf
+          iv_pl_items = abap_true
+        IMPORTING
+          et_result   = lt_items
+      ).
+    ENDIF.
+
+    """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+    "2. Gen file xlsx - mỗi Pro-forma Invoice 1 sheet
+    DATA(lv_xlsx) = COND xstring( WHEN iv_form = `PL`
+                                  THEN zcl_ce_ci_xlsx=>build_pl( it_data  = lt_data
+                                                                 it_items = lt_items )
+                                  ELSE zcl_ce_ci_xlsx=>build_ci( lt_data ) ).
+    IF lv_xlsx IS INITIAL.
+      RETURN.
+    ENDIF.
+
+    ev_content = cl_web_http_utility=>encode_x_base64( lv_xlsx ).
+
+    """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+    "3. File name - 1 invoice thì đặt theo số invoice
+    DATA(lt_invoice) = lt_data.
+    SORT lt_invoice BY ProFormaInvoice.
+    DELETE ADJACENT DUPLICATES FROM lt_invoice COMPARING ProFormaInvoice.
+
+    DATA(lv_date) = cl_abap_context_info=>get_system_date( ).
+    DATA(lv_time) = cl_abap_context_info=>get_system_time( ).
+
+    ev_filename = COND #( WHEN lines( lt_invoice ) = 1
+                          THEN |{ iv_form }_{ lt_invoice[ 1 ]-ProFormaInvoice ALPHA = OUT }_{ lv_date }_{ lv_time }|
+                          ELSE |{ iv_form }_{ lv_date }_{ lv_time }| ).
+  ENDMETHOD.
+
+ENDCLASS.
+
+CLASS lhc_item DEFINITION INHERITING FROM cl_abap_behavior_handler.
+  PRIVATE SECTION.
+    METHODS get_instance_authorizations FOR INSTANCE AUTHORIZATION
+      IMPORTING keys REQUEST requested_authorizations FOR Item RESULT result.
+
+    METHODS get_instance_features FOR INSTANCE FEATURES
+      IMPORTING keys REQUEST requested_features FOR Item RESULT result.
+
+    "Nút Edit trên bảng Items: N.W / G.W (TH2 - ProductGroup khác 320001)
+    METHODS updWeight FOR MODIFY
+      IMPORTING keys FOR ACTION Item~updWeight.
+
+    METHODS read FOR READ
+      IMPORTING keys FOR READ Item RESULT result.
+
+    "Edit / Save trên Object Page: Net weight, Gross weight
+    METHODS update FOR MODIFY
+      IMPORTING entities FOR UPDATE Item.
+
+    METHODS rba_Header FOR READ
+      IMPORTING keys_rba FOR READ Item\_Header FULL result_requested RESULT result LINK association_links.
+ENDCLASS.
+
+CLASS lhc_item IMPLEMENTATION.
+
+  METHOD get_instance_authorizations.
+    "Không phân quyền riêng theo dòng - ai mở được báo cáo thì sửa được N.W / G.W (case 2)
+  ENDMETHOD.
+
+  METHOD get_instance_features.
+    "N.W / G.W: ProductGroup = 320001 → tự tính, chỉ đọc; khác 320001 → cho điền tay
+    SELECT FROM I_BillingDocumentItem
+      FIELDS BillingDocument, BillingDocumentItem, Product
+      FOR ALL ENTRIES IN @keys
+      WHERE BillingDocument     = @keys-ProFormaInvoice
+        AND BillingDocumentItem = @keys-BillingItem
+      INTO TABLE @DATA(lt_product).
+
+    LOOP AT keys INTO DATA(ls_key).
+      READ TABLE lt_product INTO DATA(ls_product) WITH KEY BillingDocument     = ls_key-ProFormaInvoice
+                                                           BillingDocumentItem = ls_key-BillingItem.
+      DATA(lv_auto) = xsdbool( sy-subrc = 0 AND zcl_ce_ci_f01=>is_weight_auto( ls_product-Product ) = abap_true ).
+      APPEND VALUE #( %tky               = ls_key-%tky
+                      %field-NetWeight   = COND #( WHEN lv_auto = abap_true THEN if_abap_behv=>fc-f-read_only
+                                                                            ELSE if_abap_behv=>fc-f-unrestricted )
+                      %field-GrossWeight = COND #( WHEN lv_auto = abap_true THEN if_abap_behv=>fc-f-read_only
+                                                                            ELSE if_abap_behv=>fc-f-unrestricted )
+                      %action-updWeight  = COND #( WHEN lv_auto = abap_true THEN if_abap_behv=>fc-o-disabled
+                                                                            ELSE if_abap_behv=>fc-o-enabled ) ) TO result.
+      CLEAR ls_product.
+    ENDLOOP.
+  ENDMETHOD.
+
+  METHOD read.
+    DATA lr_proformainvoice TYPE zcl_ce_ci_top=>ry_string.
+    lr_proformainvoice = VALUE #( FOR ls_for IN keys ( sign = 'I' option = 'EQ' low = ls_for-ProFormaInvoice ) ).
+    IF lr_proformainvoice IS INITIAL.
+      RETURN.
+    ENDIF.
+
+    DATA(lt_items) = zcl_ce_ci_f01=>get_items( lr_proformainvoice ).
+    LOOP AT keys INTO DATA(ls_key).
+      READ TABLE lt_items INTO DATA(ls_item) WITH KEY ProFormaInvoice = ls_key-ProFormaInvoice
+                                                      BillingItem     = ls_key-BillingItem
+                                                      Batch           = ls_key-Batch.
+      IF sy-subrc = 0.
+        APPEND CORRESPONDING #( ls_item ) TO result.
+      ENDIF.
+    ENDLOOP.
+  ENDMETHOD.
+
+  METHOD update.
+    "Lưu ztb_ci_item theo Pro-forma invoice + billing item + batch
+    DATA lt_ci_item TYPE zcl_ce_ci_text_buffer=>tt_ci_item.
+
+    zcl_ce_ci_text_buffer=>get_item_data( IMPORTING et_data = lt_ci_item ).
+
+    SELECT FROM ztb_ci_item
+      FIELDS *
+      FOR ALL ENTRIES IN @entities
+      WHERE proforma     = @entities-ProFormaInvoice
+        AND billing_item = @entities-BillingItem
+        AND batch        = @entities-Batch
+      INTO TABLE @DATA(lt_existing).
+
+    "Material của dòng để chặn sửa N.W / G.W khi ProductGroup = 320001 (tự tính)
+    SELECT FROM I_BillingDocumentItem
+      FIELDS BillingDocument, BillingDocumentItem, Product
+      FOR ALL ENTRIES IN @entities
+      WHERE BillingDocument     = @entities-ProFormaInvoice
+        AND BillingDocumentItem = @entities-BillingItem
+      INTO TABLE @DATA(lt_product).
+
+    LOOP AT entities INTO DATA(ls_entity).
+      READ TABLE lt_product INTO DATA(ls_product) WITH KEY BillingDocument     = ls_entity-ProFormaInvoice
+                                                           BillingDocumentItem = ls_entity-BillingItem.
+      IF sy-subrc = 0 AND zcl_ce_ci_f01=>is_weight_auto( ls_product-Product ) = abap_true.
+        APPEND VALUE #( %tky = ls_entity-%tky ) TO failed-item.
+        APPEND VALUE #( %tky = ls_entity-%tky
+                        %msg = new_message_with_text(
+                                 severity = if_abap_behv_message=>severity-error
+                                 text     = 'N.W / G.W của hàng nhóm 320001 được tính tự động, không sửa tay' )
+                      ) TO reported-item.
+        CONTINUE.
+      ENDIF.
+
+      READ TABLE lt_ci_item ASSIGNING FIELD-SYMBOL(<lfs_ci_item>) WITH KEY proforma     = ls_entity-ProFormaInvoice
+                                                                          billing_item = ls_entity-BillingItem
+                                                                          batch        = ls_entity-Batch.
+      IF sy-subrc <> 0.
+        APPEND INITIAL LINE TO lt_ci_item ASSIGNING <lfs_ci_item>.
+        READ TABLE lt_existing INTO DATA(ls_existing) WITH KEY proforma     = ls_entity-ProFormaInvoice
+                                                               billing_item = ls_entity-BillingItem
+                                                               batch        = ls_entity-Batch.
+        IF sy-subrc = 0.
+          <lfs_ci_item> = ls_existing.
+        ENDIF.
+        <lfs_ci_item>-client       = sy-mandt.
+        <lfs_ci_item>-proforma     = ls_entity-ProFormaInvoice.
+        <lfs_ci_item>-billing_item = ls_entity-BillingItem.
+        <lfs_ci_item>-batch        = ls_entity-Batch.
+        CLEAR ls_existing.
+      ENDIF.
+
+      IF ls_entity-%control-NetWeight = if_abap_behv=>mk-on.
+        <lfs_ci_item>-net_weight = ls_entity-NetWeight.
+      ENDIF.
+      IF ls_entity-%control-GrossWeight = if_abap_behv=>mk-on.
+        <lfs_ci_item>-gross_weight = ls_entity-GrossWeight.
+      ENDIF.
+
+      <lfs_ci_item>-changed_by = sy-uname.
+      <lfs_ci_item>-changed_at = utclong_current( ).
+    ENDLOOP.
+
+    zcl_ce_ci_text_buffer=>set_item_data( it_data = lt_ci_item ).
+  ENDMETHOD.
+
+  METHOD updWeight.
+    "Lưu ztb_ci_item theo Pro-forma invoice + billing item + batch
+    DATA lt_ci_item TYPE zcl_ce_ci_text_buffer=>tt_ci_item.
+
+    zcl_ce_ci_text_buffer=>get_item_data( IMPORTING et_data = lt_ci_item ).
+
+    SELECT FROM I_BillingDocumentItem
+      FIELDS BillingDocument, BillingDocumentItem, Product
+      FOR ALL ENTRIES IN @keys
+      WHERE BillingDocument     = @keys-ProFormaInvoice
+        AND BillingDocumentItem = @keys-BillingItem
+      INTO TABLE @DATA(lt_product).
+
+    LOOP AT keys INTO DATA(ls_key).
+      "ProductGroup = 320001 → tự tính, không cho sửa (nút đã bị khóa, chặn thêm ở backend)
+      READ TABLE lt_product INTO DATA(ls_product) WITH KEY BillingDocument     = ls_key-ProFormaInvoice
+                                                           BillingDocumentItem = ls_key-BillingItem.
+      IF sy-subrc = 0 AND zcl_ce_ci_f01=>is_weight_auto( ls_product-Product ) = abap_true.
+        APPEND VALUE #( %tky = ls_key-%tky ) TO failed-item.
+        APPEND VALUE #( %tky = ls_key-%tky
+                        %msg = new_message_with_text(
+                                 severity = if_abap_behv_message=>severity-error
+                                 text     = 'N.W / G.W của hàng nhóm 320001 được tính tự động, không sửa tay' )
+                      ) TO reported-item.
+        CONTINUE.
+      ENDIF.
+
+      DELETE lt_ci_item WHERE proforma     = ls_key-ProFormaInvoice
+                          AND billing_item = ls_key-BillingItem
+                          AND batch        = ls_key-Batch.
+      APPEND VALUE #( client       = sy-mandt
+                      proforma     = ls_key-ProFormaInvoice
+                      billing_item = ls_key-BillingItem
+                      batch        = ls_key-Batch
+                      net_weight   = ls_key-%param-NetWeight
+                      gross_weight = ls_key-%param-GrossWeight
+                      changed_by   = sy-uname
+                      changed_at   = utclong_current( ) ) TO lt_ci_item.
+      CLEAR ls_product.
+    ENDLOOP.
+
+    zcl_ce_ci_text_buffer=>set_item_data( it_data = lt_ci_item ).
+  ENDMETHOD.
+
+  METHOD rba_Header.
+    DATA lr_proformainvoice TYPE zcl_ce_ci_top=>ry_string.
+    lr_proformainvoice = VALUE #( FOR ls_for IN keys_rba ( sign = 'I' option = 'EQ' low = ls_for-ProFormaInvoice ) ).
+    IF lr_proformainvoice IS INITIAL.
+      RETURN.
+    ENDIF.
+
+    DATA(lt_headers) = zcl_ce_ci_f01=>get_headers(
+      VALUE #( ( name = 'PROFORMAINVOICE' range = CORRESPONDING #( lr_proformainvoice ) ) ) ).
+
+    LOOP AT keys_rba INTO DATA(ls_key_rba).
+      APPEND VALUE #( source = CORRESPONDING #( ls_key_rba )
+                      target = VALUE #( ProFormaInvoice = ls_key_rba-ProFormaInvoice ) ) TO association_links.
+    ENDLOOP.
+
+    IF result_requested = abap_true.
+      LOOP AT lt_headers INTO DATA(ls_header).
+        APPEND CORRESPONDING #( ls_header ) TO result.
+      ENDLOOP.
+    ENDIF.
+  ENDMETHOD.
+ENDCLASS.
+
+CLASS lsc_ZCE_CI_H DEFINITION INHERITING FROM cl_abap_behavior_saver.
+  PROTECTED SECTION.
+
+    METHODS finalize REDEFINITION.
+
+    METHODS check_before_save REDEFINITION.
+
+    METHODS save REDEFINITION.
+
+    METHODS cleanup REDEFINITION.
+
+    METHODS cleanup_finalize REDEFINITION.
+
+ENDCLASS.
+
+CLASS lsc_ZCE_CI_H IMPLEMENTATION.
+
+  METHOD finalize.
+  ENDMETHOD.
+
+  METHOD check_before_save.
+  ENDMETHOD.
+
+  METHOD save.
+    "Header: Change header / Edit header trên Object Page
+    zcl_ce_ci_text_buffer=>get_data( IMPORTING et_data = DATA(lt_ci_text) ).
+    IF lt_ci_text IS NOT INITIAL.
+      MODIFY ztb_ci_text FROM TABLE @lt_ci_text.
+    ENDIF.
+
+    "Item: N.W / G.W sửa trên bảng chi tiết
+    zcl_ce_ci_text_buffer=>get_item_data( IMPORTING et_data = DATA(lt_ci_item) ).
+    IF lt_ci_item IS NOT INITIAL.
+      MODIFY ztb_ci_item FROM TABLE @lt_ci_item.
+    ENDIF.
+  ENDMETHOD.
+
+  METHOD cleanup.
+    zcl_ce_ci_text_buffer=>clear_data( ).
+  ENDMETHOD.
+
+  METHOD cleanup_finalize.
+  ENDMETHOD.
+
+ENDCLASS.

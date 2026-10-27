@@ -1,0 +1,90 @@
+@Metadata.layer: #CORE
+@UI.headerInfo: {
+    typeName: 'Item',
+    typeNamePlural: 'Items'
+}
+annotate entity zce_ci_i with
+{
+  @UI.hidden: true
+  WeightAuto;
+
+  @EndUserText.label: 'Pro-forma Invoice'
+  @UI.lineItem: [{ position: 10 }]
+  @UI.identification: [{ position: 10 }]
+  ProFormaInvoice;
+
+  @EndUserText.label: 'Billing document item'
+  @UI.lineItem: [{ position: 20 }]
+  @UI.identification: [{ position: 20 }]
+  BillingItem;
+
+  @EndUserText.label: 'PO'
+  @UI.lineItem: [{ position: 30 }]
+  @UI.identification: [{ position: 30 }]
+  PO;
+
+  @EndUserText.label: 'Material'
+  @UI.lineItem: [{ position: 40 }]
+  @UI.identification: [{ position: 40 }]
+  Material;
+
+  @EndUserText.label: 'AZT ID'
+  @UI.lineItem: [{ position: 50 }]
+  @UI.identification: [{ position: 50 }]
+  AZTID;
+
+  @EndUserText.label: 'Vendor ID'
+  @UI.lineItem: [{ position: 60 }]
+  @UI.identification: [{ position: 60 }]
+  VendorID;
+
+  @EndUserText.label: 'Batch'
+  @UI.lineItem: [{ position: 70, hidden: true }]
+  @UI.identification: [{ position: 70, hidden: true }]
+  Batch;
+
+  @EndUserText.label: 'Quantity'
+  @UI.lineItem: [{ position: 80 }]
+  @UI.identification: [{ position: 80 }]
+  Quantity;
+
+  @EndUserText.label: 'Net weight'
+  @UI.lineItem: [{ position: 90 }]
+  @UI.identification: [{ position: 90 }]
+  NetWeight;
+
+  @EndUserText.label: 'Gross weight'
+  @UI.lineItem: [{ position: 100 }]
+  @UI.identification: [{ position: 100 }]
+  GrossWeight;
+
+  @EndUserText.label: 'Length'
+  @UI.lineItem: [{ position: 110 }]
+  @UI.identification: [{ position: 110 }]
+  SizeL;
+
+  @EndUserText.label: 'Width'
+  @UI.lineItem: [{ position: 120 }]
+  @UI.identification: [{ position: 120 }]
+  SizeW;
+
+  @EndUserText.label: 'Height'
+  @UI.lineItem: [{ position: 130 }]
+  @UI.identification: [{ position: 130 }]
+  SizeH;
+
+  @EndUserText.label: 'Lot. No'
+  @UI.lineItem: [{ position: 75 }]
+  @UI.identification: [{ position: 75 }]
+  LOT;
+
+  @EndUserText.label: 'Unit price'
+  @UI.lineItem: [{ position: 150 }]
+  @UI.identification: [{ position: 150 }]
+  UnitPrice;
+
+  @EndUserText.label: 'Amount'
+  @UI.lineItem: [{ position: 160 }]
+  @UI.identification: [{ position: 160 }]
+  Amount;
+}

@@ -476,6 +476,8 @@ CLASS lhc_zce_ci IMPLEMENTATION.
           lv_table3        TYPE string,
           lv_total_pcs     TYPE fkimg,
           lv_total_sqm     TYPE zcl_ce_ci_f01=>ty_sqm-sqm,
+          lv_total_nw      TYPE zce_ci-NetWeight,
+          lv_total_gw      TYPE zce_ci-GrossWeight,
           lv_total_package TYPE string,
           lv_tabix         TYPE i.
 
@@ -541,13 +543,22 @@ CLASS lhc_zce_ci IMPLEMENTATION.
              lv_total_pcs,
              lv_total_package,
              lv_tabix,
-             lv_total_sqm.
+             lv_total_sqm,
+             lv_total_nw,
+             lv_total_gw.
       LOOP AT lt_items INTO DATA(ls_member_table2) WHERE ProFormaInvoice = ls_data_grp-ProFormaInvoice.
         lv_tabix          += 1.
         DATA(lv_aztid)    = zcl_utility_ninhnh=>escape_xml( iv_text = ls_member_table2-aztid ).
         DATA(lv_pcs)      = zcl_utility_ninhnh=>format_number_trim( iv_value = ls_member_table2-Quantity ).
         DATA(lv_lot_item) = zcl_utility_ninhnh=>escape_xml( iv_text = ls_member_table2-lot ).
         lv_total_pcs      = lv_total_pcs + ls_member_table2-Quantity.
+        lv_total_nw       = lv_total_nw + ls_member_table2-NetWeight.
+        lv_total_gw       = lv_total_gw + ls_member_table2-GrossWeight.
+        "N.W / G.W: ProductGroup khác 320001 → trống (điền tay)
+        DATA(lv_nw) = COND string( WHEN ls_member_table2-NetWeight IS NOT INITIAL
+                                   THEN zcl_utility_ninhnh=>format_number_trim( iv_value = ls_member_table2-NetWeight ) ).
+        DATA(lv_gw) = COND string( WHEN ls_member_table2-GrossWeight IS NOT INITIAL
+                                   THEN zcl_utility_ninhnh=>format_number_trim( iv_value = ls_member_table2-GrossWeight ) ).
 
         "SQM (m2), làm tròn 2 số lẻ
         READ TABLE lt_sqm INTO DATA(ls_sqm) WITH TABLE KEY proformainvoice = ls_member_table2-ProFormaInvoice
@@ -580,10 +591,10 @@ CLASS lhc_zce_ci IMPLEMENTATION.
                     && |{ lv_pcs }|
                 && |</Cell7>|
                 && |<Cell8>|
-*                    && |Net weight - chưa có logic|
+                    && |{ lv_nw }|
                 && |</Cell8>|
                 && |<Cell9>|
-*                    && |Gross weight - chưa có logic|
+                    && |{ lv_gw }|
                 && |</Cell9>|
                 && |<Cell10>|
                     && |{ lv_lot_item }|
@@ -591,6 +602,10 @@ CLASS lhc_zce_ci IMPLEMENTATION.
             && |</Row2>|.
       ENDLOOP.
       DATA(lv_total_pcs_string) = zcl_utility_ninhnh=>format_number_trim( iv_value = lv_total_pcs ).
+      DATA(lv_total_nw_string) = COND string( WHEN lv_total_nw IS NOT INITIAL
+                                              THEN zcl_utility_ninhnh=>format_number_trim( iv_value = lv_total_nw ) ).
+      DATA(lv_total_gw_string) = COND string( WHEN lv_total_gw IS NOT INITIAL
+                                              THEN zcl_utility_ninhnh=>format_number_trim( iv_value = lv_total_gw ) ).
       DATA(lv_total_sqm_string) = COND string( WHEN lv_total_sqm IS NOT INITIAL
                                                THEN |{ lv_total_sqm DECIMALS = 2 }| ).
       lv_total_package = |TOTAL: { lv_tabix } { COND string( WHEN lv_tabix = 1 THEN 'PACKAGE' ELSE 'PACKAGES' ) }|.
@@ -697,6 +712,12 @@ CLASS lhc_zce_ci IMPLEMENTATION.
                                 && |<Cell6>|
                                     && |{ lv_total_pcs_string }|
                                 && |</Cell6>|
+                                && |<Cell7>|
+                                    && |{ lv_total_nw_string }|
+                                && |</Cell7>|
+                                && |<Cell8>|
+                                    && |{ lv_total_gw_string }|
+                                && |</Cell8>|
                             && |</Row3>|
                         && |</Table2>|
                     && |</Sub4.1>|

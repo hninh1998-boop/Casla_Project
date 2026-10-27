@@ -12,6 +12,8 @@ define table ztb_ci_text {
   mbl          : abap.string(0);
   hbl          : abap.string(0);
   eta          : abap.string(0);
+  vessel_name  : abap.string(0);
+  etd          : abap.string(0);
   changed_by   : syuname;
   changed_at   : utcl;
 
