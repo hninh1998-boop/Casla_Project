@@ -1,0 +1,11 @@
+unmanaged implementation in class zbp_ce_sales_v3 unique;
+strict ( 2 );
+
+define behavior for zce_sales_v3 alias SalesV3
+lock master
+authorization master ( instance )
+{
+  // Export Excel: file sinh hoàn toàn ở backend (zcl_ce_sales_v3_xlsx), FE chỉ nhận file
+  // JsonString = filter đang chọn trên màn hình (xem ty_filter trong zbp_ce_sales_v3)
+  static action ExportExcel parameter zabs_sales_v3_param result [1] zabs_sales_v3_result;
+}

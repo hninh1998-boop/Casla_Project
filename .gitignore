@@ -1,0 +1,14 @@
+node_modules/
+dist/
+.scp/
+.env
+Makefile*.mta
+mta_archives
+mta-*
+resources
+archive.zip
+.*_mta_build_tmp
+# Tài liệu nội bộ, không đẩy lên repo public
+*.doc
+*.docx
+template.xlsx

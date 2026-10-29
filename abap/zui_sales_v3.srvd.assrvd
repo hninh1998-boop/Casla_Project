@@ -1,0 +1,4 @@
+@EndUserText.label: 'ZUI_SALES_V3'
+define service ZUI_SALES_V3 {
+  expose zce_sales_v3;
+}

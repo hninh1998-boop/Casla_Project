@@ -1,0 +1,28 @@
+{
+  "generationParameters": {
+    "generationDate": "Wed Oct 28 2026 09:08:39 GMT+0000 (Coordinated Universal Time)",
+    "generatorPlatform": "CLI",
+    "serviceType": "SAP System (ABAP Cloud)",
+    "metadataFilename": "",
+    "serviceUrl": "https://my426517.s4hana.cloud.sap/sap/opu/odata4/sap/zui_sales_v3_o4/srvd/sap/zui_sales_v3/0001/",
+    "appName": "zpr_sales_v3",
+    "appTitle": "Báo cáo bán hàng - V3",
+    "appDescription": "Báo cáo bán hàng - V3",
+    "appNamespace": "",
+    "ui5Theme": "sap_horizon",
+    "ui5Version": "1.142.10",
+    "enableEslint": true,
+    "enableTypeScript": false,
+    "showMockDataInfo": true,
+    "generatorVersion": "1.34.0",
+    "template": "List Report Page V4",
+    "generatorName": "SAP Fiori Application Generator",
+    "entityRelatedConfig": [
+      {
+        "type": "Main Entity",
+        "value": "zce_sales_v3"
+      }
+    ],
+    "launchText": "To launch the generated application, run the following from the generated application root folder:\n\n```\n    npm start\n```"
+  }
+}

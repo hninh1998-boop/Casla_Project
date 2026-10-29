@@ -1,0 +1,129 @@
+@Metadata.layer: #CUSTOMER
+@UI.headerInfo: {
+    typeName: 'Dòng báo cáo',
+    typeNamePlural: 'Báo cáo bán hàng'
+}
+annotate entity zce_sales_v3 with
+{
+  // ═════════════════ THAM SỐ (FILTER BAR) ═════════════════
+
+  // (1) Company Code - Single, Mandatory
+  @UI.selectionField: [{ position: 10 }]
+  @Consumption.filter: { mandatory: true, selectionType: #SINGLE, multipleSelections: false }
+  @Consumption.valueHelpDefinition: [{
+      entity: {
+          name:    'ZI_COMPANYCODE_VH',
+          element: 'CompanyCode'
+      }
+  }]
+  CompanyCode;
+
+  // (2) Posting Date - Từ ngày / Đến ngày, Mandatory
+  @UI.selectionField: [{ position: 20 }]
+  @Consumption.filter: { mandatory: true, selectionType: #INTERVAL, multipleSelections: false }
+  PostingDate;
+
+  // (3) Plant - Multiple, Optional
+  // Không khai selectionType: #RANGE (= SingleRange) để cho nhập nhiều giá trị và ký tự đại diện (1*)
+  @UI.selectionField: [{ position: 30 }]
+  @Consumption.valueHelpDefinition: [{
+      entity: {
+          name:    'ZI_PLANT_BY_CC_VH',
+          element: 'Plant'
+      },
+      additionalBinding: [{
+          localElement: 'CompanyCode',
+          element:      'CompanyCode',
+          usage:        #FILTER_AND_RESULT
+      }]
+  }]
+  Plant;
+
+  // (4) Product Sold - Multiple, Optional
+  @UI.selectionField: [{ position: 40 }]
+  @Consumption.valueHelpDefinition: [{
+      entity: {
+          name:    'I_ProductStdVH',
+          element: 'Product'
+      }
+  }]
+  Product;
+
+  // (5) Sales District - Multiple, Optional
+  @UI.selectionField: [{ position: 50 }]
+  @Consumption.valueHelpDefinition: [{
+      entity: {
+          name:    'ZI_SALESDISTRICT_VH',
+          element: 'SalesDistrict'
+      }
+  }]
+  SalesDistrict;
+
+  @Consumption.filter.hidden: true
+  GLAccount;
+
+  // ═════════════════ CỘT BÁO CÁO ═════════════════
+
+  // (1) STT
+  @UI.lineItem: [{ position: 10 }]
+  @Consumption.filter.hidden: true
+  STT;
+
+  // (2) Tên nhà máy - mã(tên)
+  @UI.lineItem: [{ position: 20 }]
+  @Consumption.filter.hidden: true
+  TenNhaMay;
+
+  // (3) Mã hàng - Product, TH2 = số G/L
+  @UI.lineItem: [{ position: 30 }]
+  @Consumption.filter.hidden: true
+  MaHang;
+
+  // (4) Tên hàng
+  @UI.lineItem: [{ position: 40 }]
+  @Consumption.filter.hidden: true
+  TenHang;
+
+  // (5) Đơn vị tính
+  @UI.lineItem: [{ position: 50 }]
+  @Consumption.filter.hidden: true
+  DonViTinh;
+
+  // (6) Loại hàng - mã(tên)
+  @UI.lineItem: [{ position: 60 }]
+  @Consumption.filter.hidden: true
+  LoaiHang;
+
+  // (7) Số lượng
+  @UI.lineItem: [{ position: 70 }]
+  @Consumption.filter.hidden: true
+  SoLuong;
+
+  // (8) Doanh thu USD
+  @UI.lineItem: [{ position: 80 }]
+  @Consumption.filter.hidden: true
+  DoanhThuUSD;
+
+  // (9) Doanh thu VND
+  @UI.lineItem: [{ position: 90 }]
+  @Consumption.filter.hidden: true
+  DoanhThuVND;
+
+  // (10) Giá vốn VND
+  @UI.lineItem: [{ position: 100 }]
+  @Consumption.filter.hidden: true
+  GiaVonVND;
+
+  // (11) Thị trường xuất khẩu - mã(tên)
+  @UI.lineItem: [{ position: 110 }]
+  @Consumption.filter.hidden: true
+  ThiTruongXuatKhau;
+
+  // ── Hidden ────────────────────────────────────────────────────
+  @Consumption.filter.hidden: true
+  CurrencyUSD;
+
+  @Consumption.filter.hidden: true
+  CompanyCodeCurrency;
+
+}
