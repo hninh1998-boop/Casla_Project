@@ -1,0 +1,7 @@
+<core:FragmentDefinition xmlns:core="sap.ui.core" xmlns="sap.m">
+    <!-- STT = vị trí dòng trong danh sách đang hiển thị (theo filter/sort hiện tại), không lưu DB.
+         Dùng event modelContextChange thay cho formatter: formatter khai báo qua core:require
+         bị bind "this" vào module nên không lấy được context của dòng. -->
+    <Text core:require="{ Stt: 'zuplattsoov4/ext/fragment/SttFormatter' }"
+          modelContextChange="Stt.onContextChange"/>
+</core:FragmentDefinition>

@@ -1,0 +1,27 @@
+# yaml-language-server: $schema=https://sap.github.io/ui5-tooling/schema/ui5.yaml.json
+
+specVersion: "4.0"
+metadata:
+  name: zuplattsoov4
+type: application
+builder:
+  resources:
+    excludes:
+      - /test/**
+      - /localService/**
+  customTasks:
+    - name: deploy-to-abap
+      afterTask: generateCachebusterInfo
+      configuration:
+        target:
+          destination: CASLA
+          url: https://my426517.s4hana.cloud.sap
+          authenticationType: reentranceTicket # SAML support for vscode
+        app:
+          name: ZUPL_ATT_SO_OV4
+          description: Upload Attachment SO
+          package: ZPK_UPL_ATT_SO
+          transport: AK3K908790
+        exclude:
+          - /test/
+          - /localService/

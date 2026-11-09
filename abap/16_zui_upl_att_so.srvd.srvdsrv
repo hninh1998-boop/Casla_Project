@@ -1,0 +1,4 @@
+@EndUserText.label: 'Serv.Def. - Upload Attachment SO'
+define service ZUI_UPL_ATT_SO {
+  expose ZC_UPL_ATT_SO as UploadAttachment;
+}

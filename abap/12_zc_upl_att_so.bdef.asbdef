@@ -1,0 +1,12 @@
+projection;
+strict ( 2 );
+
+define behavior for ZC_UPL_ATT_SO alias UploadAttachment
+use etag
+{
+  use delete;
+
+  use action uploadFile;
+  use action checkAttachment;
+  use action postAttachment;
+}

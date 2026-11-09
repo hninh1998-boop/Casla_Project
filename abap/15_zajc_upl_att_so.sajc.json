@@ -1,0 +1,16 @@
+{
+  "formatVersion": "1",
+  "header": {
+    "description": "Job - Upload Attachment SO",
+    "originalLanguage": "en",
+    "abapLanguageVersion": "cloudDevelopment"
+  },
+  "generalInformation": {
+    "className": "ZCL_JOB_UPL_ATT_SO"
+  },
+  "parameters": [
+    {
+      "name": "ATT_ID"
+    }
+  ]
+}

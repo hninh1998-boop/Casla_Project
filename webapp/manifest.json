@@ -1,0 +1,208 @@
+{
+  "_version": "1.86.0",
+  "sap.app": {
+    "id": "zuplattsoov4",
+    "type": "application",
+    "i18n": "i18n/i18n.properties",
+    "applicationVersion": {
+      "version": "0.0.1"
+    },
+    "title": "{{appTitle}}",
+    "description": "{{appDescription}}",
+    "resources": "resources.json",
+    "sourceTemplate": {
+      "id": "@sap/generator-fiori:lrop",
+      "version": "1.32.0"
+    },
+    "dataSources": {
+      "annotation": {
+        "type": "ODataAnnotation",
+        "uri": "annotations/annotation.xml",
+        "settings": {
+          "localUri": "annotations/annotation.xml"
+        }
+      },
+      "mainService": {
+        "uri": "/sap/opu/odata4/sap/zui_upl_att_so_ov4/srvd/sap/zui_upl_att_so/0001/",
+        "type": "OData",
+        "settings": {
+          "annotations": [
+            "annotation"
+          ],
+          "odataVersion": "4.0"
+        }
+      }
+    },
+    "crossNavigation": {
+      "inbounds": {
+        "zupl_att_so_ov4-display": {
+          "semanticObject": "zupl_att_so_ov4",
+          "action": "display",
+          "title": "{{zupl_att_so_ov4-display.flpTitle}}",
+          "signature": {
+            "parameters": {},
+            "additionalParameters": "allowed"
+          }
+        }
+      }
+    }
+  },
+  "sap.ui": {
+    "technology": "UI5",
+    "icons": {
+      "icon": "",
+      "favIcon": "",
+      "phone": "",
+      "phone@2": "",
+      "tablet": "",
+      "tablet@2": ""
+    },
+    "deviceTypes": {
+      "desktop": true,
+      "tablet": true,
+      "phone": true
+    }
+  },
+  "sap.ui5": {
+    "flexEnabled": true,
+    "extends": {
+      "extensions": {
+        "sap.ui.controllerExtensions": {
+          "sap.fe.templates.ListReport.ListReportController": {
+            "controllerName": "zuplattsoov4.ext.controller.UploadAttachmentExt"
+          }
+        }
+      }
+    },
+    "dependencies": {
+      "minUI5Version": "1.148.8",
+      "libs": {
+        "sap.m": {},
+        "sap.ui.core": {},
+        "sap.ui.unified": {},
+        "sap.fe.templates": {}
+      }
+    },
+    "contentDensities": {
+      "compact": true,
+      "cozy": true
+    },
+    "models": {
+      "i18n": {
+        "type": "sap.ui.model.resource.ResourceModel",
+        "settings": {
+          "bundleName": "zuplattsoov4.i18n.i18n"
+        }
+      },
+      "": {
+        "dataSource": "mainService",
+        "preload": true,
+        "settings": {
+          "operationMode": "Server",
+          "autoExpandSelect": true,
+          "earlyRequests": true
+        }
+      },
+      "@i18n": {
+        "type": "sap.ui.model.resource.ResourceModel",
+        "uri": "i18n/i18n.properties"
+      }
+    },
+    "resources": {
+      "css": []
+    },
+    "routing": {
+      "config": {},
+      "routes": [
+        {
+          "pattern": ":?query:",
+          "name": "UploadAttachmentList",
+          "target": "UploadAttachmentList"
+        },
+        {
+          "pattern": "UploadAttachment({key}):?query:",
+          "name": "UploadAttachmentObjectPage",
+          "target": "UploadAttachmentObjectPage"
+        }
+      ],
+      "targets": {
+        "UploadAttachmentList": {
+          "type": "Component",
+          "id": "UploadAttachmentList",
+          "name": "sap.fe.templates.ListReport",
+          "options": {
+            "settings": {
+              "contextPath": "/UploadAttachment",
+              "enhanceI18n": "i18n/i18nFE.properties",
+              "variantManagement": "Page",
+              "navigation": {
+                "UploadAttachment": {
+                  "detail": {
+                    "route": "UploadAttachmentObjectPage"
+                  }
+                }
+              },
+              "controlConfiguration": {
+                "@com.sap.vocabularies.UI.v1.LineItem": {
+                  "tableSettings": {
+                    "type": "GridTable",
+                    "selectionMode": "Multi",
+                    "selectAll": true
+                  },
+                  "columns": {
+                    "SttColumn": {
+                      "header": "{i18n>colStt}",
+                      "template": "zuplattsoov4.ext.fragment.SttColumn",
+                      "width": "4rem",
+                      "horizontalAlign": "Center",
+                      "properties": [
+                        "Uuid"
+                      ],
+                      "position": {
+                        "placement": "Before",
+                        "anchor": "DataField::Attachment"
+                      }
+                    }
+                  },
+                  "actions": {
+                    "UploadAttachmentAction": {
+                      "id": "UploadAttachmentButton",
+                      "text": "{i18n>btnUploadAttachment}",
+                      "press": ".extension.zuplattsoov4.ext.controller.UploadAttachmentExt.openUploadDialog",
+                      "requiresSelection": false,
+                      "position": {
+                        "placement": "Before",
+                        "anchor": "DataFieldForAction::com.sap.gateway.srvd.zui_upl_att_so.v0001.checkAttachment"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "UploadAttachmentObjectPage": {
+          "type": "Component",
+          "id": "UploadAttachmentObjectPage",
+          "name": "sap.fe.templates.ObjectPage",
+          "options": {
+            "settings": {
+              "editableHeaderContent": false,
+              "contextPath": "/UploadAttachment",
+              "enhanceI18n": "i18n/i18nFE.properties"
+            }
+          }
+        }
+      }
+    }
+  },
+  "sap.fiori": {
+    "registrationIds": [],
+    "archeType": "transactional"
+  },
+  "sap.fe": {
+    "app": {
+      "enableLazyLoading": true
+    }
+  }
+}

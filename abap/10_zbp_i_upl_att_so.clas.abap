@@ -1,0 +1,7 @@
+CLASS zbp_i_upl_att_so DEFINITION PUBLIC ABSTRACT FINAL FOR BEHAVIOR OF zi_upl_att_so.
+ENDCLASS.
+
+
+
+CLASS zbp_i_upl_att_so IMPLEMENTATION.
+ENDCLASS.

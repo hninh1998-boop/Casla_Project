@@ -1,0 +1,19 @@
+{
+  "formatVersion": "1",
+  "header": {
+    "description": "Job Template - Upload Attachment SO",
+    "originalLanguage": "en",
+    "abapLanguageVersion": "cloudDevelopment"
+  },
+  "generalInformation": {
+    "catalogName": "ZAJC_UPL_ATT_SO"
+  },
+  "parameters": {
+    "valueRangesParameters": [
+      {
+        "name": "ATT_ID",
+        "valueRanges": []
+      }
+    ]
+  }
+}

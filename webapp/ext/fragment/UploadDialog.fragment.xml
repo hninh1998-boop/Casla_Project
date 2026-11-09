@@ -1,0 +1,19 @@
+<core:FragmentDefinition xmlns:core="sap.ui.core" xmlns:u="sap.ui.unified" xmlns="sap.m">
+    <Dialog id="idUploadAttDialog" title="{i18n>dlgTitle}" contentWidth="34rem" class="sapUiResponsiveContentPadding">
+        <VBox id="idUploadVBox" width="100%">
+            <MessageStrip id="idRuleStrip" type="Information" showIcon="true" text="{i18n>dlgRule}"
+                class="sapUiSmallMarginBottom"/>
+            <u:FileUploader id="idFileUploader" multiple="true" sameFilenameAllowed="true" width="100%"
+                mimeType="application/pdf,text/plain" buttonText="{i18n>dlgBrowse}"
+                placeholder="{i18n>dlgPlaceholder}" change="onFilesChange"/>
+            <Text id="idSelectedText" class="sapUiSmallMarginTop"/>
+        </VBox>
+        <beginButton>
+            <Button id="idUploadButton" text="{i18n>dlgUpload}" type="Emphasized" icon="sap-icon://upload"
+                press="onUploadPress"/>
+        </beginButton>
+        <endButton>
+            <Button id="idCancelButton" text="{i18n>dlgCancel}" press="onCancelUpload"/>
+        </endButton>
+    </Dialog>
+</core:FragmentDefinition>

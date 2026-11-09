@@ -1,0 +1,119 @@
+@Metadata.layer: #CORE
+@UI.headerInfo: {
+  typeName: 'Attachment',
+  typeNamePlural: 'Attachments',
+  title: { value: 'FileName' },
+  description: { value: 'Description' }
+}
+@UI.presentationVariant: [{
+  sortOrder: [{ by: 'CreatedAt', direction: #DESC }],
+  visualizations: [{ type: #AS_LINEITEM }]
+}]
+annotate entity ZC_UPL_ATT_SO with
+{
+  @UI.facet: [
+    { id: 'General', type: #IDENTIFICATION_REFERENCE, label: 'Thông tin file', position: 10 },
+    { id: 'PostInfo', type: #FIELDGROUP_REFERENCE, targetQualifier: 'PostInfo',
+      label: 'Kết quả post', position: 20 }
+  ]
+
+  @UI.hidden: true
+  Uuid;
+
+  @UI.lineItem: [
+    { position: 10, importance: #HIGH, label: 'File Name' },
+    { type: #FOR_ACTION, dataAction: 'checkAttachment', label: 'Check attachment', position: 10 },
+    { type: #FOR_ACTION, dataAction: 'postAttachment',  label: 'Post attachment',  position: 20 }
+  ]
+  @UI.identification: [{ position: 10, label: 'File Name' }]
+  @EndUserText.label: 'File Name'
+  Attachment;
+
+  @UI.selectionField: [{ position: 10 }]
+  @EndUserText.label: 'File Name'
+  FileName;
+
+  @UI.hidden: true
+  MimeType;
+
+  @UI.lineItem: [{ position: 20, importance: #HIGH }]
+  @UI.identification: [{ position: 20 }]
+  @UI.selectionField: [{ position: 20 }]
+  @EndUserText.label: 'Sales order'
+  SalesOrder;
+
+  @UI.lineItem: [{ position: 30, importance: #HIGH }]
+  @UI.identification: [{ position: 30 }]
+  @EndUserText.label: 'Description'
+  Description;
+
+  @UI.hidden: true
+  FileSize;
+
+  @UI.lineItem: [{ position: 40, importance: #MEDIUM }]
+  @UI.identification: [{ position: 40 }]
+  @EndUserText.label: 'File size'
+  FileSizeText;
+
+  @UI.lineItem: [{ position: 50, importance: #HIGH, criticality: 'StatusCriticality' }]
+  @UI.identification: [{ position: 50, criticality: 'StatusCriticality' }]
+  @UI.selectionField: [{ position: 30 }]
+  @UI.textArrangement: #TEXT_ONLY
+  @EndUserText.label: 'Status'
+  Status;
+
+  @Consumption.filter.hidden: true
+  StatusCriticality;
+
+  @UI.hidden: true
+  StatusText;
+
+  @UI.lineItem: [{ position: 60, importance: #HIGH, criticality: 'ResultCriticality' }]
+  @UI.fieldGroup: [{ qualifier: 'PostInfo', position: 10, criticality: 'ResultCriticality' }]
+  @UI.selectionField: [{ position: 40 }]
+  @UI.textArrangement: #TEXT_ONLY
+  @EndUserText.label: 'Result'
+  PostResult;
+
+  @Consumption.filter.hidden: true
+  ResultCriticality;
+
+  @UI.hidden: true
+  ResultText;
+
+  @UI.lineItem: [{ position: 70, importance: #MEDIUM }]
+  @UI.identification: [{ position: 60 }]
+  @EndUserText.label: 'Message'
+  Message;
+
+  @UI.fieldGroup: [{ qualifier: 'PostInfo', position: 20 }]
+  @EndUserText.label: 'Attachment Doc. No.'
+  AttDocNumber;
+
+  @UI.fieldGroup: [{ qualifier: 'PostInfo', position: 30 }]
+  @EndUserText.label: 'Posted By'
+  PostedBy;
+
+  @UI.fieldGroup: [{ qualifier: 'PostInfo', position: 40 }]
+  @EndUserText.label: 'Posted At'
+  PostedAt;
+
+  @UI.lineItem: [{ position: 80, importance: #LOW }]
+  @UI.selectionField: [{ position: 50 }]
+  @EndUserText.label: 'Created By'
+  CreatedBy;
+
+  @UI.lineItem: [{ position: 90, importance: #LOW }]
+  @UI.selectionField: [{ position: 60 }]
+  @EndUserText.label: 'Created At'
+  CreatedAt;
+
+  @UI.hidden: true
+  LastChangedBy;
+
+  @UI.hidden: true
+  LocalLastChangedAt;
+
+  @UI.hidden: true
+  LastChangedAt;
+}

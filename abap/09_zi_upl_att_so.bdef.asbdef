@@ -1,0 +1,46 @@
+managed implementation in class zbp_i_upl_att_so unique;
+strict ( 2 );
+
+define behavior for ZI_UPL_ATT_SO alias UploadAttachment
+persistent table ztb_upl_att_so
+with additional save
+lock master
+authorization master ( global )
+etag master LocalLastChangedAt
+{
+  create;
+  update;
+  delete ( features : instance );
+
+  field ( readonly, numbering : managed ) Uuid;
+  field ( readonly ) CreatedBy, CreatedAt, LastChangedBy, LocalLastChangedAt, LastChangedAt;
+
+  static action uploadFile parameter ZABS_UPL_ATT_SO;
+  action ( features : instance ) checkAttachment result [1] $self;
+  action ( features : instance ) postAttachment result [1] $self;
+
+  validation validateFileName on save { create; }
+
+  mapping for ztb_upl_att_so
+    {
+      Uuid               = uuid;
+      FileName           = file_name;
+      Attachment         = attachment;
+      MimeType           = mime_type;
+      SalesOrder         = sales_order;
+      Description        = description;
+      FileSize           = file_size;
+      FileSizeText       = file_size_text;
+      Status             = status;
+      PostResult         = post_result;
+      Message            = message;
+      AttDocNumber       = att_doc_number;
+      PostedBy           = posted_by;
+      PostedAt           = posted_at;
+      CreatedBy          = created_by;
+      CreatedAt          = created_at;
+      LastChangedBy      = local_last_changed_by;
+      LocalLastChangedAt = local_last_changed_at;
+      LastChangedAt      = last_changed_at;
+    }
+}
