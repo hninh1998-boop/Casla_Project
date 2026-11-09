@@ -1,0 +1,21 @@
+{
+  "formatVersion": "1",
+  "header": {
+    "description": "Job Template - Update Partner Function ZE on SO",
+    "originalLanguage": "en",
+    "abapLanguageVersion": "cloudDevelopment"
+  },
+  "generalInformation": {
+    "catalogName": "ZAJC_UDT_PF"
+  },
+  "parameters": {
+    "singleValueParameters": [
+      { "name": "P_DATE", "value": "" },
+      { "name": "P_TEST", "value": "" },
+      { "name": "P_FULL", "value": "" }
+    ],
+    "valueRangesParameters": [
+      { "name": "S_SO", "valueRanges": [] }
+    ]
+  }
+}

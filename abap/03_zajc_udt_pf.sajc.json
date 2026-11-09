@@ -1,0 +1,17 @@
+{
+  "formatVersion": "1",
+  "header": {
+    "description": "Job - Update Partner Function ZE on SO",
+    "originalLanguage": "en",
+    "abapLanguageVersion": "cloudDevelopment"
+  },
+  "generalInformation": {
+    "className": "ZCL_JOB_UDT_PF"
+  },
+  "parameters": [
+    { "name": "P_DATE" },
+    { "name": "S_SO" },
+    { "name": "P_TEST" },
+    { "name": "P_FULL" }
+  ]
+}
