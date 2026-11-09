@@ -139,7 +139,11 @@ CLASS lhc_ManageFilePR1 DEFINITION INHERITING FROM cl_abap_behavior_handler.
              PurReqnDescription       TYPE string,
              PurReqnHeaderNote        TYPE string,
              PurchaseRequisitionItem  TYPE string,
+             AccountAssignmentCategory TYPE string,
+             CostCenter               TYPE string,
              Material                 TYPE string,
+             PurchaseRequisitionItemText TYPE string,
+             MaterialGroup            TYPE string,
              RequestedQuantity        TYPE string,
              BaseUnit                 TYPE string,
              Plant                    TYPE string,
@@ -151,6 +155,9 @@ CLASS lhc_ManageFilePR1 DEFINITION INHERITING FROM cl_abap_behavior_handler.
              DeliveryDate             TYPE string,
              RequirementTracking      TYPE string,
              RequestedBy              TYPE string,
+             MasterFixedAsset         TYPE string,
+             FixedAsset               TYPE string,
+             NoteDescription          TYPE string,
            END OF ty_file_upload.
 
     METHODS get_global_authorizations FOR GLOBAL AUTHORIZATION
@@ -498,20 +505,31 @@ CLASS lhc_ManageFilePR1 IMPLEMENTATION.
     DATA: lt_data_file TYPE TABLE OF zi_d_pr_1.
 
     LOOP AT lt_file INTO DATA(ls_file).
+      "Bỏ qua dòng trống hoàn toàn
+      IF ls_file IS INITIAL.
+        CONTINUE.
+      ENDIF.
+
       APPEND INITIAL LINE TO lt_data_file ASSIGNING FIELD-SYMBOL(<lfs_data_file>).
 
-      <lfs_data_file>-Type                    = ls_file-type.
+      DATA(lv_type) = to_upper( condense( ls_file-type ) ).
+      <lfs_data_file>-Type                    = lv_type.
       <lfs_data_file>-PurchaseRequisition     = |{ ls_file-PurchaseRequisition ALPHA = IN }|.
       <lfs_data_file>-PurchaseRequisitionType = ls_file-PurchaseRequisitionType.
       <lfs_data_file>-PurReqnDescription      = ls_file-PurReqnDescription.
       <lfs_data_file>-PurReqnHeaderNote       = ls_file-PurReqnHeaderNote.
       <lfs_data_file>-PurchaseRequisitionItem = |{ ls_file-PurchaseRequisitionItem ALPHA = IN }|.
+      <lfs_data_file>-AccountAssignmentCategory = to_upper( ls_file-AccountAssignmentCategory ).
+      <lfs_data_file>-CostCenter              = |{ CONV ztb_d_pr_1-cost_center( ls_file-CostCenter ) ALPHA = IN }|.
 
       IF ls_file-material IS NOT INITIAL.
         <lfs_data_file>-Material = COND #( WHEN ls_file-material CO '0123456789'
                                            THEN |{ ls_file-Material WIDTH = 18 ALIGN = RIGHT PAD = '0' }|
                                            ELSE ls_file-material ).
       ENDIF.
+
+      <lfs_data_file>-PurchaseRequisitionItemText = ls_file-PurchaseRequisitionItemText.
+      <lfs_data_file>-MaterialGroup = ls_file-MaterialGroup.
 
       <lfs_data_file>-RequestedQuantity = ls_file-RequestedQuantity.
 
@@ -530,10 +548,25 @@ CLASS lhc_ManageFilePR1 IMPLEMENTATION.
       <lfs_data_file>-DeliveryDate             = ls_file-DeliveryDate.
       <lfs_data_file>-RequirementTracking      = ls_file-RequirementTracking.
       <lfs_data_file>-RequestedBy               = ls_file-RequestedBy.
+      <lfs_data_file>-MasterFixedAsset         = |{ CONV ztb_d_pr_1-master_fixed_asset( ls_file-MasterFixedAsset ) ALPHA = IN }|.
+      <lfs_data_file>-FixedAsset               = |{ CONV ztb_d_pr_1-fixed_asset( ls_file-FixedAsset ) ALPHA = IN }|.
+      <lfs_data_file>-NoteDescription          = ls_file-NoteDescription.
 
+      " ── Validate: Type chỉ được là I hoặc M ─────────────────────
+      IF lv_type IS INITIAL.
+        <lfs_data_file>-message     = 'Type là bắt buộc. Chỉ được điền I hoặc M'.
+        <lfs_data_file>-messagetype = 'E'.
+      ELSEIF lv_type <> 'I' AND lv_type <> 'M'.
+        <lfs_data_file>-message     = |Type '{ ls_file-type }' không hợp lệ. Chỉ được điền I hoặc M|.
+        <lfs_data_file>-messagetype = 'E'.
       " ── Validate: Type I bắt buộc phải có Requested By ──────────
-      IF <lfs_data_file>-Type = 'I' AND <lfs_data_file>-RequestedBy IS INITIAL.
+      ELSEIF <lfs_data_file>-Type = 'I' AND <lfs_data_file>-RequestedBy IS INITIAL.
         <lfs_data_file>-message     = 'Requisitioner Name là bắt buộc khi Type = I'.
+        <lfs_data_file>-messagetype = 'E'.
+      " ── Validate: Account Assignment Category = A bắt buộc phải có Master Fixed Asset + Fixed Asset
+      ELSEIF <lfs_data_file>-Type = 'I' AND <lfs_data_file>-AccountAssignmentCategory = 'A'
+         AND ( <lfs_data_file>-MasterFixedAsset IS INITIAL OR <lfs_data_file>-FixedAsset IS INITIAL ).
+        <lfs_data_file>-message     = 'Master Fixed Asset và Fixed Asset là bắt buộc khi Account Assignment Category = A'.
         <lfs_data_file>-messagetype = 'E'.
       ENDIF.
     ENDLOOP.
@@ -549,7 +582,11 @@ CLASS lhc_ManageFilePR1 IMPLEMENTATION.
         && ls_seen_dup-PurReqnDescription
         && ls_seen_dup-PurReqnHeaderNote
         && ls_seen_dup-PurchaseRequisitionItem
+        && ls_seen_dup-AccountAssignmentCategory
+        && ls_seen_dup-CostCenter
         && ls_seen_dup-Material
+        && ls_seen_dup-PurchaseRequisitionItemText
+        && ls_seen_dup-MaterialGroup
         && ls_seen_dup-RequestedQuantity
         && ls_seen_dup-BaseUnit
         && ls_seen_dup-Plant
@@ -560,7 +597,10 @@ CLASS lhc_ManageFilePR1 IMPLEMENTATION.
         && ls_seen_dup-PurchasingGroup
         && ls_seen_dup-DeliveryDate
         && ls_seen_dup-RequirementTracking
-        && ls_seen_dup-RequestedBy.
+        && ls_seen_dup-RequestedBy
+        && ls_seen_dup-MasterFixedAsset
+        && ls_seen_dup-FixedAsset
+        && ls_seen_dup-NoteDescription.
 
       INSERT lv_key INTO TABLE lt_seen.
       IF sy-subrc <> 0.
@@ -591,7 +631,11 @@ CLASS lhc_ManageFilePR1 IMPLEMENTATION.
               PurReqnDescription        = ls_data_file-PurReqnDescription
               PurReqnHeaderNote         = ls_data_file-PurReqnHeaderNote
               PurchaseRequisitionItem   = ls_data_file-PurchaseRequisitionItem
+              AccountAssignmentCategory = ls_data_file-AccountAssignmentCategory
+              CostCenter                = ls_data_file-CostCenter
               Material                  = ls_data_file-Material
+              PurchaseRequisitionItemText = ls_data_file-PurchaseRequisitionItemText
+              MaterialGroup             = ls_data_file-MaterialGroup
               RequestedQuantity         = ls_data_file-RequestedQuantity
               BaseUnit                  = ls_data_file-BaseUnit
               Plant                     = ls_data_file-Plant
@@ -603,6 +647,9 @@ CLASS lhc_ManageFilePR1 IMPLEMENTATION.
               DeliveryDate              = ls_data_file-DeliveryDate
               RequirementTracking       = ls_data_file-RequirementTracking
               RequestedBy               = ls_data_file-RequestedBy
+              MasterFixedAsset          = ls_data_file-MasterFixedAsset
+              FixedAsset                = ls_data_file-FixedAsset
+              NoteDescription           = ls_data_file-NoteDescription
 
               message     = ls_data_file-message
               messagetype = ls_data_file-messagetype
@@ -631,7 +678,11 @@ CLASS lhc_ManageFilePR1 IMPLEMENTATION.
         PurReqnDescription
         PurReqnHeaderNote
         PurchaseRequisitionItem
+        AccountAssignmentCategory
+        CostCenter
         Material
+        PurchaseRequisitionItemText
+        MaterialGroup
         RequestedQuantity
         BaseUnit
         Plant
@@ -643,6 +694,9 @@ CLASS lhc_ManageFilePR1 IMPLEMENTATION.
         DeliveryDate
         RequirementTracking
         RequestedBy
+        MasterFixedAsset
+        FixedAsset
+        NoteDescription
 
         message
         messagetype

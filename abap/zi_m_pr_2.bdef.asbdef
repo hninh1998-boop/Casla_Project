@@ -77,7 +77,11 @@ with additional save
       Type                     = type;
       PurchaseRequisition      = purchase_requisition;
       PurchaseRequisitionItem  = purchase_requisition_item;
+      AccountAssignmentCategory = account_assignment_category;
+      CostCenter               = cost_center;
       Material                 = material;
+      PurchaseRequisitionItemText = pur_reqn_item_text;
+      MaterialGroup            = material_group;
       RequestedQuantity        = requested_quantity;
       BaseUnit                 = base_unit;
       Plant                    = plant;
@@ -89,6 +93,9 @@ with additional save
       DeliveryDate             = delivery_date;
       RequirementTracking      = requirement_tracking;
       RequisitionerName        = requisitioner_name;
+      MasterFixedAsset         = master_fixed_asset;
+      FixedAsset               = fixed_asset;
+      NoteDescription          = note_description;
       CreatedBy                = created_by;
       CreatedAt                = created_at;
       LastChangedBy            = last_changed_by;

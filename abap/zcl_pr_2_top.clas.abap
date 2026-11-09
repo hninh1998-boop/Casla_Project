@@ -30,7 +30,11 @@ CLASS zcl_pr_2_top DEFINITION
              Type                     TYPE string,
              PurchaseRequisition      TYPE string,
              PurchaseRequisitionItem  TYPE string,
+             AccountAssignmentCategory TYPE string,
+             CostCenter               TYPE string,
              Material                 TYPE string,
+             PurchaseRequisitionItemText TYPE string,
+             MaterialGroup            TYPE string,
              RequestedQuantity        TYPE string,
              BaseUnit                 TYPE string,
              Plant                    TYPE string,
@@ -42,6 +46,9 @@ CLASS zcl_pr_2_top DEFINITION
              DeliveryDate             TYPE string,
              RequirementTracking      TYPE string,
              RequisitionerName        TYPE string,
+             MasterFixedAsset         TYPE string,
+             FixedAsset               TYPE string,
+             NoteDescription          TYPE string,
            END OF ty_file_upload,
            tt_file_upload TYPE STANDARD TABLE OF ty_file_upload.
   PROTECTED SECTION.

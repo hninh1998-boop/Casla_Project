@@ -12,7 +12,11 @@ define table ztb_d_pr_2 {
   type                       : abap.char(1);
   purchase_requisition       : abap.char(10);
   purchase_requisition_item  : abap.numc(5);
+  account_assignment_category : abap.char(1);
+  cost_center                : abap.char(10);
   material                   : matnr;
+  pur_reqn_item_text         : abap.char(40);
+  material_group             : abap.char(9);
   @Semantics.quantity.unitOfMeasure : 'ztb_d_pr_2.base_unit'
   requested_quantity         : bamng;
   base_unit                  : bamei;
@@ -26,6 +30,9 @@ define table ztb_d_pr_2 {
   delivery_date              : abap.string(0);
   requirement_tracking       : bednr;
   requisitioner_name         : afnam;
+  master_fixed_asset         : abap.char(12);
+  fixed_asset                : abap.char(4);
+  note_description           : abap.string(0);
   messagetype                : abap.char(1);
   message                    : abap.char(255);
   created_by                 : abp_creation_user;

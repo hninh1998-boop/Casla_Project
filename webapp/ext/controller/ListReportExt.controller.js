@@ -165,7 +165,11 @@ sap.ui.define([
 				{ header: "PurReqnDescription", key: "PurReqnDescription", width: 22 },
 				{ header: "PurReqnHeaderNote", key: "PurReqnHeaderNote", width: 24 },
 				{ header: "PurchaseRequisitionItem", key: "PurchaseRequisitionItem", width: 26 },
+				{ header: "AccountAssignmentCategory", key: "AccountAssignmentCategory", width: 28 },
+				{ header: "CostCenter", key: "CostCenter", width: 20 },
 				{ header: "Material", key: "Material", width: 22 },
+				{ header: "PurchaseRequisitionItemText", key: "PurchaseRequisitionItemText", width: 30 },
+				{ header: "MaterialGroup", key: "MaterialGroup", width: 22 },
 				{ header: "RequestedQuantity", key: "RequestedQuantity", width: 22 },
 				{ header: "BaseUnit", key: "BaseUnit", width: 20 },
 				{ header: "Plant", key: "Plant", width: 20 },
@@ -176,7 +180,10 @@ sap.ui.define([
 				{ header: "PurchasingGroup", key: "PurchasingGroup", width: 20 },
 				{ header: "DeliveryDate", key: "DeliveryDate", width: 24 },
 				{header: "RequirementTracking", key: "RequirementTracking", width: 20 },
-				{ header: "RequisitionerName", key: "RequisitionerName", width: 22 }
+				{ header: "RequisitionerName", key: "RequisitionerName", width: 22 },
+				{ header: "MasterFixedAsset", key: "MasterFixedAsset", width: 22 },
+				{ header: "FixedAsset", key: "FixedAsset", width: 22 },
+				{ header: "PlainLongText", key: "PlainLongText", width: 40 }
 			];
 
 			const hintRow = {
@@ -186,7 +193,11 @@ sap.ui.define([
 				PurReqnDescription: "Diễn giải PR\nNếu có nhiều Item thì điền các dòng giống nhau",
 				PurReqnHeaderNote: "Note text PR\nNếu có nhiều Item thì điền các dòng giống nhau",
 				PurchaseRequisitionItem: "Điền các PR item\nChỉ áp dụng cho Type I",
+				AccountAssignmentCategory: "Điền A với mua tài sản\nĐiền Z với mua dịch vụ\nĐể trống nếu mua hàng hóa thông thường",
+				CostCenter: "Điền cost ghi nhận chi phí",
 				Material: "Điền material\nChỉ áp dụng cho Type I",
+				PurchaseRequisitionItemText: "Điền Diễn giải item\nĐiền trong trường hợp nhu cầu không qua material ( dịch vụ, tài sản)",
+				MaterialGroup: "Nhóm mã hàng\nĐiền trong TH không có material\nVới mua dịch vụ điền 800000",
 				RequestedQuantity: "Số lượng\nChỉ áp dụng cho Type I",
 				BaseUnit: "Đơn vị\nMặc định lấy Base Unit mã hàng\nChỉ áp dụng cho Type I",
 				Plant: "Plant xuất hàng\n6711,6712…\nChỉ áp dụng cho Type I",
@@ -197,7 +208,10 @@ sap.ui.define([
 				PurchasingGroup: "Nhóm mua hàng\nChỉ áp dụng cho Type I",
 				DeliveryDate: "Ngày giao hàng\nĐiền dạng dd.mm.yyyy\nChỉ áp dụng cho Type I",
 				RequirementTracking: "Tracking Number\nĐiền tối đa 10 ký tự\nChỉ áp dụng cho Type I",
-				RequisitionerName: "Requisitioner Name\nBắt buộc điền\nChỉ áp dụng cho Type I"
+				RequisitionerName: "Requisitioner Name\nBắt buộc điền\nChỉ áp dụng cho Type I",
+				MasterFixedAsset: "Bắt buộc khi AccountAssignmentCategory = A",
+				FixedAsset: "Bắt buộc khi AccountAssignmentCategory = A",
+				PlainLongText: "Long text"
 			};
 
 			// Field thuộc Header API (PR Header) — tô cam đậm để phân biệt với Item API
@@ -223,7 +237,11 @@ sap.ui.define([
 				{ header: "Type", key: "Type", width: 14 },
 				{ header: "PurchaseRequisition", key: "PurchaseRequisition", width: 20 },
 				{ header: "PurchaseRequisitionItem", key: "PurchaseRequisitionItem", width: 22 },
+				{ header: "AccountAssignmentCategory", key: "AccountAssignmentCategory", width: 28 },
+				{ header: "CostCenter", key: "CostCenter", width: 20 },
 				{ header: "Material", key: "Material", width: 22 },
+				{ header: "PurchaseRequisitionItemText", key: "PurchaseRequisitionItemText", width: 30 },
+				{ header: "MaterialGroup", key: "MaterialGroup", width: 22 },
 				{ header: "RequestedQuantity", key: "RequestedQuantity", width: 20 },
 				{ header: "BaseUnit", key: "BaseUnit", width: 18 },
 				{ header: "Plant", key: "Plant", width: 20 },
@@ -234,14 +252,21 @@ sap.ui.define([
 				{ header: "PurchasingGroup", key: "PurchasingGroup", width: 20 },
 				{ header: "DeliveryDate", key: "DeliveryDate", width: 22 },
 				{ header: "RequirementTracking", key: "RequirementTracking", width: 20 },
-				{ header: "RequisitionerName", key: "RequisitionerName", width: 22 }
+				{ header: "RequisitionerName", key: "RequisitionerName", width: 22 },
+				{ header: "MasterFixedAsset", key: "MasterFixedAsset", width: 22 },
+				{ header: "FixedAsset", key: "FixedAsset", width: 22 },
+				{ header: "PlainLongText", key: "PlainLongText", width: 40 }
 			];
 
 			const hintRow = {
 				Type: "I = POST\nM = PATCH\nD = delete",
 				PurchaseRequisition: "Điền số PR",
 				PurchaseRequisitionItem: "Điền số PR Item\nBắt buộc điền với type M, D",
+				AccountAssignmentCategory: "Điền A với mua tài sản\nĐiền Z với mua dịch vụ\nĐể trống nếu mua hàng hóa thông thường",
+				CostCenter: "Điền cost ghi nhận chi phí",
 				Material: "Điền material",
+				PurchaseRequisitionItemText: "Điền Diễn giải item\nĐiền trong trường hợp nhu cầu không qua material ( dịch vụ, tài sản)",
+				MaterialGroup: "Nhóm mã hàng\nĐiền trong TH không có material\nVới mua dịch vụ điền 800000",
 				RequestedQuantity: "Số lượng",
 				BaseUnit: "Đơn vị",
 				Plant: "Plant xuất hàng\n6711,6712…",
@@ -252,7 +277,10 @@ sap.ui.define([
 				PurchasingGroup: "Nhóm mua hàng",
 				DeliveryDate: "Ngày giao hàng\nĐiền dạng dd.mm.yyyy",
 				RequirementTracking: "Tracking Number\nĐiền tối đa 10 ký tự",
-				RequisitionerName: "Requisitioner Name\nBắt buộc điền với type I\nĐiền tối đa 12 ký tự"
+				RequisitionerName: "Requisitioner Name\nBắt buộc điền với type I\nĐiền tối đa 12 ký tự",
+				MasterFixedAsset: "Bắt buộc khi AccountAssignmentCategory = A",
+				FixedAsset: "Bắt buộc khi AccountAssignmentCategory = A",
+				PlainLongText: "Long text"
 			};
 
 			// Field thuộc Header API

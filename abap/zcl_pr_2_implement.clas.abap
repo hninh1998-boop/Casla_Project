@@ -86,12 +86,39 @@ CLASS zcl_pr_2_implement DEFINITION
 
     CLASS-METHODS get_body_item
       IMPORTING
+        is_data        TYPE ztb_d_pr_2
+        iv_deep_insert TYPE abap_boolean DEFAULT abap_false
+      EXPORTING
+        ev_body        TYPE string.
+
+    CLASS-METHODS processing_delete
+      CHANGING cs_data TYPE ztb_d_pr_2.
+
+    CLASS-METHODS has_item_data
+      IMPORTING
+        is_data          TYPE ztb_d_pr_2
+      RETURNING
+        VALUE(rv_result) TYPE abap_boolean.
+
+    CLASS-METHODS get_body_acct_assgmt
+      IMPORTING
         is_data TYPE ztb_d_pr_2
       EXPORTING
         ev_body TYPE string.
 
-    CLASS-METHODS processing_delete
-      CHANGING cs_data TYPE ztb_d_pr_2.
+    CLASS-METHODS update_acct_assgmt
+      CHANGING
+        cs_data TYPE ztb_d_pr_2.
+
+    CLASS-METHODS get_body_long_text
+      IMPORTING
+        is_data TYPE ztb_d_pr_2
+      EXPORTING
+        ev_body TYPE string.
+
+    CLASS-METHODS update_long_text
+      CHANGING
+        cs_data TYPE ztb_d_pr_2.
 ENDCLASS.
 
 
@@ -224,17 +251,28 @@ CLASS ZCL_PR_2_IMPLEMENT IMPLEMENTATION.
 
   METHOD process_data_raw.
     LOOP AT it_file INTO DATA(ls_file).
+      "Bỏ qua dòng trống hoàn toàn
+      IF ls_file IS INITIAL.
+        CONTINUE.
+      ENDIF.
+
       APPEND INITIAL LINE TO et_data_file ASSIGNING FIELD-SYMBOL(<lfs_data_file>).
 
-      <lfs_data_file>-Type                    = ls_file-type.
+      DATA(lv_type) = to_upper( condense( ls_file-type ) ).
+      <lfs_data_file>-Type                    = lv_type.
       <lfs_data_file>-PurchaseRequisition     = |{ ls_file-PurchaseRequisition ALPHA = IN }|.
       <lfs_data_file>-PurchaseRequisitionItem = |{ ls_file-PurchaseRequisitionItem ALPHA = IN }|.
+      <lfs_data_file>-AccountAssignmentCategory = to_upper( ls_file-AccountAssignmentCategory ).
+      <lfs_data_file>-CostCenter              = |{ CONV ztb_d_pr_2-cost_center( ls_file-CostCenter ) ALPHA = IN }|.
 
       IF ls_file-material IS NOT INITIAL.
         <lfs_data_file>-Material = COND #( WHEN ls_file-material CO '0123456789'
                                            THEN |{ ls_file-Material WIDTH = 18 ALIGN = RIGHT PAD = '0' }|
                                            ELSE ls_file-material ).
       ENDIF.
+
+      <lfs_data_file>-PurchaseRequisitionItemText = ls_file-PurchaseRequisitionItemText.
+      <lfs_data_file>-MaterialGroup = ls_file-MaterialGroup.
 
       <lfs_data_file>-RequestedQuantity = ls_file-RequestedQuantity.
 
@@ -250,10 +288,25 @@ CLASS ZCL_PR_2_IMPLEMENT IMPLEMENTATION.
       <lfs_data_file>-DeliveryDate             = ls_file-DeliveryDate.
       <lfs_data_file>-RequirementTracking      = ls_file-RequirementTracking.
       <lfs_data_file>-RequisitionerName        = ls_file-RequisitionerName.
+      <lfs_data_file>-MasterFixedAsset         = |{ CONV ztb_d_pr_2-master_fixed_asset( ls_file-MasterFixedAsset ) ALPHA = IN }|.
+      <lfs_data_file>-FixedAsset               = |{ CONV ztb_d_pr_2-fixed_asset( ls_file-FixedAsset ) ALPHA = IN }|.
+      <lfs_data_file>-NoteDescription          = ls_file-NoteDescription.
 
+      "Validate: Type chỉ được là I, M hoặc D
+      IF lv_type IS INITIAL.
+        <lfs_data_file>-message     = 'Type là bắt buộc. Chỉ được điền I, M hoặc D'.
+        <lfs_data_file>-messagetype = 'E'.
+      ELSEIF lv_type <> 'I' AND lv_type <> 'M' AND lv_type <> 'D'.
+        <lfs_data_file>-message     = |Type '{ ls_file-type }' không hợp lệ. Chỉ được điền I, M hoặc D|.
+        <lfs_data_file>-messagetype = 'E'.
       "Validate: Type I bắt buộc phải có Requisitioner Name
-      IF <lfs_data_file>-Type = 'I' AND <lfs_data_file>-RequisitionerName IS INITIAL.
+      ELSEIF <lfs_data_file>-Type = 'I' AND <lfs_data_file>-RequisitionerName IS INITIAL.
         <lfs_data_file>-message     = 'Requisitioner Name là bắt buộc khi Type = I'.
+        <lfs_data_file>-messagetype = 'E'.
+      "Validate: Account Assignment Category = A bắt buộc phải có Master Fixed Asset + Fixed Asset
+      ELSEIF <lfs_data_file>-Type = 'I' AND <lfs_data_file>-AccountAssignmentCategory = 'A'
+         AND ( <lfs_data_file>-MasterFixedAsset IS INITIAL OR <lfs_data_file>-FixedAsset IS INITIAL ).
+        <lfs_data_file>-message     = 'Master Fixed Asset và Fixed Asset là bắt buộc khi Account Assignment Category = A'.
         <lfs_data_file>-messagetype = 'E'.
       ENDIF.
     ENDLOOP.
@@ -268,7 +321,11 @@ CLASS ZCL_PR_2_IMPLEMENT IMPLEMENTATION.
         ls_seen_dup-type
         && ls_seen_dup-PurchaseRequisition
         && ls_seen_dup-PurchaseRequisitionItem
+        && ls_seen_dup-AccountAssignmentCategory
+        && ls_seen_dup-CostCenter
         && ls_seen_dup-Material
+        && ls_seen_dup-PurchaseRequisitionItemText
+        && ls_seen_dup-MaterialGroup
         && ls_seen_dup-RequestedQuantity
         && ls_seen_dup-BaseUnit
         && ls_seen_dup-Plant
@@ -279,7 +336,10 @@ CLASS ZCL_PR_2_IMPLEMENT IMPLEMENTATION.
         && ls_seen_dup-PurchasingGroup
         && ls_seen_dup-DeliveryDate
         && ls_seen_dup-RequirementTracking
-        && ls_seen_dup-RequisitionerName.
+        && ls_seen_dup-RequisitionerName
+        && ls_seen_dup-MasterFixedAsset
+        && ls_seen_dup-FixedAsset
+        && ls_seen_dup-NoteDescription.
 
       INSERT lv_key INTO TABLE lt_seen.
       IF sy-subrc <> 0.
@@ -308,7 +368,11 @@ CLASS ZCL_PR_2_IMPLEMENT IMPLEMENTATION.
               Type                      = ls_data_file-Type
               PurchaseRequisition       = ls_data_file-PurchaseRequisition
               PurchaseRequisitionItem   = ls_data_file-PurchaseRequisitionItem
+              AccountAssignmentCategory = ls_data_file-AccountAssignmentCategory
+              CostCenter                = ls_data_file-CostCenter
               Material                  = ls_data_file-Material
+              PurchaseRequisitionItemText = ls_data_file-PurchaseRequisitionItemText
+              MaterialGroup             = ls_data_file-MaterialGroup
               RequestedQuantity         = ls_data_file-RequestedQuantity
               BaseUnit                  = ls_data_file-BaseUnit
               Plant                     = ls_data_file-Plant
@@ -320,6 +384,9 @@ CLASS ZCL_PR_2_IMPLEMENT IMPLEMENTATION.
               DeliveryDate              = ls_data_file-DeliveryDate
               RequirementTracking       = ls_data_file-RequirementTracking
               RequisitionerName         = ls_data_file-RequisitionerName
+              MasterFixedAsset          = ls_data_file-MasterFixedAsset
+              FixedAsset                = ls_data_file-FixedAsset
+              NoteDescription           = ls_data_file-NoteDescription
 
               message     = ls_data_file-message
               messagetype = ls_data_file-messagetype
@@ -367,6 +434,9 @@ CLASS ZCL_PR_2_IMPLEMENT IMPLEMENTATION.
         WHEN 'D'.
           WAIT UP TO 1 SECONDS.
           processing_delete( CHANGING cs_data = <lfs_data> ).
+        WHEN OTHERS.
+          <lfs_data>-messagetype = 'E'.
+          <lfs_data>-message     = 'Type không hợp lệ. Chỉ được điền I, M hoặc D'.
       ENDCASE.
     ENDLOOP.
   ENDMETHOD.
@@ -416,8 +486,9 @@ CLASS ZCL_PR_2_IMPLEMENT IMPLEMENTATION.
         && '/_PurchaseRequisitionItem'.
 
     "2. Get Body
-    get_body_item( EXPORTING is_data = cs_data
-                   IMPORTING ev_body = lv_body ).
+    get_body_item( EXPORTING is_data        = cs_data
+                             iv_deep_insert = abap_true
+                   IMPORTING ev_body        = lv_body ).
 
     "3. Call API POST
     DATA(lv_result) = zcl_call_api_pr_2=>main( iv_body     = lv_body
@@ -465,6 +536,14 @@ CLASS ZCL_PR_2_IMPLEMENT IMPLEMENTATION.
       RETURN.
     ENDIF.
 
+    "Validate: Account Assignment Category = A bắt buộc phải có Master Fixed Asset + Fixed Asset
+    IF cs_data-account_assignment_category = 'A'
+       AND ( cs_data-master_fixed_asset IS INITIAL OR cs_data-fixed_asset IS INITIAL ).
+      cs_data-messagetype = 'E'.
+      cs_data-message     = 'Master Fixed Asset và Fixed Asset là bắt buộc khi Account Assignment Category = A'.
+      RETURN.
+    ENDIF.
+
     "Validate date
     validate_date( IMPORTING ev_error = DATA(lv_error)
                    CHANGING  cs_data  = cs_data ).
@@ -482,10 +561,39 @@ CLASS ZCL_PR_2_IMPLEMENT IMPLEMENTATION.
     validate_date( IMPORTING ev_error = DATA(lv_error)
                    CHANGING  cs_data  = cs_data ).
     IF lv_error = 'X'.
-      CLEAR: lv_error.
-    ELSE.
-      "API insert
+      RETURN.
+    ENDIF.
+
+    "Field của API nào để trống hết thì không chạy API đó
+    DATA(lv_has_item) = has_item_data( cs_data ).
+    get_body_acct_assgmt( EXPORTING is_data = cs_data
+                          IMPORTING ev_body = DATA(lv_body_acct) ).
+
+    IF lv_has_item = abap_false AND lv_body_acct IS INITIAL AND cs_data-note_description IS INITIAL.
+      cs_data-messagetype = 'E'.
+      cs_data-message     = 'Không có dữ liệu để cập nhật'.
+      RETURN.
+    ENDIF.
+
+    "1. API update Item (chạy trước để cập nhật Account Assignment Category)
+    IF lv_has_item = abap_true.
       update( CHANGING cs_data = cs_data ).
+      IF cs_data-messagetype <> 'S'.
+        RETURN.
+      ENDIF.
+    ENDIF.
+
+    "2. API update Account Assignment
+    IF lv_body_acct IS NOT INITIAL.
+      update_acct_assgmt( CHANGING cs_data = cs_data ).
+      IF cs_data-messagetype <> 'S'.
+        RETURN.
+      ENDIF.
+    ENDIF.
+
+    "3. API update Long text
+    IF cs_data-note_description IS NOT INITIAL.
+      update_long_text( CHANGING cs_data = cs_data ).
     ENDIF.
   ENDMETHOD.
 
@@ -529,8 +637,18 @@ CLASS ZCL_PR_2_IMPLEMENT IMPLEMENTATION.
     ev_body =
         |\{|
         && |"PurchaseRequisition": "{ is_data-purchase_requisition }",|.
+    IF is_data-account_assignment_category IS NOT INITIAL.
+      ev_body = ev_body && |"AccountAssignmentCategory": "{ is_data-account_assignment_category }",|.
+    ENDIF.
     IF is_data-material IS NOT INITIAL.
       ev_body = ev_body && |"Material": "{ is_data-material }",|.
+    ENDIF.
+    IF is_data-pur_reqn_item_text IS NOT INITIAL.
+      ev_body = ev_body && |"PurchaseRequisitionItemText": "{ escape( val    = is_data-pur_reqn_item_text
+                                                                      format = cl_abap_format=>e_json_string ) }",|.
+    ENDIF.
+    IF is_data-material_group IS NOT INITIAL.
+      ev_body = ev_body && |"MaterialGroup": "{ is_data-material_group }",|.
     ENDIF.
     IF is_data-requested_quantity IS NOT INITIAL.
       ev_body = ev_body && |"RequestedQuantity": { is_data-requested_quantity },|.
@@ -570,10 +688,153 @@ CLASS ZCL_PR_2_IMPLEMENT IMPLEMENTATION.
     IF is_data-requisitioner_name IS NOT INITIAL.
       ev_body = ev_body && |"RequisitionerName": "{ is_data-requisitioner_name }",|.
     ENDIF.
+
+    "Account Assignment (Cost Center, Asset) + Long text gửi kèm khi tạo mới item
+    "   Type M: Account Assignment được update bằng API riêng (update_acct_assgmt)
+    IF iv_deep_insert = abap_true.
+      get_body_acct_assgmt( EXPORTING is_data = is_data
+                            IMPORTING ev_body = DATA(lv_body_acct) ).
+      IF lv_body_acct IS NOT INITIAL.
+        ev_body = ev_body && |"_PurchaseReqnAcctAssgmt": [{ lv_body_acct }],|.
+      ENDIF.
+
+      get_body_long_text( EXPORTING is_data = is_data
+                          IMPORTING ev_body = DATA(lv_body_text) ).
+      IF lv_body_text IS NOT INITIAL.
+        ev_body = ev_body && |"_PurchaseReqnItemText": [{ lv_body_text }],|.
+      ENDIF.
+    ENDIF.
+
     IF ev_body CS ','.
       ev_body = substring( val = ev_body len = strlen( ev_body ) - 1 ).
     ENDIF.
     ev_body = ev_body && |\}|.
+  ENDMETHOD.
+
+
+  METHOD has_item_data.
+    rv_result = xsdbool( is_data-account_assignment_category IS NOT INITIAL
+                      OR is_data-material                    IS NOT INITIAL
+                      OR is_data-pur_reqn_item_text          IS NOT INITIAL
+                      OR is_data-material_group              IS NOT INITIAL
+                      OR is_data-requested_quantity          IS NOT INITIAL
+                      OR is_data-base_unit                   IS NOT INITIAL
+                      OR is_data-plant                       IS NOT INITIAL
+                      OR is_data-storage_location            IS NOT INITIAL
+                      OR is_data-purchase_requisition_price  IS NOT INITIAL
+                      OR is_data-pur_reqn_price_quantity     IS NOT INITIAL
+                      OR is_data-pur_reqn_item_currency      IS NOT INITIAL
+                      OR is_data-purchasing_group            IS NOT INITIAL
+                      OR is_data-delivery_date               IS NOT INITIAL
+                      OR is_data-requirement_tracking        IS NOT INITIAL
+                      OR is_data-requisitioner_name          IS NOT INITIAL ).
+  ENDMETHOD.
+
+
+  METHOD get_body_acct_assgmt.
+    CLEAR ev_body.
+
+    "Chỉ đưa vào body những field user có điền trong file, để trống hết thì trả về rỗng
+    IF is_data-cost_center IS NOT INITIAL.
+      ev_body = ev_body && |"CostCenter": "{ is_data-cost_center }",|.
+    ENDIF.
+    IF is_data-master_fixed_asset IS NOT INITIAL.
+      ev_body = ev_body && |"MasterFixedAsset": "{ is_data-master_fixed_asset }",|.
+    ENDIF.
+    IF is_data-fixed_asset IS NOT INITIAL.
+      ev_body = ev_body && |"FixedAsset": "{ is_data-fixed_asset }",|.
+    ENDIF.
+    IF ev_body IS NOT INITIAL.
+      ev_body = |\{| && substring( val = ev_body len = strlen( ev_body ) - 1 ) && |\}|.
+    ENDIF.
+  ENDMETHOD.
+
+
+  METHOD update_acct_assgmt.
+    "Mỗi PR item chỉ có 1 dòng Account Assignment (không phân bổ nhiều dòng)
+    CONSTANTS lc_acct_assgmt_number TYPE string VALUE '01'.
+
+    DATA: lv_endpoint TYPE string.
+
+    "1. Get Endpoint
+    lv_endpoint =
+        '/sap/opu/odata4/sap/api_purchaserequisition_2/srvd_a2x/sap/purchaserequisition/0001/PurchaseReqnAcctAssgmt'
+        && |/{ cs_data-purchase_requisition }|
+        && |/{ cs_data-purchase_requisition_item }|
+        && |/{ lc_acct_assgmt_number }|.
+
+    "2. Get body
+    get_body_acct_assgmt( EXPORTING is_data = cs_data
+                          IMPORTING ev_body = DATA(lv_body) ).
+
+    "3. Call API PATCH
+    DATA(lv_result) = zcl_call_api_pr_2=>main( iv_body     = lv_body
+                                               iv_endpoint = lv_endpoint
+                                               iv_method   = 'PATCH' ).
+    "4. Get Message Result
+    zcl_utility_ninhnh=>get_api_message( EXPORTING iv_result      = lv_result
+                                                   iv_code        = zcl_call_api_pr_2=>code
+                                         IMPORTING ev_messagetype = cs_data-messagetype
+                                                   ev_message     = cs_data-message ).
+  ENDMETHOD.
+
+
+  METHOD get_body_long_text.
+    CLEAR ev_body.
+
+    "Long text của item (Text ID B01, ngôn ngữ EN): để trống thì trả về rỗng
+    IF is_data-note_description IS NOT INITIAL.
+      ev_body = |\{"TextObjectCategory": "EBAN", "TextObjectType": "B01", "Language": "EN", |
+             && |"PlainLongText": "{ escape( val    = is_data-note_description
+                                             format = cl_abap_format=>e_json_string ) }"\}|.
+    ENDIF.
+  ENDMETHOD.
+
+
+  METHOD update_long_text.
+    DATA: lv_endpoint TYPE string,
+          lv_body     TYPE string.
+
+    "1. PATCH Long text đã có của item
+    "   Key: PR / Item / TextObjectCategory / TextObjectKey / TextObjectType / Language
+    "   TextObjectKey = Số PR (10 ký tự) + Item (5 ký tự)
+    DATA(lv_text_object_key) = |{ CONV ztb_d_pr_2-purchase_requisition( cs_data-purchase_requisition ) ALPHA = IN }|
+                            && |{ cs_data-purchase_requisition_item }|.
+
+    lv_endpoint =
+        '/sap/opu/odata4/sap/api_purchaserequisition_2/srvd_a2x/sap/purchaserequisition/0001/PurchaseReqnItemText'
+        && |/{ cs_data-purchase_requisition }|
+        && |/{ cs_data-purchase_requisition_item }|
+        && |/EBAN/{ lv_text_object_key }/B01/EN|.
+
+    lv_body = |\{"PlainLongText": "{ escape( val    = cs_data-note_description
+                                             format = cl_abap_format=>e_json_string ) }"\}|.
+
+    DATA(lv_result) = zcl_call_api_pr_2=>main( iv_body     = lv_body
+                                               iv_endpoint = lv_endpoint
+                                               iv_method   = 'PATCH' ).
+
+    "2. Item chưa có Long text (404 Not Found) → POST tạo mới
+    IF zcl_call_api_pr_2=>code = 404.
+      lv_endpoint =
+          '/sap/opu/odata4/sap/api_purchaserequisition_2/srvd_a2x/sap/purchaserequisition/0001/PurchaseReqnItem'
+          && |/{ cs_data-purchase_requisition }|
+          && |/{ cs_data-purchase_requisition_item }|
+          && '/_PurchaseReqnItemText'.
+
+      get_body_long_text( EXPORTING is_data = cs_data
+                          IMPORTING ev_body = lv_body ).
+
+      lv_result = zcl_call_api_pr_2=>main( iv_body     = lv_body
+                                           iv_endpoint = lv_endpoint
+                                           iv_method   = 'POST' ).
+    ENDIF.
+
+    "3. Get Message Result
+    zcl_utility_ninhnh=>get_api_message( EXPORTING iv_result      = lv_result
+                                                   iv_code        = zcl_call_api_pr_2=>code
+                                         IMPORTING ev_messagetype = cs_data-messagetype
+                                                   ev_message     = cs_data-message ).
   ENDMETHOD.
 
 

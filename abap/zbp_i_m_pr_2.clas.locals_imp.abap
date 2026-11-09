@@ -368,7 +368,11 @@ CLASS lhc_ManageFilePR2 IMPLEMENTATION.
       FIELDS ( Type
                PurchaseRequisition
                PurchaseRequisitionItem
+               AccountAssignmentCategory
+               CostCenter
                Material
+               PurchaseRequisitionItemText
+               MaterialGroup
                RequestedQuantity
                BaseUnit
                Plant
@@ -380,6 +384,9 @@ CLASS lhc_ManageFilePR2 IMPLEMENTATION.
                DeliveryDate
                RequirementTracking
                RequisitionerName
+               MasterFixedAsset
+               FixedAsset
+               NoteDescription
 
                message
                messagetype )

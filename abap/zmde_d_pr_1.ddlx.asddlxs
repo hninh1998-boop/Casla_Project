@@ -73,10 +73,26 @@ annotate entity zc_d_pr_1 with
   @UI.identification: [{ position: 80 }]
   @EndUserText.label: 'PR Item'
   PurchaseRequisitionItem;
+  @UI.lineItem: [{ position: 82 }]
+  @UI.identification: [{ position: 82 }]
+  @EndUserText.label: 'Account Assignment Category'
+  AccountAssignmentCategory;
+  @UI.lineItem: [{ position: 84 }]
+  @UI.identification: [{ position: 84 }]
+  @EndUserText.label: 'Cost Center'
+  CostCenter;
   @UI.lineItem: [{ position: 90 }]
   @UI.identification: [{ position: 90 }]
   @EndUserText.label: 'Material'
   Material;
+  @UI.lineItem: [{ position: 92 }]
+  @UI.identification: [{ position: 92 }]
+  @EndUserText.label: 'Diễn giải item'
+  PurchaseRequisitionItemText;
+  @UI.lineItem: [{ position: 95 }]
+  @UI.identification: [{ position: 95 }]
+  @EndUserText.label: 'Nhóm mã hàng'
+  MaterialGroup;
   @UI.lineItem: [{ position: 100 }]
   @UI.identification: [{ position: 100 }]
   @EndUserText.label: 'Số lượng'
@@ -121,6 +137,18 @@ annotate entity zc_d_pr_1 with
   @UI.identification: [{ position: 200 }]
   @EndUserText.label: 'Requisitioner Name'
   RequestedBy;
+  @UI.lineItem: [{ position: 202 }]
+  @UI.identification: [{ position: 202 }]
+  @EndUserText.label: 'Master Fixed Asset'
+  MasterFixedAsset;
+  @UI.lineItem: [{ position: 204 }]
+  @UI.identification: [{ position: 204 }]
+  @EndUserText.label: 'Fixed Asset'
+  FixedAsset;
+  @UI.lineItem: [{ position: 206 }]
+  @UI.identification: [{ position: 206 }]
+  @EndUserText.label: 'Long Text'
+  NoteDescription;
 
 
   @UI.lineItem: [{ position: 190 }]

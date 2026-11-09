@@ -18,7 +18,11 @@ define view entity zc_d_pr_2
       Type,
       PurchaseRequisition,
       PurchaseRequisitionItem,
+      AccountAssignmentCategory,
+      CostCenter,
       Material,
+      PurchaseRequisitionItemText,
+      MaterialGroup,
       @Semantics.quantity.unitOfMeasure: 'BaseUnit'
       RequestedQuantity,
       BaseUnit,
@@ -33,6 +37,9 @@ define view entity zc_d_pr_2
       DeliveryDate,
       RequirementTracking,
       RequisitionerName,
+      MasterFixedAsset,
+      FixedAsset,
+      NoteDescription,
 
       @EndUserText.label: 'Status'
       @Semantics.text: true

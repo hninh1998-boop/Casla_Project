@@ -72,6 +72,26 @@ CLASS ZCL_PR_1_IMPLEMENT IMPLEMENTATION.
                                                    PurReqnHeaderNote = ls_group-pur_reqn_header_note )
         ASSIGNING FIELD-SYMBOL(<lfs_data_grp>).
 
+      "0. Validate Type
+      IF <lfs_data_grp>-type <> 'I' AND <lfs_data_grp>-type <> 'M'.
+        LOOP AT GROUP <lfs_data_grp> ASSIGNING FIELD-SYMBOL(<lfs_data>).
+          <lfs_data>-messagetype = 'E'.
+          <lfs_data>-message     = 'Type không hợp lệ. Chỉ được điền I hoặc M'.
+        ENDLOOP.
+        CONTINUE.
+      ENDIF.
+
+      "Type M: không điền field nào của Header thì không chạy API
+      IF <lfs_data_grp>-type = 'M'
+         AND <lfs_data_grp>-PurReqnDescription IS INITIAL
+         AND <lfs_data_grp>-PurReqnHeaderNote IS INITIAL.
+        LOOP AT GROUP <lfs_data_grp> ASSIGNING <lfs_data>.
+          <lfs_data>-messagetype = 'E'.
+          <lfs_data>-message     = 'Không có dữ liệu Header để cập nhật'.
+        ENDLOOP.
+        CONTINUE.
+      ENDIF.
+
       "1. Get data header - Insert + Update
       get_endpoint_body_header( EXPORTING is_data_grp = <lfs_data_grp>
                                 IMPORTING ev_endpoint = DATA(lv_endpoint)
@@ -81,7 +101,7 @@ CLASS ZCL_PR_1_IMPLEMENT IMPLEMENTATION.
       CLEAR: lv_index,
              lv_body_item.
 
-      LOOP AT GROUP <lfs_data_grp> ASSIGNING FIELD-SYMBOL(<lfs_data>).
+      LOOP AT GROUP <lfs_data_grp> ASSIGNING <lfs_data>.
         CLEAR: <lfs_data>-message,
                <lfs_data>-messagetype.
 
@@ -91,6 +111,14 @@ CLASS ZCL_PR_1_IMPLEMENT IMPLEMENTATION.
         IF <lfs_data>-requested_by IS INITIAL.
           <lfs_data>-messagetype = 'E'.
           <lfs_data>-message     = 'Requisitioner Name là bắt buộc khi Type = I'.
+          CONTINUE.
+        ENDIF.
+
+        "Validate: Account Assignment Category = A bắt buộc phải có Master Fixed Asset + Fixed Asset
+        IF <lfs_data>-account_assignment_category = 'A'
+           AND ( <lfs_data>-master_fixed_asset IS INITIAL OR <lfs_data>-fixed_asset IS INITIAL ).
+          <lfs_data>-messagetype = 'E'.
+          <lfs_data>-message     = 'Master Fixed Asset và Fixed Asset là bắt buộc khi Account Assignment Category = A'.
           CONTINUE.
         ENDIF.
 
@@ -107,6 +135,11 @@ CLASS ZCL_PR_1_IMPLEMENT IMPLEMENTATION.
                             IMPORTING ev_body_item = lv_body_item ).
         ENDIF.
       ENDLOOP.
+
+      "Type I: không còn item hợp lệ thì không chạy API (các item đã có message lỗi)
+      IF <lfs_data_grp>-type = 'I' AND lv_body_item IS INITIAL.
+        CONTINUE.
+      ENDIF.
 
       IF lv_body_item IS NOT INITIAL.
         lv_body_item = lv_body_item && ']'.
@@ -191,6 +224,8 @@ CLASS ZCL_PR_1_IMPLEMENT IMPLEMENTATION.
 
 
   METHOD insert_body_item.
+    DATA lv_acct TYPE string.
+
     IF iv_tabix = 1.
       ev_body_item = |"_PurchaseRequisitionItem": [|.
     ELSE.
@@ -202,8 +237,18 @@ CLASS ZCL_PR_1_IMPLEMENT IMPLEMENTATION.
     IF is_data-purchase_requisition_item IS NOT INITIAL.
       lv_item = lv_item && |"PurchaseRequisitionItem": "{ is_data-purchase_requisition_item }",|.
     ENDIF.
+    IF is_data-account_assignment_category IS NOT INITIAL.
+      lv_item = lv_item && |"AccountAssignmentCategory": "{ is_data-account_assignment_category }",|.
+    ENDIF.
     IF is_data-material IS NOT INITIAL.
       lv_item = lv_item && |"Material": "{ is_data-material }",|.
+    ENDIF.
+    IF is_data-pur_reqn_item_text IS NOT INITIAL.
+      lv_item = lv_item && |"PurchaseRequisitionItemText": "{ escape( val    = is_data-pur_reqn_item_text
+                                                                      format = cl_abap_format=>e_json_string ) }",|.
+    ENDIF.
+    IF is_data-material_group IS NOT INITIAL.
+      lv_item = lv_item && |"MaterialGroup": "{ is_data-material_group }",|.
     ENDIF.
     IF is_data-requested_quantity IS NOT INITIAL.
       lv_item = lv_item && |"RequestedQuantity": { is_data-requested_quantity },|.
@@ -242,6 +287,30 @@ CLASS ZCL_PR_1_IMPLEMENT IMPLEMENTATION.
     ENDIF.
     IF is_data-requested_by IS NOT INITIAL.
       lv_item = lv_item && |"RequisitionerName": "{ is_data-requested_by }",|.
+    ENDIF.
+
+    "Account Assignment (Cost Center, Asset): để trống hết thì không gửi
+    IF is_data-cost_center IS NOT INITIAL.
+      lv_acct = lv_acct && |"CostCenter": "{ is_data-cost_center }",|.
+    ENDIF.
+    IF is_data-master_fixed_asset IS NOT INITIAL.
+      lv_acct = lv_acct && |"MasterFixedAsset": "{ is_data-master_fixed_asset }",|.
+    ENDIF.
+    IF is_data-fixed_asset IS NOT INITIAL.
+      lv_acct = lv_acct && |"FixedAsset": "{ is_data-fixed_asset }",|.
+    ENDIF.
+    IF lv_acct IS NOT INITIAL.
+      lv_acct = substring( val = lv_acct len = strlen( lv_acct ) - 1 ).
+      lv_item = lv_item && |"_PurchaseReqnAcctAssgmt": [\{{ lv_acct }\}],|.
+    ENDIF.
+
+    "Long text của item: để trống thì không gửi
+    IF is_data-note_description IS NOT INITIAL.
+      lv_item = lv_item && |"_PurchaseReqnItemText": [\{|
+                        && |"TextObjectCategory": "EBAN", "TextObjectType": "B01", "Language": "EN", |
+                        && |"PlainLongText": "{ escape( val    = is_data-note_description
+                                                        format = cl_abap_format=>e_json_string ) }"|
+                        && |\}],|.
     ENDIF.
     IF lv_item CS ','.
       lv_item = substring( val = lv_item len = strlen( lv_item ) - 1 ).

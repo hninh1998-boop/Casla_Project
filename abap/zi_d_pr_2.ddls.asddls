@@ -23,7 +23,11 @@ define view entity zi_d_pr_2
       type                       as Type,
       purchase_requisition       as PurchaseRequisition,
       purchase_requisition_item  as PurchaseRequisitionItem,
+      account_assignment_category as AccountAssignmentCategory,
+      cost_center                as CostCenter,
       material                   as Material,
+      pur_reqn_item_text         as PurchaseRequisitionItemText,
+      material_group             as MaterialGroup,
       @Semantics.quantity.unitOfMeasure: 'BaseUnit'
       requested_quantity         as RequestedQuantity,
       base_unit                  as BaseUnit,
@@ -38,6 +42,9 @@ define view entity zi_d_pr_2
       delivery_date              as DeliveryDate,
       requirement_tracking       as RequirementTracking,
       requisitioner_name         as RequisitionerName,
+      master_fixed_asset         as MasterFixedAsset,
+      fixed_asset                as FixedAsset,
+      note_description           as NoteDescription,
 
       @Semantics.user.createdBy: true
       created_by                 as CreatedBy,
