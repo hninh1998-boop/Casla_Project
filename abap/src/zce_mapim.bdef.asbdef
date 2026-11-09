@@ -1,0 +1,11 @@
+unmanaged implementation in class zbp_ce_mapim unique;
+strict ( 2 );
+
+define behavior for zce_mapim alias MapIM
+lock master
+authorization master ( instance )
+{
+  // Export Excel: file sinh hoàn toàn ở backend (zcl_ce_mapim_xlsx), FE chỉ gửi filter + sort rồi nhận file
+  // JsonString = filter + sort đang áp trên bảng (xem ty_export_param trong zbp_ce_mapim)
+  static action ExportExcel parameter zabs_mapim_export_param result [1] zabs_mapim_export_result;
+}

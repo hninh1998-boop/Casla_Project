@@ -1,0 +1,34 @@
+{
+  "formatVersion": "2",
+  "header": {
+    "description": "An SAP Fiori application.",
+    "originalLanguage": "en",
+    "abapLanguageVersion": "cloudDevelopment"
+  },
+  "generalInformation": {
+    "appType": "ui5",
+    "catalogId": "SAP_TC_UI5_REPO_UIAD",
+    "targetMappingTitle": "Mapping hóa đơn - chứng từ kho"
+  },
+  "ui5AppDetails": {
+    "appId": "zmapim"
+  },
+  "navigation": {
+    "targetMappingId": "UI5R_9624F0FAD0C6F488A3FFA9A76F595933453A0395_TM",
+    "semanticObject": "zmapim",
+    "action": "display",
+    "desktop": true,
+    "tablet": true,
+    "phone": true
+  },
+  "tiles": [
+    {
+      "id": "UI5R_9624F0FAD0C6F488A3FFA9A76F595933453A0395_AL",
+      "tileType": "static",
+      "isDefault": true,
+      "standard": {
+        "title": "Mapping hóa đơn - chứng từ kho"
+      }
+    }
+  ]
+}

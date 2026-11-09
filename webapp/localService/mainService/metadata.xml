@@ -122,6 +122,8 @@
                 <Property Name="AllocatedGRAmountTransCode" Type="Edm.Decimal" Precision="13" Scale="3" sap:unit="TransCur" sap:variable-scale="true" sap:label="Allocated GR Amount TransCode"/>
                 <Property Name="AllocatedInvoiceAmountComCode" Type="Edm.Decimal" Precision="13" Scale="3" sap:unit="LocaCurrencyKey" sap:variable-scale="true" sap:label="Allocated Invoice Amount ComCode"/>
                 <Property Name="AllocatedInvoiceAmountTrans" Type="Edm.Decimal" Precision="13" Scale="3" sap:unit="Currency" sap:variable-scale="true" sap:label="Allocated Invoice Amount Trans"/>
+                <Property Name="Batch" Type="Edm.String" MaxLength="10" sap:display-format="UpperCase" sap:label="Batch" sap:quickinfo="Batch Number"/>
+                <Property Name="ValuationType" Type="Edm.String" MaxLength="10" sap:display-format="UpperCase" sap:label="Valuation Type"/>
                 <Property Name="SortOrder" Type="Edm.String" MaxLength="10" sap:label="Sort Order"/>
             </EntityType>
             <EntityType Name="ZI_COMPANYCODE_VHType" sap:label="Company Code VH" sap:value-list="true" sap:content-version="1">

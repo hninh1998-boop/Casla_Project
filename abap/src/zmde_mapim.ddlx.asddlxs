@@ -1,0 +1,444 @@
+@Metadata.layer: #CORE
+@UI.headerInfo: {
+  typeName: 'Data',
+  typeNamePlural: 'Datas',
+  title: { type: #STANDARD,
+           label: 'Báo cáo Mapping Hóa đơn - Chứng từ kho' }
+}
+annotate entity zce_mapim with
+{
+  @UI.facet: [{
+    id: 'GeneralInfo',
+    purpose: #STANDARD,
+    type: #IDENTIFICATION_REFERENCE,
+    label: 'General Information',
+    position: 10 }]
+
+  @EndUserText.label: 'Company Code'
+  @UI.lineItem: [{ position: 10 }]
+  @UI.identification: [{ position: 10 }]
+  @UI.selectionField: [{ position: 10 }]
+  @Consumption.valueHelpDefinition: [{
+    entity: { name: 'ZI_COMPANYCODE_VH',
+              element: 'CompanyCode' }
+  }]
+  @Consumption.filter.mandatory: true
+  CompanyCode;
+
+  @EndUserText.label: 'PO Type'
+  @UI.lineItem: [{ position: 391 }]
+  @UI.identification: [{ position: 391 }]
+  @UI.selectionField: [{ position: 11 }]
+  @Consumption.valueHelpDefinition: [{
+    entity: { name: 'I_PurchaseOrderType',
+              element: 'PurchaseOrderType' }
+  }]
+  @Consumption.filter.mandatory: true
+  POType;
+
+  @EndUserText.label: 'Fiscal year'
+  @UI.selectionField: [{ position: 20 }]
+  @UI.lineItem: [{ hidden: true }]
+  FiscalYear;
+
+  @EndUserText.label: 'Invoicing party'
+  @UI.lineItem: [{ position: 30 }]
+  @UI.identification: [{ position: 30 }]
+  @UI.selectionField: [{ position: 30 }]
+  @Consumption.valueHelpDefinition: [{
+    entity: { name: 'zvh_invoicingparty_mapim',
+              element: 'InvoicingParty' }
+  }]
+  InvoicingParty;
+
+  @EndUserText.label: 'Invoicing party name'
+  @UI.lineItem: [{ position: 40 }]
+  @UI.identification: [{ position: 40 }]
+  @Consumption.filter.hidden: true
+  InvoicingPartyName;
+
+  @EndUserText.label: 'INV Posting Date'
+  @UI.lineItem: [{ position: 50 }]
+  @UI.identification: [{ position: 50 }]
+  @UI.selectionField: [{ position: 50 }]
+  @Consumption.filter.selectionType: #INTERVAL
+  InvoicePostingDate;
+
+  @EndUserText.label: 'E-Invoice'
+  @UI.lineItem: [{ position: 60 }]
+  @UI.identification: [{ position: 60 }]
+  InvoiceNo;
+
+  @EndUserText.label: 'Invoice Doc'
+  @UI.lineItem: [{ position: 70 }]
+  @UI.identification: [{ position: 70 }]
+  @UI.selectionField: [{ position: 70 }]
+  @Consumption.valueHelpDefinition: [{
+    entity: { name: 'zvh_po_mapim',
+              element: 'PurchasingHistoryDocument' }
+  }]
+  Inv;
+
+  @EndUserText.label: 'Invoice Doc Item'
+  @UI.lineItem: [{ position: 80 }]
+  @UI.identification: [{ position: 80 }]
+  @UI.selectionField: [{ position: 80 }]
+  @Consumption.valueHelpDefinition: [{
+    entity: { name: 'zvh_po_mapim',
+              element: 'PurchasingHistoryDocumentItem' }
+  }]
+  InvItem;
+
+  @EndUserText.label: 'GR Posting Date'
+  @UI.lineItem: [{ position: 90 }]
+  @UI.identification: [{ position: 90 }]
+  @UI.selectionField: [{ position: 90 }]
+  @Consumption.filter.selectionType: #INTERVAL
+  GRPostingDate;
+
+  @EndUserText.label: 'GR Doc'
+  @UI.lineItem: [{ position: 100 }]
+  @UI.identification: [{ position: 100 }]
+  @UI.selectionField: [{ position: 100 }]
+  @Consumption.valueHelpDefinition: [{
+    entity: { name: 'zvh_po_mapim',
+              element: 'PurchasingHistoryDocument' }
+  }]
+  MatDoc;
+
+  @EndUserText.label: 'GR Doc Item'
+  @UI.lineItem: [{ position: 110 }]
+  @UI.identification: [{ position: 110 }]
+  @UI.selectionField: [{ position: 110 }]
+  @Consumption.valueHelpDefinition: [{
+    entity: { name: 'zvh_po_mapim',
+              element: 'PurchasingHistoryDocumentItem' }
+  }]
+  MatDocItem;
+
+  @EndUserText.label: 'GR Qty'
+  @UI.lineItem: [{ position: 120 }]
+  @UI.identification: [{ position: 120 }]
+  @Consumption.filter.hidden: true
+  GRQty;
+
+  @EndUserText.label: 'INV Qty'
+  @UI.lineItem: [{ position: 130 }]
+  @UI.identification: [{ position: 130 }]
+  @Consumption.filter.hidden: true
+  InvoiceQty;
+
+  @EndUserText.label: 'Allocated Qty'
+  @UI.lineItem: [{ position: 140 }]
+  @UI.identification: [{ position: 140 }]
+  @Consumption.filter.hidden: true
+  AllocatedQty;
+
+  @EndUserText.label: 'GR Open Qty'
+  @UI.lineItem: [{ position: 150 }]
+  @UI.identification: [{ position: 150 }]
+  @Consumption.filter.hidden: true
+  GROpenQty;
+
+  @EndUserText.label: 'INV Open Qty'
+  @UI.lineItem: [{ position: 160 }]
+  @UI.identification: [{ position: 160 }]
+  @Consumption.filter.hidden: true
+  InvOpenQty;
+
+  @EndUserText.label: 'Item Text'
+  @UI.lineItem: [{ position: 161 }]
+  @UI.identification: [{ position: 161 }]
+  @Consumption.filter.hidden: true
+  ItemText;
+
+  @EndUserText.label: 'Header Text'
+  @UI.lineItem: [{ position: 162 }]
+  @UI.identification: [{ position: 162 }]
+  @Consumption.filter.hidden: true
+  HeaderText;
+
+  @EndUserText.label: 'Material Code'
+  @UI.lineItem: [{ position: 170 }]
+  @UI.identification: [{ position: 170 }]
+  @UI.selectionField: [{ position: 170 }]
+  @Consumption.valueHelpDefinition: [{
+    entity: { name: 'I_ProductStdVH',
+              element: 'Product' }
+  }]
+  MaterialCode;
+
+  @EndUserText.label: 'Material Description'
+  @UI.lineItem: [{ position: 180 }]
+  @UI.identification: [{ position: 180 }]
+  @Consumption.filter.hidden: true
+  MaterialDescription;
+
+  @EndUserText.label: 'Order Price Unit'
+  @UI.lineItem: [{ position: 190 }]
+  @UI.identification: [{ position: 190 }]
+  @Consumption.filter.hidden: true
+  OrderPriceUnit;
+
+  @EndUserText.label: 'GR Category'
+  @UI.lineItem: [{ position: 200 }]
+  @UI.identification: [{ position: 200 }]
+  GRCategory;
+
+  @EndUserText.label: 'INV Category'
+  @UI.lineItem: [{ position: 210 }]
+  @UI.identification: [{ position: 210 }]
+  IVCategory;
+
+  @EndUserText.label: 'GR Amount ComCode'
+  @UI.lineItem: [{ position: 220 }]
+  @UI.identification: [{ position: 220 }]
+  @Consumption.filter.hidden: true
+  GRAmountComCode;
+
+  @EndUserText.label: 'GR Amount TransCode'
+  @UI.lineItem: [{ position: 230 }]
+  @UI.identification: [{ position: 230 }]
+  @Consumption.filter.hidden: true
+  GRAmountTransCode;
+
+  @EndUserText.label: 'TransCur'
+  @UI.lineItem: [{ position: 240 }]
+  @UI.identification: [{ position: 240 }]
+  @Consumption.filter.hidden: true
+  TransCur;
+
+  @EndUserText.label: 'INV Journal Entry'
+  @UI.lineItem: [{ position: 250 }]
+  @UI.identification: [{ position: 250 }]
+  @UI.selectionField: [{ position: 250 }]
+  @Consumption.valueHelpDefinition: [{
+    entity: { name: 'zvh_je_mapim',
+              element: 'ACCOUNTINGDOCUMENT' }
+  }]
+  JE;
+
+  @EndUserText.label: 'INV Amount ComCode'
+  @UI.lineItem: [{ position: 260 }]
+  @UI.identification: [{ position: 260 }]
+  @Consumption.filter.hidden: true
+  //  InvoiceAmountComCodeF;
+  //  @UI.hidden: true
+  //  @Consumption.filter.hidden: true
+  InvoiceAmountComCode;
+
+  @EndUserText.label: 'INV Amount Trans'
+  @UI.lineItem: [{ position: 270 }]
+  @UI.identification: [{ position: 270 }]
+  @Consumption.filter.hidden: true
+  //  invoiceamounttransf;
+  //  @UI.hidden: true
+  //  @Consumption.filter.hidden: true
+  InvoiceAmountTrans;
+
+
+  @EndUserText.label: 'INV Net price TransCur'
+  @UI.lineItem: [{ position: 271 }]
+  @UI.identification: [{ position: 271 }]
+  @Consumption.filter.hidden: true
+  //  invnetpricetranscurf;
+  //  @UI.hidden: true
+  //  @Consumption.filter.hidden: true
+  INVNetPriceTransCur;
+
+  @EndUserText.label: 'Currency'
+  @UI.lineItem: [{ position: 280 }]
+  @UI.identification: [{ position: 280 }]
+  @Consumption.filter.hidden: true
+  Currency;
+
+  @EndUserText.label: 'GR Fully Invoiced'
+  @UI.lineItem: [{ position: 290 }]
+  @UI.identification: [{ position: 290 }]
+  @UI.selectionField: [{ position: 290 }]
+  @Consumption.valueHelpDefinition: [{
+    entity: {
+        name: 'zvh_grfullyinvoiced_mapim',
+        element: 'Text' }
+    }]
+  GRFullyInvoiced;
+
+  @EndUserText.label: 'IV Fully Invoiced'
+  @UI.lineItem: [{ position: 300 }]
+  @UI.identification: [{ position: 300 }]
+  @UI.selectionField: [{ position: 300 }]
+  @Consumption.valueHelpDefinition: [{
+  entity: {
+      name: 'zvh_grfullyinvoiced_mapim',
+      element: 'Text' }
+  }]
+  IVFullyInvoiced;
+
+  @EndUserText.label: 'PO fully invoiced'
+  @UI.lineItem: [{ position: 310 }]
+  @UI.identification: [{ position: 310 }]
+  @UI.selectionField: [{ position: 310 }]
+  @Consumption.valueHelpDefinition: [{
+  entity: {
+      name: 'zvh_grfullyinvoiced_mapim',
+      element: 'Text' }
+  }]
+  POFullyInvoiced;
+
+  @EndUserText.label: 'Storage Location'
+  @UI.lineItem: [{ position: 311 }]
+  @UI.identification: [{ position: 311 }]
+  @UI.selectionField: [{ position: 311 }]
+  @Consumption.valueHelpDefinition: [{
+  entity: {
+      name: 'I_StorageLocationStdVH',
+      element: 'StorageLocation' }
+  }]
+  StorageLocation;
+
+  @UI.hidden: true
+  @Consumption.filter.hidden: true
+  StorageLocationName;
+
+  @EndUserText.label: 'Plant'
+  @UI.lineItem: [{ position: 320 }]
+  @UI.identification: [{ position: 320 }]
+  @UI.selectionField: [{ position: 320 }]
+  @Consumption.valueHelpDefinition: [{
+    entity: { name: 'I_PlantStdVH',
+              element: 'Plant' }
+  }]
+  Plant;
+
+  @EndUserText.label: 'PO No'
+  @UI.lineItem: [{ position: 330 }]
+  @UI.identification: [{ position: 330 }]
+  @UI.selectionField: [{ position: 330 }]
+  @Consumption.valueHelpDefinition: [{
+    entity: { name: 'zvh_po_mapim',
+              element: 'PurchaseOrder' }
+  }]
+  PONo;
+
+  @EndUserText.label: 'PO Item'
+  @UI.lineItem: [{ position: 340 }]
+  @UI.identification: [{ position: 340 }]
+  @UI.selectionField: [{ position: 340 }]
+  @Consumption.valueHelpDefinition: [{
+    entity: { name: 'zvh_po_mapim',
+              element: 'PurchaseOrderItem' }
+  }]
+  POItem;
+
+  @EndUserText.label: 'PO Net Price'
+  @UI.lineItem: [{ position: 341 }]
+  @UI.identification: [{ position: 341 }]
+  @Consumption.filter.hidden: true
+  PONetprice;
+
+  @EndUserText.label: 'PO Currency'
+  @UI.lineItem: [{ position: 342 }]
+  @UI.identification: [{ position: 342 }]
+  @Consumption.filter.hidden: true
+  POCurrency;
+
+  @EndUserText.label: 'PO Supplier'
+  @UI.lineItem: [{ position: 350 }]
+  @UI.identification: [{ position: 350 }]
+  @UI.selectionField: [{ position: 350 }]
+  @Consumption.valueHelpDefinition: [{
+    entity: { name: 'zvh_posupplier_mapim',
+              element: 'POSupplier' }
+  }]
+  POSupplier;
+
+  @EndUserText.label: 'PO Supplier Name'
+  @UI.lineItem: [{ position: 360 }]
+  @UI.identification: [{ position: 360 }]
+  @Consumption.filter.hidden: true
+  POSupplierName;
+
+  @EndUserText.label: 'Ghi chú'
+  @UI.lineItem: [{ position: 361 }]
+  @UI.identification: [{ position: 361 }]
+  @Consumption.filter.hidden: true
+  GhiChu;
+
+  @EndUserText.label: 'GR-based INV'
+  @UI.lineItem: [{ position: 370 }]
+  @UI.identification: [{ position: 370 }]
+  @UI.selectionField: [{ position: 370 }]
+  @Consumption.valueHelpDefinition: [{
+  entity: {
+      name: 'zvh_grfullyinvoiced_mapim',
+      element: 'Text' }
+  }]
+  GRBasedInv;
+
+  @EndUserText.label: 'Delivery Doc'
+  @UI.lineItem: [{ position: 380 }]
+  @UI.identification: [{ position: 380 }]
+  @Consumption.filter.hidden: true
+  DeliveryDoc;
+
+  @EndUserText.label: 'Delivery Item'
+  @UI.lineItem: [{ position: 390 }]
+  @UI.identification: [{ position: 390 }]
+  @Consumption.filter.hidden: true
+  DeliveryItem;
+
+  @EndUserText.label: 'GR Fiscal year'
+  @UI.lineItem: [{ position: 400 }]
+  @UI.identification: [{ position: 400 }]
+  GRFiscalYear;
+
+  @EndUserText.label: 'Invoice Fiscal year'
+  @UI.lineItem: [{ position: 410 }]
+  @UI.identification: [{ position: 410 }]
+  InvFiscalYear;
+
+  @EndUserText.label: 'Allocated GR Amount ComCode'
+  @UI.lineItem: [{ position: 420 }]
+  @UI.identification: [{ position: 420 }]
+  @Consumption.filter.hidden: true
+  AllocatedGRAmountComCode;
+
+  @EndUserText.label: 'Allocated GR Amount TransCode'
+  @UI.lineItem: [{ position: 430 }]
+  @UI.identification: [{ position: 430 }]
+  @Consumption.filter.hidden: true
+  AllocatedGRAmountTransCode;
+
+  @EndUserText.label: 'Allocated Invoice Amount ComCode'
+  @UI.lineItem: [{ position: 440 }]
+  @UI.identification: [{ position: 440 }]
+  @Consumption.filter.hidden: true
+  AllocatedInvoiceAmountComCode;
+
+  @EndUserText.label: 'Allocated Invoice Amount Trans'
+  @UI.lineItem: [{ position: 450 }]
+  @UI.identification: [{ position: 450 }]
+  @Consumption.filter.hidden: true
+  AllocatedInvoiceAmountTrans;
+
+  //Dev/NinhNH/ZMapIM/Add Batch + Valuation type - FS v2 - 04.11.2026
+  @EndUserText.label: 'Batch'
+  @UI.lineItem: [{ position: 460 }]
+  @UI.identification: [{ position: 460 }]
+  @Consumption.filter.hidden: true
+  Batch;
+
+  @EndUserText.label: 'Valuation Type'
+  @UI.lineItem: [{ position: 470 }]
+  @UI.identification: [{ position: 470 }]
+  @Consumption.filter.hidden: true
+  ValuationType;
+
+  @UI.hidden: true
+  @Consumption.filter.hidden: true
+  LocaCurrencyKey;
+
+  @UI.hidden: true
+  @Consumption.filter.hidden: true
+  SortOrder;
+}

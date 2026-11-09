@@ -1,0 +1,4 @@
+@EndUserText.label: 'Serv.Def. - Map Inv./Mat.Doc.'
+define service Zui_mapim {
+  expose zce_mapim;
+}
