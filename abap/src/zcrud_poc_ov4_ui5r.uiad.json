@@ -1,0 +1,34 @@
+{
+  "formatVersion": "2",
+  "header": {
+    "description": "An SAP Fiori application.",
+    "originalLanguage": "en",
+    "abapLanguageVersion": "cloudDevelopment"
+  },
+  "generalInformation": {
+    "appType": "ui5",
+    "catalogId": "SAP_TC_UI5_REPO_UIAD",
+    "targetMappingTitle": "Mass change Production Order Components"
+  },
+  "ui5AppDetails": {
+    "appId": "zcrudpocov4"
+  },
+  "navigation": {
+    "targetMappingId": "UI5R_E837C6FEF2DB303623A56727B845DE4E65DA1572_TM",
+    "semanticObject": "zcrud_poc_ov4",
+    "action": "display",
+    "desktop": true,
+    "tablet": true,
+    "phone": true
+  },
+  "tiles": [
+    {
+      "id": "UI5R_E837C6FEF2DB303623A56727B845DE4E65DA1572_AL",
+      "tileType": "static",
+      "isDefault": true,
+      "standard": {
+        "title": "Mass change Production Order Components"
+      }
+    }
+  ]
+}

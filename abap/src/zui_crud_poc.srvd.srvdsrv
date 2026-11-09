@@ -1,0 +1,6 @@
+@EndUserText.label: 'Serv.Def. - CRUD POC'
+define service Zui_crud_poc {
+  expose zc_m_crud_poc          as ManageFile;
+  expose zc_d_crud_poc          as DataFile;
+  expose zi_req_sta_crud_poc_vh as StatusVH;
+}

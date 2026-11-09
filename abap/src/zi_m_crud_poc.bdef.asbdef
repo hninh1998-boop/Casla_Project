@@ -1,0 +1,94 @@
+managed implementation in class zbp_i_m_crud_poc unique;
+strict ( 2 );
+
+with draft;
+
+define behavior for zi_m_crud_poc alias ManageFile
+persistent table ztb_m_crud_poc
+draft table ztb_m_crud_pocd
+etag master Changedbyuser
+lock master total etag Changedbyuser
+authorization master ( global )
+early numbering
+{
+  create ( authorization : global );
+  update;
+  delete;
+  field ( readonly ) Uuid, ZCount, Countline, Createdbyuser, Createddate, Changedbyuser, Changeddate;
+  association _DataFile { with draft; create; }
+
+  draft action Activate optimized;
+  draft action Discard;
+  draft action Edit;
+  draft action Resume;
+  draft determine action Prepare;
+
+  static action uploadExcel parameter zabs_file_crud_poc;
+
+  determination getExcelData on save { field Filename; }
+  determination setStatusToOpen on modify { create; }
+
+  static action downloadFile result [1] zabs_file_crud_poc;
+
+  static action downloadTemplate;
+
+  mapping for ztb_m_crud_poc
+    {
+      Uuid          = uuid;
+      Zcount        = zcount;
+      Status        = status;
+      Attachment    = attachment;
+      Mimetype      = mimetype;
+      Filename      = filename;
+      Countline     = countline;
+      Createdbyuser = createdbyuser;
+      Createddate   = createddate;
+      Changedbyuser = changedbyuser;
+      Changeddate   = changeddate;
+    }
+}
+
+define behavior for zi_d_crud_poc alias DataFile
+persistent table ztb_d_crud_poc
+draft table ztb_d_crud_pocd
+lock dependent by _ManageFile
+authorization dependent by _ManageFile
+//etag master <field_name>
+with additional save
+{
+  update;
+  delete;
+  field ( numbering : managed, readonly ) Uuid;
+  field ( readonly ) Uuidfile, CreatedBy, CreatedAt, LocalLastChangedAt, LastChangedAt, LastChangedBy;
+  association _ManageFile { with draft; }
+
+  action ( features : instance ) PostConfirm result [1] $self;
+  action ( features : instance ) setJob result [1] $self;
+
+  side effects { action setJob affects entity _ManageFile; }
+
+  determination setStatusToUpdate on modify { field MessageType; }
+
+  mapping for ztb_d_crud_poc
+    {
+      Uuid                        = uuid;
+      Uuidfile                    = uuidfile;
+      MessageType                 = messagetype;
+      Message                     = message;
+      Type                        = type;
+      ManufacturingOrder          = manufacturing_order;
+      ManufacturingOrderOperation = manufacturing_order_operation;
+      BomItem                     = bom_item;
+      BomItemCategory             = bom_item_category;
+      Material                    = material;
+      RequiredQuantity            = required_quantity;
+      BaseUnit                    = base_unit;
+      Plant                       = plant;
+      StorageLocation             = storage_location;
+      CreatedBy                   = created_by;
+      CreatedAt                   = created_at;
+      LastChangedBy               = last_changed_by;
+      LocalLastChangedAt          = local_last_changed_at;
+      LastChangedAt               = last_changed_at;
+    }
+}

@@ -1,0 +1,19 @@
+{
+  "formatVersion": "1",
+  "header": {
+    "description": "ZJT_CRUD_POC",
+    "originalLanguage": "en",
+    "abapLanguageVersion": "cloudDevelopment"
+  },
+  "generalInformation": {
+    "catalogName": "ZJC_CRUD_POC"
+  },
+  "parameters": {
+    "valueRangesParameters": [
+      {
+        "name": "HDR_ID",
+        "valueRanges": []
+      }
+    ]
+  }
+}
