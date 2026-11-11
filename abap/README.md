@@ -20,7 +20,7 @@ Tạo các object trong ADT **theo đúng số thứ tự** rồi Activate.
 | Bước | Xử lý |
 |---|---|
 | 1 | `I_BusinessPartner` – BP thay đổi trong ngày **D-1 theo giờ thực tế VN** (00:00:00 → 23:59:59 UTC+7), xem ghi chú UTC |
-| 2 | `I_SalesOrder` – SoldToParty thuộc bước 1, SalesOrg **6710 / 6720**, `OverallSDProcessStatus` **A / B** |
+| 2 | `I_SalesOrder` – `SalesOrderType` = **TA**, SoldToParty thuộc bước 1, SalesOrg **6710 / 6720**, `OverallSDProcessStatus` **A / B** |
 | 3 | (1) = `I_SalesOrderPartner` ZE ở **header** SO · (2) = `I_CustSalesPartnerFunc` ZE theo Sold-to + Sales area, lấy `BPCustomerNumber` (ZE là partner type **KU**) |
 | 4 | (1)=(2): bỏ qua · (2) trống: **giữ nguyên** (TH1) · (1) trống: **insert** (TH2) · khác nhau: **ghi đè** (TH3) |
 | 5 | Update qua EML `I_SalesOrderTP`, **commit từng SO**, nên một SO lỗi không ảnh hưởng các SO khác |
@@ -46,9 +46,9 @@ Dòng đầu tiên của log in ra khoảng thời gian này để đối chiế
 | Tham số | Ý nghĩa |
 |---|---|
 | `P_DATE` | Ngày thay đổi BP theo giờ VN. **Để trống = D-1**. Lịch chạy định kỳ **phải để trống**, vì giá trị nhập sẽ bị lưu cố định cho mọi lần chạy. Chỉ nhập khi chạy bù một ngày bị lỡ (ví dụ đêm đó job lỗi): mỗi ngày bị lỡ chạy 1 lần. |
-| `S_SO` | Giới hạn số SO, dùng khi test hoặc chạy lại vài đơn (nhập 10004257 hay 0010004257 đều được) |
+| `S_SO` | Chạy riêng các SO này (nhập 10004257 hay 0010004257 đều được). **Nếu để trống `P_DATE`**, job xử lý các SO này mà không xét BP thay đổi, dùng khi chạy Immediately để check hoặc chạy lại SO lỗi. SO nhập đích danh mà không tìm thấy thì log Warning. |
 | `P_TEST` | Chạy thử: chỉ so sánh và ghi log `[TEST] … sẽ thêm/đổi …`, **không update** |
-| `P_FULL` | Quét **toàn bộ** SO đang mở của 6710/6720, bỏ qua điều kiện BP thay đổi. Dùng cho **lần đồng bộ đầu tiên khi go-live**. |
+| `P_FULL` | Quét **toàn bộ** SO TA đang mở của 6710/6720, bỏ qua điều kiện BP thay đổi. Dùng cho **lần đồng bộ đầu tiên khi go-live**. |
 
 ## 01. Application Log Object (form editor – nhập tay)
 
@@ -78,8 +78,8 @@ Dòng đầu tiên của log in ra khoảng thời gian này để đối chiế
 ## 04. Lên lịch & phân quyền
 
 1. Gán Job Catalog vào IAM App hoặc Business Catalog (giống `ZAJC_UPL_ATT_SO`) để user thấy template trong app **Application Jobs**.
-2. App **Application Jobs** > Create > chọn template `ZAJT_UDT_PF` > Recurrence **Daily 01:00** (giờ VN, theo timezone của user tạo) > để trống toàn bộ tham số.
-3. **Timezone của user tạo lịch phải là UTC+7** (Settings > Language & Region). App hiểu giờ 01:00 theo timezone của user này. Nếu user để UTC thì job sẽ chạy lúc 08:00 giờ VN. Ngày D-1 vẫn đúng vì code tự quy đổi sang giờ VN.
+2. App **Application Jobs** > Create > chọn template `ZAJT_UDT_PF` > bỏ tick Start Immediately > Recurrence **Daily 01:00** > để trống toàn bộ tham số.
+3. **Time Zone of Job = `Etc/GMT-7`** (giờ VN, giống `ZJT_HHDV_DAILY` trên PRD). Etc/GMT ghi dấu ngược, nên `Etc/GMT-7` là UTC+7, còn `Etc/GMT+7` là UTC-7. Timezone của job chỉ quyết định **giờ job bắt đầu chạy**. Khi đang chạy, ngày hệ thống và LastChangeDate/Time vẫn là UTC, nên code vẫn phải tự quy đổi D-1 sang giờ VN (xem Ghi chú UTC).
 4. **User chạy job = user tạo lịch.** EML không dùng `PRIVILEGED` nên user này phải có quyền **sửa Sales Order** của 6710/6720. Nên dùng user kỹ thuật hoặc user dùng chung, tránh user cá nhân để không bị ảnh hưởng khi người đó nghỉ việc.
 5. **Go-live:** chạy 1 lần với `P_TEST = X` + `P_FULL = X` để xem trước, rồi chạy lại `P_FULL = X` để đồng bộ thật. Sau đó mới bật lịch hằng ngày.
 
@@ -94,4 +94,4 @@ App **Application Jobs** > chọn lần chạy > **Log**:
 | Info | `SO …: master KH … (6710/10/00) chưa có ZE – giữ nguyên ZE …` (TH1) |
 | Tổng kết (dòng cuối) | `Tổng SO: n – Đã đúng – Insert – Ghi đè – Giữ nguyên – Lỗi` |
 
-SO đã đúng thì không ghi log để log gọn. SO bị khóa lúc chạy sẽ báo Error. Vì job chỉ quét BP thay đổi trong D-1, đêm sau SO đó **không** tự được xử lý lại. Cần chạy tay với `S_SO` = các SO lỗi.
+Mọi SO job quét được đều có 1 dòng log, kể cả SO đã khớp (Information *"đã khớp master"*). SO bị khóa lúc chạy sẽ báo Error. Vì job chỉ quét BP thay đổi trong D-1, đêm sau SO đó **không** tự được xử lý lại. Cần chạy tay với `S_SO` = các SO lỗi.

@@ -1,7 +1,7 @@
 "! <p>Job - Đồng bộ Partner function ZE (Sales Person) từ BP master sang SO chưa complete</p>
 "! FS: Update partner function (SD – Hoàng Phương Thanh, 11/2026)
 "! <ul>
-"! <li>Sales org 6710, 6720 – chỉ partner function ZE ở header SO</li>
+"! <li>SO loại TA, Sales org 6710, 6720 – chỉ partner function ZE ở header SO</li>
 "! <li>SO có OverallSDProcessStatus = A / B</li>
 "! <li>(1) = ZE trên SO, (2) = ZE trên master (I_CustSalesPartnerFunc)</li>
 "! <li>(1)=(2): bỏ qua | (2) trống: giữ nguyên | (1) trống: insert | khác nhau: ghi đè</li>
@@ -37,6 +37,7 @@ CLASS zcl_job_udt_pf DEFINITION PUBLIC FINAL CREATE PUBLIC.
              sales_org    TYPE i_salesorder-salesorganization,
              distr_chan   TYPE i_salesorder-distributionchannel,
              division     TYPE i_salesorder-organizationdivision,
+             so_ze_pf     TYPE i_salesorderpartner-partnerfunction, " có giá trị = SO đã có dòng ZE
              so_ze        TYPE i_salesorderpartner-customer,
              master_ze    TYPE i_custsalespartnerfunc-bpcustomernumber,
              default_flag TYPE i_custsalespartnerfunc-defaultpartner,
@@ -62,7 +63,9 @@ CLASS zcl_job_udt_pf DEFINITION PUBLIC FINAL CREATE PUBLIC.
     CONSTANTS c_pf_ze          TYPE i_salesorderpartner-partnerfunction VALUE 'ZE'.
     CONSTANTS c_sorg_6710      TYPE i_salesorder-salesorganization VALUE '6710'.
     CONSTANTS c_sorg_6720      TYPE i_salesorder-salesorganization VALUE '6720'.
-    CONSTANTS c_sts_not_yet    TYPE i_salesorder-overallsdprocessstatus VALUE 'A'.
+    " Giá trị lưu trong DB là TA (Standard Order); màn hình tiếng Anh hiển thị là OR
+    CONSTANTS c_so_type_ta     TYPE i_salesorder-salesordertype VALUE 'TA'.
+    CONSTANTS c_sts_not_yet   TYPE i_salesorder-overallsdprocessstatus VALUE 'A'.
     CONSTANTS c_sts_partially  TYPE i_salesorder-overallsdprocessstatus VALUE 'B'.
 
     " Ngày D-1 tính theo giờ thực tế Việt Nam, không theo ngày hệ thống (UTC)
@@ -154,7 +157,11 @@ CLASS zcl_job_udt_pf IMPLEMENTATION.
     LOOP AT it_parameters INTO DATA(ls_par).
       CASE ls_par-selname.
         WHEN c_par_date.
-          ls_sel-change_date = ls_par-low.
+          " Ô ngày để trống vẫn được job truyền vào (low = space) -> bỏ qua, nếu không
+          " change_date = '        ' (không phải INITIAL) làm khoảng ngày thành 0000-00-00
+          IF ls_par-low IS NOT INITIAL.
+            ls_sel-change_date = ls_par-low.
+          ENDIF.
         WHEN c_par_so.
           " User nhập 10004257 -> chuyển về 0010004257 (trừ khi dùng pattern *)
           APPEND VALUE #( sign   = ls_par-sign
@@ -201,13 +208,21 @@ CLASS zcl_job_udt_pf IMPLEMENTATION.
     GET TIME STAMP FIELD lv_now.
     CONVERT TIME STAMP lv_now TIME ZONE c_tz_vn INTO DATE lv_today_vn.
 
-    IF is_sel-change_date IS NOT INITIAL.
+    " Chỉ dùng ngày nhập vào khi là ngày thật (không phải toàn space / toàn số 0)
+    DATA(lv_has_date) = xsdbool( is_sel-change_date CN ' 0' ).
+    IF lv_has_date = abap_true.
       lv_change_vn = is_sel-change_date.
     ELSE.
       lv_change_vn = lv_today_vn - 1.
     ENDIF.
 
-    IF is_sel-full = abap_true.
+    " Nhập số SO mà không nhập ngày -> xử lý đúng các SO đó, không xét BP có thay đổi hay không
+    " (dùng khi chạy Immediately để check / chạy lại SO lỗi)
+    DATA(lv_by_so) = xsdbool( is_sel-full = abap_false
+                              AND is_sel-so_range IS NOT INITIAL
+                              AND lv_has_date = abap_false ).
+
+    IF is_sel-full = abap_true OR lv_by_so = abap_true.
       " Không lọc theo BP thay đổi -> khoảng thời gian bao toàn bộ
       ls_window = VALUE #( date_from = '00000000' time_from = c_time_start
                            date_to   = '99991231' time_to   = c_time_end ).
@@ -225,7 +240,10 @@ CLASS zcl_job_udt_pf IMPLEMENTATION.
     log_add( iv_severity = if_bali_constants=>c_severity_information
              iv_text     = COND string(
                              WHEN is_sel-full = abap_true
-                             THEN |Quét toàn bộ SO đang mở (6710, 6720)|
+                             THEN |Quét toàn bộ SO TA đang mở (6710, 6720)|
+                               && COND string( WHEN is_sel-so_range IS NOT INITIAL THEN ` – giới hạn theo danh sách SO` )
+                             WHEN lv_by_so = abap_true
+                             THEN |Xử lý theo danh sách SO nhập vào (không xét ngày thay đổi BP)|
                              ELSE |BP thay đổi ngày { lv_change_vn DATE = ISO } (giờ VN)|
                                && | = UTC { ls_window-date_from DATE = ISO } { ls_window-time_from TIME = ISO }|
                                && | -> { ls_window-date_to DATE = ISO } { ls_window-time_to TIME = ISO }| )
@@ -239,6 +257,17 @@ CLASS zcl_job_udt_pf IMPLEMENTATION.
       process_so( is_so = ls_so iv_test = is_sel-test ).
     ENDLOOP.
 
+    " SO nhập đích danh (EQ) nhưng không lấy được -> báo rõ lý do thay vì im lặng
+    LOOP AT is_sel-so_range INTO DATA(ls_so_sel) WHERE sign = 'I' AND option = 'EQ'.
+      IF NOT line_exists( lt_so[ sales_order = ls_so_sel-low ] ).
+        log_add( iv_severity = if_bali_constants=>c_severity_warning
+                 iv_text     = |SO { ls_so_sel-low ALPHA = OUT }: không xử lý – không tồn tại, không phải loại TA,|
+                            && | không thuộc 6710/6720 hoặc đã complete|
+                            && COND string( WHEN lv_has_date = abap_true AND is_sel-full = abap_false
+                                            THEN `, hoặc BP khách hàng không thay đổi trong ngày đã nhập` ) ).
+      ENDIF.
+    ENDLOOP.
+
     log_add( iv_severity = COND #( WHEN ms_count-error > 0 THEN if_bali_constants=>c_severity_warning
                                    ELSE if_bali_constants=>c_severity_status )
              iv_text     = |Tổng SO: { ms_count-total } – Đã đúng: { ms_count-same }|
@@ -250,13 +279,14 @@ CLASS zcl_job_udt_pf IMPLEMENTATION.
 
   METHOD select_sales_orders.
     " Bước 1 + 2 + 3 gom trong 1 câu SQL:
-    "   SO đang mở của 6710/6720 có Sold-to nằm trong danh sách BP thay đổi
+    "   SO TA đang mở của 6710/6720 có Sold-to nằm trong danh sách BP thay đổi
     "   + ZE hiện tại trên header SO (1) + ZE trên master theo Sold-to & Sales area (2)
     SELECT so~SalesOrder           AS sales_order,
            so~SoldToParty          AS sold_to,
            so~SalesOrganization    AS sales_org,
            so~DistributionChannel  AS distr_chan,
            so~OrganizationDivision AS division,
+           sp~PartnerFunction      AS so_ze_pf,
            sp~Customer             AS so_ze,
            mp~BPCustomerNumber     AS master_ze,
            mp~DefaultPartner       AS default_flag,
@@ -271,7 +301,8 @@ CLASS zcl_job_udt_pf IMPLEMENTATION.
         AND mp~DistributionChannel = so~DistributionChannel
         AND mp~Division            = so~OrganizationDivision
         AND mp~PartnerFunction     = 'ZE'
-      WHERE so~SalesOrganization      IN ( @c_sorg_6710, @c_sorg_6720 )
+      WHERE so~SalesOrderType         = @c_so_type_ta
+        AND so~SalesOrganization      IN ( @c_sorg_6710, @c_sorg_6720 )
         AND so~OverallSDProcessStatus IN ( @c_sts_not_yet, @c_sts_partially )
         AND so~SalesOrder             IN @it_so_range
         " BP thay đổi trong khoảng [from, to] (UTC) – ngày D-1 giờ VN vắt qua 2 ngày UTC
@@ -297,6 +328,13 @@ CLASS zcl_job_udt_pf IMPLEMENTATION.
     " (1) = (2) -> không update
     IF is_so-so_ze = is_so-master_ze.
       ms_count-same += 1.
+      " Ghi log mọi SO (kể cả SO đã khớp) để user thấy kết quả từng SO
+      log_add( iv_severity = if_bali_constants=>c_severity_information
+               iv_text     = COND string(
+                               WHEN is_so-so_ze IS INITIAL
+                               THEN |SO { is_so-sales_order ALPHA = OUT }: SO và master đều chưa có ZE, không cần cập nhật|
+                               ELSE |SO { is_so-sales_order ALPHA = OUT }: ZE { is_so-so_ze ALPHA = OUT }|
+                                 && | đã khớp master, không cần cập nhật| ) ).
       RETURN.
     ENDIF.
 
@@ -310,11 +348,16 @@ CLASS zcl_job_udt_pf IMPLEMENTATION.
       RETURN.
     ENDIF.
 
-    " TH2: (1) trống -> insert | TH3: khác nhau -> ghi đè
-    DATA(lv_insert) = xsdbool( is_so-so_ze IS INITIAL ).
-    DATA(lv_change) = COND string( WHEN lv_insert = abap_true
-                                   THEN |thêm ZE { is_so-master_ze ALPHA = OUT }|
-                                   ELSE |đổi ZE { is_so-so_ze ALPHA = OUT } -> { is_so-master_ze ALPHA = OUT }| ).
+    " TH2: SO chưa có dòng ZE -> insert | TH3: đã có dòng ZE -> ghi đè
+    " Xét theo dòng ZE có tồn tại hay không, không theo mã KH: có SO đã có dòng ZE nhưng
+    " field Customer trống -> nếu insert sẽ lỗi "Partner function ZE can only occur 1 times"
+    DATA(lv_insert) = xsdbool( is_so-so_ze_pf IS INITIAL ).
+    DATA(lv_change) = COND string(
+      WHEN lv_insert = abap_true
+      THEN |thêm ZE { is_so-master_ze ALPHA = OUT }|
+      WHEN is_so-so_ze IS INITIAL
+      THEN |ghi ZE { is_so-master_ze ALPHA = OUT } vào dòng ZE đang có (chưa có mã KH)|
+      ELSE |đổi ZE { is_so-so_ze ALPHA = OUT } -> { is_so-master_ze ALPHA = OUT }| ).
 
     IF iv_test = abap_true.
       IF lv_insert = abap_true.
