@@ -32,6 +32,18 @@ sap.ui.define([
         ["RefNo", "REF NO. (ô 8 - EUR1)"],
         ["ArtNo", "ART NO. (ô 8 - EUR1)"]
     ];
+    // Trường nào in trên form nào (FormType: EUR1 / EUR1.UK / EAV); không khai báo = in trên mọi form.
+    // Popup chỉ hiện trường của các form đang chọn; lưu chỉ ghi trường đó cho Pro-forma có form tương ứng.
+    var FIELD_FORMS = {
+        IssuedRetro: ["EUR1", "EUR1.UK"],
+        RefNo: ["EUR1"],
+        ArtNo: ["EUR1"]
+    };
+    // Pro-forma chưa có form (Sales District chưa có mẫu) → coi như mọi trường đều dùng được
+    var fieldApplies = function (sField, sForm) {
+        var aForms = FIELD_FORMS[sField];
+        return !aForms || !sForm || aForms.indexOf(sForm) >= 0;
+    };
     // HS code chỉ chọn 1 trong 2 giá trị (FS); "" = giữ nguyên, "D" = xóa
     var HTS_OPTIONS = [
         ["", "(giữ nguyên)"],
@@ -72,6 +84,7 @@ sap.ui.define([
 
             if (!this._textDialog) {
                 this._textInputs = {};
+                this._fieldControls = {};   // trường → [Label, control] để ẩn / hiện theo form
                 var aItems = [
                     new Text({ text: "Để trống = giữ nguyên giá trị đang có, nhập D = xóa giá trị." })
                         .addStyleClass("sapUiSmallMarginBottom")
@@ -83,8 +96,13 @@ sap.ui.define([
                         return new Item({ key: aOption[0], text: aOption[1] });
                     })
                 });
-                aItems.push(new Label({ text: "HS Code", labelFor: this._htsSelect }));
-                aItems.push(this._htsSelect);
+                var fnAdd = function (sField, sLabel, oControl, bMarginTop) {
+                    var oLabel = new Label({ text: sLabel, labelFor: oControl });
+                    if (bMarginTop) { oLabel.addStyleClass("sapUiSmallMarginTop"); }
+                    that._fieldControls[sField] = [oLabel, oControl];
+                    aItems.push(oLabel, oControl);
+                };
+                fnAdd("HTSCode", "HS Code", this._htsSelect, false);
 
                 this._retroSelect = new Select({
                     width: "100%",
@@ -92,15 +110,12 @@ sap.ui.define([
                         return new Item({ key: aOption[0], text: aOption[1] });
                     })
                 });
-                aItems.push(new Label({ text: "Issued Retrospectively (ô 7)", labelFor: this._retroSelect })
-                    .addStyleClass("sapUiSmallMarginTop"));
-                aItems.push(this._retroSelect);
+                fnAdd("IssuedRetro", "Issued Retrospectively (ô 7 - EUR1 / UK)", this._retroSelect, true);
 
                 TEXT_FIELDS.forEach(function (aField) {
                     var oInput = new Input({ width: "100%" });
                     that._textInputs[aField[0]] = oInput;
-                    aItems.push(new Label({ text: aField[1], labelFor: oInput }).addStyleClass("sapUiSmallMarginTop"));
-                    aItems.push(oInput);
+                    fnAdd(aField[0], aField[1], oInput, true);
                 });
 
                 this._textDialog = new Dialog({
@@ -135,6 +150,15 @@ sap.ui.define([
             });
             this._htsSelect.setSelectedKey("");
             this._retroSelect.setSelectedKey("");
+
+            // Chỉ hiện trường của các form đang chọn (vd. chỉ chọn UK / EAV thì ẩn REF NO., ART NO.)
+            var aForms = aContexts.map(function (oContext) {
+                return (oContext.getObject() || {}).FormType || "";
+            });
+            Object.keys(this._fieldControls).forEach(function (sField) {
+                var bVisible = aForms.some(function (sForm) { return fieldApplies(sField, sForm); });
+                that._fieldControls[sField].forEach(function (oControl) { oControl.setVisible(bVisible); });
+            });
 
             this._textContexts = aContexts;
             this._textDialog.open();
@@ -181,10 +205,14 @@ sap.ui.define([
                 return oBinding.getBoundContext().requestObject();
             })).then(function () {
                 var aPatches = [];
-                aBindings.forEach(function (oBinding) {
+                aBindings.forEach(function (oBinding, iIndex) {
                     var oContext = oBinding.getBoundContext();
+                    var sForm = (aContexts[iIndex].getObject() || {}).FormType || "";
                     aFields.forEach(function (sField) {
-                        aPatches.push(oContext.setProperty(sField, oChanges[sField], sGroupId));
+                        // Trường không in trên form của Pro-forma này → không ghi (vd. REF NO. cho Pro-forma UK)
+                        if (fieldApplies(sField, sForm)) {
+                            aPatches.push(oContext.setProperty(sField, oChanges[sField], sGroupId));
+                        }
                     });
                 });
                 oModel.submitBatch(sGroupId);

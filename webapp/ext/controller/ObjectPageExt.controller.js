@@ -28,6 +28,12 @@ sap.ui.define([
         ["ArtNo", "ART NO. (ô 8 - EUR1)"]
     ];
     var HTS_OPTIONS = [["", "(trống)"], ["420222", "420222"], ["420292", "420292"]];
+    // Trường nào in trên form nào (giống Change header ở màn hình ngoài); không khai báo = mọi form
+    var FIELD_FORMS = {
+        IssuedRetro: ["EUR1", "EUR1.UK"],
+        RefNo: ["EUR1"],
+        ArtNo: ["EUR1"]
+    };
     var ITEM_FIELDS = [
         ["Quantity", "Quantity (PCS)"],
         ["CTNS", "CTNS"],
@@ -94,6 +100,7 @@ sap.ui.define([
 
             if (!this._headerDialog) {
                 this._headerInputs = {};
+                this._fieldControls = {};   // trường → các control để ẩn / hiện theo form
                 var aItems = [];
                 this._htsSelect = new Select({
                     width: "100%",
@@ -102,15 +109,17 @@ sap.ui.define([
                     })
                 });
                 aItems.push(new Label({ text: "HS Code", labelFor: this._htsSelect }), this._htsSelect);
-                // Ô 7 (FS v0.02): tích = in "ISSUED RETROSPECTIVELY"
+                // Ô 7 (FS v0.02): tích = in "ISSUED RETROSPECTIVELY" (chỉ EUR1 / UK)
                 this._retroCheck = new CheckBox({ text: "ISSUED RETROSPECTIVELY (ô 7)" })
                     .addStyleClass("sapUiSmallMarginTop");
+                this._fieldControls.IssuedRetro = [this._retroCheck];
                 aItems.push(this._retroCheck);
                 HEADER_FIELDS.forEach(function (aField) {
                     var oInput = new Input({ width: "100%" });
+                    var oLabel = new Label({ text: aField[1], labelFor: oInput }).addStyleClass("sapUiSmallMarginTop");
                     that._headerInputs[aField[0]] = oInput;
-                    aItems.push(new Label({ text: aField[1], labelFor: oInput }).addStyleClass("sapUiSmallMarginTop"),
-                        oInput);
+                    that._fieldControls[aField[0]] = [oLabel, oInput];
+                    aItems.push(oLabel, oInput);
                 });
                 this._headerDialog = this._createDialog("Edit CO Information", aItems, function () {
                     that._headerDialog.close();
@@ -124,6 +133,12 @@ sap.ui.define([
             });
             this._htsSelect.setSelectedKey(oData.HTSCode || "");
             this._retroCheck.setSelected(!!oData.IssuedRetro);
+            // Chỉ hiện trường in trên form của Pro-forma này (UK / EAV: ẩn REF NO., ART NO.; EAV: ẩn ô 7)
+            Object.keys(this._fieldControls).forEach(function (sField) {
+                var aForms = FIELD_FORMS[sField];
+                var bVisible = !aForms || !oData.FormType || aForms.indexOf(oData.FormType) >= 0;
+                that._fieldControls[sField].forEach(function (oControl) { oControl.setVisible(bVisible); });
+            });
             this._headerDialog.open();
         },
 
