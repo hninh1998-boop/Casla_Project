@@ -1,0 +1,239 @@
+{
+  "_version": "1.86.0",
+  "sap.app": {
+    "id": "zcoov4",
+    "type": "application",
+    "i18n": "i18n/i18n.properties",
+    "applicationVersion": {
+      "version": "0.0.1"
+    },
+    "title": "{{appTitle}}",
+    "description": "{{appDescription}}",
+    "resources": "resources.json",
+    "sourceTemplate": {
+      "id": "@sap/generator-fiori:lrop",
+      "version": "1.31.1",
+      "toolsId": "5b0c7d2e-6f1a-4c33-9a8e-2c0f4d1e7b90"
+    },
+    "dataSources": {
+      "annotation": {
+        "type": "ODataAnnotation",
+        "uri": "annotations/annotation.xml",
+        "settings": {
+          "localUri": "annotations/annotation.xml"
+        }
+      },
+      "mainService": {
+        "uri": "/sap/opu/odata4/sap/zui_co_ov4/srvd/sap/zui_co/0001/",
+        "type": "OData",
+        "settings": {
+          "annotations": [
+            "annotation"
+          ],
+          "localUri": "localService/mainService/metadata.xml",
+          "odataVersion": "4.0"
+        }
+      }
+    },
+    "crossNavigation": {
+      "inbounds": {
+        "zco_ov4-display": {
+          "semanticObject": "zco_ov4",
+          "action": "display",
+          "title": "{{zco_ov4-display.flpTitle}}",
+          "signature": {
+            "parameters": {},
+            "additionalParameters": "allowed"
+          }
+        }
+      }
+    }
+  },
+  "sap.ui": {
+    "technology": "UI5",
+    "icons": {
+      "icon": "",
+      "favIcon": "",
+      "phone": "",
+      "phone@2": "",
+      "tablet": "",
+      "tablet@2": ""
+    },
+    "deviceTypes": {
+      "desktop": true,
+      "tablet": true,
+      "phone": true
+    }
+  },
+  "sap.ui5": {
+    "flexEnabled": true,
+    "dependencies": {
+      "minUI5Version": "1.148.8",
+      "libs": {
+        "sap.m": {},
+        "sap.ui.core": {},
+        "sap.fe.templates": {}
+      }
+    },
+    "contentDensities": {
+      "compact": true,
+      "cozy": true
+    },
+    "models": {
+      "i18n": {
+        "type": "sap.ui.model.resource.ResourceModel",
+        "settings": {
+          "bundleName": "zcoov4.i18n.i18n"
+        }
+      },
+      "": {
+        "dataSource": "mainService",
+        "preload": true,
+        "settings": {
+          "operationMode": "Server",
+          "autoExpandSelect": true,
+          "earlyRequests": true
+        }
+      },
+      "@i18n": {
+        "type": "sap.ui.model.resource.ResourceModel",
+        "uri": "i18n/i18n.properties"
+      }
+    },
+    "resources": {
+      "css": [
+        {
+          "uri": "css/style.css"
+        }
+      ]
+    },
+    "routing": {
+      "config": {},
+      "routes": [
+        {
+          "pattern": ":?query:",
+          "name": "zce_co_hList",
+          "target": "zce_co_hList"
+        },
+        {
+          "pattern": "zce_co_h({key}):?query:",
+          "name": "zce_co_hObjectPage",
+          "target": "zce_co_hObjectPage"
+        }
+      ],
+      "targets": {
+        "zce_co_hList": {
+          "type": "Component",
+          "id": "zce_co_hList",
+          "name": "sap.fe.templates.ListReport",
+          "options": {
+            "settings": {
+              "contextPath": "/zce_co_h",
+              "variantManagement": "Page",
+              "initialLoad": "Disabled",
+              "navigation": {
+                "zce_co_h": {
+                  "detail": {
+                    "route": "zce_co_hObjectPage"
+                  }
+                }
+              },
+              "controlConfiguration": {
+                "@com.sap.vocabularies.UI.v1.LineItem": {
+                  "tableSettings": {
+                    "type": "GridTable",
+                    "selectionMode": "Multi"
+                  },
+                  "actions": {
+                    "ChangeHeader": {
+                      "press": ".extension.zcoov4.ext.controller.ListReportExt.btnChangeHeader",
+                      "visible": true,
+                      "enabled": true,
+                      "requiresSelection": true,
+                      "text": "Change header"
+                    },
+                    "PrintPDF": {
+                      "press": ".extension.zcoov4.ext.controller.ListReportExt.btnPrintPDF",
+                      "visible": true,
+                      "enabled": true,
+                      "requiresSelection": true,
+                      "text": "Print PDF"
+                    },
+                    "ExportExcel": {
+                      "press": ".extension.zcoov4.ext.controller.ListReportExt.btnExportExcel",
+                      "visible": true,
+                      "enabled": true,
+                      "requiresSelection": true,
+                      "text": "Export Excel"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "zce_co_hObjectPage": {
+          "type": "Component",
+          "id": "zce_co_hObjectPage",
+          "name": "sap.fe.templates.ObjectPage",
+          "options": {
+            "settings": {
+              "editableHeaderContent": false,
+              "contextPath": "/zce_co_h",
+              "content": {
+                "header": {
+                  "actions": {
+                    "EditHeader": {
+                      "press": ".extension.zcoov4.ext.controller.ObjectPageExt.btnEditHeader",
+                      "visible": true,
+                      "enabled": true,
+                      "text": "Edit"
+                    }
+                  }
+                }
+              },
+              "controlConfiguration": {
+                "_Item/@com.sap.vocabularies.UI.v1.LineItem": {
+                  "tableSettings": {
+                    "type": "GridTable",
+                    "selectionMode": "Multi"
+                  },
+                  "actions": {
+                    "EditItems": {
+                      "press": ".extension.zcoov4.ext.controller.ObjectPageExt.btnEditItems",
+                      "visible": true,
+                      "enabled": true,
+                      "requiresSelection": true,
+                      "text": "Edit"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "extends": {
+      "extensions": {
+        "sap.ui.controllerExtensions": {
+          "sap.fe.templates.ListReport.ListReportController#zcoov4::zce_co_hList": {
+            "controllerName": "zcoov4.ext.controller.ListReportExt"
+          },
+          "sap.fe.templates.ObjectPage.ObjectPageController#zcoov4::zce_co_hObjectPage": {
+            "controllerName": "zcoov4.ext.controller.ObjectPageExt"
+          }
+        }
+      }
+    }
+  },
+  "sap.fiori": {
+    "registrationIds": [],
+    "archeType": "transactional"
+  },
+  "sap.fe": {
+    "app": {
+      "enableLazyLoading": true
+    }
+  }
+}
